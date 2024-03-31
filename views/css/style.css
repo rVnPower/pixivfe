@@ -637,6 +637,11 @@ nav .sidebar-item img {
   border-radius: 50%;
   margin-right: 10px;
 }
+.illust .comment .comment-author {
+  color: #fff;
+  font-size: medium;
+  font-weight: bold;
+}
 .illust .comment .stamp {
   width: 96px;
   height: 96px;

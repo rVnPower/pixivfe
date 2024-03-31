@@ -25,9 +25,13 @@
   <p>There are no comments yet</p>
   {{ else }} {{ range Illust.CommentsList }}
   <div class="comment">
+      <a href="/users/{{ .AuthorID }}" class="comment-author">
     <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
+      </a>
     <div class="comment-context">
-      <b>{{ .AuthorName }}</b>
+      <a href="/users/{{ .AuthorID }}" class="comment-author">
+      {{ .AuthorName }}
+      </a>
       <p>
         {{ if .Stamp }}
         <img
