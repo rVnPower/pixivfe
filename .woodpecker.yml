@@ -1,11 +1,16 @@
 steps:
-  - name: docker
-    image: docker
-    commands:
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - export VERSION=$(cat core/config/config.go | grep "v[0-9]\+\.[0-9]\+" -o)
-      - dockerd &
-      - docker image build -t "vnpower/pixivfe:$VERSION" .
-      - docker image push "vnpower/pixivfe:$VERSION"
-    secrets: [ DOCKER_USERNAME, DOCKER_PASSWORD ]
+  - name: docker-build-image
+    image: woodpeckerci/plugin-docker-buildx
+    settings:
+      dockerfile: Dockerfile
+      registry: https://docker.io
+      repo: codeberg.org/VnPower/PixivFE
+      platforms: linux/amd64,linux/arm64
+      username:
+        from_secret: DOCKER_USERNAME
+      password:
+        from_secret: DOCKER_PASSWORD
+    when:
+      branch: [ v2 ]
+      event: [ tag, release ]
     
