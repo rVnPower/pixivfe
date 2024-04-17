@@ -4,6 +4,7 @@ steps:
     commands:
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - export VERSION=$(cat core/config/config.go | grep "v[0-9]\+\.[0-9]\+" -o)
+      - dockerd &
       - docker image build -t "vnpower/pixivfe:$VERSION" .
       - docker image push "vnpower/pixivfe:$VERSION"
     secrets: [ DOCKER_USERNAME, DOCKER_PASSWORD ]
