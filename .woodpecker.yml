@@ -12,5 +12,5 @@ steps:
         from_secret: DOCKER_PASSWORD
     when:
       branch: [ v2 ]
-      event: [ tag, release ]
+      event: [ tag, release, manual ]
     
