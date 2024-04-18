@@ -4,6 +4,7 @@ services:
   pixivfe:
     container_name: pixivfe
     hostname: pixivfe
+    image: vnpower/pixivfe:latest
     restart: unless-stopped
     user: 1000:1000
     read_only: true
@@ -11,9 +12,6 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8282:8282" # Specify `127.0.0.1:8282:8282` instead if using a reverse proxy
     env_file: .env
