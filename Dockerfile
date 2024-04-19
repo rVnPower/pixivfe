@@ -2,9 +2,6 @@
 FROM golang:1.22 as builder
 WORKDIR /app
 
-# 8282 is the default port for Docker
-ENV PIXIVFE_PORT=8282
-
 COPY go.* ./
 RUN go mod download
 COPY . ./
