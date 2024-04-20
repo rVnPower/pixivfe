@@ -35,12 +35,12 @@
     </div>
   </div>
   <div class="artwork-actions">
-    {{ if isset(.BookmarkID) }}
-    <a href="/self/deleteBookmark/{{ .BookmarkID }}">
+    {{ if isset(.BookmarkData) }}
+    <a href="/self/deleteBookmark/{{ .BookmarkID }}?r={{ OriginalURL }}">
       <img src="/assets/heart-red.png" alt="Bookmarked" />
     </a>
     {{ else }}
-    <a href="/self/addBookmark/{{ .ID }}">
+    <a href="/self/addBookmark/{{ .ID }}?r={{ OriginalURL }}">
       <img src="/assets/heart-outline.png" alt="Bookmark" />
     </a>
     {{ end }}
@@ -49,7 +49,7 @@
     <img src="/assets/like-blue.png" alt="Liked" />
 
     {{ else }}
-    <a href="/self/like/{{ .ID }}">
+    <a href="/self/like/{{ .ID }}?r={{ OriginalURL }}">
       <img src="/assets/like-outline.png" alt="Like" />
     </a>
     {{ end }}

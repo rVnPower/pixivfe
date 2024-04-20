@@ -135,7 +135,5 @@ func SettingsPost(c *fiber.Ctx) error {
 		return err
 	}
 
-	ret := c.Query("redirect", "/")
-	c.Redirect(ret)
 	return nil
 }

@@ -195,6 +195,14 @@ func main() {
 		))
 	}
 
+	server.Use(func(c *fiber.Ctx) error {
+		ret := c.Query("r")
+		if ret != "" {
+			c.Redirect(ret)
+		}
+		return c.Next()
+	})
+
 	// Global HTTP headers
 	server.Use(func(c *fiber.Ctx) error {
 		c.Set("X-Frame-Options", "DENY")
