@@ -1,45 +1,68 @@
 <div class="container" data-hx-boost="false">
-  <h2>Current Settings</h2>
+  <h2>Settings</h2>
+  <p>
+    This page allows you to customize various settings for PixivFE. You can
+    adjust settings like Token, CSRF, and ImageProxy on this page.
+  </p>
+  <p>
+    Please note that some features, such as NovelFontType, ShowArtR18,
+    ShowArtR18G, and ShowArtAI, are still under development and may not function
+    as expected.
+  </p>
+  <hr />
+  <h3>Current Settings</h3>
+  <p>
+    To restore all settings to their default values, click the 'Reset All'
+    button.
+  </p>
   {{ range CookieList }}
-  <div>
-    <span>{{.Key}}</span>=<span>{{.Value}}</span>
-  </div>
+  <div><span>{{.Key}}</span>=<span>{{.Value}}</span></div>
   {{ end }}
   <form action="/settings/reset-all" method="post">
-    <input type="submit" value="Reset All" />
+    <input type="submit" value="Reset all" />
   </form>
-  <h2>Login</h2>
+  <hr />
+  <h3>Login</h3>
   <p>Supported features (for now):</p>
   <ul>
     <li>Discovery page</li>
     <li>Landing page</li>
   </ul>
   <p>
-    You can only login using your account's cookie, check out
-    <a href="https://codeberg.org/VnPower/PixivFE/src/branch/v2/doc/How-to-get-the-cookie-%28PIXIVFE_TOKEN%29.md">this
-      page</a>
-    to see how to get it.
+    Log in with your account's cookie to access the Discovery and Landing pages.
+    To learn how to obtain your cookie, please see
+    <a href="https://pixivfe.pages.dev/obtaining-pixivfe-token/"
+      >the guide on obtaining your PixivFE token</a
+    >.
   </p>
   <p>
-    Note that you will get logged out automatically every time the server
-    updates, if you are logged in before but got logged out recently, it is
-    probably because the instance owner restarted the server.
+    Keep in mind that logins will expire whenever the server is updated, so you
+    may need to log in again if the server has been restarted recently.
   </p>
   <form action="/settings/token" method="post">
     <input type="text" name="token" autocomplete="off" />
-    <input type="submit" value="Remember Account Cookie Until Next Server Restart" />
+    <input
+      type="submit"
+      value="Remeber account cookie (until next server restart)"
+    />
   </form>
   <hr />
-  <h2>Logout</h2>
+  <h3>Logout</h3>
   <p>
-    You can safely logout here. This button will just delete the token directly
-    from this session.
+    To securely end your session, click the 'Logout!' button. This will
+    immediately remove your session token.
   </p>
   <form action="/settings/logout" method="post">
     <input type="submit" value="Logout!" />
   </form>
   <hr />
-  <h2>Image proxy server</h2>
+  <h3>Image proxy server</h3>
+  <p>
+    Choose how images are loaded in PixivFE by selecting either the built-in
+    proxy or one of the provided external proxy servers. If you prefer, you can
+    also specify a custom proxy server by entering its URL and clicking 'Use
+    Custom Proxy'.
+  </p>
   <div class="form-field">
     <form action="/settings/imageServer" method="post">
       <label>
@@ -52,15 +75,21 @@
         {{.}}
       </label>
       {{ end }}
-      <input type="submit" value="Use Selected Proxy" />
+      <input type="submit" value="Use selected proxy" />
     </form>
     <br />
     <form action="/settings/imageServer" method="post">
       <label for="image-proxy">
         Custom image proxy server
-        <input type="text" name="image-proxy" required="true" placeholder="https://example.com" autocomplete="off" />
+        <input
+          type="text"
+          name="image-proxy"
+          required="true"
+          placeholder="https://example.com"
+          autocomplete="off"
+        />
       </label>
-      <input type="submit" value="Use Custom Proxy" />
+      <input type="submit" value="Use custom proxy" />
     </form>
   </div>
 </div>
