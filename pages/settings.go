@@ -88,6 +88,7 @@ func setNovelFontType(c *fiber.Ctx) error {
 
 func setLogout(c *fiber.Ctx) error {
 	session.ClearCookie(c, session.Cookie_Token)
+	session.ClearCookie(c, session.Cookie_CSRF)
 	return nil
 }
 
