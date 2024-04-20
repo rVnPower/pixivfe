@@ -579,8 +579,13 @@ nav .sidebar-item img {
 .illust-attr {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.illust-attr .illust-author-attr {
+  display: flex;
+  align-items: center;
 }
 .illust-attr .illust-avatar {
   width: 62px;
@@ -600,6 +605,11 @@ nav .sidebar-item img {
 }
 .illust-attr .attr-wrap a {
   color: #aaa;
+}
+.illust-attr .artwork-actions img {
+  aspect-ratio: 1/1;
+  width: 30px;
+  height: 30px;
 }
 
 .illust {

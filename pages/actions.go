@@ -12,7 +12,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func pixivPostRequest(c *fiber.Ctx, url, payload, token, csrf string) error {
+func pixivPostRequest(c *fiber.Ctx, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
@@ -22,9 +22,14 @@ func pixivPostRequest(c *fiber.Ctx, url, payload, token, csrf string) error {
 	req = req.WithContext(c.Context())
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
 	req.Header.Add("x-csrf-token", csrf)
+
+	if isJSON {
+		req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	} else {
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
+	}
 	// req.AddCookie(&http.Cookie{
 	// 	Name:  "PHPSESSID",
 	// 	Value: token,
@@ -60,7 +65,7 @@ func AddBookmarkRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/login")
+		return c.Redirect("/settings")
 	}
 
 	id := c.Params("id")
@@ -75,7 +80,7 @@ func AddBookmarkRoute(c *fiber.Ctx) error {
 "comment": "",
 "tags": []
 }`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf); err != nil {
+	if err := pixivPostRequest(c, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
@@ -87,7 +92,7 @@ func DeleteBookmarkRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/login")
+		return c.Redirect("/settings")
 	}
 
 	id := c.Params("id")
@@ -98,7 +103,7 @@ func DeleteBookmarkRoute(c *fiber.Ctx) error {
 	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
 	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf); err != nil {
+	if err := pixivPostRequest(c, URL, payload, token, csrf, false); err != nil {
 		return err
 	}
 
@@ -110,7 +115,7 @@ func LikeRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/login")
+		return c.Redirect("/settings")
 	}
 
 	id := c.Params("id")
@@ -120,7 +125,7 @@ func LikeRoute(c *fiber.Ctx) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf); err != nil {
+	if err := pixivPostRequest(c, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 

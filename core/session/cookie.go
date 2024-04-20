@@ -11,13 +11,13 @@ import (
 type CookieName string
 
 const ( // the __Host thing force it to be secure and same-origin (no subdomain) >> https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-	Cookie_Token         CookieName = "__Host-pixivfe-Token"
-	Cookie_CSRF          CookieName = "__Host-pixivfe-CSRF"
-	Cookie_ImageProxy    CookieName = "__Host-pixivfe-ImageProxy"
-	Cookie_NovelFontType CookieName = "__Host-pixivfe-NovelFontType"
-	Cookie_ShowArtR18    CookieName = "__Host-pixivfe-ShowArtR18"
-	Cookie_ShowArtR18G   CookieName = "__Host-pixivfe-ShowArtR18G"
-	Cookie_ShowArtAI     CookieName = "__Host-pixivfe-ShowArtAI"
+	Cookie_Token         CookieName = "pixivfe-Token"
+	Cookie_CSRF          CookieName = "pixivfe-CSRF"
+	Cookie_ImageProxy    CookieName = "pixivfe-ImageProxy"
+	Cookie_NovelFontType CookieName = "pixivfe-NovelFontType"
+	Cookie_ShowArtR18    CookieName = "pixivfe-ShowArtR18"
+	Cookie_ShowArtR18G   CookieName = "pixivfe-ShowArtR18G"
+	Cookie_ShowArtAI     CookieName = "pixivfe-ShowArtAI"
 )
 
 // Go can't make this a const...

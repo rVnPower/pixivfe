@@ -122,13 +122,14 @@ type Illust struct {
 	SanityLevel     int       `json:"sl"`
 	XRestrict       xRestrict `json:"xRestrict"`
 	AiType          aiType    `json:"aiType"`
-	Bookmarked      any       `json:"bookmarkData"`
+	BookmarkData    any       `json:"bookmarkData"`
 	Liked           any       `json:"likeData"`
 	User            UserBrief
 	RecentWorks     []ArtworkBrief
 	RelatedWorks    []ArtworkBrief
 	CommentsList    []Comment
 	IsUgoira        bool
+	BookmarkID      string
 }
 
 func GetUserBasicInformation(c *fiber.Ctx, id string) (UserBrief, error) {
@@ -252,6 +253,11 @@ func GetArtworkByID(c *fiber.Ctx, id string, full bool) (*Illust, error) {
 	err = json.Unmarshal([]byte(response), &illust)
 	if err != nil {
 		return nil, err
+	}
+
+	if illust.BookmarkData != nil {
+		t := illust.BookmarkData.(map[string]any)
+		illust.BookmarkID = t["id"].(string)
 	}
 
 	// Begin testing here

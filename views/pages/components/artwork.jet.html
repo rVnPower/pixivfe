@@ -13,64 +13,67 @@
 </div>
 {{ else }}
 <div class="illust-images">
-    <video
-      autoplay
-      loop
-      muted
-      disablepictureinpicture
-      playsinline
-      controls
-      poster="{{ .Images[0].Large }}"
-      src="/proxy/ugoira.com/{{ .ID }}"
-    >
-      Unable to load ugoira.
-    </video>
+  <video autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
+    src="/proxy/ugoira.com/{{ .ID }}">
+    Unable to load ugoira.
+  </video>
 </div>
-<a href="/proxy/ugoira.com/{{ .ID }}"
-  >Download</a
->
+<a href="/proxy/ugoira.com/{{ .ID }}">Download</a>
 <br />
-<a href="https://ugoira.com/i/{{ .ID }}"
-  >Go to ugoira.com for more options</a
->
+<a href="https://ugoira.com/i/{{ .ID }}">Go to ugoira.com for more options</a>
 {{ end }}
 
 <div class="illust-attr">
-  <a href="/users/{{ .User.ID }}"
-    ><img
-      src="{{ .User.Avatar }}"
-      alt="{{ .User.Name }}"
-      class="illust-avatar"
-    />
-  </a>
-  <div class="attr-wrap">
-    <div class="illust-title">{{ .Title }}</div>
-    <div class="illust-author">
-      <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+  <div class="illust-author-attr">
+    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="illust-avatar" />
+    </a>
+    <div class="attr-wrap">
+      <div class="illust-title">{{ .Title }}</div>
+      <div class="illust-author">
+        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+      </div>
     </div>
+  </div>
+  <div class="artwork-actions">
+    {{ if isset(.BookmarkID) }}
+    <a href="/self/deleteBookmark/{{ .BookmarkID }}">
+      <img src="/assets/heart-red.png" alt="Bookmarked" />
+    </a>
+    {{ else }}
+    <a href="/self/addBookmark/{{ .ID }}">
+      <img src="/assets/heart-outline.png" alt="Bookmark" />
+    </a>
+    {{ end }}
+
+    {{ if ! .Liked }}
+    <img src="/assets/like-blue.png" alt="Liked" />
+
+    {{ else }}
+    <a href="/self/like/{{ .ID }}">
+      <img src="/assets/like-outline.png" alt="Like" />
+    </a>
+    {{ end }}
   </div>
 </div>
 
 <div>
-  <a href="https://pixiv.net/i/{{ .ID }}"
-    >pixiv.net/i/{{ .ID }}</a
-  >
+  <a href="https://pixiv.net/i/{{ .ID }}">pixiv.net/i/{{ .ID }}</a>
   <br />
 </div>
 <div class="illust-tags">
   {*
-        To know if this artwork is bookmarked:
-        ```
-        {{ if .Bookmarked }}
-        <button>Unbookmark</button>
-        //...
-        {{ else }}
-        <button>Bookmarked</button>
-        //...
-        {{ end }}
-        ```
+  To know if this artwork is bookmarked:
+  ```
+  {{ if .Bookmarked }}
+  <button>Unbookmark</button>
+  //...
+  {{ else }}
+  <button>Bookmarked</button>
+  //...
+  {{ end }}
+  ```
 
-        Same with .Liked
+  Same with .Liked
   *}
   <span class="illust-tag-attr">
     <img src="/assets/eye.png" alt="Views" />
@@ -101,9 +104,8 @@
   </span>
   {{ else }}
   <span class="illust-tag">
-    <span class="illust-tag-name"
-      ><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span
-    ><span class="illust-tag-translation">{{ .TranslatedName }}</span>
+    <span class="illust-tag-name"><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span><span
+      class="illust-tag-translation">{{ .TranslatedName }}</span>
   </span>
   {{ end }} {{ end }}
 </div>
