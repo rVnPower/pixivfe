@@ -123,7 +123,7 @@ type Illust struct {
 	XRestrict       xRestrict `json:"xRestrict"`
 	AiType          aiType    `json:"aiType"`
 	BookmarkData    any       `json:"bookmarkData"`
-	Liked           any       `json:"likeData"`
+	Liked           bool      `json:"likeData"`
 	User            UserBrief
 	RecentWorks     []ArtworkBrief
 	RelatedWorks    []ArtworkBrief
