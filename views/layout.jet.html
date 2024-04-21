@@ -1,129 +1,100 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="View this page on PixivFE." />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    {{ title := "" }} {{ if isset(Title) }} {{ title = Title }} {{ else }} {{
-    title = "PixivFE" }} {{ end }}
-    <title>{{ title }} - PixivFE</title>
-    
-    <link href="/css/style.css" rel="stylesheet" />
-    
-    <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
-    <script src="/js/htmx@1.9.10.min.js" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
 
-    {{ if PageURL }}
-      <meta property="og:title" content="{{ title }}" />
-      <meta property="og:url" content="{{ PageURL }}" />
-      <meta property="og:site_name" content="PixivFE" />
-      <meta property="og:type" content="article" />
-      <meta content="summary_large_image" name="twitter:card" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="View this page on PixivFE." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      {{ if isset(MetaDescription) }}
-    <meta
-      property="og:description"
-      content="{{MetaDescription}}"
-    />
-    {{end}}
+  {{ title := "" }} {{ if isset(Title) }} {{ title = Title }} {{ else }} {{
+  title = "PixivFE" }} {{ end }}
+  <title>{{ title }} - PixivFE</title>
 
-      {{ if isset(MetaDescription) }}
-      <meta property="og:image" content="{{ MetaImage }}" />
-    {{ end }}
-    {{ end }}
-  </head>
+  <link href="/css/style.css" rel="stylesheet" />
 
-  <body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main" data-hx-indicator="#loading-indicator">
-    <div id="loading-indicator"></div>
-    <nav>
-      <div class="navigation-wrapper">
-        <span class="navbar-entry">
-          <span class="sidebar-container">
-            <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
-            <label for="sidebar-toggler" class="sidebar-label">
-              <img
-                src="/assets/menu-thin.png"
-                alt="Menu"
-                width="30"
-                height="30"
-              />
-            </label>
-            <div class="sidebar">
-              <ul class="sidebar-list">
-                <a class="sidebar-item" href="/discovery">
-                  <img src="/assets/compass.png" alt="compass" />Discovery</a
-                >
-                <a class="sidebar-item" href="/ranking">
-                  <img src="/assets/crown.png" alt="crown" />Ranking</a
-                >
-                <a class="sidebar-item" href="/rankingCalendar">
-                  <img src="/assets/calendar.png" alt="calendar" />Ranking history</a
-                >
-                <a class="sidebar-item" href="/newest">
-                  <img src="/assets/sparkling.png" alt="sparkling" />Newest</a
-                >
-                <br />
-                <a class="sidebar-item" href="/self/followingWorks">
-                  <img src="/assets/users.png" alt="users" />Latest by followed</a
-                >
-                <a class="sidebar-item" href="/self/bookmarks">
-                  <img src="/assets/heart.png" alt="heart" />Your bookmarks</a
-                >
-                <a class="sidebar-item" href="/self">
-                  <img src="/assets/user.png" alt="user" />Your profile</a
-                >
-                <br />
-                <a class="sidebar-item" href="/settings">
-                  <img src="/assets/settings.png" alt="settings" />Settings</a
-                >
-                <a class="sidebar-item" href="/about">
-                  <img src="/assets/about.svg" alt="about" />About</a
-                >
-                <br />
-                <a
-                  class="sidebar-item"
-                  href="https://codeberg.org/vnpower/pixivfe"
-                >
-                  <img src="/assets/globe.png" alt="globe" />Source code</a
-                >
-              </ul>
-            </div>
-          </span>
-          <a class="navbar-brand" href="/">
-            <img src="/assets/favicon.ico" alt="PixivFE icon" />
-            <span>PixivFE</span>
-          </a>
+  <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
+  <script src="/js/htmx@1.9.10.min.js"
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
+
+  <meta property="og:title" content="{{ title }}" />
+  <meta property="og:url" content="{{ PageURL }}" />
+  <meta property="og:site_name" content="PixivFE" />
+  <meta property="og:type" content="article" />
+  <meta content="summary_large_image" name="twitter:card" />
+  <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed">
+
+  {{ if isset(MetaDescription) }}
+  <meta property="og:description" content="{{MetaDescription}}" />
+  {{end}}
+
+  {{ if isset(MetaDescription) }}
+  <meta property="og:image" content="{{ MetaImage }}" />
+  {{ end }}
+</head>
+
+<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
+  data-hx-indicator="#loading-indicator">
+  <div id="loading-indicator"></div>
+  <nav>
+    <div class="navigation-wrapper">
+      <span class="navbar-entry">
+        <span class="sidebar-container">
+          <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
+          <label for="sidebar-toggler" class="sidebar-label">
+            <img src="/assets/menu-thin.png" alt="Menu" width="30" height="30" />
+          </label>
+          <div class="sidebar">
+            <ul class="sidebar-list">
+              <a class="sidebar-item" href="/discovery">
+                <img src="/assets/compass.png" alt="compass" />Discovery</a>
+              <a class="sidebar-item" href="/ranking">
+                <img src="/assets/crown.png" alt="crown" />Ranking</a>
+              <a class="sidebar-item" href="/rankingCalendar">
+                <img src="/assets/calendar.png" alt="calendar" />Ranking history</a>
+              <a class="sidebar-item" href="/newest">
+                <img src="/assets/sparkling.png" alt="sparkling" />Newest</a>
+              <br />
+              <a class="sidebar-item" href="/self/followingWorks">
+                <img src="/assets/users.png" alt="users" />Latest by followed</a>
+              <a class="sidebar-item" href="/self/bookmarks">
+                <img src="/assets/heart.png" alt="heart" />Your bookmarks</a>
+              <a class="sidebar-item" href="/self">
+                <img src="/assets/user.png" alt="user" />Your profile</a>
+              <br />
+              <a class="sidebar-item" href="/settings">
+                <img src="/assets/settings.png" alt="settings" />Settings</a>
+              <a class="sidebar-item" href="/about">
+                <img src="/assets/about.svg" alt="about" />About</a>
+              <br />
+              <a class="sidebar-item" href="https://codeberg.org/vnpower/pixivfe">
+                <img src="/assets/globe.png" alt="globe" />Source code</a>
+            </ul>
+          </div>
         </span>
-
-        <span class="navbar-entry">
-          <form action="/tags" method="post"
-            class="search-form"
-            autocomplete="off"
-          >
-            <input
-              type="text"
-              name="name"
-              required="true"
-              class="search-form-text"
-              placeholder="⌕ Search artworks..."
-            />
-            <label class="navbar-entry"
-              ><img src="/assets/search.svg" alt="Search" 
-              /><input type="submit" hidden 
-            /></label>
-          </form>
-        </span>
-        
-        <a class="navbar-entry" href="/settings">
-          <img src="/assets/cog.svg" alt="Settings" />
+        <a class="navbar-brand" href="/">
+          <img src="/assets/favicon.ico" alt="PixivFE icon" />
+          <span>PixivFE</span>
         </a>
-      </div>
-      <div class="navbar-shadow"></div>
-    </nav>
-    <script src="/js/on-page-load.js"></script>
-    <main>
-      {{ embed() }}
-    </main>
-  </body>
+      </span>
+
+      <span class="navbar-entry">
+        <form action="/tags" method="post" class="search-form" autocomplete="off">
+          <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
+          <label class="navbar-entry"><img src="/assets/search.svg" alt="Search" /><input type="submit"
+              hidden /></label>
+        </form>
+      </span>
+
+      <a class="navbar-entry" href="/settings">
+        <img src="/assets/cog.svg" alt="Settings" />
+      </a>
+    </div>
+    <div class="navbar-shadow"></div>
+  </nav>
+  <script src="/js/on-page-load.js"></script>
+  <main>
+    {{ embed() }}
+  </main>
+</body>
+
 </html>

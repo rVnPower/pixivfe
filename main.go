@@ -256,6 +256,9 @@ func main() {
 	self.Get("/deleteBookmark/:id", pages.DeleteBookmarkRoute)
 	self.Get("/like/:id", pages.LikeRoute)
 
+	// Oembed group
+	server.Get("/oembed", pages.Oembed)
+
 	server.Get("/tags/:name", pages.TagPage)
 	server.Post("/tags/:name", pages.TagPage)
 	server.Post("/tags",
