@@ -30,5 +30,7 @@ func ArtworkPage(c *fiber.Ctx) error {
 		"Title":           illust.Title,
 		"MetaDescription": metaDescription,
 		"MetaImage":       illust.Images[0].Original,
+		"MetaAuthor":      illust.UserName,
+		"MetaAuthorID":    illust.UserID,
 	})
 }

@@ -21,7 +21,13 @@
   <meta property="og:site_name" content="PixivFE" />
   <meta property="og:type" content="article" />
   <meta content="summary_large_image" name="twitter:card" />
+
+  {{ if isset(MetaAuthor) }}
+  <link rel="alternate" type="application/json+oembed"
+    href="{{ BaseURL }}/oembed?a={{ MetaAuthor }}&u={{ BaseURL }}/users/{{ MetaAuthorID }}">
+  {{else}}
   <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed">
+  {{end}}
 
   {{ if isset(MetaDescription) }}
   <meta property="og:description" content="{{MetaDescription}}" />

@@ -35,12 +35,16 @@ func IndexPage(c *fiber.Ctx) error {
 
 func Oembed(c *fiber.Ctx) error {
 	pageURL := c.BaseURL()
+	artistName := c.Query("a", "")
+	artistURL := c.Query("u", "")
 
 	data := fiber.Map{
 		"version":       "1.0",
 		"embed_type":    "rich",
 		"provider_name": "PixivFE",
 		"provider_url":  pageURL,
+		"author_name":   artistName,
+		"author_url":    artistURL,
 	}
 
 	return c.JSON(data)
