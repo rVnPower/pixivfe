@@ -1,8 +1,6 @@
 package pages
 
 import (
-	"fmt"
-
 	session "codeberg.org/vnpower/pixivfe/v2/core/session"
 	core "codeberg.org/vnpower/pixivfe/v2/core/webapi"
 	"github.com/gofiber/fiber/v2"
@@ -37,7 +35,13 @@ func IndexPage(c *fiber.Ctx) error {
 
 func Oembed(c *fiber.Ctx) error {
 	pageURL := c.BaseURL()
-	s := fmt.Sprintf(`{version: "1.0", embed_type: "rich", provider_name: "PixivFE", provider_url: "%s"}`, pageURL)
 
-	return c.JSON(s)
+	data := fiber.Map{
+		"version":       "1.0",
+		"embed_type":    "rich",
+		"provider_name": "PixivFE",
+		"provider_url":  pageURL,
+	}
+
+	return c.JSON(data)
 }
