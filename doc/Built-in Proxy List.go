@@ -9,6 +9,7 @@ var BuiltinProxyList = []string{
 	"https://pixiv.ducks.party",
 	"https://pximg.cocomi.eu.org",
 	"https://mima.localghost.org/proxy/pximg",
+	"https://pixiv.darkness.services",
 	"https://i.pixiv.re",
 	// "https://pixiv.tatakai.top", // dead due to us :(
 	// "https://pximg.chaotic.ninja", // incompatible
