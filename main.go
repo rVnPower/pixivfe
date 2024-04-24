@@ -95,11 +95,14 @@ func main() {
 	})
 
 	server.Use(func(c *fiber.Ctx) error {
+		token := session.GetPixivToken(c)
 		pageURL := c.BaseURL() + c.OriginalURL()
+
 		c.Bind(fiber.Map{
 			"BaseURL":     c.BaseURL(),
 			"OriginalURL": c.OriginalURL(),
 			"PageURL":     pageURL,
+			"LoggedIn":    token != "",
 		})
 		return c.Next()
 	})
