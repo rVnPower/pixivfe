@@ -28,7 +28,7 @@
   </div>
 
   <div class="switcher">
-    {{ url := "/tags/" + Tag.Name + "?order=" + Queries.Order + "&mode=" +
+    {{ url := "/tags/" + TrueTag + "?order=" + Queries.Order + "&mode=" +
     Queries.Mode + "&ratio=" + Queries.Ratio + "&page=1" + "&category=" }}
     <div class="switch-title">Type</div>
     <a href="{{url }}artworks" class="switch-button">All</a>
@@ -36,7 +36,7 @@
     <a href="{{url }}manga" class="switch-button">Manga</a>
   </div>
   <div class="switcher">
-    {{ url := "/tags/" + Tag.Name + "?category=" + Queries.Category + "&mode=" +
+    {{ url := "/tags/" + TrueTag + "?category=" + Queries.Category + "&mode=" +
     Queries.Mode + "&ratio=" + Queries.Ratio + "&page=1" + "&order=" }}
     <div class="switch-title">Order</div>
     <a href="{{url }}date_d" class="switch-button">Newest</a>
@@ -44,7 +44,7 @@
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    {{ url := "/tags/" + Tag.Name + "?category=" + Queries.Category + "&order="
+    {{ url := "/tags/" + TrueTag + "?category=" + Queries.Category + "&order="
     + Queries.Order + "&ratio=" + Queries.Ratio + "&page=1" + "&mode=" }}
     <a href="{{url }}all" class="switch-button">All</a>
     <a href="{{url }}safe" class="switch-button">Safe</a>
@@ -52,7 +52,7 @@
   </div>
   <div class="switcher">
     <div class="switch-title">Ratio</div>
-    {{ url := "/tags/" + Tag.Name + "?category=" + Queries.Category + "&order="
+    {{ url := "/tags/" + TrueTag + "?category=" + Queries.Category + "&order="
     + Queries.Order + "&page=1" + "&mode=" + Queries.Mode + "&ratio=" }}
     <a href="{{url }}" class="switch-button">All</a>
     <a href="{{url }}-0.5" class="switch-button">Portrait</a>
@@ -78,7 +78,7 @@
   </div>
 
   <div class="pagination">
-    {{ url := "/tags/" + Tag.Name + "?category=" + Queries.Category + "&order="
+    {{ url := "/tags/" + TrueTag + "?category=" + Queries.Category + "&order="
     + Queries.Order + "&mode=" + Queries.Mode + "&ratio=" + Queries.Ratio + "&page=" }}
     <small>Page {{ Page }}</small>
     <br />

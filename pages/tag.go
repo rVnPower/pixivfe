@@ -15,7 +15,8 @@ func TagPage(c *fiber.Ctx) error {
 	queries["Order"] = c.Query("order", "date_d")
 	queries["Ratio"] = c.Query("ratio", "")
 
-	name, err := url.PathUnescape(c.Params("name"))
+	param := c.Params("name")
+	name, err := url.PathUnescape(param)
 	if err != nil {
 		return err
 	}
@@ -35,5 +36,5 @@ func TagPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/tag", fiber.Map{"Title": "Results for " + tag.Name, "Tag": tag, "Data": result, "Queries": queries, "Page": pageInt})
+	return c.Render("pages/tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": queries, "TrueTag": param, "Page": pageInt})
 }
