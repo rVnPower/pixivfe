@@ -11,4 +11,5 @@ steps:
     when:
       branch: [ v2 ]
       event: [ tag, release, manual ]
+    auto_tag: true
     
