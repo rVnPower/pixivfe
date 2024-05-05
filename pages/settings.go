@@ -86,6 +86,15 @@ func setNovelFontType(c *fiber.Ctx) error {
 	return nil
 }
 
+func setNovelViewMode(c *fiber.Ctx) error {
+	viewMode := c.FormValue("view-mode")
+	if viewMode != "" {
+		session.SetCookie(c, session.Cookie_NovelViewMode, viewMode)
+	}
+
+	return nil
+}
+
 func setLogout(c *fiber.Ctx) error {
 	session.ClearCookie(c, session.Cookie_Token)
 	session.ClearCookie(c, session.Cookie_CSRF)
@@ -127,6 +136,8 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = resetAll(c)
 	case "novelFontType":
 		err = setNovelFontType(c)
+	case "novelViewMode":
+		err = setNovelViewMode(c)
 	default:
 		err = errors.New("No such setting is available.")
 	}

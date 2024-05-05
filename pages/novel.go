@@ -32,6 +32,7 @@ func NovelPage(c *fiber.Ctx) error {
 	}
 
 	fontType := session.GetCookie(c, session.Cookie_NovelFontType, "gothic")
+	viewMode := session.GetCookie(c, session.Cookie_NovelViewMode, strconv.Itoa(novel.Settings.ViewMode))
 
 	// println("fontType", fontType)
 
@@ -41,6 +42,7 @@ func NovelPage(c *fiber.Ctx) error {
 		"User":         user,
 		"Title":        novel.Title,
 		"FontType":     fontType,
+		"ViewMode":     viewMode,
 		"Language":     strings.ToLower(novel.Language),
 	})
 }
