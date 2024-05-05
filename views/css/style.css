@@ -777,10 +777,14 @@ nav .sidebar-item img {
 }
 .novel .novel-content {
   margin: 1.2rem 0;
-  padding: 6.4rem 10rem;
   line-height: 1.8;
   color: black;
   background-color: white;
+  max-width: 100%;
+  width: 100%;
+}
+.novel .novel-content .novel-content-text {
+  padding: 6.4rem 10rem;
 }
 .novel .novel-settings {
   background-color: #131516;
@@ -838,6 +842,11 @@ nav .sidebar-item img {
 
 [data-font=gothic] {
   font-family: YuGothic, "Hiragino Kaku Gothic Pro", Meiryo, "Source Han Sans", "Source Han Sans JP", "Noto Sans CJK JP", "Avenir Next", Avenir, "Source Sans", "Noto Sans", Roboto, Verdana, "Pingfang TC", "Pingfang HK", "Hiragino Sans CNS", "Lantinghei TC", "Source Han Sans TW", "Source Han Sans HK", "Noto Sans CJK TC", "Microsoft JhengHei", "Pingfang SC", "Hiragino Sans GB", "Lantinghei SC", "Source Han Sans CN", "Noto Sans CJK SC", "Microsoft Yahei", DengXian, "Apple SD Gothic Neo", "Source Han Sans K", "Source Han Sans KR", "Noto Sans CJK KR", "Malgun Gothic", sans-serif;
+}
+
+[data-view="2"] {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
 }
 
 .background-cover {

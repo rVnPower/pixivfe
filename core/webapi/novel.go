@@ -42,18 +42,22 @@ type Novel struct {
 		} `json:"tags"`
 		Writable bool `json:"writable"`
 	} `json:"tags"`
-	SeriesNavData  interface{} `json:"seriesNavData"`
-	HasGlossary    bool        `json:"hasGlossary"`
-	IsUnlisted     bool        `json:"isUnlisted"`
+	SeriesNavData interface{} `json:"seriesNavData"`
+	HasGlossary   bool        `json:"hasGlossary"`
+	IsUnlisted    bool        `json:"isUnlisted"`
 	// seen values: zh-cn, ja
-	Language       string      `json:"language"`
-	CommentOff     int         `json:"commentOff"`
-	CharacterCount int         `json:"characterCount"`
-	WordCount      int         `json:"wordCount"`
-	UseWordCount   bool        `json:"useWordCount"`
-	ReadingTime    int         `json:"readingTime"`
-	AiType         int         `json:"aiType"`
-	Genre          string      `json:"genre"`
+	Language       string `json:"language"`
+	CommentOff     int    `json:"commentOff"`
+	CharacterCount int    `json:"characterCount"`
+	WordCount      int    `json:"wordCount"`
+	UseWordCount   bool   `json:"useWordCount"`
+	ReadingTime    int    `json:"readingTime"`
+	AiType         int    `json:"aiType"`
+	Genre          string `json:"genre"`
+	Settings       struct {
+		ViewMode int `json:"viewMode"`
+		// ...
+	} `json:"suggestedSettings"`
 }
 
 type NovelBrief struct {

@@ -912,10 +912,15 @@ nav {
 
   .novel-content {
     margin: 1.2rem 0;
-    padding: 6.4rem 10rem;
     line-height: 1.8;
     color: black;
     background-color: white;
+    max-width: 100%;
+    width: 100%;
+
+    .novel-content-text {
+      padding: 6.4rem 10rem;
+    }
   }
 
   .novel-settings {
@@ -1060,6 +1065,11 @@ $font-fallback-sans: YuGothic,
 
 [data-font=gothic] {
   font-family: $font-fallback-sans;
+}
+
+[data-view="2"] {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
 }
 
 .background-cover {

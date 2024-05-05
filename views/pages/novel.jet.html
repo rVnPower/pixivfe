@@ -78,8 +78,11 @@
     </span>
     <img src="/assets/font-size.png" alt="Font size" />
   </div>
-  <div class="novel-content" data-font="{{ FontType }}" data-lang="{{ Language }}">
-    {{ raw: renderNovel(Novel.Content) }}
+  <div class="novel-content" data-font="{{ FontType }}" data-lang="{{ Language }}"
+    data-view="{{ Novel.Settings.ViewMode }}">
+    <div class="novel-content-text">
+      {{ raw: renderNovel(Novel.Content) }}
+    </div>
   </div>
   <div class="illust-attr">
     <a href="/users/{{ User.ID }}"><img src="{{ User.Avatar }}" alt="{{ User.Name }}" class="illust-avatar" />
