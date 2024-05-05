@@ -1,6 +1,8 @@
 package core
 
 import (
+	"fmt"
+	"regexp"
 	"time"
 
 	http "codeberg.org/vnpower/pixivfe/v2/core/http"
@@ -103,6 +105,26 @@ func GetNovelByID(c *fiber.Ctx, id string) (Novel, error) {
 	if err != nil {
 		return novel, err
 	}
+
+	// Novel embedded illusts
+	r := regexp.MustCompile("\\[pixivimage:(\\d+.\\d+)\\]")
+	d := regexp.MustCompile("\\d+.\\d+")
+	t := regexp.MustCompile(`\"original\":\"(.+?)\"`)
+
+	novel.Content = r.ReplaceAllStringFunc(novel.Content, func(s string) string {
+		illustid := d.FindString(s)
+
+		URL := http.GetInsertIllustURL(novel.ID, illustid)
+		response, err := http.UnwrapWebAPIRequest(c.Context(), URL, "")
+		if err != nil {
+			return "Cannot insert illust" + illustid
+		}
+
+		url := t.FindString(response)
+		url = session.ProxyImageUrl(c, url[11:]) // truncate the "original":
+
+		return fmt.Sprintf(`<img src=%s alt="%s"/>`, url, s)
+	})
 
 	return novel, nil
 }

@@ -127,3 +127,9 @@ func GetNovelRelatedURL(id string, limit int) string {
 
 	return fmt.Sprintf(base, id, limit)
 }
+
+func GetInsertIllustURL(novelid, id string) string {
+	base := "https://www.pixiv.net/ajax/novel/%s/insert_illusts?id[]=%s"
+
+	return fmt.Sprintf(base, novelid, id)
+}

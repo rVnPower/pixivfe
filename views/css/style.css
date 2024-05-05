@@ -777,14 +777,20 @@ nav .sidebar-item img {
 }
 .novel .novel-content {
   margin: 1.2rem 0;
-  line-height: 1.8;
+  line-height: 2;
   color: black;
   background-color: white;
   max-width: 100%;
   width: 100%;
+  overflow-x: scroll;
 }
 .novel .novel-content .novel-content-text {
   padding: 6.4rem 10rem;
+  text-align: justify;
+}
+.novel .novel-content .novel-content-text img {
+  max-height: 100%;
+  margin: 0 0.5rem;
 }
 .novel .novel-settings {
   background-color: #131516;
