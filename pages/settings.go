@@ -146,5 +146,7 @@ func SettingsPost(c *fiber.Ctx) error {
 		return err
 	}
 
+	c.Redirect("/settings", http.StatusSeeOther)
+
 	return nil
 }
