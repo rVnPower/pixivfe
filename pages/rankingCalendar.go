@@ -78,7 +78,7 @@ func RankingCalendarPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/rankingCalendar", fiber.Map{
+	return c.Render("rankingCalendar", fiber.Map{
 		"Title":       "Ranking calendar",
 		"Render":      render,
 		"Mode":        mode,

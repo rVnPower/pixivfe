@@ -23,7 +23,7 @@ func RankingPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/rank", fiber.Map{
+	return c.Render("rank", fiber.Map{
 		"Title":     "Ranking",
 		"Page":      pageInt,
 		"PageLimit": 10, // hard-coded by pixiv

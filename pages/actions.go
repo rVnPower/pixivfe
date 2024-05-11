@@ -65,7 +65,7 @@ func AddBookmarkRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	id := c.Params("id")
@@ -92,7 +92,7 @@ func DeleteBookmarkRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	id := c.Params("id")
@@ -115,7 +115,7 @@ func LikeRoute(c *fiber.Ctx) error {
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	id := c.Params("id")

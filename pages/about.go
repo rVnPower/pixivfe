@@ -12,5 +12,5 @@ func AboutPage(c *fiber.Ctx) error {
 		"ImageProxy":     core.GlobalServerConfig.ProxyServer.String(),
 		"AcceptLanguage": core.GlobalServerConfig.AcceptLanguage,
 	}
-	return c.Render("pages/about", info)
+	return c.Render("about", info)
 }

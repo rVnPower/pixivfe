@@ -25,7 +25,7 @@ func ArtworkPage(c *fiber.Ctx) error {
 	}
 
 	// todo: passing ArtWorkData{} here will not work. maybe lowercase?
-	return c.Render("pages/artwork", fiber.Map{
+	return c.Render("artwork", fiber.Map{
 		"Illust":          illust,
 		"Title":           illust.Title,
 		"MetaDescription": metaDescription,

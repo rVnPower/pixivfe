@@ -59,7 +59,7 @@ func UserPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/user", fiber.Map{
+	return c.Render("user", fiber.Map{
 		"Title":     data.user.Name,
 		"User":      data.user,
 		"Category":  data.category,
@@ -75,7 +75,7 @@ func UserAtomFeed(c *fiber.Ctx) error {
 		return err
 	}
 
-	err = c.Render("pages/user.atom", fiber.Map{
+	err = c.Render("user.atom", fiber.Map{
 		"URL":       string(c.Request().RequestURI()),
 		"Title":     data.user.Name,
 		"User":      data.user,

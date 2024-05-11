@@ -13,7 +13,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/discovery", fiber.Map{
+	return c.Render("discovery", fiber.Map{
 		"Artworks": works,
 		"Title":    "Discovery",
 	})
@@ -27,7 +27,7 @@ func NovelDiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/novelDiscovery", fiber.Map{
+	return c.Render("novelDiscovery", fiber.Map{
 		"Novels": works,
 		"Title":  "Discovery",
 	})

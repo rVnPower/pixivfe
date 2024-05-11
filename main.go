@@ -50,7 +50,7 @@ func main() {
 	config.GlobalServerConfig.InitializeConfig()
 	core_http.Init()
 
-	engine := jet.New("./views", ".jet.html")
+	engine := jet.New("./views/pages", ".jet.html")
 	engine.AddFuncMap(serve.GetTemplateFunctions())
 	if config.GlobalServerConfig.InDevelopment {
 		engine.Reload(true)
@@ -68,7 +68,7 @@ func main() {
 		Prefork:                 false,
 		JSONEncoder:             json.Marshal,
 		JSONDecoder:             json.Unmarshal,
-		ViewsLayout:             "layout",
+		ViewsLayout:             "_layout",
 		EnableTrustedProxyCheck: true,
 		TrustedProxies:          []string{"0.0.0.0/0"},
 		ProxyHeader:             fiber.HeaderXForwardedFor,
@@ -85,7 +85,8 @@ func main() {
 			// }
 
 			// Send custom error page
-			err = c.Status(code).Render("pages/error", fiber.Map{"Title": "Error", "Error": err})
+			c.Status(code)
+			err = c.Render("error", fiber.Map{"Title": "Error", "Error": err})
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Internal Server Error: %s", err))
 			}

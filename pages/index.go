@@ -18,7 +18,7 @@ func IndexPage(c *fiber.Ctx) error {
 			return err
 		}
 
-		return c.Render("pages/index", fiber.Map{
+		return c.Render("index", fiber.Map{
 			"Title": "Landing", "Data": works,
 		})
 	}
@@ -28,7 +28,7 @@ func IndexPage(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.Render("pages/index", fiber.Map{
+	return c.Render("index", fiber.Map{
 		"Title": "Landing", "NoTokenData": works,
 	})
 }

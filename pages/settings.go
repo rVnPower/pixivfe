@@ -115,7 +115,7 @@ func SettingsPage(c *fiber.Ctx) error {
 			"Value": value,
 		})
 	}
-	return c.Render("pages/settings", fiber.Map{
+	return c.Render("settings", fiber.Map{
 		"CookieList": cookies,
 		"ProxyList":  doc.BuiltinProxyList,
 	})

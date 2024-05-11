@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -9,11 +10,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func PromptUserToLoginPage(c *fiber.Ctx) error {
+	c.Status(http.StatusUnauthorized)
+	return c.Render("unauthorized", fiber.Map{})
+}
+
 func LoginUserPage(c *fiber.Ctx) error {
 	token := session.GetPixivToken(c)
 
 	if token == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	// The left part of the token is the member ID
@@ -26,7 +32,7 @@ func LoginUserPage(c *fiber.Ctx) error {
 func LoginBookmarkPage(c *fiber.Ctx) error {
 	token := session.GetPixivToken(c)
 	if token == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	// The left part of the token is the member ID
@@ -38,7 +44,7 @@ func LoginBookmarkPage(c *fiber.Ctx) error {
 
 func FollowingWorksPage(c *fiber.Ctx) error {
 	if token := session.GetPixivToken(c); token == "" {
-		return c.Redirect("/settings#login")
+		return PromptUserToLoginPage(c)
 	}
 
 	mode := c.Query("mode", "all")
@@ -54,7 +60,7 @@ func FollowingWorksPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/following", fiber.Map{
+	return c.Render("following", fiber.Map{
 		"Title":    "Following works",
 		"Mode":     mode,
 		"Artworks": works,

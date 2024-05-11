@@ -36,5 +36,5 @@ func TagPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("pages/tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": queries, "TrueTag": param, "Page": pageInt})
+	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": queries, "TrueTag": param, "Page": pageInt})
 }
