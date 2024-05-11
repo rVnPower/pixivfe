@@ -1,28 +1,24 @@
 <div class="container" data-hx-boost="false">
-  <h2>Settings</h2>
+  <h1>Settings | Customizing Your Experience On This Instance</h1>
   <p>
-    This page allows you to customize various settings for PixivFE. You can
-    adjust settings like Token, CSRF, and ImageProxy on this page.
+    PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your preferences, which you can change on this page.
   </p>
+  <h2>Current Cookie Values</h2>
   <p>
     Please note that some features, such as NovelFontType, ShowArtR18,
     ShowArtR18G, and ShowArtAI, are still under development and may not function
     as expected.
   </p>
-  <hr />
-  <h3>Current Settings</h3>
   <p>
-    To restore all settings to their default values, click the 'Reset All'
-    button.
+    {{ range CookieList }}
+    <div><span>{{.Key}}</span>=<span>{{.Value}}</span></div>
+    {{ end }}
   </p>
-  {{ range CookieList }}
-  <div><span>{{.Key}}</span>=<span>{{.Value}}</span></div>
-  {{ end }}
   <form action="/settings/reset-all" method="post">
-    <input type="submit" value="Reset all" />
+    <input type="submit" value="Reset All Cookies | Reset All Preferences" />
   </form>
   <hr />
-  <h3 id="login">Login</h3>
+  <h2 id="login">Login</h2>
   <p>Supported features (for now):</p>
   <ul>
     <li>Discovery page</li>
@@ -42,7 +38,7 @@
     <input type="submit" value="Remeber account cookie (until next server restart)" />
   </form>
   <hr />
-  <h3>Logout</h3>
+  <h2>Logout</h2>
   <p>
     To securely end your session, click the 'Logout!' button. This will
     immediately remove your session token.
@@ -51,7 +47,7 @@
     <input type="submit" value="Logout!" />
   </form>
   <hr />
-  <h3>Image proxy server</h3>
+  <h2>Image proxy server</h2>
   <p>
     Choose how images are loaded in PixivFE by selecting either the built-in
     proxy or one of the provided external proxy servers. If you prefer, you can
