@@ -311,7 +311,6 @@ input[type="submit"],
 .switch-button,
 .pagination-button {
   background-color: $link;
-  border: 2px solid $link;
   color: $fg;
 }
 
@@ -1410,4 +1409,17 @@ $font-fallback-sans: YuGothic,
     font-size: 1.2em;
     font-weight: normal;
   }
+}
+
+.settings-set-cookie,
+.settings-set-cookie>* {
+  margin: unset;
+  display: inline;
+}
+.settings-set-cookie>input[type="text"] {
+  width: 20em;
+}
+
+input.critical {
+  background-color: $highlight;
 }

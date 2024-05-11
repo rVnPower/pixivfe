@@ -3,21 +3,27 @@
   <p>
     PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your preferences, which you can change on this page.
   </p>
+  <p>
+    Please note that some cookies here such as NovelFontType, ShowArtR18,
+    ShowArtR18G, and ShowArtAI are for features still under development.
+  </p>
   <h2>Current Cookie Values</h2>
   <p>
-    Please note that some features, such as NovelFontType, ShowArtR18,
-    ShowArtR18G, and ShowArtAI, are still under development and may not function
-    as expected.
-  </p>
-  <p>
     {{ range CookieList }}
-    <div><span>{{.Key}}</span>=<span>{{.Value}}</span></div>
+    <div>
+      <h3 class="settings-set-cookie">{{.Key}}</h3>
+      <form action="/settings/set-cookie" method="post" class="settings-set-cookie">
+        <input type="hidden" name="key" value="{{.Key}}" />
+        <input type="text" name="value" value="{{.Value}}" />
+        <input type="submit" value="Set" />
+      </form>
+    </div>
     {{ end }}
   </p>
   <form action="/settings/reset-all" method="post">
-    <input type="submit" value="Reset All Cookies | Reset All Preferences" />
+    <input class="critical" type="submit" value="Reset All Cookies | Reset All Preferences" />
   </form>
-  <hr />
+  <hr/>
   <h2 id="login">Login</h2>
   <p>Supported features (for now):</p>
   <ul>

@@ -287,7 +287,6 @@ input[type=submit],
 .switch-button,
 .pagination-button {
   background-color: #118bee;
-  border: 2px solid #118bee;
   color: #fff;
 }
 
@@ -1156,6 +1155,20 @@ nav .sidebar-item img {
 .tag-container .sub {
   font-size: 1.2em;
   font-weight: normal;
+}
+
+.settings-set-cookie,
+.settings-set-cookie > * {
+  margin: unset;
+  display: inline;
+}
+
+.settings-set-cookie > input[type=text] {
+  width: 20em;
+}
+
+input.critical {
+  background-color: #fc365b;
 }
 
 /*# sourceMappingURL=style.css.map */

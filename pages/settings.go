@@ -2,6 +2,7 @@ package pages
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"regexp"
@@ -101,6 +102,18 @@ func setLogout(c *fiber.Ctx) error {
 	return nil
 }
 
+func setCookie(c *fiber.Ctx) error {
+	key := c.FormValue("key")
+	value := c.FormValue("value")
+	for _, cookie_name := range session.AllCookieNames {
+		if string(cookie_name) == key {
+			session.SetCookie(c, cookie_name, value)
+			return nil
+		}
+	}
+	return fmt.Errorf("Invalid Cookie Name: %s", key)
+}
+
 func resetAll(c *fiber.Ctx) error {
 	session.ClearAllCookies(c)
 	return nil
@@ -138,6 +151,8 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = setNovelFontType(c)
 	case "novelViewMode":
 		err = setNovelViewMode(c)
+	case "set-cookie":
+		err = setCookie(c)
 	default:
 		err = errors.New("No such setting is available.")
 	}
