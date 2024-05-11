@@ -793,6 +793,28 @@ nav .sidebar-item img {
   max-height: 100%;
   margin: 0 0.5rem;
 }
+.novel .novel-attr {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.novel .novel-attr .novel-avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50px;
+  object-fit: cover;
+  object-position: center top;
+}
+.novel .novel-attr .attr-wrap {
+  margin-left: 5px;
+}
+.novel .novel-attr .attr-wrap .novel-author {
+  font-size: 0.8em;
+}
+.novel .novel-attr .attr-wrap a {
+  color: #aaa;
+}
 .novel .novel-settings {
   background-color: #131516;
   padding: 0.5rem;

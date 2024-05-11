@@ -931,6 +931,34 @@ nav {
     }
   }
 
+
+  .novel-attr {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .novel-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50px;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .attr-wrap {
+      margin-left: 5px;
+
+      .novel-author {
+        font-size: 0.8em;
+      }
+
+      a {
+        color: $fg-secondary;
+      }
+    }
+  }
+
   .novel-settings {
     background-color: $bg;
     padding: 0.5rem;
