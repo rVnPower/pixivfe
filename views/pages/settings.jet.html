@@ -7,19 +7,23 @@
     Please note that some cookies here such as NovelFontType, ShowArtR18,
     ShowArtR18G, and ShowArtAI are for features still under development.
   </p>
-  <h2>Current Cookie Values</h2>
-  <p>
-    {{ range CookieList }}
-    <div>
-      <h3 class="settings-set-cookie">{{.Key}}</h3>
-      <form action="/settings/set-cookie" method="post" class="settings-set-cookie">
-        <input type="hidden" name="key" value="{{.Key}}" />
-        <input type="text" name="value" value="{{.Value}}" />
-        <input type="submit" value="Set" />
-      </form>
-    </div>
-    {{ end }}
-  </p>
+  <details>
+    <summary>
+      <h2>Current Cookie Values</h2>
+    </summary>
+    <p>
+      {{ range CookieList }}
+      <div class="settings-set-cookie">
+        <h3>{{.Key}}</h3>
+        <form action="/settings/set-cookie" method="post" >
+          <input type="hidden" name="key" value="{{.Key}}" />
+          <input type="text" name="value" value="{{.Value}}" />
+          <input type="submit" value="Set" />
+        </form>
+      </div>
+      {{ end }}
+    </p>
+  </details>
   <form action="/settings/reset-all" method="post">
     <input class="critical" type="submit" value="Reset All Cookies | Reset All Preferences" />
   </form>

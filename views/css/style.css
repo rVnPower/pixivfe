@@ -1157,13 +1157,25 @@ nav .sidebar-item img {
   font-weight: normal;
 }
 
-.settings-set-cookie,
-.settings-set-cookie > * {
-  margin: unset;
-  display: inline;
+summary > :is(h1, h2, h3, h4, h5, h6) {
+  display: inline-block;
 }
 
-.settings-set-cookie > input[type=text] {
+.settings-set-cookie h3 {
+  font-size: smaller;
+  margin-block: 4px 0;
+}
+
+.settings-set-cookie form {
+  display: flex;
+  gap: 4px;
+}
+
+.settings-set-cookie form > * {
+  margin: unset !important;
+}
+
+.settings-set-cookie form > input[type=text] {
   width: 20em;
 }
 
