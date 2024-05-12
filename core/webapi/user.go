@@ -21,14 +21,16 @@ const (
 	UserArt_Illustration UserArtCategory = "illustrations"
 	UserArt_Manga        UserArtCategory = "manga"
 	UserArt_Bookmarked   UserArtCategory = "bookmarks" // what this user has bookmarked; not art by this user
+	UserArt_Novel        UserArtCategory = "novels"
 )
 
 func (s UserArtCategory) Validate() error {
 	if s != UserArt_Any &&
 		s != UserArt_Illustration &&
 		s != UserArt_Manga &&
-		s != UserArt_Bookmarked {
-		return fmt.Errorf("Invalid work category: %#v. " + `only "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarked)
+		s != UserArt_Bookmarked &&
+		s != UserArt_Novel {
+		return fmt.Errorf("Invalid work category: %#v. "+`only "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarked, UserArt_Novel)
 	} else {
 		return nil
 	}
@@ -49,6 +51,7 @@ type User struct {
 	Webpage         string                 `json:"webpage"`
 	SocialRaw       json.RawMessage        `json:"social"`
 	Artworks        []ArtworkBrief         `json:"artworks"`
+	Novels          []NovelBrief           `json:"novels"`
 	Background      map[string]interface{} `json:"background"`
 	ArtworksCount   int
 	FrequentTags    []FrequentTag
@@ -69,10 +72,15 @@ func (s *User) ParseSocial() error {
 	return nil
 }
 
-func GetFrequentTags(c *fiber.Ctx, ids string) ([]FrequentTag, error) {
+func GetFrequentTags(c *fiber.Ctx, ids string, category UserArtCategory) ([]FrequentTag, error) {
 	var tags []FrequentTag
+	var URL string
 
-	URL := http.GetFrequentTagsURL(ids)
+	if category != "novels" {
+		URL = http.GetFrequentArtworkTagsURL(ids)
+	} else {
+		URL = http.GetFrequentNovelTagsURL(ids)
+	}
 
 	response, err := http.UnwrapWebAPIRequest(c.Context(), URL, "")
 	if err != nil {
@@ -121,6 +129,41 @@ func GetUserArtworks(c *fiber.Ctx, id, ids string) ([]ArtworkBrief, error) {
 	return works, nil
 }
 
+func GetUserNovels(c *fiber.Ctx, id, ids string) ([]NovelBrief, error) {
+	// VnPower: we can merge this function into GetUserArtworks, but I want to make things simple for now
+	var works []NovelBrief
+
+	URL := http.GetUserFullNovelURL(id, ids)
+
+	resp, err := http.UnwrapWebAPIRequest(c.Context(), URL, "")
+	if err != nil {
+		return nil, err
+	}
+	resp = session.ProxyImageUrl(c, resp)
+
+	var body struct {
+		Novels map[int]json.RawMessage `json:"works"`
+	}
+
+	err = json.Unmarshal([]byte(resp), &body)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range body.Novels {
+		var novel NovelBrief
+		err = json.Unmarshal(v, &novel)
+
+		if err != nil {
+			return nil, err
+		}
+
+		works = append(works, novel)
+	}
+
+	return works, nil
+}
+
 func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page int) (string, int, error) {
 	URL := http.GetUserArtworksURL(id)
 
@@ -132,6 +175,7 @@ func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page i
 	var body struct {
 		Illusts json.RawMessage `json:"illusts"`
 		Mangas  json.RawMessage `json:"manga"`
+		Novels  json.RawMessage `json:"novels"`
 	}
 
 	err = json.Unmarshal([]byte(resp), &body)
@@ -149,28 +193,38 @@ func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page i
 
 	var illusts map[int]string
 	var mangas map[int]string
+	var novels map[int]string
 	count := 0
-
-	if err = json.Unmarshal(body.Illusts, &illusts); err != nil {
-		illusts = make(map[int]string)
-	}
-	if err = json.Unmarshal(body.Mangas, &mangas); err != nil {
-		mangas = make(map[int]string)
-	}
 
 	// Get the keys, because Pixiv only returns IDs (very evil)
 
 	if category == UserArt_Illustration || category == UserArt_Any {
+		if err = json.Unmarshal(body.Illusts, &illusts); err != nil {
+			illusts = make(map[int]string)
+		}
 		for k := range illusts {
 			ids = append(ids, k)
 			count++
 		}
 	}
 	if category == UserArt_Manga || category == UserArt_Any {
+		if err = json.Unmarshal(body.Mangas, &mangas); err != nil {
+			mangas = make(map[int]string)
+		}
 		for k := range mangas {
 			ids = append(ids, k)
 			count++
 		}
+	}
+	if category == UserArt_Novel {
+		if err = json.Unmarshal(body.Novels, &novels); err != nil {
+			novels = make(map[int]string)
+		}
+		for k := range novels {
+			ids = append(ids, k)
+			count++
+		}
+
 	}
 
 	// Reverse sort the ids
@@ -212,7 +266,49 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 		return user, err
 	}
 
-	if category != "bookmarks" {
+	if category == "bookmarks" {
+		// Bookmarks
+		works, count, err := GetUserBookmarks(c, id, "show", page)
+		if err != nil {
+			return user, err
+		}
+
+		user.Artworks = works
+
+		// Public bookmarks count
+		user.ArtworksCount = count
+	} else if category == "novels" {
+		ids, count, err := GetUserArtworksID(c, id, category, page)
+		if err != nil {
+			return user, err
+		}
+
+		if count > 0 {
+			// Check if the user has artworks available or not
+			works, err := GetUserNovels(c, id, ids)
+			if err != nil {
+				return user, err
+			}
+
+			// IDK but the order got shuffled even though Pixiv sorted the IDs in the response
+			sort.Slice(works[:], func(i, j int) bool {
+				left := works[i].ID
+				right := works[j].ID
+				return numberGreaterThan(left, right)
+			})
+			user.Novels = works
+
+			if getTags {
+				user.FrequentTags, err = GetFrequentTags(c, ids, category)
+				if err != nil {
+					return user, err
+				}
+			}
+		}
+
+		// Artworks count
+		user.ArtworksCount = count
+	} else {
 		ids, count, err := GetUserArtworksID(c, id, category, page)
 		if err != nil {
 			return user, err
@@ -234,7 +330,7 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 			user.Artworks = works
 
 			if getTags {
-				user.FrequentTags, err = GetFrequentTags(c, ids)
+				user.FrequentTags, err = GetFrequentTags(c, ids, category)
 				if err != nil {
 					return user, err
 				}
@@ -243,19 +339,6 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 
 		// Artworks count
 		user.ArtworksCount = count
-
-	} else {
-		// Bookmarks
-		works, count, err := GetUserBookmarks(c, id, "show", page)
-		if err != nil {
-			return user, err
-		}
-
-		user.Artworks = works
-
-		// Public bookmarks count
-		user.ArtworksCount = count
-
 	}
 
 	err = user.ParseSocial()

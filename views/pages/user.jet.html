@@ -12,18 +12,13 @@
   <div class="user-details">
     <h1>{{ User.Name }}</h1>
     <div>
-      <a href="https://pixiv.net/u/{{ User.ID }}"
-        >pixiv.net/u/{{ User.ID }}</a
-      >
+      <a href="https://pixiv.net/u/{{ User.ID }}">pixiv.net/u/{{ User.ID }}</a>
       <br />
     </div>
     <small> {{ User.Following }} Following | {{ User.MyPixiv }} MyPixiv </small>
     <div class="user-social">
       {{ if User.Webpage }}
-      <span
-        ><a href="{{ User.Webpage }}"
-          ><img src="/assets/globe.png" alt="Webpage" /></a
-      ></span>
+      <span><a href="{{ User.Webpage }}"><img src="/assets/globe.png" alt="Webpage" /></a></span>
       {{ end }} {{ range index, item := User.Social }}
       <span>
         <a href="{{ item.url }}">
@@ -52,22 +47,14 @@
   </div>
   <div class="switcher">
     <div class="switch-title">Category</div>
-    <a href="/users/{{ User.ID }}/#checkpoint" class="switch-button"
-      >All</a
-    >
-    <a
-      href="/users/{{ User.ID }}/illustrations#checkpoint"
-      class="switch-button"
-      >Illustrations</a
-    >
-    <a href="/users/{{ User.ID }}/manga#checkpoint" class="switch-button"
-      >Mangas</a
-    >
-    <a href="/users/{{ User.ID }}/bookmarks#checkpoint" class="switch-button"
-      >Bookmarks</a
-    >
+    <a href="/users/{{ User.ID }}/#checkpoint" class="switch-button">All</a>
+    <a href="/users/{{ User.ID }}/illustrations#checkpoint" class="switch-button">Illustrations</a>
+    <a href="/users/{{ User.ID }}/manga#checkpoint" class="switch-button">Mangas</a>
+    <a href="/users/{{ User.ID }}/novels#checkpoint" class="switch-button">Novels</a>
+    <a href="/users/{{ User.ID }}/bookmarks#checkpoint" class="switch-button">Bookmarks</a>
   </div>
   <div>
+    {{ if Category != "novels" }}
     <div class="artwork-container-header">
       <h2 id="checkpoint">Illustrations and Mangas</h2>
       {{ combinedUrl := "/artworks-multi/" + joinArtworkIds(User.Artworks) }}
@@ -76,6 +63,17 @@
     <div class="artwork-container">
       {{ include "components/small-tn" User.Artworks }}
     </div>
+    {{ else }}
+
+    <div class="artwork-container-header">
+      <h2 id="checkpoint">Novels</h2>
+    </div>
+    <div class="novel-container">
+      {{ range User.Novels }}
+      {{ include "components/novel-tn" . }}
+      {{ end }}
+    </div>
+    {{ end }}
   </div>
   <div class="pagination">
     {{ url := "/users/" + User.ID + "/" + Category + "?page="}}

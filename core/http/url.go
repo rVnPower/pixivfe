@@ -55,14 +55,26 @@ func GetUserFullArtworkURL(id, ids string) string {
 	return fmt.Sprintf(base, id, ids)
 }
 
+func GetUserFullNovelURL(id, ids string) string {
+	base := "https://www.pixiv.net/ajax/user/%s/profile/novels?is_first_page=0&lang=en%s"
+
+	return fmt.Sprintf(base, id, ids)
+}
+
 func GetUserBookmarksURL(id, mode string, page int) string {
 	base := "https://www.pixiv.net/ajax/user/%s/illusts/bookmarks?tag=&offset=%d&limit=48&rest=%s"
 
 	return fmt.Sprintf(base, id, page*48, mode)
 }
 
-func GetFrequentTagsURL(ids string) string {
+func GetFrequentArtworkTagsURL(ids string) string {
 	base := "https://www.pixiv.net/ajax/tags/frequent/illust?%s"
+
+	return fmt.Sprintf(base, ids)
+}
+
+func GetFrequentNovelTagsURL(ids string) string {
+	base := "https://www.pixiv.net/ajax/tags/frequent/novel?%s"
 
 	return fmt.Sprintf(base, ids)
 }
