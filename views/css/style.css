@@ -36,7 +36,9 @@ edit style.scss
     list-style: none;
   }
   /* Fix list style to not indent */
-  ul, ol, menu {
+  ul,
+  ol,
+  menu {
     padding-inline-start: 1.5em;
   }
   li {
@@ -111,7 +113,12 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-block-end: 0.5em;
 }
 
@@ -730,6 +737,7 @@ nav .sidebar-item img {
   aspect-ratio: 1/1;
   width: 30px;
   height: 30px;
+  display: inline;
 }
 
 .illust {
@@ -1020,6 +1028,9 @@ nav .sidebar-item img {
 
 .user {
   transform: translateY(-8rem);
+}
+.user img {
+  display: inline;
 }
 .user .user-avatar {
   text-align: center;
