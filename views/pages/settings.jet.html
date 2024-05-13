@@ -1,33 +1,34 @@
 <div class="container" data-hx-boost="false">
-  <h1>Settings | Customizing Your Experience On This Instance</h1>
+  <h1>Settings</h1>
   <p>
-    PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your preferences, which you can change on this page.
+    PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your
+    preferences, which you can change on this page to customize yout experience on this instance.
   </p>
   <details>
     <summary>
-      <h2>Current Cookie Values</h2>
+      <h2>Current cookie values</h2>
     </summary>
     <div>
-      Please note that some cookies here such as NovelFontType, ShowArtR18,
+      Please note that some cookies here such as ShowArtR18,
       ShowArtR18G, and ShowArtAI are for features still under development.
     </div>
     <p>
       {{ range CookieList }}
-      <div class="settings-set-cookie">
-        <h3>{{.Key}}</h3>
-        <form action="/settings/set-cookie" method="post" >
-          <input type="hidden" name="key" value="{{.Key}}" />
-          <input type="text" name="value" value="{{.Value}}" />
-          <input type="submit" value="Set" />
-        </form>
-      </div>
-      {{ end }}
+    <div class="settings-set-cookie">
+      <h3>{{.Key}}</h3>
+      <form action="/settings/set-cookie" method="post">
+        <input type="hidden" name="key" value="{{.Key}}" />
+        <input type="text" name="value" value="{{.Value}}" />
+        <input type="submit" value="Set" />
+      </form>
+    </div>
+    {{ end }}
     </p>
   </details>
   <form action="/settings/reset-all" method="post">
-    <input class="critical" type="submit" value="Reset All Cookies | Reset All Preferences" />
+    <input class="critical" type="submit" value="Reset all cookies/preferences" />
   </form>
-  <hr/>
+  <hr />
   <h2 id="login">Login</h2>
   <p>Supported features (for now):</p>
   <ul>
@@ -45,7 +46,7 @@
   </p>
   <form action="/settings/token" method="post">
     <input type="text" name="token" autocomplete="off" />
-    <input type="submit" value="Remeber account cookie (until next server restart)" />
+    <input type="submit" value="Remember account cookie (until next server restart)" />
   </form>
   <hr />
   <h2>Logout</h2>
