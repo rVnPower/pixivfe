@@ -60,6 +60,8 @@
   </div>
   <!-- ----------- -->
   <div class="novel-settings">
+    <div class="novel-settings-wrapper">
+
     <span class="dropdown">
       {{ url := "/settings/novelFontType?r=" + OriginalURL + "#content" }}
       <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
@@ -101,6 +103,7 @@
         </form>
       </div>
     </span>
+    </div>
   </div>
   <!-- ----------- -->
   <div class="novel-content" id="content" data-font="{{ FontType }}" data-lang="{{ Language }}"

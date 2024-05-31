@@ -955,6 +955,9 @@ nav .sidebar-item img {
   width: 30px;
   height: 30px;
 }
+.novel .novel-settings .novel-settings-wrapper {
+  display: flex;
+}
 .novel .novel-settings .dropdown {
   position: relative;
   display: inline-block;
