@@ -1,6 +1,7 @@
 package pages
 
 import (
+	site "codeberg.org/vnpower/pixivfe/v2/core/http"
 	core "codeberg.org/vnpower/pixivfe/v2/core/webapi"
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,9 +14,12 @@ func DiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
+	urlc := site.NewURLConstruct("discovery", map[string]string{"mode": mode})
+
 	return c.Render("discovery", fiber.Map{
 		"Artworks": works,
 		"Title":    "Discovery",
+		"URLC":     urlc.Replace,
 	})
 }
 

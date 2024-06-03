@@ -6,11 +6,10 @@
     <a href="/discovery/novel" class="switch-button">Novels</a>
   </div>
   <div class="switcher">
-    {{ url := "/discovery?mode=" }}
     <div class="switch-title">Filter</div>
-    <a href="{{url}}all" class="switch-button">All</a>
-    <a href="{{url}}safe" class="switch-button">Safe</a>
-    <a href="{{url}}r18" class="switch-button">R-18</a>
+    <a href='{{URLC("mode", "all")}}' class="switch-button">All</a>
+    <a href='{{URLC("mode", "safe")}}' class="switch-button">Safe</a>
+    <a href='{{URLC("mode", "r18")}}' class="switch-button">R-18</a>
   </div>
   <div class="artwork-container">
     {{ include "components/small-tn" Artworks }}
