@@ -14,7 +14,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	urlc := site.NewURLConstruct("discovery", map[string]string{"mode": mode})
+	urlc := site.NewURLConstruct("discovery", map[string]string{"mode": mode}, "#checkpoint")
 
 	return c.Render("discovery", fiber.Map{
 		"Artworks": works,

@@ -34,6 +34,37 @@ type SearchResult struct {
 	RelatedTags []string `json:"relatedTags"`
 }
 
+type SearchPageSettings struct {
+	Name string // Tag to search for
+	Category string // Filter by type, could be illusts or mangas
+	Order string // Sort by date
+	Mode string // Safe, R18 or both
+	Ratio string // Landscape, portrait, or squared
+	Page string // Page number
+
+	// To implement
+	SearchMode string // Exact match, partial match, or match with title
+	Wlt string // Minimum image width
+	Wgt string // Maximum image width
+	Hlt string // Minimum image height
+	Hgt string // Maximum image height
+	Tool string // Filter by production tools (ex. Photoshop)
+	Scd string // After this date
+	Ecd string // Before this date
+}
+
+func (s SearchPageSettings) ReturnMap() map[string]string {
+	return map[string]string {
+		"Name": s.Name,
+		"Category": s.Category,
+		"Order": s.Order,
+		"Mode": s.Mode,
+		"Ratio": s.Ratio,
+		"Page": s.Page, // This field should always be the last
+	}
+}
+
+
 func GetTagData(c *fiber.Ctx, name string) (TagDetail, error) {
 	var tag TagDetail
 
@@ -54,9 +85,8 @@ func GetTagData(c *fiber.Ctx, name string) (TagDetail, error) {
 	return tag, nil
 }
 
-func GetSearch(c *fiber.Ctx, artworkType, name, order, age_settings, ratio, page string) (*SearchResult, error) {
-
-	URL := http.GetSearchArtworksURL(artworkType, name, order, age_settings, ratio, page)
+func GetSearch(c *fiber.Ctx, settings SearchPageSettings) (*SearchResult, error) {
+	URL := http.GetSearchArtworksURL(settings.ReturnMap())
 
 	response, err := http.UnwrapWebAPIRequest(c.Context(), URL, "")
 	if err != nil {
