@@ -7,9 +7,10 @@
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    <a href='{{URLC("mode", "all")}}' class="switch-button">All</a>
-    <a href='{{URLC("mode", "safe")}}' class="switch-button">Safe</a>
-    <a href='{{URLC("mode", "r18")}}' class="switch-button">R-18</a>
+    {{ URL := URLC("mode") }}
+    <a href='{{URL}}all' class="switch-button">All</a>
+    <a href='{{URL}}safe' class="switch-button">Safe</a>
+    <a href='{{URL}}r18' class="switch-button">R-18</a>
   </div>
   <div class="artwork-container">
     {{ include "components/small-tn" Artworks }}

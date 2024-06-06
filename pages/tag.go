@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"strconv"
 
-	core "codeberg.org/vnpower/pixivfe/v2/core/webapi"
 	site "codeberg.org/vnpower/pixivfe/v2/core/http"
+	core "codeberg.org/vnpower/pixivfe/v2/core/webapi"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,13 +24,13 @@ func TagPage(c *fiber.Ctx) error {
 
 	// Because of the large amount of queries available for this route,
 	// I made a struct type just to manage the queries
-	queries := core.SearchPageSettings {
-		Name: name,
+	queries := core.SearchPageSettings{
+		Name:     name,
 		Category: c.Query("category", "artworks"),
-		Order: c.Query("order", "date_d"),
-		Mode: c.Query("mode", "safe"),
-		Ratio: c.Query("ratio", ""),
-		Page: page,
+		Order:    c.Query("order", "date_d"),
+		Mode:     c.Query("mode", "safe"),
+		Ratio:    c.Query("ratio", ""),
+		Page:     page,
 	}
 
 	tag, err := core.GetTagData(c, name)
@@ -42,8 +42,8 @@ func TagPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	urlc := site.NewURLConstruct("tags", queries.ReturnMap(), "")
+	urlc := site.NewURLConstruct("tags", queries.ReturnMap())
 
 	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": queries.ReturnMap(), "TrueTag": param, "Page": pageInt, "URLC": urlc.Replace})
-		
+
 }

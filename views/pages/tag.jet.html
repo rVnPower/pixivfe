@@ -29,27 +29,31 @@
 
   <div class="switcher">
     <div class="switch-title">Type</div>
-    <a href='{{URLC("category", "artworks")}}' class="switch-button">All</a>
-	<a href='{{URLC("category", "illustrations")}}' class="switch-button">Illustrations</a>
-	<a href='{{URLC("category", "manga")}}' class="switch-button">Manga</a>
+    {{ URL := URLC("category") }}
+    <a href='{{URL}}artworks#checkpoint' class="switch-button">All</a>
+	<a href='{{URL}}illustrations#checkpoint' class="switch-button">Illustrations</a>
+	<a href='{{URL}}manga#checkpoint' class="switch-button">Manga</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Order</div>
-    <a href='{{URLC("order", "date_d")}}' class="switch-button">Newest</a>
-    <a href='{{URLC("order", "date")}}' class="switch-button">Oldest</a>
+    {{ URL := URLC("order") }}
+    <a href='{{URL}}date_d#checkpoint' class="switch-button">Newest</a>
+    <a href='{{URL}}date#checkpoint' class="switch-button">Oldest</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    <a href='{{URLC("mode", "all")}}' class="switch-button">All</a>
-    <a href='{{URLC("mode", "safe")}}' class="switch-button">Safe</a>
-    <a href='{{URLC("mode", "r18")}}' class="switch-button">R-18</a>
+    {{ URL := URLC("mode") }}
+    <a href='{{URL}}all#checkpoint' class="switch-button">All</a>
+    <a href='{{URL}}safe#checkpoint' class="switch-button">Safe</a>
+    <a href='{{URL}}r18#checkpoint' class="switch-button">R-18</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Ratio</div>
-    <a href='{{URLC("ratio", "")}}' class="switch-button">All</a>
-    <a href='{{URLC("ratio", "-0.5")}}' class="switch-button">Portrait</a>
-    <a href='{{URLC("ratio", "0")}}' class="switch-button">Square</a>
-    <a href='{{URLC("ratio", "0.5")}}' class="switch-button">Landscape</a>
+    {{ URL := URLC("ratio") }}
+    <a href='{{URL}}#checkpoint' class="switch-button">All</a>
+    <a href='{{URL}}-0.5#checkpoint' class="switch-button">Portrait</a>
+    <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
+    <a href='{{URL}}0.5#checkpoint' class="switch-button">Landscape</a>
   </div>
   {{ if Data.Popular.Recent }}
   <h2>Popular artworks</h2>
@@ -70,7 +74,7 @@
   </div>
 
   <div class="pagination">
-    {{ url := URLC("page", "") }}
+    {{ url := URLC("page") }}
     <small>Page {{ Page }}</small>
     <br />
     {{ raw: createPaginator(url, "#checkpoint", Page, -1) }}

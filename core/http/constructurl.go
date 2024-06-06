@@ -8,24 +8,20 @@ import (
 type URLConstructor struct {
 	path string
 	hash map[string]string
-	fragment string
 }
 
 func lowercaseFirstChar(s string) string {
 	return strings.ToLower(s[0:1]) + s[1:]
 }
 
-func (obj *URLConstructor) Replace(name, value string) string {
+func (obj *URLConstructor) Replace(name string) string {
 	url := fmt.Sprintf("/%s", obj.path)
 	first := true
-
-	var matchedV string
 
 	for k, v := range obj.hash {
 		k = lowercaseFirstChar(k)
 
 		if k == name {
-			matchedV = value
 			continue
 		}
 		if first {
@@ -44,17 +40,14 @@ func (obj *URLConstructor) Replace(name, value string) string {
 	} else {
 		t = "&"
 	}
-	url += fmt.Sprintf("%s%s=%s", t, name, matchedV)
-	
-	url += obj.fragment
+	url += fmt.Sprintf("%s%s=", t, name)
 
 	return url
 }
 
-func NewURLConstruct(path string, obj map[string]string, fragment string) URLConstructor {
+func NewURLConstruct(path string, obj map[string]string) URLConstructor {
 	return URLConstructor{
 		path: path,
 		hash: obj,
-		fragment: fragment,
 	}
 }
