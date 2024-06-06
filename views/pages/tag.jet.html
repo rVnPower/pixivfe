@@ -28,11 +28,11 @@
   </div>
 
   <div class="switcher">
-    <div class="switch-title">Type</div>
+    <div class="switch-title">Category</div>
     {{ URL := URLC(Queries, "category") }}
-    <a href='{{URL}}artworks#checkpoint' class="switch-button">All</a>
-	<a href='{{URL}}illustrations#checkpoint' class="switch-button">Illustrations</a>
-	<a href='{{URL}}manga#checkpoint' class="switch-button">Manga</a>
+    <a href='{{URL}}artworks#checkpoint' class="switch-button">Artworks</a>
+    <a href='{{URL}}illustrations#checkpoint' class="switch-button">Illustrations</a>
+    <a href='{{URL}}manga#checkpoint' class="switch-button">Manga</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Order</div>
@@ -47,14 +47,19 @@
     <a href='{{URL}}safe#checkpoint' class="switch-button">Safe</a>
     <a href='{{URL}}r18#checkpoint' class="switch-button">R-18</a>
   </div>
-  <div class="switcher">
-    <div class="switch-title">Ratio</div>
-    {{ URL := URLC(Queries, "ratio") }}
-    <a href='{{URL}}#checkpoint' class="switch-button">All</a>
-    <a href='{{URL}}-0.5#checkpoint' class="switch-button">Portrait</a>
-    <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
-    <a href='{{URL}}0.5#checkpoint' class="switch-button">Landscape</a>
-  </div>
+  <details>
+    <summary>
+    <h2>Advanced settings</h2>
+    </summary>
+    <div class="switcher">
+      <div class="switch-title">Ratio</div>
+      {{ URL := URLC(Queries, "ratio") }}
+      <a href='{{URL}}#checkpoint' class="switch-button">All</a>
+      <a href='{{URL}}-0.5#checkpoint' class="switch-button">Portrait</a>
+      <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
+      <a href='{{URL}}0.5#checkpoint' class="switch-button">Landscape</a>
+    </div>
+  </details>
   {{ if Data.Popular.Recent }}
   <h2>Popular artworks</h2>
   <h3>Recent</h3>
