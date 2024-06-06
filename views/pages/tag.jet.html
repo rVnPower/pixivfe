@@ -29,27 +29,27 @@
 
   <div class="switcher">
     <div class="switch-title">Type</div>
-    {{ URL := URLC("category") }}
+    {{ URL := URLC(Queries, "category") }}
     <a href='{{URL}}artworks#checkpoint' class="switch-button">All</a>
 	<a href='{{URL}}illustrations#checkpoint' class="switch-button">Illustrations</a>
 	<a href='{{URL}}manga#checkpoint' class="switch-button">Manga</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Order</div>
-    {{ URL := URLC("order") }}
+    {{ URL := URLC(Queries, "order") }}
     <a href='{{URL}}date_d#checkpoint' class="switch-button">Newest</a>
     <a href='{{URL}}date#checkpoint' class="switch-button">Oldest</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    {{ URL := URLC("mode") }}
+    {{ URL := URLC(Queries, "mode") }}
     <a href='{{URL}}all#checkpoint' class="switch-button">All</a>
     <a href='{{URL}}safe#checkpoint' class="switch-button">Safe</a>
     <a href='{{URL}}r18#checkpoint' class="switch-button">R-18</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Ratio</div>
-    {{ URL := URLC("ratio") }}
+    {{ URL := URLC(Queries, "ratio") }}
     <a href='{{URL}}#checkpoint' class="switch-button">All</a>
     <a href='{{URL}}-0.5#checkpoint' class="switch-button">Portrait</a>
     <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
@@ -74,7 +74,7 @@
   </div>
 
   <div class="pagination">
-    {{ url := URLC("page") }}
+    {{ url := URLC(Queries, "page") }}
     <small>Page {{ Page }}</small>
     <br />
     {{ raw: createPaginator(url, "#checkpoint", Page, -1) }}

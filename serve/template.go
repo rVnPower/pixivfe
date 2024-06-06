@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	site "codeberg.org/vnpower/pixivfe/v2/core/http"
 	core "codeberg.org/vnpower/pixivfe/v2/core/webapi"
 )
 
@@ -234,6 +235,10 @@ func GetNovelGenre(s string) string {
 	return fmt.Sprintf("(Unknown Genre %s)", s)
 }
 
+func lowercaseFirstChar(s string) string {
+	return strings.ToLower(s[0:1]) + s[1:]
+}
+
 func GetTemplateFunctions() template.FuncMap {
 	return template.FuncMap{
 		"parseEmojis": func(s string) template.HTML {
@@ -295,6 +300,36 @@ func GetTemplateFunctions() template.FuncMap {
 		"novelGenre": GetNovelGenre,
 		"floor": func(i float64) int {
 			return int(math.Floor(i))
+		},
+		"URLC": func(obj site.URLConstructor, name string) string {
+			url := fmt.Sprintf("/%s", obj.Path)
+			first := true
+
+			for k, v := range obj.Hash {
+				k = lowercaseFirstChar(k)
+
+				if k == name {
+					continue
+				}
+				if first {
+					url += "?"
+					first = false
+				} else {
+					url += "&"
+				}
+				url += fmt.Sprintf("%s=%s", k, v)
+			}
+
+			// This is to move the matched query to the end of the URL
+			var t string
+			if first {
+				t = "?"
+			} else {
+				t = "&"
+			}
+			url += fmt.Sprintf("%s%s=", t, name)
+
+			return url
 		},
 	}
 }

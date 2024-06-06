@@ -1,13 +1,13 @@
 <div class="container">
   <h1>Discover artworks</h1>
   <div class="switcher">
-    <div class="switch-title">Filter</div>
+    <div class="switch-title">Type</div>
     <a href="/discovery" class="switch-button">Artworks</a>
     <a href="/discovery/novel" class="switch-button">Novels</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    {{ URL := URLC("mode") }}
+    {{ URL := URLC(Queries, "mode") }}
     <a href='{{URL}}all' class="switch-button">All</a>
     <a href='{{URL}}safe' class="switch-button">Safe</a>
     <a href='{{URL}}r18' class="switch-button">R-18</a>

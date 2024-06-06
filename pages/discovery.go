@@ -19,7 +19,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 	return c.Render("discovery", fiber.Map{
 		"Artworks": works,
 		"Title":    "Discovery",
-		"URLC":     urlc.Replace,
+		"Queries":  urlc,
 	})
 }
 

@@ -44,6 +44,5 @@ func TagPage(c *fiber.Ctx) error {
 
 	urlc := site.NewURLConstruct("tags", queries.ReturnMap())
 
-	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": queries.ReturnMap(), "TrueTag": param, "Page": pageInt, "URLC": urlc.Replace})
-
+	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": urlc, "TrueTag": param, "Page": pageInt})
 }
