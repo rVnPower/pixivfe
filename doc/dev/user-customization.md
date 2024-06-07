@@ -17,3 +17,7 @@ Let the host supply multiple tokens at once to avoid overuse.
 ## artwork
 - [ ] native AI/R15/R18/R18-G... artwork filtering  
 We can filter them out using values supplied by Pixiv for each artworks.
+
+## search
+- [ ] add an option to do potentially very extensive searches
+Sort by bookmarks

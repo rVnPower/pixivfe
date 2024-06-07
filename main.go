@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"os"
 	"os/exec"
 	"runtime"
@@ -265,12 +264,8 @@ func main() {
 
 	server.Get("/tags/:name", pages.TagPage)
 	server.Post("/tags/:name", pages.TagPage)
-	server.Post("/tags",
-		func(c *fiber.Ctx) error {
-			name := c.FormValue("name")
-
-			return c.Redirect("/tags/"+name, http.StatusFound)
-		})
+	server.Get("/tags", pages.TagPage)
+	server.Post("/tags", pages.AdvancedTagPost)
 
 	// Legacy illust URL
 	server.Get("/member_illust.php", func(c *fiber.Ctx) error {

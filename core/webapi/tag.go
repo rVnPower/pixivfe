@@ -35,35 +35,42 @@ type SearchResult struct {
 }
 
 type SearchPageSettings struct {
-	Name string // Tag to search for
+	Name     string // Tag to search for
 	Category string // Filter by type, could be illusts or mangas
-	Order string // Sort by date
-	Mode string // Safe, R18 or both
-	Ratio string // Landscape, portrait, or squared
-	Page string // Page number
+	Order    string // Sort by date
+	Mode     string // Safe, R18 or both
+	Ratio    string // Landscape, portrait, or squared
+	Page     string // Page number
 
 	// To implement
-	SearchMode string // Exact match, partial match, or match with title
-	Wlt string // Minimum image width
-	Wgt string // Maximum image width
-	Hlt string // Minimum image height
-	Hgt string // Maximum image height
-	Tool string // Filter by production tools (ex. Photoshop)
-	Scd string // After this date
-	Ecd string // Before this date
+	Smode string // Exact match, partial match, or match with title
+	Wlt   string // Minimum image width
+	Wgt   string // Maximum image width
+	Hlt   string // Minimum image height
+	Hgt   string // Maximum image height
+	Tool  string // Filter by production tools (ex. Photoshop)
+	Scd   string // After this date
+	Ecd   string // Before this date
 }
 
 func (s SearchPageSettings) ReturnMap() map[string]string {
-	return map[string]string {
-		"Name": s.Name,
+	return map[string]string{
+		"Name":     s.Name,
 		"Category": s.Category,
-		"Order": s.Order,
-		"Mode": s.Mode,
-		"Ratio": s.Ratio,
-		"Page": s.Page, // This field should always be the last
+		"Order":    s.Order,
+		"Mode":     s.Mode,
+		"Ratio":    s.Ratio,
+		"Smode":    s.Smode,
+		"Wlt":      s.Wlt,
+		"Wgt":      s.Wgt,
+		"Hlt":      s.Hlt,
+		"Hgt":      s.Hgt,
+		"Scd":      s.Scd,
+		"Ecd":      s.Ecd,
+		"Tool":     s.Tool,
+		"Page":     s.Page,
 	}
 }
-
 
 func GetTagData(c *fiber.Ctx, name string) (TagDetail, error) {
 	var tag TagDetail

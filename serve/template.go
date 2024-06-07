@@ -304,13 +304,22 @@ func GetTemplateFunctions() template.FuncMap {
 		"URLC": func(obj site.URLConstructor, name string) string {
 			url := fmt.Sprintf("/%s", obj.Path)
 			first := true
+			exists := false
 
 			for k, v := range obj.Hash {
 				k = lowercaseFirstChar(k)
 
 				if k == name {
+					// Reserve this
+					exists = true
 					continue
 				}
+
+				if v == "" {
+					// If the value is empty, ignore to not clutter the URL
+					continue
+				}
+
 				if first {
 					url += "?"
 					first = false
@@ -321,14 +330,16 @@ func GetTemplateFunctions() template.FuncMap {
 			}
 
 			// This is to move the matched query to the end of the URL
-			var t string
-			if first {
-				t = "?"
-			} else {
-				t = "&"
-			}
-			url += fmt.Sprintf("%s%s=", t, name)
+			if exists {
+				var t string
+				if first {
+					t = "?"
+				} else {
+					t = "&"
+				}
+				url += fmt.Sprintf("%s%s=", t, name)
 
+			}
 			return url
 		},
 	}

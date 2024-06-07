@@ -26,6 +26,7 @@
     </a>
     {{ end }}
   </div>
+  {{ Queries.Hash.Name }}
 
   <div class="switcher">
     <div class="switch-title">Category</div>
@@ -47,10 +48,6 @@
     <a href='{{URL}}safe#checkpoint' class="switch-button">Safe</a>
     <a href='{{URL}}r18#checkpoint' class="switch-button">R-18</a>
   </div>
-  <details>
-    <summary>
-    <h2>Advanced settings</h2>
-    </summary>
     <div class="switcher">
       <div class="switch-title">Ratio</div>
       {{ URL := URLC(Queries, "ratio") }}
@@ -59,6 +56,36 @@
       <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
       <a href='{{URL}}0.5#checkpoint' class="switch-button">Landscape</a>
     </div>
+    <div class="switcher">
+      <div class="switch-title">Search mode</div>
+      {{ URL := URLC(Queries, "smode") }}
+      <a href='{{URL}}#checkpoint' class="switch-button">None</a>
+      <a href='{{URL}}s_tag_full#checkpoint' class="switch-button">Exact (tags)</a>
+      <a href='{{URL}}s_tag#checkpoint' class="switch-button">Partial (tags)</a>
+      <a href='{{URL}}s_tc#checkpoint' class="switch-button">Title/Caption</a>
+    </div>
+  <details>
+    <summary>
+    <h2>Advanced settings</h2>
+    </summary>
+      {{ URL := URLC(Queries, "") }}
+      <form action="{{ URL }}&name={{ Queries.Hash.Name }}" method="post">
+        <label for="wlt">Minimum image width</label>
+        <input type="text" name="wlt" value="{{ Queries.Hash.Wlt }}" />
+        <label for="wgt">Maximum image width</label>
+        <input type="text" name="wgt" value="{{ Queries.Hash.Wgt }}" />
+        <label for="hlt">Minimum image height</label>
+        <input type="text" name="hlt" value="{{ Queries.Hash.Hlt }}" />
+        <label for="hgt">Maximum image height</label>
+        <input type="text" name="hgt" value="{{ Queries.Hash.Hgt }}" />
+        <label for="scd">Posted after (format: yyyy-mm-dd)</label>
+        <input type="text" name="scd" value="{{ Queries.Hash.Scd }}" />
+        <label for="ecd">Posted before (format: yyyy-mm-dd)</label>
+        <input type="text" name="ecd" value="{{ Queries.Hash.Ecd }}" />
+        <label for="tool">Tool</label>
+        <input type="text" name="tool" value="{{ Queries.Hash.Tool }}" />
+        <input type="submit" value="Set" />
+      </form>
   </details>
   {{ if Data.Popular.Recent }}
   <h2>Popular artworks</h2>

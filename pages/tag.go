@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func TagPage(c *fiber.Ctx) error {
-	param := c.Params("name")
+	param := c.Params("name", c.Query("name"))
 	name, err := url.PathUnescape(param)
 	if err != nil {
 		return err
@@ -30,6 +31,13 @@ func TagPage(c *fiber.Ctx) error {
 		Order:    c.Query("order", "date_d"),
 		Mode:     c.Query("mode", "safe"),
 		Ratio:    c.Query("ratio", ""),
+		Wlt:      c.Query("wlt", ""),
+		Wgt:      c.Query("wgt", ""),
+		Hlt:      c.Query("hlt", ""),
+		Hgt:      c.Query("hgt", ""),
+		Tool:     c.Query("tool", ""),
+		Scd:      c.Query("scd", ""),
+		Ecd:      c.Query("ecd", ""),
 		Page:     page,
 	}
 
@@ -45,4 +53,25 @@ func TagPage(c *fiber.Ctx) error {
 	urlc := site.NewURLConstruct("tags", queries.ReturnMap())
 
 	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": urlc, "TrueTag": param, "Page": pageInt})
+}
+
+func AdvancedTagPost(c *fiber.Ctx) error {
+	return c.RedirectToRoute("/tags", fiber.Map{
+		"queries": map[string]string{
+			"name":     c.Query("name"),
+			"category": c.Query("category", "artworks"),
+			"order":    c.Query("order", "date_d"),
+			"mode":     c.Query("mode", "safe"),
+			"ratio":    c.Query("ratio"),
+			"page":     c.Query("page", "1"),
+			"wlt":      c.Query("wlt", c.FormValue("wlt")),
+			"wgt":      c.Query("wgt", c.FormValue("wgt")),
+			"hlt":      c.Query("hlt", c.FormValue("hlt")),
+			"hgt":      c.Query("hgt", c.FormValue("hgt")),
+			"tool":     c.Query("tool", c.FormValue("tool")),
+			"scd":      c.Query("scd", c.FormValue("scd")),
+			"ecd":      c.Query("ecd", c.FormValue("ecd")),
+		},
+	}, http.StatusFound)
+
 }
