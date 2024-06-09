@@ -17,12 +17,20 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 	artworks := make([]*core.Illust, len(ids))
 
 	wg := sync.WaitGroup{}
-	wg.Add(len(ids))
+	// // gofiber/fasthttp's API is trash
+	// // i can't replace c.Context() with this
+	// // so i guess we will have to wait for network traffic to finish on error
+	// ctx, cancel := context.WithCancel(c.Context())
+	// defer cancel()
+	// c.SetUserContext(ctx)
+	var err_global error = nil
 	for i, id := range ids {
 		if _, err := strconv.Atoi(id); err != nil {
-			return fmt.Errorf("Invalid ID: %s", id)
+			err_global = fmt.Errorf("Invalid ID: %s", id)
+			break
 		}
 
+		wg.Add(1)
 		go func(i int, id string) {
 			defer wg.Done()
 
@@ -42,7 +50,13 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 			artworks[i] = illust
 		}(i, id)
 	}
+	// if err_global != nil {
+	// 	cancel()
+	// }
 	wg.Wait()
+	if err_global != nil {
+		return err_global
+	}
 
 	return c.Render("artwork-multi", fiber.Map{
 		"Artworks": artworks,
