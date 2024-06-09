@@ -236,7 +236,8 @@ func GetRelatedArtworks(c *fiber.Ctx, id string) ([]ArtworkBrief, error) {
 func GetArtworkByID(c *fiber.Ctx, id string, full bool) (*Illust, error) {
 	URL := http.GetArtworkInformationURL(id)
 
-	response, err := http.UnwrapWebAPIRequest(c.Context(), URL, session.GetPixivToken(c))
+	token := session.GetPixivToken(c)
+	response, err := http.UnwrapWebAPIRequest(c.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
