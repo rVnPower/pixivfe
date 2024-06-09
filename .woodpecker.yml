@@ -8,8 +8,7 @@ steps:
         from_secret: DOCKER_USERNAME
       password:
         from_secret: DOCKER_PASSWORD
+      auto_tag: true
     when:
       branch: [ v2 ]
       event: [ tag, release, manual ]
-    auto_tag: true
-    
