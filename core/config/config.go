@@ -112,7 +112,7 @@ func (s *ServerConfig) setStartingTime() {
 }
 
 func (s *ServerConfig) setVersion() {
-	s.Version = "v2.5"
+	s.Version = "v2.6"
 	log.Printf("PixivFE %s\n", s.Version)
 }
 
