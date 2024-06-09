@@ -18,6 +18,7 @@ type UserArtCategory string
 
 const (
 	UserArt_Any          UserArtCategory = ""
+	UserArt_AnyAlt       UserArtCategory = "artworks"
 	UserArt_Illustration UserArtCategory = "illustrations"
 	UserArt_Manga        UserArtCategory = "manga"
 	UserArt_Bookmarked   UserArtCategory = "bookmarks" // what this user has bookmarked; not art by this user
@@ -26,11 +27,12 @@ const (
 
 func (s UserArtCategory) Validate() error {
 	if s != UserArt_Any &&
+		s != UserArt_AnyAlt &&
 		s != UserArt_Illustration &&
 		s != UserArt_Manga &&
 		s != UserArt_Bookmarked &&
 		s != UserArt_Novel {
-		return fmt.Errorf("Invalid work category: %#v. "+`only "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarked, UserArt_Novel)
+		return fmt.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarked, UserArt_Novel)
 	} else {
 		return nil
 	}
@@ -198,7 +200,7 @@ func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page i
 
 	// Get the keys, because Pixiv only returns IDs (very evil)
 
-	if category == UserArt_Illustration || category == UserArt_Any {
+	if category == UserArt_Illustration || category == UserArt_Any || category == UserArt_AnyAlt {
 		if err = json.Unmarshal(body.Illusts, &illusts); err != nil {
 			illusts = make(map[int]string)
 		}
