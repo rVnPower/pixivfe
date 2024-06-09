@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"slices"
+	"strings"
 
 	httpc "codeberg.org/vnpower/pixivfe/v2/core/http"
 	session "codeberg.org/vnpower/pixivfe/v2/core/session"
@@ -114,6 +116,28 @@ func setCookie(c *fiber.Ctx) error {
 	return fmt.Errorf("Invalid Cookie Name: %s", key)
 }
 
+func setRawCookie(c *fiber.Ctx) error {
+	raw := c.FormValue("raw")
+	lines := strings.Split(raw, "\n")
+
+	for _, line := range lines {
+		sub := strings.Split(line, "=")
+		if len(sub) != 2 {
+			continue
+		}
+
+		name := session.CookieName(sub[0])
+		value := sub[1]
+
+		if !slices.Contains(session.AllCookieNames, name) {
+			continue
+		}
+
+		session.SetCookie(c, name, value)
+	}
+	return nil
+}
+
 func resetAll(c *fiber.Ctx) error {
 	session.ClearAllCookies(c)
 	return nil
@@ -136,6 +160,7 @@ func SettingsPage(c *fiber.Ctx) error {
 
 func SettingsPost(c *fiber.Ctx) error {
 	t := c.Params("type")
+	var noredirect bool = false
 	var err error
 
 	switch t {
@@ -149,10 +174,14 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = resetAll(c)
 	case "novelFontType":
 		err = setNovelFontType(c)
+		noredirect = true
 	case "novelViewMode":
 		err = setNovelViewMode(c)
+		noredirect = true
 	case "set-cookie":
 		err = setCookie(c)
+	case "raw":
+		err = setRawCookie(c)
 	default:
 		err = errors.New("No such setting is available.")
 	}
@@ -161,7 +190,9 @@ func SettingsPost(c *fiber.Ctx) error {
 		return err
 	}
 
-	c.Redirect("/settings", http.StatusSeeOther)
+	if !noredirect {
+		c.Redirect("/settings", http.StatusSeeOther)
+	}
 
 	return nil
 }

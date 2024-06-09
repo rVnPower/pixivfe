@@ -9,10 +9,10 @@
       <h2>Current cookie values</h2>
     </summary>
     <div>
+    <h3>Cookie list</h3>
       Please note that some cookies here such as ShowArtR18,
       ShowArtR18G, and ShowArtAI are for features still under development.
     </div>
-    <p>
       {{ range CookieList }}
     <div class="settings-set-cookie">
       <h3>{{.Key}}</h3>
@@ -21,9 +21,24 @@
         <input type="text" name="value" value="{{.Value}}" />
         <input type="submit" value="Set" />
       </form>
+
     </div>
     {{ end }}
+    <div>
+
+    <h3>Raw settings</h3>
+    <p>
+      You can save your current cookie values to quickly set your settings on other compatible instances,
+      or if the current instance's cookies went expired.
     </p>
+    <p>Invalid values will be ignored.</p>
+    <form action="/settings/raw" method="post">
+    <textarea name="raw" rows="10" cols="80">{{range CookieList}}
+{{.Key}}={{.Value}}{{end}}
+    </textarea>
+    <input type="submit" value="Set raw settings" />
+    </form>
+    </div>
   </details>
   <form action="/settings/reset-all" method="post">
     <input class="critical" type="submit" value="Reset all cookies/preferences" />
@@ -34,9 +49,10 @@
   <ul>
     <li>Discovery page</li>
     <li>Landing page</li>
+    <li>Like/Bookmark</li>
   </ul>
   <p>
-    Log in with your account's cookie to access the Discovery and Landing pages.
+    Log in with your Pixiv account's cookie to access features above.
     To learn how to obtain your cookie, please see
     <a href="https://pixivfe.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
   </p>

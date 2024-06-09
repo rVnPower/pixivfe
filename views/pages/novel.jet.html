@@ -69,11 +69,11 @@
       </label>
       <div class="dropdown-content">
         <div>Font type</div>
-        <form action="{{ url }}" method="post">
+        <form action="{{ url }}?noredirect=t" method="post">
           <input type="text" name="font-type" value="gothic" class="value-holder" />
           <input type="submit" value="Gothic" />
         </form>
-        <form action="{{ url }}" method="post">
+        <form action="{{ url }}?noredirect=t" method="post">
           <input type="text" name="font-type" value="mincho" class="value-holder" />
           <input type="submit" value="Mincho" />
         </form>
@@ -88,11 +88,11 @@
       </label>
       <div class="dropdown-content">
         <div>Force text orientation</div>
-        <form action="{{ url }}" method="post">
+        <form action="{{ url }}?noredirect=t" method="post">
           <input type="text" name="view-mode" value="1" class="value-holder" />
           <input type="submit" value="Horizontal" />
         </form>
-        <form action="{{ url }}" method="post">
+        <form action="{{ url }}?noredirect=t" method="post">
           <input type="text" name="view-mode" value="2" class="value-holder" />
           <input type="submit" value="Vertical" />
         </form>

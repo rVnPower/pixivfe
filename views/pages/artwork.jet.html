@@ -18,14 +18,13 @@
     </div>
   </div>
   <hr />
-  <h2>Comments</h2>
   {{ if Illust.CommentDisabled == 1 }}
   <p>The creator turned comments off</p>
   {{ else if Illust.Comments == 0 }}
   <p>There are no comments yet</p>
   {{ else }} {{ range Illust.CommentsList }}
   <div class="comment">
-      <a href="/users/{{ .AuthorID }}" class="comment-author">
+    <a href="/users/{{ .AuthorID }}" class="comment-author">
     <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
       </a>
     <div class="comment-context">
