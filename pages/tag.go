@@ -58,7 +58,7 @@ func TagPage(c *fiber.Ctx) error {
 func AdvancedTagPost(c *fiber.Ctx) error {
 	return c.RedirectToRoute("/tags", fiber.Map{
 		"queries": map[string]string{
-			"name":     c.Query("name"),
+			"name":     c.Query("name", c.FormValue("name")),
 			"category": c.Query("category", "artworks"),
 			"order":    c.Query("order", "date_d"),
 			"mode":     c.Query("mode", "safe"),
