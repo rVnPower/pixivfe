@@ -217,17 +217,6 @@ func FileInfoHeader(fi fs.FileInfo) (*FileHeader, error) {
 	return fh, nil
 }
 
-type directoryEnd struct {
-	diskNbr            uint32 // unused
-	dirDiskNbr         uint32 // unused
-	dirRecordsThisDisk uint64 // unused
-	directoryRecords   uint64
-	directorySize      uint64
-	directoryOffset    uint64 // relative to file
-	commentLen         uint16
-	comment            string
-}
-
 // timeZone returns a *time.Location based on the provided offset.
 // If the offset is non-sensible, then this uses an offset of zero.
 func timeZone(offset time.Duration) *time.Location {

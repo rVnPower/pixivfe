@@ -1,11 +1,16 @@
 package main
 
 import (
-	"archive/zip"
+	"bytes"
 	"fmt"
 	"image"
+	_ "image/jpeg" // register JPEG decoder
+	// xxx: if "panic: image: unknown format", register more formats may help
+
 	"io"
 	"os"
+
+	"codeberg.org/vnpower/pixivfe/v2/proto_apng/zip"
 
 	"github.com/kettek/apng"
 )
@@ -26,8 +31,7 @@ func main() {
 
 // each frame will be delayed (delayNumerator/delayDenominator) seconds
 func zip2apng(filename string, w io.Writer, delayNumerator, delayDenominator uint16) error {
-	// Open a zip archive for reading.
-	r, err := zip.OpenReader(filename)
+	r, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
@@ -35,16 +39,16 @@ func zip2apng(filename string, w io.Writer, delayNumerator, delayDenominator uin
 
 	img_apng := apng.APNG{}
 
-	// Iterate through the files in the archive,
-	// printing some of their contents.
-	for _, f := range r.File {
-		fmt.Printf("Contents of %s:\n", f.Name)
-		rc, err := f.Open()
+	for {
+		file, err := zip.ReadFile(r)
+		if err == zip.ErrFormat {
+			break
+		}
 		if err != nil {
 			return err
 		}
-		defer rc.Close()
-		img, img_format, err := image.Decode(rc)
+		fmt.Println("len", len(file.Content))
+		img, img_format, err := image.Decode(bytes.NewReader(file.Content))
 		_ = img_format
 		if err != nil {
 			return err
