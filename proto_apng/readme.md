@@ -9,3 +9,8 @@ wget2 --header 'Referer: https://www.pixiv.net/' https://i.pximg.net/img-zip-ugo
 go run .
 firefox out.apng
 ```
+
+
+## todo
+
+delay... where do you get the delay?
