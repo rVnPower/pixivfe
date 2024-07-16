@@ -656,6 +656,8 @@ nav {
     img {
       width: $small-artwork-width;
       height: $small-artwork-width;
+      background: rgb(19,21,22);
+      background: linear-gradient(0deg, rgba(10,10,10,0.5) 0%, rgba(19,21,22,0) 80%, rgba(34,33,33,0) 100%);
     }
 
     .artwork-title {

@@ -551,6 +551,8 @@ nav .sidebar-item img {
 .artwork-container-scroll .artwork-small img {
   width: 184px;
   height: 184px;
+  background: rgb(19, 21, 22);
+  background: linear-gradient(0deg, rgba(10, 10, 10, 0.5) 0%, rgba(19, 21, 22, 0) 80%, rgba(34, 33, 33, 0) 100%);
 }
 .artwork-container .artwork-small .artwork-title,
 .artwork-container-scroll .artwork-small .artwork-title {
