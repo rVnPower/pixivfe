@@ -52,11 +52,48 @@ The only thing left is to write the frontend for them. Detailed notes TBA.
 - Currently, you have to authenticate (login) in order to access the *full* landing page. Can we show the *full* page to unauthenticated users as well?
 
 ### Popular artworks
+
+**Summary**: Pixiv has a "Sort by views" and "Sort by bookmarks" feature that is only available for premium users.
+
+**Notes**: There are some search ["hacks"](https://github.com/kokseen1/Mashiro/) that could yield relatively accurate results for popular artworks.
+
+**Ideas**:
+- Look into repos that attempts to retrieve popular artworks
+- If search "hacking" is possible, could there be more "hacks" around?
+
 ### "User discovery" page
-### Search page
+
+**Summary**: Like artwork discovery, but it is for users.
+
+**Notes**: Currently, we do not know if we could implement the "user follow" function into PixivFE.
+The development for this page has been put on hold because of it, since "following", after all, is what you want to do if you discover an user you like.
+
+**Ideas**:
+- It is easy to implement thanks to the API.
+
+### Search suggestions
+
+**Summary**: Pixiv provides [an API endpoint](https://www.pixiv.net/ajax/search/suggestion?mode=all&lang=en) for search suggestions.
+
+**Notes**: The search suggestions appear when you focus on the search bar.
+
+**Ideas**:
+- We can prefetch the search suggestions for every requests on PixivFE. But this means we will have to add one request (to Pixiv's API) for each PixivFE page request. (Caching?)
+- We can implement JavaScript to fetch the suggestions every time the user focuses on the search bar.
+- We can create a separate page just for this.
+
+### App API support
+
+**Summary**: Apart of the public AJAX API, Pixiv also provides a private API, used specifically for mobile applications.
+
+**Notes**: Because you already could do almost everything through the AJAX API, there is really no point to integrate the App API.
+I added this section because there are some limitations to the public API (following,...).
+
+**Ideas**:
+- Write more stuff when desperate.
+
 ### Novel page
 ### Image grid layout
-### App API support
 ### Series
 ### Server's PixivFE Git version/commit
 ### Artwork filters
@@ -66,10 +103,16 @@ The only thing left is to write the frontend for them. Detailed notes TBA.
 This section documents some bad/buggy designs in PixivFE's design, both frontend and backend.
 
 ### Cookies management / validation
+
+All cookie values could be set directly without validation. Should we be concerned?
+
 ### "Switchers"
-### Undocumented code
+
+Switchers should know what the current value is.
+
 ### "kmutex"
-### Browser compatibility / Universal CSS
+
+Sometimes panics.
 
 ## References
 
