@@ -27,8 +27,6 @@ func RankingPage(c *fiber.Ctx) error {
 		"Title":     "Ranking",
 		"Page":      pageInt,
 		"PageLimit": 10, // hard-coded by pixiv
-		"Mode":      mode,
-		"Content":   content,
 		"Date":      date,
 		"Data":      works,
 	})

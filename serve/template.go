@@ -235,6 +235,15 @@ func GetNovelGenre(s string) string {
 	return fmt.Sprintf("(Unknown Genre %s)", s)
 }
 
+func SwitchButtonAttributes(baseURL, selection, currentSelection string) string {
+	var cur string = "false"
+	if selection == currentSelection {
+		cur = "true"
+	}
+
+	return fmt.Sprintf(`href=%s%s class=switch-button selected=%s`, baseURL, selection, cur)
+}
+
 func lowercaseFirstChar(s string) string {
 	return strings.ToLower(s[0:1]) + s[1:]
 }
@@ -342,5 +351,6 @@ func GetTemplateFunctions() template.FuncMap {
 			}
 			return url
 		},
+		"AttrGen": SwitchButtonAttributes,
 	}
 }

@@ -95,6 +95,7 @@ func main() {
 	})
 
 	server.Use(func(c *fiber.Ctx) error {
+		// Pass in values that we want to be available to all pages here
 		token := session.GetPixivToken(c)
 		pageURL := c.BaseURL() + c.OriginalURL()
 
@@ -103,6 +104,7 @@ func main() {
 			"OriginalURL": c.OriginalURL(),
 			"PageURL":     pageURL,
 			"LoggedIn":    token != "",
+			"Queries": c.Queries(),
 		})
 		return c.Next()
 	})

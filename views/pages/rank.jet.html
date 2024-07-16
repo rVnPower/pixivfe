@@ -1,3 +1,5 @@
+{{ import "components/switcher" }}
+
 <div class="container">
   <h1>{{ Title }}</h1>
 
@@ -10,33 +12,39 @@
     {{ url = "/ranking?mode=" + Mode + "&date=" + Data.CurrentDate +
     "&page=1&content=" }}
     {{ end }}
-    <div class="switch-title">Content (current: {{ Content }})</div>
-    <a href="{{ url }}all" class="switch-button">Overall</a>
-    <a href="{{ url }}illust" class="switch-button">Illustrations</a>
-    <a href="{{ url }}manga" class="switch-button">Mangas</a>
-    <a href="{{ url }}ugoira" class="switch-button">Ugoira</a>
+    <div class="switch-title">Content</div>
+    {{ path := slice("all",     "illust",        "manga",  "ugoira") }}
+    {{ name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.content)}}
   </div>
   <br />
 
   <div class="switcher">
     {{ url := "/ranking?content=" + Content +"&date=" + Data.CurrentDate
     + "&page=1&mode=" }}
-    <div class="switch-title">Modes (current: {{ Mode }})</div>
-    <a href="{{ url }}daily" class="switch-button">Daily</a>
-    <a href="{{ url }}weekly" class="switch-button">Weekly</a>
+    <div class="switch-title">Modes</div>
+
+    {{ path := slice("daily", "weekly") }}
+    {{ name := slice("Daily", "Weekly")}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+
     {{ if Content != "ugoira" }}
-    <a href="{{ url }}monthly" class="switch-button">Monthly</a>
-    <a href="{{ url }}rookie" class="switch-button">Rookie</a>
+
+    {{ path := slice("monthly", "rookie") }}
+    {{ name := slice("Monthly", "Rookie")}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+
     {{ end }}
 
     <span class="switch-seperator"></span>
-    <a href="{{ url }}daily_r18" class="switch-button">Daily (R-18)</a>
-    <a href="{{ url }}weekly_r18" class="switch-button">Weekly (R-18)</a>
+    {{ path := slice("daily_r18", "weekly_r18") }}
+    {{ name := slice("Daily (R-18)", "Weekly (R-18)")}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
     <br />
     {{ if Content == "all" }}
-    <a href="{{ url }}original" class="switch-button">Original</a>
-    <a href="{{ url }}male" class="switch-button">Popular among males</a>
-    <a href="{{ url }}female" class="switch-button">Popular among females</a>
+    {{ path := slice("original", "male", "female") }}
+    {{ name := slice("Original", "Popular among males", "Popular among females")}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
     {{ end }}
   </div>
   <br />

@@ -302,6 +302,10 @@ input[type=submit][hidden] {
   display: none;
 }
 
+.switch-button[selected="1"] {
+  background: #fc365b;
+}
+
 .switch-seperator {
   display: inline-block;
   margin-left: 10px;
