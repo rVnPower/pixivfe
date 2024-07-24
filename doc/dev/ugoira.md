@@ -1,3 +1,5 @@
+## downloading a ugoira .zip file
+
 xarchiver won't open the file
 
 binwalk -e X.zip  does work
@@ -10,7 +12,4 @@ go run .
 firefox out.apng
 ```
 
-
-## todo
-
-delay... where do you get the delay?
+## APNG spec: https://wiki.mozilla.org/APNG_Specification
