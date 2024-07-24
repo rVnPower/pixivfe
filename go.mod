@@ -6,6 +6,7 @@ require (
 	github.com/goccy/go-json v0.10.2
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/gofiber/template/jet/v2 v2.1.9
+	github.com/kettek/apng v0.0.0-20220823221153-ff692776a607
 	github.com/tidwall/gjson v1.17.1
 	golang.org/x/net v0.24.0
 )
