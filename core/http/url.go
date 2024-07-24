@@ -152,6 +152,3 @@ func GetUgoiraMetaURL(id string) string {
 	base := "https://www.pixiv.net/ajax/illust/%s/ugoira_meta?lang=en&version=b84cb537b2ba819525e66eed415d9f17a2db86e5"
 	return fmt.Sprintf(base, id)
 }
-
-// todo:
-// one more thing to check: original mp4 is used in <video>, but apng cannot be used in <video>. fix this.

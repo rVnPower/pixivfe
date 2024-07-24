@@ -13,10 +13,11 @@
 </div>
 {{ else }}
 <div class="illust-images">
-  <video autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
+  <img src="/proxy/ugoira.com/{{ .ID }}" />
+  <!-- <video autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
     src="/proxy/ugoira.com/{{ .ID }}">
     Unable to load ugoira.
-  </video>
+  </video> -->
 </div>
 <a href="/proxy/ugoira.com/{{ .ID }}">Download</a>
 <br />
