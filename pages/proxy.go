@@ -12,9 +12,11 @@ import (
 
 	// xxx: if "panic: image: unknown format", register more formats may help
 
+	core_http "codeberg.org/vnpower/pixivfe/v2/core/http"
 	"codeberg.org/vnpower/pixivfe/v2/core/zip"
 	"github.com/gofiber/fiber/v2"
 	"github.com/kettek/apng"
+	"github.com/tidwall/gjson"
 )
 
 func SPximgProxy(c *fiber.Ctx) error {
@@ -99,12 +101,25 @@ func UgoiraProxy_mp4(c *fiber.Ctx) error {
 }
 
 func UgoiraProxy_apng(c *fiber.Ctx) error {
-	// xxx: stub
-	URL := "https://i.pximg.net/img-zip-ugoira/img/2024/06/09/10/47/04/119477424_ugoira600x600.zip"
-	// xxx: stub
-	var delayNumerator, delayDenominator uint16 = 1000, 1000
+	id := c.Params("id")
+	if id == "" {
+		return errors.New("No ID provided.")
+	}
+	
+	URL_meta := core_http.GetUgoiraMetaURL(id)
+	
+	ugoira_metadata, err := core_http.UnwrapWebAPIRequest(c.Context(), URL_meta, "")
+	if err != nil {
+		return err
+	}
+	delays := []uint16{}
+	for _, o := range gjson.Get(ugoira_metadata, "frames").Array() {
+		delays = append(delays, uint16(o.Get("delay").Int()))
+	}
 
-	req, err := http.NewRequestWithContext(c.Context(), "GET", URL, nil)
+	URL_zip := gjson.Get(ugoira_metadata, "originalSrc").Str
+
+	req, err := http.NewRequestWithContext(c.Context(), "GET", URL_zip, nil)
 	if err != nil {
 		return err
 	}
@@ -124,13 +139,14 @@ func UgoiraProxy_apng(c *fiber.Ctx) error {
 	}
 	r := bytes.NewReader(body)
 	c.Set("Content-Type", "image/apng")
-	return zip2apng(r, c, delayNumerator, delayDenominator)
+	return zip2apng(r, c, delays)
 }
 
 // each frame will be delayed $delayNumerator/delayDenominator$ seconds
-func zip2apng(reader_zip io.ReadSeeker, writer_apng io.Writer, delayNumerator, delayDenominator uint16) error {
+func zip2apng(reader_zip io.ReadSeeker, writer_apng io.Writer, delays []uint16) error {
 	img_apng := apng.APNG{}
 
+	i := 0
 	for {
 		file, err := zip.ReadFile(reader_zip)
 		if err == zip.ErrFormat {
@@ -147,9 +163,10 @@ func zip2apng(reader_zip io.ReadSeeker, writer_apng io.Writer, delayNumerator, d
 		}
 		frame := apng.Frame{
 			Image:            img,
-			DelayNumerator:   delayNumerator,
-			DelayDenominator: delayDenominator,
+			DelayNumerator:   delays[i],
+			DelayDenominator: 1000,
 		}
+		i += 1
 		img_apng.Frames = append(img_apng.Frames, frame)
 	}
 

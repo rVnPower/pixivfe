@@ -278,7 +278,7 @@ func main() {
 	proxy := server.Group("/proxy")
 	proxy.Get("/i.pximg.net/*", pages.IPximgProxy)
 	proxy.Get("/s.pximg.net/*", pages.SPximgProxy)
-	proxy.Get("/ugoira.com/*", pages.UgoiraProxy_apng)
+	proxy.Get("/ugoira.com/:id", pages.UgoiraProxy_apng)
 
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {
