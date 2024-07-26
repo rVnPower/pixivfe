@@ -52,7 +52,7 @@ func TagPage(c *fiber.Ctx) error {
 
 	urlc := site.NewURLConstruct("tags", queries.ReturnMap())
 
-	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "Queries": urlc, "TrueTag": param, "Page": pageInt})
+	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "QueriesC": urlc, "TrueTag": param, "Page": pageInt})
 }
 
 func AdvancedTagPost(c *fiber.Ctx) error {

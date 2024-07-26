@@ -1,3 +1,5 @@
+{{ import "components/switcher" }}
+
 <div class="container">
   <div class="tag-header">
     {{ if Tag.Metadata.ID }}
@@ -26,63 +28,66 @@
     </a>
     {{ end }}
   </div>
-
+  {{ Category := isset(Queries.category) ? Queries.category : "artworks" }}
+  {{ Order := isset(Queries.order) ? Queries.order : "date_d" }}
+  {{ Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
+  {{ Ratio := isset(Queries.ratio) ? Queries.ratio : "" }}
+  {{ SearchMode := isset(Queries.smode) ? Queries.smode : "" }}
   <div class="switcher">
     <div class="switch-title">Category</div>
-    {{ URL := URLC(Queries, "category") }}
-    <a href='{{URL}}artworks#checkpoint' class="switch-button">Artworks</a>
-    <a href='{{URL}}illustrations#checkpoint' class="switch-button">Illustrations</a>
-    <a href='{{URL}}manga#checkpoint' class="switch-button">Manga</a>
+    {{ URL := URLC(QueriesC, "category") }}
+    {{ path := slice("artworks", "illustrations", "manga")}}
+    {{ name := slice("Artworks", "Illustrations", "Manga")}}
+    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Order</div>
-    {{ URL := URLC(Queries, "order") }}
-    <a href='{{URL}}date_d#checkpoint' class="switch-button">Newest</a>
-    <a href='{{URL}}date#checkpoint' class="switch-button">Oldest</a>
+    {{ URL := URLC(QueriesC, "order") }}
+    {{ path := slice("date_d", "date")}}
+    {{ name := slice("Newest", "Oldest")}}
+    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    {{ URL := URLC(Queries, "mode") }}
-    <a href='{{URL}}all#checkpoint' class="switch-button">All</a>
-    <a href='{{URL}}safe#checkpoint' class="switch-button">Safe</a>
-    <a href='{{URL}}r18#checkpoint' class="switch-button">R-18</a>
+    {{ URL := URLC(QueriesC, "mode") }}
+    {{ path := slice("all", "safe", "r18")}}
+    {{ name := slice("All", "Safe", "R-18")}}
+    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
   </div>
     <div class="switcher">
       <div class="switch-title">Ratio</div>
-      {{ URL := URLC(Queries, "ratio") }}
-      <a href='{{URL}}#checkpoint' class="switch-button">All</a>
-      <a href='{{URL}}-0.5#checkpoint' class="switch-button">Portrait</a>
-      <a href='{{URL}}0#checkpoint' class="switch-button">Square</a>
-      <a href='{{URL}}0.5#checkpoint' class="switch-button">Landscape</a>
+    {{ URL := URLC(QueriesC, "ratio") }}
+    {{ path := slice("", "-0.5", "0", "0.5")}}
+    {{ name := slice("All", "Portrait", "Square", "Landscape")}}
+    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
     </div>
     <div class="switcher">
       <div class="switch-title">Search mode</div>
-      {{ URL := URLC(Queries, "smode") }}
-      <a href='{{URL}}#checkpoint' class="switch-button">None</a>
-      <a href='{{URL}}s_tag_full#checkpoint' class="switch-button">Exact (tags)</a>
-      <a href='{{URL}}s_tag#checkpoint' class="switch-button">Partial (tags)</a>
-      <a href='{{URL}}s_tc#checkpoint' class="switch-button">Title/Caption</a>
+      {{ URL := URLC(QueriesC, "smode") }}
+      {{ path := slice("", "s_tag_full", "s_tag", "s_tc")}}
+      {{ name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+      {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
     </div>
   <details>
     <summary>
     <h2>Advanced settings</h2>
     </summary>
-      {{ URL := URLC(Queries, "") }}
-      <form action="{{ URL }}&name={{ Queries.Hash.Name }}" method="post">
+      {{ URL := URLC(QueriesC, "") }}
+      <form action="{{ URL }}&name={{ QueriesC.Hash.Name }}" method="post">
         <label for="wlt">Minimum image width</label>
-        <input type="text" name="wlt" value="{{ Queries.Hash.Wlt }}" />
+        <input type="text" name="wlt" value="{{ QueriesC.Hash.Wlt }}" />
         <label for="wgt">Maximum image width</label>
-        <input type="text" name="wgt" value="{{ Queries.Hash.Wgt }}" />
+        <input type="text" name="wgt" value="{{ QueriesC.Hash.Wgt }}" />
         <label for="hlt">Minimum image height</label>
-        <input type="text" name="hlt" value="{{ Queries.Hash.Hlt }}" />
+        <input type="text" name="hlt" value="{{ QueriesC.Hash.Hlt }}" />
         <label for="hgt">Maximum image height</label>
-        <input type="text" name="hgt" value="{{ Queries.Hash.Hgt }}" />
+        <input type="text" name="hgt" value="{{ QueriesC.Hash.Hgt }}" />
         <label for="scd">Posted after (format: yyyy-mm-dd)</label>
-        <input type="text" name="scd" value="{{ Queries.Hash.Scd }}" />
+        <input type="text" name="scd" value="{{ QueriesC.Hash.Scd }}" />
         <label for="ecd">Posted before (format: yyyy-mm-dd)</label>
-        <input type="text" name="ecd" value="{{ Queries.Hash.Ecd }}" />
+        <input type="text" name="ecd" value="{{ QueriesC.Hash.Ecd }}" />
         <label for="tool">Tool</label>
-        <input type="text" name="tool" value="{{ Queries.Hash.Tool }}" />
+        <input type="text" name="tool" value="{{ QueriesC.Hash.Tool }}" />
         <input type="submit" value="Set" />
       </form>
   </details>
@@ -105,7 +110,7 @@
   </div>
 
   <div class="pagination">
-    {{ url := URLC(Queries, "page") }}
+    {{ url := URLC(QueriesC, "page") }}
     <small>Page {{ Page }}</small>
     <br />
     {{ raw: createPaginator(url, "#checkpoint", Page, -1) }}

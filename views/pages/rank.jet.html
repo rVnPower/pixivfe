@@ -4,18 +4,20 @@
   <h1>{{ Title }}</h1>
 
   <div class="switcher">
+    {{ Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+    {{ Content := isset(Queries.content) ? Queries.content : "all" }}
+
     {{ url := "" }}
-    {{ if Mode == "original" || Mode == "male" || Mode == "Female" }}
+    {{ if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
     {{ url = "/ranking?date=" + Data.CurrentDate +
     "&page=1&content=" }}
     {{ else }}
-    {{ url = "/ranking?mode=" + Mode + "&date=" + Data.CurrentDate +
-    "&page=1&content=" }}
+    {{ url = "/ranking?mode=" + Mode + "&date=" + Data.CurrentDate + "&page=1&content=" }}
     {{ end }}
     <div class="switch-title">Content</div>
     {{ path := slice("all",     "illust",        "manga",  "ugoira") }}
     {{ name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.content)}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Content)}}
   </div>
   <br />
 
@@ -26,25 +28,25 @@
 
     {{ path := slice("daily", "weekly") }}
     {{ name := slice("Daily", "Weekly")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
 
     {{ if Content != "ugoira" }}
 
     {{ path := slice("monthly", "rookie") }}
     {{ name := slice("Monthly", "Rookie")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
 
     {{ end }}
 
     <span class="switch-seperator"></span>
     {{ path := slice("daily_r18", "weekly_r18") }}
     {{ name := slice("Daily (R-18)", "Weekly (R-18)")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
     <br />
     {{ if Content == "all" }}
     {{ path := slice("original", "male", "female") }}
     {{ name := slice("Original", "Popular among males", "Popular among females")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Queries.mode)}}
+    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
     {{ end }}
   </div>
   <br />
