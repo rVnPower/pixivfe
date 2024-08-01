@@ -246,6 +246,7 @@ func main() {
 	server.Get("/artworks/:id/", pages.ArtworkPage).Name("artworks")
 	server.Get("/artworks-multi/:ids/", pages.ArtworkMultiPage)
 	server.Get("/novel/:id/", pages.NovelPage)
+	server.Get("/pixivision", pages.PixivisionHomePage)
 
 	// Settings group
 	settings := server.Group("/settings")
