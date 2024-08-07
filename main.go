@@ -104,7 +104,7 @@ func main() {
 			"OriginalURL": c.OriginalURL(),
 			"PageURL":     pageURL,
 			"LoggedIn":    token != "",
-			"Queries": c.Queries(),
+			"Queries":     c.Queries(),
 		})
 		return c.Next()
 	})

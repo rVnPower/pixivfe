@@ -4,6 +4,78 @@
     PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your
     preferences, which you can change on this page to customize your experience on this instance.
   </p>
+  <!-- General settings -->
+  <div class="tabs">
+    <input id="account" class="hidden" type="radio" name="tabsSG" checked>
+    <label for="account">Account</label>
+    <div class="tabs-content">
+  <h2 id="login">Login</h2>
+  <p>Supported features (for now):</p>
+  <ul>
+    <li>Discovery page</li>
+    <li>Landing page</li>
+    <li>Like/Bookmark</li>
+  </ul>
+  <p>
+    Log in with your Pixiv account's cookie to access features above.
+    To learn how to obtain your cookie, please see
+    <a href="https://pixivfe.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
+  </p>
+  <p>
+    Keep in mind that logins will expire whenever the server is updated, so you
+    may need to log in again if the server has been restarted recently.
+  </p>
+  <form action="/settings/token" method="post">
+    <input type="text" name="token" autocomplete="off" />
+    <input type="submit" value="Remember account cookie (until next server restart)" />
+  </form>
+  <hr />
+  <h2>Logout</h2>
+  <p>
+    To securely end your session, click the 'Logout!' button. This will
+    immediately remove your session token.
+  </p>
+  <form action="/settings/logout" method="post">
+    <input type="submit" value="Logout!" />
+  </form>
+    </div>
+    <input id="site" class="hidden" type="radio" name="tabsSG">
+    <label for="site">Site</label>
+    <div class="tabs-content">
+
+  <h2>Image proxy server</h2>
+  <p>
+    Choose how images are loaded in PixivFE by selecting either the built-in
+    proxy or one of the provided external proxy servers. If you prefer, you can
+    also specify a custom proxy server by entering its URL and clicking 'Use
+    Custom Proxy'.
+  </p>
+  <div class="form-field">
+    <form action="/settings/imageServer" method="post">
+      <label>
+        <input type="radio" name="image-proxy" required="true" value="" />
+        No (use built-in proxy)
+      </label>
+      {{ range ProxyList }}
+      <label>
+        <input type="radio" name="image-proxy" required="true" value="{{.}}" />
+        {{.}}
+      </label>
+      {{ end }}
+      <input type="submit" value="Use selected proxy" />
+    </form>
+    <br />
+    <form action="/settings/imageServer" method="post">
+      <label for="image-proxy">
+        Custom image proxy server
+        <input type="text" name="image-proxy" required="true" placeholder="https://example.com" autocomplete="off" />
+      </label>
+      <input type="submit" value="Use custom proxy" />
+    </form>
+  </div>
+    </div>
+  </div>
+  <!-- End of general settings -->
   <details>
     <summary>
       <h2>Current cookie values</h2>
@@ -43,65 +115,4 @@
   <form action="/settings/reset-all" method="post">
     <input class="critical" type="submit" value="Reset all cookies/preferences" />
   </form>
-  <hr />
-  <h2 id="login">Login</h2>
-  <p>Supported features (for now):</p>
-  <ul>
-    <li>Discovery page</li>
-    <li>Landing page</li>
-    <li>Like/Bookmark</li>
-  </ul>
-  <p>
-    Log in with your Pixiv account's cookie to access features above.
-    To learn how to obtain your cookie, please see
-    <a href="https://pixivfe.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
-  </p>
-  <p>
-    Keep in mind that logins will expire whenever the server is updated, so you
-    may need to log in again if the server has been restarted recently.
-  </p>
-  <form action="/settings/token" method="post">
-    <input type="text" name="token" autocomplete="off" />
-    <input type="submit" value="Remember account cookie (until next server restart)" />
-  </form>
-  <hr />
-  <h2>Logout</h2>
-  <p>
-    To securely end your session, click the 'Logout!' button. This will
-    immediately remove your session token.
-  </p>
-  <form action="/settings/logout" method="post">
-    <input type="submit" value="Logout!" />
-  </form>
-  <hr />
-  <h2>Image proxy server</h2>
-  <p>
-    Choose how images are loaded in PixivFE by selecting either the built-in
-    proxy or one of the provided external proxy servers. If you prefer, you can
-    also specify a custom proxy server by entering its URL and clicking 'Use
-    Custom Proxy'.
-  </p>
-  <div class="form-field">
-    <form action="/settings/imageServer" method="post">
-      <label>
-        <input type="radio" name="image-proxy" required="true" value="" />
-        No (use built-in proxy)
-      </label>
-      {{ range ProxyList }}
-      <label>
-        <input type="radio" name="image-proxy" required="true" value="{{.}}" />
-        {{.}}
-      </label>
-      {{ end }}
-      <input type="submit" value="Use selected proxy" />
-    </form>
-    <br />
-    <form action="/settings/imageServer" method="post">
-      <label for="image-proxy">
-        Custom image proxy server
-        <input type="text" name="image-proxy" required="true" placeholder="https://example.com" autocomplete="off" />
-      </label>
-      <input type="submit" value="Use custom proxy" />
-    </form>
-  </div>
 </div>

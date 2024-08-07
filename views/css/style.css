@@ -335,6 +335,26 @@ input[type=submit][hidden] {
   filter: brightness(1);
 }
 
+.tabs {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid white;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tabs input[type=radio]:checked + label + .tabs-content {
+  display: block;
+}
+.tabs .tabs-content {
+  order: 999;
+  width: 100%;
+  border-top: 1px solid white;
+  padding: 0.5rem 1rem 1rem;
+  display: none;
+}
+
 #loading-indicator {
   z-index: 2;
   isolation: isolate;

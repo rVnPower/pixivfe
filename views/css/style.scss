@@ -383,6 +383,28 @@ input[type="submit"][hidden] {
   }
 }
 
+.tabs {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid white;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+
+  input[type="radio"]:checked + label + .tabs-content {
+    display: block;
+  }
+
+  .tabs-content {
+    order: 999;
+    width: 100%;
+    border-top: 1px solid white;
+    padding: .5rem 1rem 1rem;
+    display: none;
+  }
+}
+
 // https://stackoverflow.com/questions/63787241/css-how-to-create-an-infinitely-moving-repeating-linear-gradient/63787567#63787567
 #loading-indicator {
   z-index: 2;
