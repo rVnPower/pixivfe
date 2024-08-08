@@ -1,3 +1,4 @@
+{{ target := CookieList["pixivfe-ThumbnailToNewTab"] }}
 <div class="artwork-additional">
 
   {{ if .XRestrict != 0 }}
@@ -12,6 +13,6 @@
   {{ end }}
 
 </div>
-<a href="/artworks/{{ .ID }}#checkpoint">
+<a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
   <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
 </a>

@@ -1,4 +1,5 @@
 {{ range . }}
+{{ target := CookieList["pixivfe-ThumbnailToNewTab"] }}
 <div class="artwork-small artwork">
   <div class="artwork-additional">
     <div class="artwork-position">{{ .Rank }}</div>
@@ -10,11 +11,11 @@
     {{ end }}
   </div>
 
-  <a href="/artworks/{{ .ID }}#checkpoint">
+  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
     <img src="{{ .Image }}" alt="{{ .Title }}" />
   </a>
   <div class="artwork-title">
-    <a href="/artworks/{{ .ID }}#checkpoint"> {{ .Title }} </a>
+    <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint"> {{ .Title }} </a>
   </div>
   <div class="artwork-author">
     <a href="/users/{{ .ArtistID }}"

@@ -98,6 +98,15 @@ func setNovelViewMode(c *fiber.Ctx) error {
 	return nil
 }
 
+func setThumbnailToNewTab(c *fiber.Ctx) error {
+	ttnt := c.FormValue("ttnt")
+	if ttnt == "_blank" || ttnt == "_self" {
+		session.SetCookie(c, session.Cookie_ThumbnailToNewTab, ttnt)
+	}
+
+	return nil
+}
+
 func setLogout(c *fiber.Ctx) error {
 	session.ClearCookie(c, session.Cookie_Token)
 	session.ClearCookie(c, session.Cookie_CSRF)
@@ -144,17 +153,8 @@ func resetAll(c *fiber.Ctx) error {
 }
 
 func SettingsPage(c *fiber.Ctx) error {
-	cookies := []fiber.Map{}
-	for _, name := range session.AllCookieNames {
-		value := session.GetCookie(c, name)
-		cookies = append(cookies, fiber.Map{
-			"Key":   name,
-			"Value": value,
-		})
-	}
 	return c.Render("settings", fiber.Map{
-		"CookieList": cookies,
-		"ProxyList":  doc.BuiltinProxyList,
+		"ProxyList": doc.BuiltinProxyList,
 	})
 }
 
@@ -176,6 +176,8 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = resetAll(c)
 	case "novelFontType":
 		err = setNovelFontType(c)
+	case "thumbnailToNewTab":
+		err = setThumbnailToNewTab(c)
 	case "novelViewMode":
 		err = setNovelViewMode(c)
 	case "set-cookie":

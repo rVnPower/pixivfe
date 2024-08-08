@@ -74,6 +74,16 @@
       <input type="submit" value="Use custom proxy" />
     </form>
   </div>
+      <h2>Open artworks in new tab</h2>
+      <form action="/settings/thumbnailToNewTab" method="post">
+        <input id="ttnt-y" type="radio" name="ttnt" value="_blank" />
+        <label for="ttnt-y">Yes</label>
+        <br />
+        <input id="ttnt-n" type="radio" name="ttnt" value="_self" />
+        <label for="ttnt">No</label>
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
     </div>
   <!--  -->
     <input id="novels" class="hidden" type="radio" name="tabsSG">
@@ -113,12 +123,12 @@
       Please note that some cookies here such as ShowArtR18,
       ShowArtR18G, and ShowArtAI are for features still under development.
     </div>
-      {{ range CookieList }}
+      {{ range k, v := CookieList }}
     <div class="settings-set-cookie">
-      <h3>{{.Key}}</h3>
+      <h3>{{k}}</h3>
       <form action="/settings/set-cookie" method="post">
-        <input type="hidden" name="key" value="{{.Key}}" />
-        <input type="text" name="value" value="{{.Value}}" />
+        <input type="hidden" name="key" value="{{k}}" />
+        <input type="text" name="value" value="{{v}}" />
         <input type="submit" value="Set" />
       </form>
 
@@ -133,8 +143,8 @@
     </p>
     <p>Invalid values will be ignored.</p>
     <form action="/settings/raw" method="post">
-    <textarea name="raw" rows="10" cols="80">{{range CookieList}}
-{{.Key}}={{.Value}}{{end}}
+    <textarea name="raw" rows="10" cols="80">{{range k, v := CookieList}}
+{{k}}={{v}}{{end}}
     </textarea>
     <input type="submit" value="Set raw settings" />
     </form>

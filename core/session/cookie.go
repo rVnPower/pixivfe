@@ -11,14 +11,15 @@ import (
 type CookieName string
 
 const ( // the __Host thing force it to be secure and same-origin (no subdomain) >> https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-	Cookie_Token         CookieName = "pixivfe-Token"
-	Cookie_CSRF          CookieName = "pixivfe-CSRF"
-	Cookie_ImageProxy    CookieName = "pixivfe-ImageProxy"
-	Cookie_NovelFontType CookieName = "pixivfe-NovelFontType"
-	Cookie_NovelViewMode CookieName = "pixivfe-NovelViewMode"
-	Cookie_ShowArtR18    CookieName = "pixivfe-ShowArtR18"
-	Cookie_ShowArtR18G   CookieName = "pixivfe-ShowArtR18G"
-	Cookie_ShowArtAI     CookieName = "pixivfe-ShowArtAI"
+	Cookie_Token             CookieName = "pixivfe-Token"
+	Cookie_CSRF              CookieName = "pixivfe-CSRF"
+	Cookie_ImageProxy        CookieName = "pixivfe-ImageProxy"
+	Cookie_NovelFontType     CookieName = "pixivfe-NovelFontType"
+	Cookie_NovelViewMode     CookieName = "pixivfe-NovelViewMode"
+	Cookie_ThumbnailToNewTab CookieName = "pixivfe-ThumbnailToNewTab"
+	Cookie_ShowArtR18        CookieName = "pixivfe-ShowArtR18"
+	Cookie_ShowArtR18G       CookieName = "pixivfe-ShowArtR18G"
+	Cookie_ShowArtAI         CookieName = "pixivfe-ShowArtAI"
 )
 
 // Go can't make this a const...
@@ -28,6 +29,7 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_ImageProxy,
 	Cookie_NovelFontType,
 	Cookie_NovelViewMode,
+	Cookie_ThumbnailToNewTab,
 	Cookie_ShowArtR18,
 	Cookie_ShowArtR18G,
 	Cookie_ShowArtAI,
