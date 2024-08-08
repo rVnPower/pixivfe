@@ -39,6 +39,7 @@
     <input type="submit" value="Logout!" />
   </form>
     </div>
+  <!--  -->
     <input id="site" class="hidden" type="radio" name="tabsSG">
     <label for="site">Site</label>
     <div class="tabs-content">
@@ -74,12 +75,39 @@
     </form>
   </div>
     </div>
+  <!--  -->
+    <input id="novels" class="hidden" type="radio" name="tabsSG">
+    <label for="novels">Novels</label>
+    <div class="tabs-content">
+      <h2>Font family</h2>
+      <form action="/settings/novelFontType?r=/settings" method="post">
+        <input id="font-type-mincho" type="radio" name="font-type" value="mincho" />
+        <label for="font-type-mincho">Mincho</label>
+        <br />
+        <input id="font-type-gothic" type="radio" name="font-type" value="gothic" />
+        <label for="font-type-gothic">Gothic</label>
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
+      <hr />
+      <h2>Force text orientation</h2>
+      <form action="/settings/novelViewMode" method="post">
+        <input id="tx-ori-h" type="radio" name="view-mode" value="1" />
+        <label for="tx-ori-h">Horizontal</label>
+        <br />
+        <input id="tx-ori-v" type="radio" name="view-mode" value="2" />
+        <label for="tx-ori-v">Vertical</label>
+        <br />
+        <input id="tx-ori-n" type="radio" name="view-mode" value="" />
+        <label for="tx-ori-n">Don't force (default from Pixiv)</label>
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
   </div>
+
   <!-- End of general settings -->
-  <details>
-    <summary>
-      <h2>Current cookie values</h2>
-    </summary>
+    <h2>Current cookie values</h2>
     <div>
     <h3>Cookie list</h3>
       Please note that some cookies here such as ShowArtR18,
@@ -111,7 +139,6 @@
     <input type="submit" value="Set raw settings" />
     </form>
     </div>
-  </details>
   <form action="/settings/reset-all" method="post">
     <input class="critical" type="submit" value="Reset all cookies/preferences" />
   </form>

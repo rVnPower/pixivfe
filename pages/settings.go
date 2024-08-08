@@ -159,8 +159,10 @@ func SettingsPage(c *fiber.Ctx) error {
 }
 
 func SettingsPost(c *fiber.Ctx) error {
+	// VnPower: Future maintainers should leave this function alone.
+
 	t := c.Params("type")
-	var noredirect bool = false
+	noredirect := c.Params("noredirect", "") == ""
 	var err error
 
 	switch t {
@@ -174,10 +176,8 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = resetAll(c)
 	case "novelFontType":
 		err = setNovelFontType(c)
-		noredirect = true
 	case "novelViewMode":
 		err = setNovelViewMode(c)
-		noredirect = true
 	case "set-cookie":
 		err = setCookie(c)
 	case "raw":
@@ -191,7 +191,9 @@ func SettingsPost(c *fiber.Ctx) error {
 	}
 
 	if !noredirect {
-		c.Redirect("/settings", http.StatusSeeOther)
+		c.Path("/settings")
+		c.RestartRouting()
+		// c.Redirect("/settings", http.StatusFound)
 	}
 
 	return nil

@@ -251,7 +251,7 @@ func main() {
 	// Settings group
 	settings := server.Group("/settings")
 	settings.Get("/", pages.SettingsPage)
-	settings.Post("/:type", pages.SettingsPost)
+	settings.Post("/:type/:noredirect?", pages.SettingsPost)
 
 	// Personal group
 	self := server.Group("/self")

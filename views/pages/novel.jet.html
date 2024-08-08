@@ -62,18 +62,18 @@
   <div class="novel-settings">
     <div class="novel-settings-wrapper">
     <span class="dropdown">
-      {{ url := "/settings/novelFontType?r=" + OriginalURL + "#content" }}
+      {{ url := "/settings/novelFontType?noredirect=t&r=" + OriginalURL + "#content" }}
       <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
       <label for="font-type-toggler" class="dropdown-toggler-label">
         <img src="/assets/font-family.png" alt="Font family" />
       </label>
       <div class="dropdown-content">
         <div>Font type</div>
-        <form action="{{ url }}?noredirect=t" method="post">
+        <form action="{{ url }}" method="post">
           <input type="text" name="font-type" value="gothic" class="value-holder" />
           <input type="submit" value="Gothic" />
         </form>
-        <form action="{{ url }}?noredirect=t" method="post">
+        <form action="{{ url }}" method="post">
           <input type="text" name="font-type" value="mincho" class="value-holder" />
           <input type="submit" value="Mincho" />
         </form>
@@ -81,18 +81,18 @@
     </span>
     <img src="/assets/font-size.png" alt="Font size" />
     <span class="dropdown">
-      {{ url := "/settings/novelViewMode?r=" + OriginalURL + "#content" }}
+      {{ url := "/settings/novelViewMode?noredirect=t&r=" + OriginalURL + "#content" }}
       <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
       <label for="view-mode-toggler" class="dropdown-toggler-label">
         <img src="/assets/orientation.png" alt="Orientation" />
       </label>
       <div class="dropdown-content">
         <div>Force text orientation</div>
-        <form action="{{ url }}?noredirect=t" method="post">
+        <form action="{{ url }}" method="post">
           <input type="text" name="view-mode" value="1" class="value-holder" />
           <input type="submit" value="Horizontal" />
         </form>
-        <form action="{{ url }}?noredirect=t" method="post">
+        <form action="{{ url }}" method="post">
           <input type="text" name="view-mode" value="2" class="value-holder" />
           <input type="submit" value="Vertical" />
         </form>

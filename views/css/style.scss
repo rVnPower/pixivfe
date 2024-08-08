@@ -618,12 +618,11 @@ nav {
   max-width: 1200px;
   margin-inline: auto;
   padding-inline: 4px;
+  scroll-margin-top: 71px; // Prevent images from being covered; equal to the navigation bar height
 
   @media (min-width: $small-breakpoint) {
     padding-inline: 10px;
   }
-
-  scroll-margin-top: 71px; // Prevent images from being covered; equal to the navigation bar height
 }
 
 .error.container {
