@@ -8,8 +8,9 @@ import (
 )
 
 var pw *playwright.Playwright
+var browser playwright.Browser
 
-func TestInitialize(t *testing.T) {
+func setup() {
 	var err error
 
 	if err = playwright.Install(); err != nil {
@@ -20,6 +21,31 @@ func TestInitialize(t *testing.T) {
 	if err != nil {
 		log.Fatalf("could not start playwright")
 	}
+
+	browser, err = pw.Chromium.Launch()
+	if err != nil {
+		log.Fatalf("could not launch browser: %v", err)
+	}
+
+	log.Println("Setup is complete")
+}
+
+func teardown() {
+	if err := browser.Close(); err != nil {
+		log.Fatalf("could not close browser: %v", err)
+	}
+
+	if err := pw.Stop(); err != nil {
+		log.Fatalf("could not stop Playwright: %v", err)
+	}
+	log.Println("Teardown is complete")
+}
+
+// TestMain can be used for global setup and teardown
+func TestMain(m *testing.M) {
+	setup()
+	_ = m.Run()
+	teardown()
 }
 
 func getBaseURL() string {
@@ -28,10 +54,6 @@ func getBaseURL() string {
 }
 
 func TestGetHomepage(t *testing.T) {
-	browser, err := pw.Chromium.Launch()
-	if err != nil {
-		t.Errorf("could not launch browser: %v", err)
-	}
 	page, err := browser.NewPage()
 	if err != nil {
 		t.Errorf("could not create page: %v", err)
@@ -47,4 +69,5 @@ func TestGetHomepage(t *testing.T) {
 	if len(artworks) != 50 {
 		t.Errorf("number of daily ranking artworks is %d. expected: 50", len(artworks))
 	}
+
 }
