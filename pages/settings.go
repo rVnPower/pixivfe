@@ -159,7 +159,7 @@ func SettingsPage(c *fiber.Ctx) error {
 }
 
 func SettingsPost(c *fiber.Ctx) error {
-	// VnPower: Future maintainers should leave this function alone.
+	// NOTE: VnPower: Future maintainers should leave this function alone.
 
 	t := c.Params("type")
 	noredirect := c.Params("noredirect", "") == ""
