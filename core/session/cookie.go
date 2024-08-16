@@ -17,6 +17,7 @@ const ( // the __Host thing force it to be secure and same-origin (no subdomain)
 	Cookie_NovelFontType     CookieName = "pixivfe-NovelFontType"
 	Cookie_NovelViewMode     CookieName = "pixivfe-NovelViewMode"
 	Cookie_ThumbnailToNewTab CookieName = "pixivfe-ThumbnailToNewTab"
+	Cookie_ArtworkPreview    CookieName = "pixivfe-ArtworkPreview"
 	Cookie_ShowArtR18        CookieName = "pixivfe-ShowArtR18"
 	Cookie_ShowArtR18G       CookieName = "pixivfe-ShowArtR18G"
 	Cookie_ShowArtAI         CookieName = "pixivfe-ShowArtAI"
@@ -30,6 +31,7 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_NovelFontType,
 	Cookie_NovelViewMode,
 	Cookie_ThumbnailToNewTab,
+	Cookie_ArtworkPreview,
 	Cookie_ShowArtR18,
 	Cookie_ShowArtR18G,
 	Cookie_ShowArtAI,

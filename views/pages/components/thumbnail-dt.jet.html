@@ -13,6 +13,8 @@
   {{ end }}
 
 </div>
-<a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
-  <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
-</a>
+<div class="artwork-image">
+  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
+    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
+  </a>
+</div>

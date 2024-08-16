@@ -107,6 +107,15 @@ func setThumbnailToNewTab(c *fiber.Ctx) error {
 	return nil
 }
 
+func setArtworkPreview(c *fiber.Ctx) error {
+	value := c.FormValue("app")
+	if value == "cover" || value == "button" || value == "" {
+		session.SetCookie(c, session.Cookie_ArtworkPreview, value)
+	}
+
+	return nil
+}
+
 func setLogout(c *fiber.Ctx) error {
 	session.ClearCookie(c, session.Cookie_Token)
 	session.ClearCookie(c, session.Cookie_CSRF)
@@ -180,6 +189,8 @@ func SettingsPost(c *fiber.Ctx) error {
 		err = setThumbnailToNewTab(c)
 	case "novelViewMode":
 		err = setNovelViewMode(c)
+	case "artworkPreview":
+		err = setArtworkPreview(c)
 	case "set-cookie":
 		err = setCookie(c)
 	case "raw":

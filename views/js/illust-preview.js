@@ -8,14 +8,14 @@ function OpenPreviewer(url) {
     left: 0;
     background: rgba(0,0,0,.8);
 		display: flex;
-flex-direction: column;
+		flex-direction: column;
 		padding: 0 3rem;
 		overflow: scroll;
   `;
 
-  const image = url.replace(/c\/\d+x\d+.*?\//, "").replace(/square1200/, "master1200");
+  const imageLink = url.replace(/c\/\d+x\d+.*?\//, "").replace(/square1200/, "master1200");
   const img = document.createElement("img");
-  img.src = image;
+  img.src = imageLink;
   img.style.cssText = `
 			    margin: 3rem auto;
 			    max-width: 90%;
@@ -31,23 +31,39 @@ flex-direction: column;
   };
 }
 
-function Overlay() {
-  document.querySelectorAll('.artwork-small img').forEach(illust => {
+function AddOverlay() {
+  // Check out `_layout.jet.html`
+  const type = document.querySelector('#artworkPreview').innerHTML
+
+  let className, html;
+
+  if (type === "cover") {
+    className = "overlay-cover";
+    html = "";
+  } else if (type === "button") {
+    className = "overlay-button";
+    html = "↗";
+  }
+
+  document.querySelectorAll('.artwork-small .artwork-image img').forEach(illust => {
     const url = illust.getAttribute("src");
     const button = document.createElement('div');
-	button.style.cssText = `
-	  position: absolute;
-	  top: 0;
-	  left: 0;
-	  width: 100%;
-	  height: 100%;
-		    `;
-	illust.parentElement.parentElement.appendChild(button);
-	button.onclick = (e) => {
-	  OpenPreviewer(url);
-	};
-      })
-  console.log("ran")
+
+    button.setAttribute("class", className);
+    button.innerHTML = html;
+
+    illust.parentElement.parentElement.appendChild(button);
+
+    button.onclick = (e) => {
+      OpenPreviewer(url);
+    };
+  })
 }
 
-Overlay();
+addEventListener('htmx:afterSwap', function (event) {
+  console.log("%o", event)
+  AddOverlay();
+});
+
+// Initialize (it will only run one time)
+AddOverlay();

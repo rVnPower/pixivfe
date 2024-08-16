@@ -11,17 +11,17 @@
     {{ end }}
   </div>
 
-  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
-    <img src="{{ .Image }}" alt="{{ .Title }}" />
-  </a>
+  <div class="artwork-image">
+    <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
+      <img src="{{ .Image }}" alt="{{ .Title }}" />
+    </a>
+  </div>
   <div class="artwork-title">
     <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint"> {{ .Title }} </a>
   </div>
   <div class="artwork-author">
-    <a href="/users/{{ .ArtistID }}"
-      ><img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" />
-      <span>{{ .ArtistName }}</span></a
-    >
+    <a href="/users/{{ .ArtistID }}"><img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" />
+      <span>{{ .ArtistName }}</span></a>
   </div>
 </div>
 {{ end }}
