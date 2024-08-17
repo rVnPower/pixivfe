@@ -14,7 +14,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	urlc := utils.NewURLConstruct("discovery", map[string]string{"mode": mode})
+	urlc := utils.PartialURL{Path: "discovery", Query: map[string]string{"mode": mode}}
 
 	return c.Render("discovery", fiber.Map{
 		"Artworks": works,

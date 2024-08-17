@@ -309,47 +309,8 @@ func GetTemplateFunctions() template.FuncMap {
 		"floor": func(i float64) int {
 			return int(math.Floor(i))
 		},
-		"URLC": func(obj URLConstructor, name string) string {
-			url := fmt.Sprintf("/%s", obj.Path)
-			first := true
-			exists := false
-
-			for k, v := range obj.Hash {
-				k = lowercaseFirstChar(k)
-
-				if k == name {
-					// Reserve this
-					exists = true
-					continue
-				}
-
-				if v == "" {
-					// If the value is empty, ignore to not clutter the URL
-					continue
-				}
-
-				if first {
-					url += "?"
-					first = false
-				} else {
-					url += "&"
-				}
-				url += fmt.Sprintf("%s=%s", k, v)
-			}
-
-			// This is to move the matched query to the end of the URL
-			if exists {
-				var t string
-				if first {
-					t = "?"
-				} else {
-					t = "&"
-				}
-				url += fmt.Sprintf("%s%s=", t, name)
-
-			}
-			return url
-		},
-		"AttrGen": SwitchButtonAttributes,
+		"unfinishedQuery": unfinishedQuery,
+		"replaceQuery":    replaceQuery,
+		// "AttrGen": SwitchButtonAttributes,
 	}
 }

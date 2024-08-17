@@ -50,7 +50,7 @@ func TagPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	urlc := utils.NewURLConstruct("tags", queries.ReturnMap())
+	urlc := utils.PartialURL{Path: "tags", Query: queries.ReturnMap()}
 
 	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "QueriesC": urlc, "TrueTag": param, "Page": pageInt})
 }
