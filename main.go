@@ -40,6 +40,7 @@ func CanRequestSkipLimiter(c *fiber.Ctx) bool {
 }
 
 func CanRequestSkipLogger(c *fiber.Ctx) bool {
+	// return false
 	path := c.Path()
 	return CanRequestSkipLimiter(c) ||
 		strings.HasPrefix(path, "/proxy/i.pximg.net/")
@@ -189,6 +190,7 @@ func main() {
 				},
 				Expiration:   5 * time.Minute,
 				CacheControl: true,
+				StoreResponseHeaders: true,
 
 				KeyGenerator: func(c *fiber.Ctx) string {
 					key := utils.CopyString(c.OriginalURL())
@@ -207,6 +209,8 @@ func main() {
 		))
 	}
 
+	// redirect any round with ?r=url
+	// could this be unsafe with cross-site scripting?
 	server.Use(func(c *fiber.Ctx) error {
 		ret := c.Query("r")
 		if ret != "" {

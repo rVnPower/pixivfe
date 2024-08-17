@@ -24,7 +24,11 @@ func ArtworkPage(c *fiber.Ctx) error {
 		metaDescription += "#" + i.Name + ", "
 	}
 
-	// todo: passing ArtWorkData{} here will not work. maybe lowercase?
+	// monkey patching. assuming illust.Images[_].Large is used
+	for _, img := range illust.Images {
+		PreloadImage(c, img.Large)
+	}
+
 	return c.Render("artwork", fiber.Map{
 		"Illust":          illust,
 		"Title":           illust.Title,
