@@ -17,9 +17,9 @@ function OpenPreviewer(url) {
   const img = document.createElement("img");
   img.src = imageLink;
   img.style.cssText = `
-			    margin: 3rem auto;
-			    max-width: 90%;
-			    max-height: 90%;
+	margin: 3rem auto;
+	max-width: 90%;
+	max-height: 90%;
     `
 
   viewer.appendChild(img);
@@ -43,6 +43,8 @@ function AddOverlay() {
   } else if (type === "button") {
     className = "overlay-button";
     html = "↗";
+  } else {
+    return;
   }
 
   document.querySelectorAll('.artwork-small .artwork-image img').forEach(illust => {

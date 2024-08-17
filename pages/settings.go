@@ -171,7 +171,7 @@ func SettingsPost(c *fiber.Ctx) error {
 	// NOTE: VnPower: Future maintainers should leave this function alone.
 
 	t := c.Params("type")
-	noredirect := c.Params("noredirect", "") == ""
+	noredirect := c.FormValue("noredirect", "") == ""
 	var err error
 
 	switch t {
@@ -204,10 +204,8 @@ func SettingsPost(c *fiber.Ctx) error {
 	}
 
 	if !noredirect {
-		c.Path("/settings")
-		c.RestartRouting()
-		// c.Redirect("/settings", http.StatusFound)
+		return nil
 	}
 
-	return nil
+	return c.Redirect("/settings", http.StatusSeeOther)
 }

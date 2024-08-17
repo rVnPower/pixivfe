@@ -61,47 +61,48 @@
   <!-- ----------- -->
   <div class="novel-settings">
     <div class="novel-settings-wrapper">
-    <span class="dropdown">
-      {{ url := "/settings/novelFontType?noredirect=t&r=" + OriginalURL + "#content" }}
-      <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
-      <label for="font-type-toggler" class="dropdown-toggler-label">
-        <img src="/assets/font-family.png" alt="Font family" />
-      </label>
-      <div class="dropdown-content">
-        <div>Font type</div>
-        <form action="{{ url }}" method="post">
-          <input type="text" name="font-type" value="gothic" class="value-holder" />
-          <input type="submit" value="Gothic" />
-        </form>
-        <form action="{{ url }}" method="post">
-          <input type="text" name="font-type" value="mincho" class="value-holder" />
-          <input type="submit" value="Mincho" />
-        </form>
-      </div>
-    </span>
-    <img src="/assets/font-size.png" alt="Font size" />
-    <span class="dropdown">
-      {{ url := "/settings/novelViewMode?noredirect=t&r=" + OriginalURL + "#content" }}
-      <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
-      <label for="view-mode-toggler" class="dropdown-toggler-label">
-        <img src="/assets/orientation.png" alt="Orientation" />
-      </label>
-      <div class="dropdown-content">
-        <div>Force text orientation</div>
-        <form action="{{ url }}" method="post">
-          <input type="text" name="view-mode" value="1" class="value-holder" />
-          <input type="submit" value="Horizontal" />
-        </form>
-        <form action="{{ url }}" method="post">
-          <input type="text" name="view-mode" value="2" class="value-holder" />
-          <input type="submit" value="Vertical" />
-        </form>
-        <form action="{{ url }}" method="post">
-          <input type="text" name="view-mode" value="" class="value-holder" />
-          <input type="submit" value="Don't force" />
-        </form>
-      </div>
-    </span>
+      <span class="dropdown">
+        {{ url := "/settings/novelFontType?noredirect=t&r=" + OriginalURL + "#content" }}
+        <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
+        <label for="font-type-toggler" class="dropdown-toggler-label">
+          <img src="/assets/font-family.png" alt="Font family" />
+        </label>
+        <div class="dropdown-content">
+          <div>Font type</div>
+          <form action="{{ url }}" method="post">
+            <input type="text" name="font-type" value="gothic" class="value-holder" />
+            <input type="submit" value="Gothic" />
+          </form>
+          <form action="{{ url }}" method="post">
+            <input type="text" name="font-type" value="mincho" class="value-holder" />
+            <input type="submit" value="Mincho" />
+          </form>
+        </div>
+      </span>
+      <img src="/assets/font-size.png" alt="Font size" />
+      <span class="dropdown">
+        {{ url := "/settings/novelViewMode?r=" + OriginalURL + "#content" }}
+        <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
+        <label for="view-mode-toggler" class="dropdown-toggler-label">
+          <img src="/assets/orientation.png" alt="Orientation" />
+        </label>
+        <div class="dropdown-content">
+          <div>Text orientation</div>
+          <form action="{{ url }}" method="post">
+            <input id="vm-1" type="radio" name="view-mode" value="1" />
+            <label for="vm-1">Horizontal</label>
+            <br />
+            <input id="vm-2" type="radio" name="view-mode" value="2" />
+            <label for="vm-2">Vertical</label>
+            <br />
+            <input id="vm-d" type="radio" name="view-mode" value="d" />
+            <label for="vm-d">Don't force</label>
+            <br />
+            <input type="hidden" name="noredirect" value="t" />
+            <input type="submit" value="Submit!" />
+          </form>
+        </div>
+      </span>
     </div>
   </div>
   <!-- ----------- -->
