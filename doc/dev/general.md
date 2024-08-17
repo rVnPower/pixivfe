@@ -39,8 +39,6 @@ A page to do more extensive searching.
 Might require JavaScript for search recommendation, if wanted.
 
 
-
-
 - [ ] Full landing page  
 There are a lot of sections for the landing page. https://www.pixiv.net/ajax/top/illust  
 The artwork parsing part has already been implemented flawlessly.  
@@ -52,6 +50,9 @@ We only have to write the frontend code for those sections.
   - https://www.pixiv.net/contest/ (no AJAX endpoints)
 
 ## To consider
+
+- Speculative Fetching
+Fetch images from pixiv and cache them while we send the response page to users. When they ask for those images, we already have those.
 
 - App API support  
 May be painful to implement.
