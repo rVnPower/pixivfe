@@ -54,42 +54,42 @@
     {{ name := slice("All", "Safe", "R-18")}}
     {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
   </div>
-    <div class="switcher">
-      <div class="switch-title">Ratio</div>
+  <div class="switcher">
+    <div class="switch-title">Ratio</div>
     {{ URL := unfinishedQuery(QueriesC, "ratio") }}
     {{ path := slice("", "-0.5", "0", "0.5")}}
     {{ name := slice("All", "Portrait", "Square", "Landscape")}}
     {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
-    </div>
-    <div class="switcher">
-      <div class="switch-title">Search mode</div>
-      {{ URL := unfinishedQuery(QueriesC, "smode") }}
-      {{ path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-      {{ name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-      {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
-    </div>
+  </div>
+  <div class="switcher">
+    <div class="switch-title">Search mode</div>
+    {{ URL := unfinishedQuery(QueriesC, "smode") }}
+    {{ path := slice("", "s_tag_full", "s_tag", "s_tc")}}
+    {{ name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
+  </div>
   <details>
     <summary>
-    <h2>Advanced settings</h2>
+      <h2>Advanced settings</h2>
     </summary>
-      {{ URL := unfinishedQuery(QueriesC, "") }}
-      <form action="{{ URL }}&name={{ QueriesC.Hash.Name }}" method="post">
-        <label for="wlt">Minimum image width</label>
-        <input type="text" name="wlt" value="{{ QueriesC.Hash.Wlt }}" />
-        <label for="wgt">Maximum image width</label>
-        <input type="text" name="wgt" value="{{ QueriesC.Hash.Wgt }}" />
-        <label for="hlt">Minimum image height</label>
-        <input type="text" name="hlt" value="{{ QueriesC.Hash.Hlt }}" />
-        <label for="hgt">Maximum image height</label>
-        <input type="text" name="hgt" value="{{ QueriesC.Hash.Hgt }}" />
-        <label for="scd">Posted after (format: yyyy-mm-dd)</label>
-        <input type="text" name="scd" value="{{ QueriesC.Hash.Scd }}" />
-        <label for="ecd">Posted before (format: yyyy-mm-dd)</label>
-        <input type="text" name="ecd" value="{{ QueriesC.Hash.Ecd }}" />
-        <label for="tool">Tool</label>
-        <input type="text" name="tool" value="{{ QueriesC.Hash.Tool }}" />
-        <input type="submit" value="Set" />
-      </form>
+    {{ URL := unfinishedQuery(QueriesC, "") }}
+    <form action="{{ URL }}&name={{ QueriesC.Query.Name }}" method="post">
+      <label for="wlt">Minimum image width</label>
+      <input type="text" name="wlt" value="{{ QueriesC.Query.Wlt }}" />
+      <label for="wgt">Maximum image width</label>
+      <input type="text" name="wgt" value="{{ QueriesC.Query.Wgt }}" />
+      <label for="hlt">Minimum image height</label>
+      <input type="text" name="hlt" value="{{ QueriesC.Query.Hlt }}" />
+      <label for="hgt">Maximum image height</label>
+      <input type="text" name="hgt" value="{{ QueriesC.Query.Hgt }}" />
+      <label for="scd">Posted after (format: yyyy-mm-dd)</label>
+      <input type="text" name="scd" value="{{ QueriesC.Query.Scd }}" />
+      <label for="ecd">Posted before (format: yyyy-mm-dd)</label>
+      <input type="text" name="ecd" value="{{ QueriesC.Query.Ecd }}" />
+      <label for="tool">Tool</label>
+      <input type="text" name="tool" value="{{ QueriesC.Query.Tool }}" />
+      <input type="submit" value="Set" />
+    </form>
   </details>
   {{ if Data.Popular.Recent }}
   <h2>Popular artworks</h2>
