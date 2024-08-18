@@ -405,6 +405,7 @@ nav .sidebar-container {
 }
 nav .navbar-brand {
   display: inline-flex;
+  align-items: center;
   gap: 10px;
 }
 nav .navbar-brand span {
