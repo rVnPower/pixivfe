@@ -30,7 +30,7 @@
     <p>{{ raw: parsePixivRedirect(User.Comment) }}</p>
   </div>
   <div>Frequently Used Tags</div>
-  <div class="user-tags">
+  <div class="tag-list">
     {{ range User.FrequentTags }}
     <a href="/tags/{{ .Name }}">
       #{{ .Name }}

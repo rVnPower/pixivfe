@@ -118,6 +118,10 @@ func ParseTime(date time.Time) string {
 	return date.Format("2006-01-02 15:04")
 }
 
+func ParseTimeCustomFormat(date time.Time, format string) string {
+	return date.Format(format)
+}
+
 func CreatePaginator(base, ending string, current_page, max_page int) template.HTML {
 	pageUrl := func(page int) string {
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
@@ -285,6 +289,9 @@ func GetTemplateFunctions() template.FuncMap {
 		},
 		"parseTime": func(date time.Time) string {
 			return ParseTime(date)
+		},
+		"parseTimeCustomFormat": func(date time.Time, format string) string {
+			return ParseTimeCustomFormat(date, format)
 		},
 		"createPaginator": func(base, ending string, current_page, max_page int) template.HTML {
 			return CreatePaginator(base, ending, current_page, max_page)

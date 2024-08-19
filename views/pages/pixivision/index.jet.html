@@ -1,0 +1,26 @@
+<div class="container">
+	<div class="vision-container">
+		{{ range _, article := Data }}
+		<div class="vision-preview vision-preview-large">
+			<div class="vision-thumbnail">
+				<img src="{{article.Thumbnail}}" alt="{{article.Title}}" />
+			</div>
+			<div class="vision-metadata">
+				<a class="vision-title" href="/pixivision/a/{{article.ID}}">
+					{{article.Title}}
+				</a>
+				<div class="vision-metadata-other">
+					<div class="tag-list">
+						{{ range _, tag := article.Tags }}
+						<a href="/pixivision/tag/{{tag.ID}}">#{{tag.Name}}</a>
+						{{ end }}
+					</div>
+					<div>
+						<div>{{parseTimeCustomFormat(article.Date, "2006-01-02")}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{ end }}
+	</div>
+</div>

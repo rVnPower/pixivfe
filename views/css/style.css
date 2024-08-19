@@ -1116,18 +1116,52 @@ nav .sidebar-item img {
   margin: 0;
 }
 
-.user-tags {
+.tag-list {
   display: flex;
   flex-wrap: wrap;
   row-gap: 8px;
   column-gap: 1em;
   margin-block: 4px 20px;
 }
-.user-tags > a {
+.tag-list > a {
   line-height: 1;
 }
-.user-tags > a:hover {
+.tag-list > a:hover {
   text-decoration: underline;
+}
+
+.vision-container {
+  display: grid;
+  width: 100%;
+  gap: 15px;
+  grid-template-columns: 1fr 1fr;
+}
+.vision-container .vision-preview {
+  background: #222;
+  padding: 10px;
+  display: flex;
+  flex-flow: column wrap;
+}
+.vision-container .vision-thumbnail img {
+  width: 100%;
+}
+.vision-container .vision-metadata {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+.vision-container .vision-metadata .vision-title {
+  color: #fff;
+  margin: 0.5rem 0;
+}
+.vision-container .vision-metadata .vision-metadata-other {
+  display: flex;
+  justify-content: space-between;
+}
+.vision-container .tag-list {
+  align-items: center;
+  margin: 0;
 }
 
 #calendar {
