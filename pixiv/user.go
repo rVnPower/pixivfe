@@ -20,7 +20,7 @@ const (
 	UserArt_AnyAlt       UserArtCategory = "artworks"
 	UserArt_Illustration UserArtCategory = "illustrations"
 	UserArt_Manga        UserArtCategory = "manga"
-	UserArt_Bookmarked   UserArtCategory = "bookmarks" // what this user has bookmarked; not art by this user
+	UserArt_Bookmarks    UserArtCategory = "bookmarks" // what this user has bookmarked; not art by this user
 	UserArt_Novel        UserArtCategory = "novels"
 )
 
@@ -29,9 +29,9 @@ func (s UserArtCategory) Validate() error {
 		s != UserArt_AnyAlt &&
 		s != UserArt_Illustration &&
 		s != UserArt_Manga &&
-		s != UserArt_Bookmarked &&
+		s != UserArt_Bookmarks &&
 		s != UserArt_Novel {
-		return fmt.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarked, UserArt_Novel)
+		return fmt.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarks, UserArt_Novel)
 	} else {
 		return nil
 	}
@@ -267,7 +267,7 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 		return user, err
 	}
 
-	if category == "bookmarks" {
+	if category == UserArt_Bookmarks {
 		// Bookmarks
 		works, count, err := GetUserBookmarks(c, id, "show", page)
 		if err != nil {
@@ -278,7 +278,7 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 
 		// Public bookmarks count
 		user.ArtworksCount = count
-	} else if category == "novels" {
+	} else if category == UserArt_Novel {
 		ids, count, err := GetUserArtworksID(c, id, category, page)
 		if err != nil {
 			return user, err

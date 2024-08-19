@@ -87,6 +87,14 @@ rules:
   message: "raw UserArtCategory string"
   languages: [go]
   severity: WARNING
-  pattern-either:
+  patterns:
   - pattern: |
-      ($A : UserArtCategory) == "$B"
+      ($A : UserArtCategory) == $B
+  - pattern-not: |
+      ($A : UserArtCategory) == ($B : UserArtCategory)
+- id: rule-7
+  message: "c.Render"
+  languages: [go]
+  severity: INFO
+  pattern: |
+    c.Render(...)

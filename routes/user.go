@@ -41,7 +41,7 @@ func fetchData(c *fiber.Ctx, getTags bool) (userPageData, error) {
 	var worksCount int
 	var worksPerPage float64
 
-	if category == core.UserArt_Bookmarked {
+	if category == core.UserArt_Bookmarks {
 		worksPerPage = 48.0
 	} else {
 		worksPerPage = 30.0
@@ -75,7 +75,9 @@ func UserAtomFeed(c *fiber.Ctx) error {
 		return err
 	}
 
-	err = c.Render("user.atom", fiber.Map{
+	c.Context().SetContentType("application/atom+xml")
+
+	return c.Render("user.atom", fiber.Map{
 		"URL":       string(c.Request().RequestURI()),
 		"Title":     data.user.Name,
 		"User":      data.user,
@@ -85,11 +87,4 @@ func UserAtomFeed(c *fiber.Ctx) error {
 		"Page":      data.page,
 		// "MetaImage": data.user.BackgroundImage,
 	}, "")
-	if err != nil {
-		return err
-	}
-
-	c.Context().SetContentType("application/atom+xml")
-
-	return nil
 }

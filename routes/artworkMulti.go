@@ -58,7 +58,7 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 		return err_global
 	}
 
-	return c.Render("artwork-multi", fiber.Map{
+	return c.Render("artworkMulti", fiber.Map{
 		"Artworks": artworks,
 		"Title":    fmt.Sprintf("(%d images)", len(artworks)),
 	})
