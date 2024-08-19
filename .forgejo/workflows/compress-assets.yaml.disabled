@@ -24,4 +24,4 @@ jobs:
           mv ./leanify /usr/local/bin
 
       - name: Compress assets
-        run: leanify -p ./views/assets
+        run: leanify -p ./assets/img

@@ -20,7 +20,7 @@ RUN addgroup -g 1000 -S pixivfe && \
 
 # Copy the compiled application and other necessary files from the builder stage
 COPY --from=builder /app/pixivfe /app/pixivfe
-COPY --from=builder /app/views /app/views
+COPY --from=builder /app/assets /app/assets
 COPY ./docker/entrypoint.sh /entrypoint.sh
 # Include entrypoint script and ensure it's executable
 RUN chmod +x /entrypoint.sh && \

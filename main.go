@@ -33,7 +33,7 @@ import (
 
 func CanRequestSkipLimiter(c *fiber.Ctx) bool {
 	path := c.Path()
-	return strings.HasPrefix(path, "/assets/") ||
+	return strings.HasPrefix(path, "/img/") ||
 		strings.HasPrefix(path, "/css/") ||
 		strings.HasPrefix(path, "/js/") ||
 		strings.HasPrefix(path, "/proxy/s.pximg.net/")
@@ -50,7 +50,7 @@ func main() {
 	config.GlobalServerConfig.InitializeConfig()
 	core_http.Init()
 
-	engine := jet.New("./views/pages", ".jet.html")
+	engine := jet.New("./assets/layout", ".jet.html")
 	engine.AddFuncMap(serve.GetTemplateFunctions())
 	if config.GlobalServerConfig.InDevelopment {
 		engine.Reload(true)
@@ -238,11 +238,11 @@ func main() {
 		return nil
 	})
 
-	server.Static("/favicon.ico", "./views/assets/favicon.ico")
-	server.Static("/robots.txt", "./views/assets/robots.txt")
-	server.Static("/assets/", "./views/assets")
-	server.Static("/css/", "./views/css")
-	server.Static("/js/", "./views/js")
+	server.Static("/favicon.ico", "./assets/img/favicon.ico")
+	server.Static("/robots.txt", "./assets/robots.txt")
+	server.Static("/img/", "./assets/img")
+	server.Static("/css/", "./assets/css")
+	server.Static("/js/", "./assets/js")
 
 	server.Use(recover.New(recover.Config{EnableStackTrace: config.GlobalServerConfig.InDevelopment}))
 
@@ -301,7 +301,7 @@ func main() {
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {
 		go func() {
-			cmd := exec.Command("sass", "--watch", "views/css")
+			cmd := exec.Command("sass", "--watch", "assets/css")
 			cmd.Stdout = os.Stderr // Sass quirk
 			cmd.Stderr = os.Stderr
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pdeathsig: syscall.SIGHUP}
