@@ -1164,6 +1164,12 @@ nav .sidebar-item img {
   margin: 0;
 }
 
+.vision-article {
+  background-color: #222;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
 #calendar {
   width: 100%;
   height: auto;

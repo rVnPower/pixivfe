@@ -29,5 +29,11 @@ func PixivisionArticlePage(c *fiber.Ctx) error {
 		return err
 	}
 
+	data.Thumbnail = session.ProxyImageUrlNoEscape(c, data.Thumbnail)
+	for i := range data.Items {
+		data.Items[i].Image = session.ProxyImageUrlNoEscape(c, data.Items[i].Image)
+		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(c, data.Items[i].Avatar)
+	}
+
 	return c.Render("pixivision/article", fiber.Map{"Article": data})
 }

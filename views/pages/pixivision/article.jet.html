@@ -1,3 +1,13 @@
-<div class="container">
-	{{Article.Title}}
+<div class="container vision-article">
+	<h2>{{Article.Title}}</h2>
+	{{ range _, desc := Article.Description }}
+	<p>{{desc}}</p>
+	{{ end }}
+
+	{{ range _, item := Article.Items }}
+	<div class="vision-article-item">
+		{{item.Title}}
+		<img src="{{item.Image}}" alt="{{item.Title}}" />
+	</div>
+	{{ end }}
 </div>

@@ -1412,8 +1412,6 @@ $font-fallback-sans: YuGothic,
     }
   }
 
-
-
   .vision-metadata {
     display: flex;
     flex-direction: column;
@@ -1436,6 +1434,12 @@ $font-fallback-sans: YuGothic,
     align-items: center;
     margin: 0;
   }
+}
+
+.vision-article {
+  background-color: $bg-secondary;
+  border-radius: 5px;
+  padding: 5px 15px;
 }
 
 #calendar {
