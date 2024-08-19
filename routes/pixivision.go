@@ -1,10 +1,10 @@
-package pages
+package routes
 
 import (
 	"codeberg.org/vnpower/pixivision"
 	"github.com/gofiber/fiber/v2"
 
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 )
 
 func PixivisionHomePage(c *fiber.Ctx) error {

@@ -1,4 +1,4 @@
-package pages
+package routes
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 	"github.com/tidwall/gjson"
 )

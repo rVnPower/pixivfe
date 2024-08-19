@@ -1,4 +1,4 @@
-package pixiv
+package pixiv_api
 
 import (
 	"context"
@@ -26,7 +26,7 @@ type HttpResponse struct {
 
 const DevDir_Response = "/tmp/pixivfe-dev/resp"
 
-func Init() error {
+func CreateResponseAuditFolder() error {
 	if config.GlobalServerConfig.InDevelopment {
 		// {err := os.RemoveAll(DevDir_Response)
 		// if err != nil {

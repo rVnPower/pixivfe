@@ -1,7 +1,7 @@
-package pages
+package routes
 
 import (
-	core "codeberg.org/vnpower/pixivfe/v2/pixiv"
+	core "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
 	"github.com/gofiber/fiber/v2"
 )
 

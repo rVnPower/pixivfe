@@ -1,11 +1,11 @@
-package pages
+package routes
 
 import (
 	"net/http"
 	"net/url"
 	"strconv"
 
-	core "codeberg.org/vnpower/pixivfe/v2/pixiv"
+	core "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"github.com/gofiber/fiber/v2"
 )

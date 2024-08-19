@@ -1,4 +1,4 @@
-package pixiv
+package pixiv_api
 
 import (
 	"errors"
@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 )

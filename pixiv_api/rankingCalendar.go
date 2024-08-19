@@ -1,4 +1,4 @@
-package pixiv
+package pixiv_api
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/net/html"
 )

@@ -1,4 +1,4 @@
-package pages
+package routes
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	httpc "codeberg.org/vnpower/pixivfe/v2/pixiv"
+	httpc "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 )

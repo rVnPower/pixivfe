@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"time"
 
-	config "codeberg.org/vnpower/pixivfe/v2/config"
-	core_http "codeberg.org/vnpower/pixivfe/v2/pixiv"
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 
-	pages "codeberg.org/vnpower/pixivfe/v2/routes"
-	serve "codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/routes"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"codeberg.org/vnpower/pixivfe/v2/utils/kmutex"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
@@ -27,7 +27,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/fiber/v2/utils"
+	fiber_utils "github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/template/jet/v2"
 )
 
@@ -48,10 +48,10 @@ func CanRequestSkipLogger(c *fiber.Ctx) bool {
 
 func main() {
 	config.GlobalServerConfig.InitializeConfig()
-	core_http.Init()
+	pixiv_api.CreateResponseAuditFolder()
 
 	engine := jet.New("./assets/layout", ".jet.html")
-	engine.AddFuncMap(serve.GetTemplateFunctions())
+	engine.AddFuncMap(utils.GetTemplateFunctions())
 	if config.GlobalServerConfig.InDevelopment {
 		engine.Reload(true)
 	}
@@ -193,7 +193,7 @@ func main() {
 				StoreResponseHeaders: true,
 
 				KeyGenerator: func(c *fiber.Ctx) string {
-					key := utils.CopyString(c.OriginalURL())
+					key := fiber_utils.CopyString(c.OriginalURL())
 					for _, cookieName := range session.AllCookieNames {
 						cookieValue := session.GetCookie(c, cookieName)
 						if cookieValue != "" {
@@ -248,44 +248,44 @@ func main() {
 
 	// Routes
 
-	server.Get("/", pages.IndexPage)
-	server.Get("/about", pages.AboutPage)
-	server.Get("/newest", pages.NewestPage)
-	server.Get("/discovery", pages.DiscoveryPage)
-	server.Get("/discovery/novel", pages.NovelDiscoveryPage)
-	server.Get("/ranking", pages.RankingPage)
-	server.Get("/rankingCalendar", pages.RankingCalendarPage)
-	server.Post("/rankingCalendar", pages.RankingCalendarPicker)
-	server.Get("/users/:id.atom.xml", pages.UserAtomFeed)
-	server.Get("/users/:id/:category?.atom.xml", pages.UserAtomFeed)
-	server.Get("/users/:id/:category?", pages.UserPage)
-	server.Get("/artworks/:id/", pages.ArtworkPage).Name("artworks")
-	server.Get("/artworks-multi/:ids/", pages.ArtworkMultiPage)
-	server.Get("/novel/:id/", pages.NovelPage)
-	server.Get("/pixivision", pages.PixivisionHomePage)
-	server.Get("/pixivision/a/:id", pages.PixivisionArticlePage)
+	server.Get("/", routes.IndexPage)
+	server.Get("/about", routes.AboutPage)
+	server.Get("/newest", routes.NewestPage)
+	server.Get("/discovery", routes.DiscoveryPage)
+	server.Get("/discovery/novel", routes.NovelDiscoveryPage)
+	server.Get("/ranking", routes.RankingPage)
+	server.Get("/rankingCalendar", routes.RankingCalendarPage)
+	server.Post("/rankingCalendar", routes.RankingCalendarPicker)
+	server.Get("/users/:id.atom.xml", routes.UserAtomFeed)
+	server.Get("/users/:id/:category?.atom.xml", routes.UserAtomFeed)
+	server.Get("/users/:id/:category?", routes.UserPage)
+	server.Get("/artworks/:id/", routes.ArtworkPage).Name("artworks")
+	server.Get("/artworks-multi/:ids/", routes.ArtworkMultiPage)
+	server.Get("/novel/:id/", routes.NovelPage)
+	server.Get("/pixivision", routes.PixivisionHomePage)
+	server.Get("/pixivision/a/:id", routes.PixivisionArticlePage)
 
 	// Settings group
 	settings := server.Group("/settings")
-	settings.Get("/", pages.SettingsPage)
-	settings.Post("/:type/:noredirect?", pages.SettingsPost)
+	settings.Get("/", routes.SettingsPage)
+	settings.Post("/:type/:noredirect?", routes.SettingsPost)
 
 	// Personal group
 	self := server.Group("/self")
-	self.Get("/", pages.LoginUserPage)
-	self.Get("/followingWorks", pages.FollowingWorksPage)
-	self.Get("/bookmarks", pages.LoginBookmarkPage)
-	self.Get("/addBookmark/:id", pages.AddBookmarkRoute)
-	self.Get("/deleteBookmark/:id", pages.DeleteBookmarkRoute)
-	self.Get("/like/:id", pages.LikeRoute)
+	self.Get("/", routes.LoginUserPage)
+	self.Get("/followingWorks", routes.FollowingWorksPage)
+	self.Get("/bookmarks", routes.LoginBookmarkPage)
+	self.Get("/addBookmark/:id", routes.AddBookmarkRoute)
+	self.Get("/deleteBookmark/:id", routes.DeleteBookmarkRoute)
+	self.Get("/like/:id", routes.LikeRoute)
 
 	// Oembed group
-	server.Get("/oembed", pages.Oembed)
+	server.Get("/oembed", routes.Oembed)
 
-	server.Get("/tags/:name", pages.TagPage)
-	server.Post("/tags/:name", pages.TagPage)
-	server.Get("/tags", pages.TagPage)
-	server.Post("/tags", pages.AdvancedTagPost)
+	server.Get("/tags/:name", routes.TagPage)
+	server.Post("/tags/:name", routes.TagPage)
+	server.Get("/tags", routes.TagPage)
+	server.Post("/tags", routes.AdvancedTagPost)
 
 	// Legacy illust URL
 	server.Get("/member_illust.php", func(c *fiber.Ctx) error {
@@ -294,9 +294,9 @@ func main() {
 
 	// Proxy routes
 	proxy := server.Group("/proxy")
-	proxy.Get("/i.pximg.net/*", pages.IPximgProxy)
-	proxy.Get("/s.pximg.net/*", pages.SPximgProxy)
-	proxy.Get("/ugoira.com/*", pages.UgoiraProxy)
+	proxy.Get("/i.pximg.net/*", routes.IPximgProxy)
+	proxy.Get("/s.pximg.net/*", routes.SPximgProxy)
+	proxy.Get("/ugoira.com/*", routes.UgoiraProxy)
 
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {

@@ -1,1 +1,1 @@
-package pages
+package routes

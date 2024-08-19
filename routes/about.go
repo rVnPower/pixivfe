@@ -1,4 +1,4 @@
-package pages
+package routes
 
 import (
 	"codeberg.org/vnpower/pixivfe/v2/config"

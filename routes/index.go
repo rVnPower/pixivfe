@@ -1,8 +1,8 @@
-package pages
+package routes
 
 import (
-	core "codeberg.org/vnpower/pixivfe/v2/pixiv"
-	session "codeberg.org/vnpower/pixivfe/v2/session"
+	core "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 )
 
