@@ -34,6 +34,8 @@ type ServerConfig struct {
 	StartingTime  string
 	Version       string
 	InDevelopment bool
+
+	ProxyCheckInterval time.Duration // Proxy check interval
 }
 
 func (s *ServerConfig) InitializeConfig() error {
@@ -71,6 +73,8 @@ func (s *ServerConfig) InitializeConfig() error {
 
 	s.SetProxyServer(GetEnv("PIXIVFE_IMAGEPROXY"))
 
+	s.SetProxyCheckInterval(GetEnv("PIXIVFE_PROXY_CHECK_INTERVAL"))
+
 	AnnounceAllEnv()
 
 	s.setStartingTime()
@@ -102,6 +106,22 @@ func (s *ServerConfig) SetRequestLimit(v string) {
 		}
 		s.RequestLimit = t
 	}
+}
+
+func (s *ServerConfig) SetProxyCheckInterval(v string) {
+	const defaultInterval = 480
+	if v == "" {
+		s.ProxyCheckInterval = defaultInterval * time.Minute
+	} else {
+		minutes, err := strconv.Atoi(v)
+		if err != nil {
+			log.Printf("Invalid PIXIVFE_PROXY_CHECK_INTERVAL value: %s. Using default of %d minutes.\n", v, defaultInterval)
+			s.ProxyCheckInterval = defaultInterval * time.Minute
+		} else {
+			s.ProxyCheckInterval = time.Duration(minutes) * time.Minute
+		}
+	}
+	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
 }
 
 func (s *ServerConfig) setStartingTime() {

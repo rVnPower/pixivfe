@@ -298,6 +298,9 @@ func main() {
 	proxy.Get("/s.pximg.net/*", routes.SPximgProxy)
 	proxy.Get("/ugoira.com/*", routes.UgoiraProxy)
 
+	// Initialize and start the proxy checker
+	config.InitializeProxyChecker()
+
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {
 		go func() {
