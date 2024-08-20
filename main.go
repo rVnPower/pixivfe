@@ -88,7 +88,7 @@ func main() {
 			c.Status(code)
 			err = routes.Render(c, routes.Data_error{Title: "Error", Error: err})
 			if err != nil {
-				return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Internal Server Error: %s", err))
+				return c.Status(code).SendString(fmt.Sprintf("Internal Server Error: %s", err))
 			}
 
 			return nil

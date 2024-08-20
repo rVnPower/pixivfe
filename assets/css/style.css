@@ -775,6 +775,7 @@ nav .sidebar-item img {
   border-radius: 50px;
   object-fit: cover;
   object-position: center top;
+  aspect-ratio: 1/1;
 }
 .illust-attr .attr-wrap {
   margin-left: 5px;
