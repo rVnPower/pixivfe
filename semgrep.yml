@@ -98,3 +98,6 @@ rules:
   severity: INFO
   pattern: |
     c.Render(...)
+  paths:
+    exclude:
+      - "render_types.go"

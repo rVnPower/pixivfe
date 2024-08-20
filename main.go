@@ -15,11 +15,11 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/pixiv_api"
-	"codeberg.org/vnpower/pixivfe/v2/session"
-
 	"codeberg.org/vnpower/pixivfe/v2/routes"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"codeberg.org/vnpower/pixivfe/v2/utils/kmutex"
+
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
@@ -86,7 +86,7 @@ func main() {
 
 			// Send custom error page
 			c.Status(code)
-			err = c.Render("error", fiber.Map{"Title": "Error", "Error": err})
+			err = routes.Render(c, routes.Data_error{Title: "Error", Error: err})
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Internal Server Error: %s", err))
 			}
