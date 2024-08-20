@@ -101,6 +101,14 @@ var EnvList []*EnvVar = []*EnvVar{
 		//
 		// The value of the `Accept-Language` header, used to make requests to Pixiv's API. You can change the response's language with this one.
 	},
+	{
+		Name:       "PIXIVFE_PROXY_CHECK_INTERVAL",
+		CommonName: "proxy check interval",
+		Value:      "480",
+		// **Required**: No
+		//
+		// The interval in minutes between proxy checks. Defaults to 480 minutes (8 hours) if not set.
+	},
 }
 
 // ======================================================================
