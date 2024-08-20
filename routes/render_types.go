@@ -13,13 +13,23 @@ type Data_error struct {
 	Error error
 }
 
+// add new types above
+
+// the migration plan
+//
+// 1. find and replace every occurance of `c.Render("abc", fiber.Map{...})` with `Render(c, Data_abc{...})` (except in this file)
+// 2. create type `Data_abc` in this file (see `Data_error` above)
+// 3. update `TestTemplates` in render_test.go to include `Data_abc`
+
 func Render[T interface{}](c *fiber.Ctx, data T) error {
-	route_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
-	if !found { log.Panicf("struct name does not start with 'Data_': %s", route_name) }
-	return c.Render(route_name, structToMap(data))
+	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
+	if !found {
+		log.Panicf("struct name does not start with 'Data_': %s", template_name)
+	}
+	return c.Render(template_name, StructToMap(data))
 }
 
-func structToMap[T interface{}](data T) map[string]interface{} {
+func StructToMap[T interface{}](data T) map[string]interface{} {
 	result := map[string]interface{}{}
 	Type := reflect.TypeFor[T]()
 	for i := 0; i < Type.NumField(); i += 1 {

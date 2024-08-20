@@ -1,6 +1,0 @@
-# About testing
-
-There are two places where data transformations aren't type checked.
-
-1. passing data from Go to Jet (layout engine)
-2. whether response from pixiv API fit our JSON schema or not
