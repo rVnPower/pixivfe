@@ -1,20 +1,21 @@
 {{ range . }}
 {{ target := CookieList["pixivfe-ThumbnailToNewTab"] }}
 <div class="artwork-small artwork">
-  <div class="artwork-additional">
-    <div class="artwork-position">{{ .Rank }}</div>
-    {{ if .Pages > 1 }}
-    <div class="artwork-page-count"><span>&boxbox; {{ .Pages }}</span></div>
-    {{ end }}
-    {{ if .IllustType == 2 }}
-    <div class="artwork-page-count"><span>&#9654;</span></div>
-    {{ end }}
-  </div>
 
   <div class="artwork-image">
     <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
       <img src="{{ .Image }}" alt="{{ .Title }}" />
     </a>
+
+    <div class="artwork-additional">
+      <div class="artwork-position">{{ .Rank }}</div>
+      {{ if .Pages > 1 }}
+      <div class="artwork-page-count"><span>&boxbox; {{ .Pages }}</span></div>
+      {{ end }}
+      {{ if .IllustType == 2 }}
+      <div class="artwork-page-count"><span>&#9654;</span></div>
+      {{ end }}
+    </div>
   </div>
   <div class="artwork-title">
     <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint"> {{ .Title }} </a>
