@@ -57,12 +57,21 @@
             <input type="radio" name="image-proxy" required="true" value="" />
             No (use built-in proxy)
           </label>
-          {{ range ProxyList }}
+          {{ range WorkingProxyList }}
           <label>
             <input type="radio" name="image-proxy" required="true" value="{{.}}" />
             {{.}}
           </label>
           {{ end }}
+          <details>
+            <summary>See all built-in proxies</summary>
+            {{ range ProxyList }}
+            <label>
+              <input type="radio" name="image-proxy" required="true" value="{{.}}" />
+              {{.}}
+            </label>
+            {{ end }}
+          </details>
           <input type="submit" value="Use selected proxy" />
         </form>
         <br />
