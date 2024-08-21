@@ -2,8 +2,8 @@
   {{ include "components/artwork" Illust }}
   <div class="illust-other-works">
     <div class="artwork-container-header">
-      <a class="illust-other-works-author" href="/users/{{ Illust.User.ID }}"
-        ><img src="{{ Illust.User.Avatar }}" alt="{{ Illust.User.Name }}" /> Other works by {{ Illust.User.Name }}
+      <a class="illust-other-works-author" href="/users/{{ Illust.User.ID }}"><img src="{{ Illust.User.Avatar }}"
+          alt="{{ Illust.User.Name }}" /> Other works by {{ Illust.User.Name }}
         <span class="special-symbol">&raquo;</span>
       </a>
       {{ combinedUrl := "/artworks-multi/" + joinArtworkIds(Illust.RecentWorks) }}
@@ -18,32 +18,32 @@
     </div>
   </div>
   <hr />
-  {{ if Illust.CommentDisabled == 1 }}
-  <p>The creator turned comments off</p>
-  {{ else if Illust.Comments == 0 }}
-  <p>There are no comments yet</p>
-  {{ else }} {{ range Illust.CommentsList }}
-  <div class="comment">
-    <a href="/users/{{ .AuthorID }}" class="comment-author">
-    <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
-      </a>
-    <div class="comment-context">
+  <details>
+    <summary>Comments</summary>
+    {{ if Illust.CommentDisabled == 1 }}
+    <p>The creator turned comments off</p>
+    {{ else if Illust.Comments == 0 }}
+    <p>There are no comments yet</p>
+    {{ else }} {{ range Illust.CommentsList }}
+    <div class="comment">
       <a href="/users/{{ .AuthorID }}" class="comment-author">
-      {{ .AuthorName }}
+        <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
       </a>
-      <p>
-        {{ if .Stamp }}
-        <img
-          class="stamp"
-          src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-          alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-        />
-        {{ else }} {{ raw: parseEmojis(.Context) }} {{ end }}
-      </p>
+      <div class="comment-context">
+        <a href="/users/{{ .AuthorID }}" class="comment-author">
+          {{ .AuthorName }}
+        </a>
+        <p>
+          {{ if .Stamp }}
+          <img class="stamp" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
+            alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" />
+          {{ else }} {{ raw: parseEmojis(.Context) }} {{ end }}
+        </p>
 
-      <small>{{ .Date }}</small>
+        <small>{{ .Date }}</small>
+      </div>
     </div>
-  </div>
+  </details>
   {{ end }} {{ end }}
 </div>
 <div class="container">
