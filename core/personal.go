@@ -1,4 +1,4 @@
-package pixiv_api
+package core
 
 import (
 	"codeberg.org/vnpower/pixivfe/v2/session"

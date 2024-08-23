@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	httpc "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	httpc "codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 )

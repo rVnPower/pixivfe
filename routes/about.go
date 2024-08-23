@@ -6,11 +6,10 @@ import (
 )
 
 func AboutPage(c *fiber.Ctx) error {
-	info := fiber.Map{
-		"Time":           config.GlobalServerConfig.StartingTime,
-		"Version":        config.GlobalServerConfig.Version,
-		"ImageProxy":     config.GlobalServerConfig.ProxyServer.String(),
-		"AcceptLanguage": config.GlobalServerConfig.AcceptLanguage,
-	}
-	return c.Render("about", info)
+	return Render(c, Data_about{
+		Time:           config.GlobalServerConfig.StartingTime,
+		Version:        config.GlobalServerConfig.Version,
+		ImageProxy:     config.GlobalServerConfig.ProxyServer.String(),
+		AcceptLanguage: config.GlobalServerConfig.AcceptLanguage,
+	})
 }

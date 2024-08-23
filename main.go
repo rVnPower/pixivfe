@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
@@ -48,7 +48,7 @@ func CanRequestSkipLogger(c *fiber.Ctx) bool {
 
 func main() {
 	config.GlobalServerConfig.InitializeConfig()
-	pixiv_api.CreateResponseAuditFolder()
+	core.CreateResponseAuditFolder()
 
 	engine := jet.New("./assets/layout", ".jet.html")
 	engine.AddFuncMap(utils.GetTemplateFunctions())

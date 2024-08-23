@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	core "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	"github.com/gofiber/fiber/v2"
 )
 

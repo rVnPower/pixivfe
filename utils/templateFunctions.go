@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	core "codeberg.org/vnpower/pixivfe/v2/pixiv_api"
+	"codeberg.org/vnpower/pixivfe/v2/core"
 )
 
 func GetRandomColor() string {
