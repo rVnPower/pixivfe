@@ -29,13 +29,13 @@ func ArtworkPage(c *fiber.Ctx) error {
 		PreloadImage(c, img.Large)
 	}
 
-	return c.Render("artwork", fiber.Map{
-		"Illust":          illust,
-		"Title":           illust.Title,
-		"MetaDescription": metaDescription,
-		"MetaImage":       illust.Images[0].Original,
-		"MetaAuthor":      illust.UserName,
-		"MetaAuthorID":    illust.UserID,
+	return Render(c, Data_artwork{
+		Illust:          *illust,
+		Title:           illust.Title,
+		MetaDescription: metaDescription,
+		MetaImage:       illust.Images[0].Original,
+		MetaAuthor:      illust.UserName,
+		MetaAuthorID:    illust.UserID,
 	})
 }
 

@@ -28,9 +28,21 @@ type Data_artwork struct {
 	MetaAuthorID    string
 }
 type Data_artworkMulti struct {
-	Artworks string
+	Artworks []core.Illust
 	Title    string
 }
+type Data_userAtom struct {
+	URL       string
+	Title     string
+	User      core.User
+	Category  core.UserArtCategory
+	Updated   string
+	PageLimit int
+	Page      int
+	// MetaImage string
+}
+
+// below are unconverted. types may be wrong.
 type Data_discovery struct {
 	Artworks string
 	Title    string
@@ -65,12 +77,12 @@ type Data_following struct {
 	CurPage  string
 	Page     string
 }
-type Data_pixivisionindex struct {
-	Data string
-}
-type Data_pixivisionarticle struct {
-	Article string
-}
+// type Data_pixivisionindex struct {
+// 	Data string
+// }
+// type Data_pixivisionarticle struct {
+// 	Article string
+// }
 type Data_rank struct {
 	Title     string
 	Page      string
@@ -87,12 +99,12 @@ type Data_rankingCalendar struct {
 	MonthAfter  string
 	ThisMonth   string
 }
-type Data_settings struct {
-	ProxyList string
-}
-type Data_tag struct {
-	Title string
-}
+// type Data_settings struct {
+// 	ProxyList string
+// }
+// type Data_tag struct {
+// 	Title string
+// }
 type Data_user struct {
 	Title     string
 	User      string
@@ -101,17 +113,6 @@ type Data_user struct {
 	Page      string
 	MetaImage string
 }
-type Data_userAtom struct {
-	URL       string
-	Title     string
-	User      core.User
-	Category  core.UserArtCategory
-	Updated   string
-	PageLimit int
-	Page      int
-	// MetaImage string
-}
-
 // add new types above
 
 // the migration plan

@@ -14,7 +14,7 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 	ids_ := c.Params("ids")
 	ids := strings.Split(ids_, ",")
 
-	artworks := make([]*core.Illust, len(ids))
+	artworks := make([]core.Illust, len(ids))
 
 	wg := sync.WaitGroup{}
 	// // gofiber/fasthttp's API is trash
@@ -36,7 +36,7 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 
 			illust, err := core.GetArtworkByID(c, id, false)
 			if err != nil {
-				artworks[i] = &core.Illust{
+				artworks[i] = core.Illust{
 					Title: err.Error(), // this might be flaky
 				}
 				return
@@ -47,7 +47,7 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 				metaDescription += "#" + i.Name + ", "
 			}
 
-			artworks[i] = illust
+			artworks[i] = *illust
 		}(i, id)
 	}
 	// if err_global != nil {
@@ -58,8 +58,8 @@ func ArtworkMultiPage(c *fiber.Ctx) error {
 		return err_global
 	}
 
-	return c.Render("artworkMulti", fiber.Map{
-		"Artworks": artworks,
-		"Title":    fmt.Sprintf("(%d images)", len(artworks)),
+	return Render(c, Data_artworkMulti{
+		Artworks: artworks,
+		Title:    fmt.Sprintf("(%d images)", len(artworks)),
 	})
 }
