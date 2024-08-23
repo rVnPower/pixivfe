@@ -100,7 +100,7 @@ func main() {
 		token := session.GetPixivToken(c)
 		pageURL := c.BaseURL() + c.OriginalURL()
 
-		cookies := fiber.Map{}
+		cookies := map[string]string{}
 		for _, name := range session.AllCookieNames {
 			value := session.GetCookie(c, name)
 			cookies[string(name)] = value

@@ -77,14 +77,14 @@ func UserAtomFeed(c *fiber.Ctx) error {
 
 	c.Context().SetContentType("application/atom+xml")
 
-	return c.Render("user.atom", fiber.Map{
-		"URL":       string(c.Request().RequestURI()),
-		"Title":     data.user.Name,
-		"User":      data.user,
-		"Category":  data.category,
-		"Updated":   time.Now().Format(time.RFC3339),
-		"PageLimit": data.pageLimit,
-		"Page":      data.page,
-		// "MetaImage": data.user.BackgroundImage,
-	}, "")
+	return Render(c, Data_userAtom{
+		URL:       string(c.Request().RequestURI()),
+		Title:     data.user.Name,
+		User:      data.user,
+		Category:  data.category,
+		Updated:   time.Now().Format(time.RFC3339),
+		PageLimit: data.pageLimit,
+		Page:      data.page,
+		// MetaImage: data.user.BackgroundImage,
+	})
 }
