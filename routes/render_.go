@@ -113,13 +113,12 @@ type Data_user struct {
 	Page      string
 	MetaImage string
 }
-// add new types above
 
-// the migration plan
-//
-// 1. find and replace every occurance of `c.Render("abc" struct {...})` with `Render(c, Data_abc{...})` (except in this file)
-// 2. create type `Data_abc` in this file (see `Data_error` above)
-// 3. update `TestTemplates` in render_test.go to include `Data_abc`
+// add new types above this line
+// whenever you add new types, update `TestTemplates` in render_test.go to include the type in the test
+
+// caution: do not use pointer in Data_* struct. faker will insert nil.
+// caution: do not name template file a.b.jet.html or it won't be able to be used here. Data_a.b is not a valid identifier.
 
 func Render[T interface{}](c *fiber.Ctx, data T) error {
 	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
