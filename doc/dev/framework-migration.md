@@ -7,8 +7,9 @@ Then, the templating engine is decoupled from gofiber.
 
 ### Fixing current templates
 
-gofiber doesn't mention this crucial distinction of Jet: the difference between variables (e.g. PageURL) and data (the data parameter to `Render(...)`).
+If you see error like `<variable name> not found in map[...]` when visiting a page, you need to add a dot before all data member access. e.g. from `Illust` to `.Illust`.
 
-Data access must be prefixed with a dot. `.Illust` is valid. `Illust` is a variable but not data.
+gofiber doesn't mention this.
+In Jet, variables are accessed without a dot (`PageURL`), while data members (the `data` parameter to `Render(...)`). are accessed with a dot in front.
 
 Current templates use the variable style (`Illust`), but that is wrong.

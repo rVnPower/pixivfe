@@ -18,8 +18,10 @@ func IndexPage(c *fiber.Ctx) error {
 			return err
 		}
 
-		return c.Render("index", fiber.Map{
-			"Title": "Landing", "Data": works,
+		return Render(c, Data_index{
+			Title: "Landing",
+			Data: *works,
+			IsLoggedIn: true,
 		})
 	}
 
@@ -28,8 +30,10 @@ func IndexPage(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.Render("index", fiber.Map{
-		"Title": "Landing", "NoTokenData": works,
+	return Render(c, Data_index{
+		Title: "Landing",
+		NoTokenData: works,
+		IsLoggedIn: false,
 	})
 }
 
