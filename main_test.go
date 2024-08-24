@@ -49,8 +49,8 @@ func TestMain(m *testing.M) {
 }
 
 func getBaseURL() string {
-	// return "http://0.0.0.0:8282"
-	return "https://pixivfe.exozy.me"
+	return "http://0.0.0.0:8282"
+	// return "https://pixivfe.exozy.me"
 }
 
 func checkIfPageHasError(page playwright.Page) bool {
