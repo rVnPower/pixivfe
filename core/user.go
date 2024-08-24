@@ -53,7 +53,7 @@ type User struct {
 	SocialRaw       json.RawMessage        `json:"social"`
 	Artworks        []ArtworkBrief         `json:"artworks"`
 	Novels          []NovelBrief           `json:"novels"`
-	Background      map[string]interface{} `json:"background"`
+	Background      map[string]any `json:"background"`
 	ArtworksCount   int
 	FrequentTags    []FrequentTag
 	Social          map[string]map[string]string

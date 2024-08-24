@@ -251,8 +251,8 @@ func lowercaseFirstChar(s string) string {
 	return strings.ToLower(s[0:1]) + s[1:]
 }
 
-func GetTemplateFunctions() template.FuncMap {
-	return template.FuncMap{
+func GetTemplateFunctions() map[string]any {
+	return map[string]any{
 		"parseEmojis": func(s string) template.HTML {
 			return ParseEmojis(s)
 		},

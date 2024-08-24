@@ -1,16 +1,18 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 <div class="container illust" id="checkpoint">
-  {{ include "components/artwork" Illust }}
+  {{ include "components/artwork" .Illust }}
   <div class="illust-other-works">
     <div class="artwork-container-header">
-      <a class="illust-other-works-author" href="/users/{{ Illust.User.ID }}"><img src="{{ Illust.User.Avatar }}"
-          alt="{{ Illust.User.Name }}" /> Other works by {{ Illust.User.Name }}
+      <a class="illust-other-works-author" href="/users/{{ .Illust.User.ID }}"><img src="{{ .Illust.User.Avatar }}"
+          alt="{{ .Illust.User.Name }}" /> Other works by {{ .Illust.User.Name }}
         <span class="special-symbol">&raquo;</span>
       </a>
-      {{ combinedUrl := "/artworks-multi/" + joinArtworkIds(Illust.RecentWorks) }}
+      {{ combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
       <div class="artwork-actions"><a href="{{combinedUrl}}">View all</a></div>
     </div>
     <div class="artwork-container-scroll">
-      {{ range Illust.RecentWorks }}
+      {{ range .Illust.RecentWorks }}
       <div class="artwork-small artwork">
         {{ include "components/thumbnail-dt" . }}
       </div>
@@ -20,11 +22,11 @@
   <hr />
   <details>
     <summary>Comments</summary>
-    {{ if Illust.CommentDisabled == 1 }}
+    {{ if .Illust.CommentDisabled == 1 }}
     <p>The creator turned comments off</p>
-    {{ else if Illust.Comments == 0 }}
+    {{ else if .Illust.Comments == 0 }}
     <p>There are no comments yet</p>
-    {{ else }} {{ range Illust.CommentsList }}
+    {{ else }} {{ range .Illust.CommentsList }}
     <div class="comment">
       <a href="/users/{{ .AuthorID }}" class="comment-author">
         <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
@@ -49,6 +51,7 @@
 <div class="container">
   <h2>Related works</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" Illust.RelatedWorks }}
+    {{ include "components/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>
+{{end}}

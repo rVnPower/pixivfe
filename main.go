@@ -50,7 +50,9 @@ func main() {
 	config.GlobalServerConfig.InitializeConfig()
 	core.CreateResponseAuditFolder()
 
-	engine := jet.New("./assets/layout", ".jet.html")
+	routes.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
+	// the code below is redundant
+	engine := jet.New("./assets/views", ".jet.html")
 	engine.AddFuncMap(utils.GetTemplateFunctions())
 	if config.GlobalServerConfig.InDevelopment {
 		engine.Reload(true)
@@ -60,6 +62,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	// the code above is redundant
 
 	server := fiber.New(fiber.Config{
 		AppName:                 "PixivFE",

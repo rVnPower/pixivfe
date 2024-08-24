@@ -7,6 +7,9 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
+
+	"github.com/CloudyKit/jet/v6"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -121,11 +124,29 @@ type Data_user struct {
 
 // add new types above this line
 // whenever you add new types, update `TestTemplates` in render_test.go to include the type in the test
-
 // caution: do not use pointer in Data_* struct. faker will insert nil.
-// caution: do not name template file a.b.jet.html or it won't be able to be used here. Data_a.b is not a valid identifier.
+// caution: do not name template file a.b.jet.html or it won't be able to be used here, since Data_a.b is not a valid identifier.
 
-func Render[T interface{}](c *fiber.Ctx, data T) error {
+// global variable, yes.
+var views *jet.Set
+
+func InitTemplatingEngine(InDevelopment bool) {
+	if InDevelopment {
+		views = jet.NewSet(
+			jet.NewOSFileSystemLoader("assets/views"),
+			jet.InDevelopmentMode(), // disable cache
+		)
+	} else {
+		views = jet.NewSet(
+			jet.NewOSFileSystemLoader("assets/views"),
+		)
+	}
+	for fn_name, fn := range utils.GetTemplateFunctions() {
+		views.AddGlobal(fn_name, fn)
+	}
+}
+
+func Render[T any](c *fiber.Ctx, data T) error {
 	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", template_name)
@@ -141,25 +162,46 @@ func Render[T interface{}](c *fiber.Ctx, data T) error {
 		cookies[string(name)] = value
 	}
 
-	bind := StructToMap(data)
+	template, err := views.GetTemplate(template_name + ".jet.html")
+	if err != nil {
+		return err
+	}
+
+	views.Parse(template_name + ".jet.html", template.String())
+
+	variables := jet.VarMap{}
 
 	// The middleware at line 99 in `main.go` cannot bind these values below if we use this function.
-	bind["BaseURL"] = c.BaseURL()
-	bind["OriginalURL"] = c.OriginalURL()
-	bind["PageURL"] = pageURL
-	bind["LoggedIn"] = token != ""
-	bind["Queries"] = c.Queries()
-	bind["CookieList"] = cookies
+	variables.Set("BaseURL", c.BaseURL())
+	variables.Set("OriginalURL", c.OriginalURL())
+	variables.Set("PageURL", pageURL)
+	variables.Set("LoggedIn", token != "")
+	variables.Set("Queries", c.Queries())
+	variables.Set("CookieList", cookies)
 
-	return c.Render(template_name, bind)
+	// Type := reflect.TypeFor[T]()
+	// for _, special_varname := range []string{"Title", "MetaAuthor", "MetaDescription", "MetaImage"} {
+	// 	_, has_field := Type.FieldByName(special_varname)
+	// 	if has_field {
+	// 		variables.Set(special_varname, FieldName(data, special_varname))
+	// 	}
+	// }
+
+	c.Context().SetContentType("text/html; charset=utf-8")
+	return template.Execute(c.Response().BodyWriter(), variables, data)
 }
 
-func StructToMap[T interface{}](data T) map[string]interface{} {
-	result := map[string]interface{}{}
+func StructToMap[T any](data T) map[string]any {
+	result := map[string]any{}
 	Type := reflect.TypeFor[T]()
 	for i := 0; i < Type.NumField(); i += 1 {
 		field := Type.Field(i)
-		result[field.Name] = reflect.ValueOf(data).FieldByName(field.Name).Interface()
+		result[field.Name] = FieldName(data, field.Name)
 	}
 	return result
+}
+
+// assumes that the field `field_name` exists, panics otherwise
+func FieldName[T any](data T, field_name string) any {	
+	return reflect.ValueOf(data).FieldByName(field_name).Interface()
 }

@@ -1,3 +1,5 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 <div class="container illust">
 	<h2>{{Article.Title}}</h2>
 	{{ range _, desc := Article.Description }}
@@ -25,3 +27,4 @@
 	</div>
 	{{ end }}
 </div>
+{{end}}

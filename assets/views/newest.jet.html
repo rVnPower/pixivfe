@@ -1,3 +1,5 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 <div class="container">
   <h1>Newest works from all users</h1>
   <div class="switcher">
@@ -7,3 +9,4 @@
   </div>
   <div class="artwork-container">{{ include "components/small-tn" Items }}</div>
 </div>
+{{end}}

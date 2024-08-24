@@ -1,3 +1,5 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 <div class="container">
   <h1>Newest works from people you follow</h1>
   <div class="switcher">
@@ -14,3 +16,4 @@
     {{ raw: createPaginator(url, "#checkpoint", Page, -1) }}
   </div>
 </div>
+{{end}}

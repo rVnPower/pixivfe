@@ -1,3 +1,5 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 <div class="container">
     <h1>Ranking calendar ({{ ThisMonth.MonthLiteral }} {{ Year }})</h1>
     <div class="switcher">
@@ -56,3 +58,4 @@
         <a href="{{ url }}{{ MonthAfter.Link }}" class="pagination-button ">Next month</a>
     </div>
 </div>
+{{end}}

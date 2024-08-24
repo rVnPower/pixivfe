@@ -6,7 +6,7 @@
   <meta name="description" content="View this page on PixivFE." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  {{ title := "" }} {{ if isset(Title) }} {{ title = Title }} {{ else }} {{
+  {{ title := "" }} {{ if isset(.Title) }} {{ title = .Title }} {{ else }} {{
   title = "PixivFE" }} {{ end }}
   <title>{{ title }} - PixivFE</title>
 
@@ -23,19 +23,19 @@
   <meta content="summary_large_image" name="twitter:card" />
 
   <meta property="og:url" content="{{ PageURL }}" />
-  {{ if isset(MetaAuthor) }}
+  {{ if isset(.MetaAuthor) }}
   <link rel="alternate" type="application/json+oembed"
-    href="{{ BaseURL }}/oembed?a={{ MetaAuthor }}&u={{ BaseURL }}/users/{{ MetaAuthorID }}">
+    href="{{ BaseURL }}/oembed?a={{ .MetaAuthor }}&u={{ BaseURL }}/users/{{ .MetaAuthorID }}">
   {{else}}
   <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed">
   {{end}}
 
-  {{ if isset(MetaDescription) }}
-  <meta property="og:description" content="{{MetaDescription}}" />
+  {{ if isset(.MetaDescription) }}
+  <meta property="og:description" content="{{.MetaDescription}}" />
   {{end}}
 
-  {{ if isset(MetaDescription) }}
-  <meta property="og:image" content="{{ MetaImage }}" />
+  {{ if isset(.MetaImage) }}
+  <meta property="og:image" content="{{ .MetaImage }}" />
   {{ end }}
 </head>
 
@@ -99,7 +99,7 @@
   </nav>
   <script src="/js/on-page-load.js"></script>
   <main>
-    {{ embed() }}
+    {{yield body()}}
   </main>
   <div id="site-config">
     <span id="artworkPreview">{{CookieList["pixivfe-ArtworkPreview"]}}</span>

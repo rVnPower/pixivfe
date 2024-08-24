@@ -18,7 +18,7 @@ func PixivisionHomePage(c *fiber.Ctx) error {
 		data[i].Thumbnail = session.ProxyImageUrlNoEscape(c, data[i].Thumbnail)
 	}
 
-	return c.Render("pixivision/index", fiber.Map{"Data": data})
+	return c.Render("pixivision", fiber.Map{"Data": data})
 }
 
 func PixivisionArticlePage(c *fiber.Ctx) error {
@@ -35,5 +35,5 @@ func PixivisionArticlePage(c *fiber.Ctx) error {
 		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(c, data.Items[i].Avatar)
 	}
 
-	return c.Render("pixivision/article", fiber.Map{"Article": data})
+	return c.Render("pixivision_article", fiber.Map{"Article": data})
 }

@@ -37,7 +37,7 @@ func TestTemplates(t *testing.T) {
 var engine *jet.Engine
 
 func TestMain(m *testing.M) {
-	engine = jet.New("../assets/layout", ".jet.html")
+	engine = jet.New("../assets/views", ".jet.html")
 	engine.AddFuncMap(utils.GetTemplateFunctions())
 
 	// gofiber bug: no error even if the templates are invalid??? https://github.com/gofiber/template/issues/341
@@ -50,7 +50,7 @@ func TestMain(m *testing.M) {
 }
 
 // test template
-func test[T interface{}](t *testing.T) {	
+func test[T any](t *testing.T) {	
 	var data T
 	faker.FakeData(&data)
 
@@ -60,7 +60,7 @@ func test[T interface{}](t *testing.T) {
 	}
 	bindings := StructToMap(data)
 
-	for k, v := range map[string]interface{}{
+	for k, v := range map[string]any{
 		"BaseURL":     "",
 		"OriginalURL": "",
 		"PageURL":     "",

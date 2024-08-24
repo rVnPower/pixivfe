@@ -1,3 +1,5 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 {{ if ! User.BackgroundImage }}
 <div class="background-cover"></div>
 {{ else }}
@@ -82,3 +84,4 @@
     {{ raw: createPaginator(url, "#checkpoint", Page, PageLimit) }}
   </div>
 </div>
+{{end}}

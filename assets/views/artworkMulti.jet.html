@@ -1,5 +1,7 @@
+{{extends "layout/default.jet"}}
+{{block body()}}
 {{ range Artworks }}
 <div class="container illust">
 {{ include "components/artwork" . }}
 </div>
-{{ end }}
+{{ end }}{{end}}
