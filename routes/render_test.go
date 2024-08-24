@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"github.com/CloudyKit/jet/v6"
 	"github.com/go-faker/faker/v4"
-	"github.com/gofiber/template/jet/v2"
 )
 
 func TestTemplates(t *testing.T) {
@@ -34,26 +34,21 @@ func TestTemplates(t *testing.T) {
 	autoTest[Data_userAtom](t)
 }
 
-var engine *jet.Engine
-
 func TestMain(m *testing.M) {
-	engine = jet.New("../assets/views", ".jet.html")
-	engine.AddFuncMap(utils.GetTemplateFunctions())
-
-	// gofiber bug: no error even if the templates are invalid??? https://github.com/gofiber/template/issues/341
-	err := engine.Load()
-	if err != nil {
-		panic(err)
-	}
+	InitTemplatingEngine(false)
 
 	m.Run()
 }
 
-// autoTest template with fake data
-func autoTest[T any](t *testing.T) {
+func fakeData[T any]() T {
 	var data T
 	faker.FakeData(&data)
-	manualTest(t, data)
+	return data
+}
+
+// autoTest template with fake data
+func autoTest[T any](t *testing.T) {
+	manualTest(t, fakeData[T]())
 }
 
 func manualTest[T any](t *testing.T, data T) {
@@ -61,20 +56,20 @@ func manualTest[T any](t *testing.T, data T) {
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", route_name)
 	}
-	bindings := structToMap(data)
+	variables := jet.VarMap{}
 
 	for k, v := range map[string]any{
-		"BaseURL":     "",
-		"OriginalURL": "",
-		"PageURL":     "",
-		"LoggedIn":    false,
-		"Queries":     map[string]string{},
-		"CookieList":  map[string]string{},
+		"BaseURL":     fakeData[string](),
+		"OriginalURL": fakeData[string](),
+		"PageURL":     fakeData[string](),
+		"LoggedIn":    fakeData[bool](),
+		"Queries":     fakeData[map[string]string](),
+		"CookieList":  fakeData[map[string]string](),
 	} {
-		bindings[k] = v
+		variables.Set(k, v)
 	}
 
-	err := engine.Render(io.Discard, route_name, bindings)
+	err := RenderInner(io.Discard, variables, data)
 
 	if err != nil {
 		template_name, _ := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")

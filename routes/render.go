@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"io"
 	"log"
 	"reflect"
 	"strings"
@@ -32,11 +33,6 @@ func InitTemplatingEngine(InDevelopment bool) {
 }
 
 func Render[T any](c *fiber.Ctx, data T) error {
-	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
-	if !found {
-		log.Panicf("struct name does not start with 'Data_': %s", template_name)
-	}
-
 	// Pass in values that we want to be available to all pages here
 	token := session.GetPixivToken(c)
 	pageURL := c.BaseURL() + c.OriginalURL()
@@ -46,13 +42,6 @@ func Render[T any](c *fiber.Ctx, data T) error {
 		value := session.GetCookie(c, name)
 		cookies[string(name)] = value
 	}
-
-	template, err := views.GetTemplate(template_name + ".jet.html")
-	if err != nil {
-		return err
-	}
-
-	views.Parse(template_name + ".jet.html", template.String())
 
 	variables := jet.VarMap{}
 
@@ -65,7 +54,24 @@ func Render[T any](c *fiber.Ctx, data T) error {
 	variables.Set("CookieList", cookies)
 
 	c.Context().SetContentType("text/html; charset=utf-8")
-	return template.Execute(c.Response().BodyWriter(), variables, data)
+
+	return RenderInner(c.Response().BodyWriter(), variables, data)
+}
+
+func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
+	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
+	if !found {
+		log.Panicf("struct name does not start with 'Data_': %s", template_name)
+	}
+
+	template, err := views.GetTemplate(template_name + ".jet.html")
+	if err != nil {
+		return err
+	}
+
+	views.Parse(template_name + ".jet.html", template.String())
+
+	return template.Execute(w, variables, data)
 }
 
 // func structToMap[T any](data T) map[string]any {
