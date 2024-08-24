@@ -61,13 +61,18 @@ func checkProxies() {
 		wg.Add(1)
 		go func(proxyURL string) {
 			defer wg.Done()
-			if isProxyWorking(proxyURL) {
+			isWorking, resp := testProxy(proxyURL)
+			status := ""
+			if resp != nil {
+				status = resp.Status
+			}
+			if isWorking {
 				mutex.Lock()
 				newWorkingProxies = append(newWorkingProxies, proxyURL)
 				mutex.Unlock()
-				logf("Working proxy found: %s", proxyURL)
+				logf("[OK]  %s %s", proxyURL, status)
 			} else {
-				logf("Non-working proxy: %s", proxyURL)
+				logf("[ERR] %s %s", proxyURL, status)
 			}
 		}(proxy)
 	}
@@ -77,7 +82,7 @@ func checkProxies() {
 	updateWorkingProxies(newWorkingProxies)
 }
 
-func isProxyWorking(proxyBaseURL string) bool {
+func testProxy(proxyBaseURL string) (bool, *http.Response) {
 	client := &http.Client{Timeout: proxyCheckTimeout}
 
 	fullURL := fmt.Sprintf("%s%s", strings.TrimRight(proxyBaseURL, "/"), testImagePath)
@@ -86,19 +91,17 @@ func isProxyWorking(proxyBaseURL string) bool {
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
 		logf("Error creating request for proxy %s: %v", proxyBaseURL, err)
-		return false
+		return false, nil
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
 		logf("Error testing proxy %s: %v", proxyBaseURL, err)
-		return false
+		return false, nil
 	}
 	defer resp.Body.Close()
 
-	logf("Proxy %s response status: %s", proxyBaseURL, resp.Status)
-
-	return resp.StatusCode == http.StatusOK
+	return resp.StatusCode == http.StatusOK, resp
 }
 
 func updateWorkingProxies(newProxies []string) {
@@ -117,10 +120,10 @@ func GetWorkingProxies() []string {
 }
 
 // Helper functions for logging
-func logf(format string, v ...interface{}) {
+func logf(format string, v ...any) {
 	log.Printf(format, v...)
 }
 
-func logln(v ...interface{}) {
+func logln(v ...any) {
 	log.Println(v...)
 }
