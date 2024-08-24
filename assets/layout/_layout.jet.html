@@ -17,13 +17,12 @@
     integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
 
   <script src="/js/illust-preview.js" defer></script>
-
   <meta property="og:title" content="{{ title }}" />
-  <meta property="og:url" content="{{ PageURL }}" />
   <meta property="og:site_name" content="PixivFE" />
   <meta property="og:type" content="article" />
   <meta content="summary_large_image" name="twitter:card" />
 
+  <meta property="og:url" content="{{ PageURL }}" />
   {{ if isset(MetaAuthor) }}
   <link rel="alternate" type="application/json+oembed"
     href="{{ BaseURL }}/oembed?a={{ MetaAuthor }}&u={{ BaseURL }}/users/{{ MetaAuthorID }}">
@@ -88,8 +87,7 @@
       <span class="navbar-entry">
         <form action="/tags" method="post" class="search-form" autocomplete="off">
           <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
-          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit"
-              hidden /></label>
+          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit" hidden /></label>
         </form>
       </span>
 

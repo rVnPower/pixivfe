@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -77,12 +78,14 @@ type Data_following struct {
 	CurPage  string
 	Page     string
 }
-// type Data_pixivisionindex struct {
-// 	Data string
-// }
-// type Data_pixivisionarticle struct {
-// 	Article string
-// }
+
+//	type Data_pixivisionindex struct {
+//		Data string
+//	}
+//
+//	type Data_pixivisionarticle struct {
+//		Article string
+//	}
 type Data_rank struct {
 	Title     string
 	Page      string
@@ -99,12 +102,14 @@ type Data_rankingCalendar struct {
 	MonthAfter  string
 	ThisMonth   string
 }
-// type Data_settings struct {
-// 	ProxyList string
-// }
-// type Data_tag struct {
-// 	Title string
-// }
+
+//	type Data_settings struct {
+//		ProxyList string
+//	}
+//
+//	type Data_tag struct {
+//		Title string
+//	}
 type Data_user struct {
 	Title     string
 	User      string
@@ -125,7 +130,28 @@ func Render[T interface{}](c *fiber.Ctx, data T) error {
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", template_name)
 	}
-	return c.Render(template_name, StructToMap(data))
+
+	// Pass in values that we want to be available to all pages here
+	token := session.GetPixivToken(c)
+	pageURL := c.BaseURL() + c.OriginalURL()
+
+	cookies := map[string]string{}
+	for _, name := range session.AllCookieNames {
+		value := session.GetCookie(c, name)
+		cookies[string(name)] = value
+	}
+
+	bind := StructToMap(data)
+
+	// The middleware at line 99 in `main.go` cannot bind these values below if we use this function.
+	bind["BaseURL"] = c.BaseURL()
+	bind["OriginalURL"] = c.OriginalURL()
+	bind["PageURL"] = pageURL
+	bind["LoggedIn"] = token != ""
+	bind["Queries"] = c.Queries()
+	bind["CookieList"] = cookies
+
+	return c.Render(template_name, bind)
 }
 
 func StructToMap[T interface{}](data T) map[string]interface{} {
