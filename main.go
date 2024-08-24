@@ -288,8 +288,8 @@ func main() {
 
 	// Initialize and start the proxy checker
 	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+	defer cancel()
 	config.InitializeProxyChecker(ctx_timeout)
-	cancel()
 
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {
