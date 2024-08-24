@@ -34,7 +34,12 @@ func StartProxyChecker() {
 				return
 			default:
 				checkProxies()
-				time.Sleep(GlobalServerConfig.ProxyCheckInterval)
+				if t := GlobalServerConfig.ProxyCheckInterval; t > 0 {
+					time.Sleep(t)
+				} else {
+					log.Println("Proxy check interval set to 0, disabling auto-check from now on.")
+					select {} // Sweet dreams!
+				}
 			}
 		}
 	}()

@@ -108,6 +108,7 @@ var EnvList []*EnvVar = []*EnvVar{
 		// **Required**: No
 		//
 		// The interval in minutes between proxy checks. Defaults to 480 minutes (8 hours) if not set.
+		// You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
 	},
 }
 
