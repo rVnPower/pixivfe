@@ -1,8 +1,8 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container">
 	<div class="vision-container">
-		{{ range _, article := Data }}
+		{{ range _, article := .Data }}
 		<div class="vision-preview vision-preview-large">
 			<div class="vision-thumbnail">
 				<img src="{{article.Thumbnail}}" alt="{{article.Title}}" />
@@ -26,4 +26,4 @@
 		{{ end }}
 	</div>
 </div>
-{{end}}
+{{ end }}

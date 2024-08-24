@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container illust" id="checkpoint">
   {{ include "components/artwork" .Illust }}
   <div class="illust-other-works">
@@ -54,4 +54,4 @@
     {{ include "components/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>
-{{end}}
+{{ end }}

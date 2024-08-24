@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container">
   <h1>About PixivFE</h1>
   <p>PixivFE is a Pixiv frontend. It lets you enjoy art on Pixiv without needless interruption.</p>
@@ -7,22 +7,22 @@
   <h2>Server information</h2>
   <ul>
     <li>
-      <b>Version:</b> {{ Version }}<br />PixivFE's version this server is
+      <b>Version:</b> {{ .Version }}<br />PixivFE's version this server is
       running
     </li>
     <li>
-      <b>Started PixivFE (UTC)</b>: {{ Time }} <br />The date when PixivFE
+      <b>Started PixivFE (UTC)</b>: {{ .Time }} <br />The date when PixivFE
       started on this server
     </li>
     <li>
-      <b>Default image proxy server</b>: {{ ImageProxy }}<br />The default image
+      <b>Default image proxy server</b>: {{ .ImageProxy }}<br />The default image
       proxy server that was set on this server, used to proxy images from
       i.pximg.net
     </li>
     <li>
-      <b>Accept-Language header</b>: {{ AcceptLanguage }}<br />The value of the
+      <b>Accept-Language header</b>: {{ .AcceptLanguage }}<br />The value of the
       Accept-Language header this server uses to request to Pixiv's APIs.
     </li>
   </ul>
 </div>
-{{end}}
+{{ end }}

@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container">
   <h1>Newest works from all users</h1>
   <div class="switcher">
@@ -7,6 +7,6 @@
     <a href="/newest" class="switch-button">Safe</a>
     <a href="/newest?mode=r18" class="switch-button">R-18</a>
   </div>
-  <div class="artwork-container">{{ include "components/small-tn" Items }}</div>
+  <div class="artwork-container">{{ include "components/small-tn" .Items }}</div>
 </div>
-{{end}}
+{{ end }}

@@ -1,12 +1,12 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container illust">
-	<h2>{{Article.Title}}</h2>
-	{{ range _, desc := Article.Description }}
+	<h2>{{.Article.Title}}</h2>
+	{{ range _, desc := .Article.Description }}
 	<p>{{desc}}</p>
 	{{ end }}
 
-	{{ range _, item := Article.Items }}
+	{{ range _, item := .Article.Items }}
 	<div class="illust-images">
 
 		<div class="illust-attr">
@@ -27,4 +27,4 @@
 	</div>
 	{{ end }}
 </div>
-{{end}}
+{{ end }}

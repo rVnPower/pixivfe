@@ -1,23 +1,23 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container">
   <h1>Discover artworks</h1>
   <div class="switcher">
     <div class="switch-title">Type</div>
-    <a href="/discovery" class="switch-button">Artworks</a>
-    <a href="/discovery/novel" class="switch-button">Novels</a>
+    <a href="/discovery" class="switch-button">.Artworks</a>
+    <a href="/discovery/novel" class="switch-button">.Novels</a>
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    <a href='{{replaceQuery(Queries, "mode", "all")}}' class="switch-button">All</a>
-    <a href='{{replaceQuery(Queries, "mode", "safe")}}' class="switch-button">Safe</a>
-    <a href='{{replaceQuery(Queries, "mode", "r18")}}' class="switch-button">R-18</a>
+    <a href='{{replaceQuery(.Queries, "mode", "all")}}' class="switch-button">All</a>
+    <a href='{{replaceQuery(.Queries, "mode", "safe")}}' class="switch-button">Safe</a>
+    <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="switch-button">R-18</a>
   </div>
   <div class="artwork-container">
-    {{ include "components/small-tn" Artworks }}
+    {{ include "components/small-tn" .Artworks }}
   </div>
   <div class="pagination">
     <a href="" class="pagination-button">Reload</a>
   </div>
 </div>
-{{end}}
+{{ end }}

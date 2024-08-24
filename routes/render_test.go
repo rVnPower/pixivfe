@@ -3,6 +3,7 @@ package routes
 import (
 	"io"
 	"log"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -12,28 +13,36 @@ import (
 )
 
 func TestTemplates(t *testing.T) {
-	autoTest[Data_error](t)
+	{
+		data := fakeData[Data_error]()
+		data.Error = io.EOF
+		manualTest(t, data)
+	}
 	autoTest[Data_about](t)
 	autoTest[Data_artwork](t)
 	autoTest[Data_artworkMulti](t)
 	autoTest[Data_discovery](t)
-	autoTest[Data_novelDiscovery](t)
+	autoTest[Data_following](t)
 	autoTest[Data_index](t)
 	autoTest[Data_newest](t)
 	autoTest[Data_novel](t)
-	autoTest[Data_unauthorized](t)
-	autoTest[Data_following](t)
-	autoTest[Data_pixivision_index](t)
+	autoTest[Data_novelDiscovery](t)
 	autoTest[Data_pixivision_article](t)
+	autoTest[Data_pixivision_index](t)
 	autoTest[Data_rank](t)
 	autoTest[Data_rankingCalendar](t)
 	autoTest[Data_settings](t)
 	autoTest[Data_tag](t)
+	autoTest[Data_unauthorized](t)
 	autoTest[Data_user](t)
 	autoTest[Data_userAtom](t)
 }
 
 func TestMain(m *testing.M) {
+	err := os.Chdir("..")
+	if err != nil {
+		panic(err)
+	}
 	InitTemplatingEngine(false)
 
 	m.Run()
@@ -55,6 +64,9 @@ func manualTest[T any](t *testing.T, data T) {
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", route_name)
 	}
+
+	// log.Println("Testing " + route_name)
+
 	variables := jet.VarMap{}
 
 	for k, v := range map[string]any{

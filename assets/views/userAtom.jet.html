@@ -1,26 +1,26 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <?xml version="1.0" encoding="utf-8"?>{* <?xml-stylesheet href="/feed.xsl" type="text/xsl"?> *}
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}</id>
-  <link rel="alternate" href="{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}"/>
+  <id>{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}</id>
+  <link rel="alternate" href="{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}"/>
   <link rel="self" href="{{ PageURL }}"/>
-  <link rel="first" href="{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}.atom.xml?page=1"/>
-  <link rel="last" href="{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}.atom.xml?page={{ PageLimit }}"/>
-  {{ if Page - 1 >= 1 }}
-  <link rel="previous" href="{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}.atom.xml?page={{ Page - 1 }}"/>
+  <link rel="first" href="{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}.atom.xml?page=1"/>
+  <link rel="last" href="{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}.atom.xml?page={{ .PageLimit }}"/>
+  {{ if .Page - 1 >= 1 }}
+  <link rel="previous" href="{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}.atom.xml?page={{ .Page - 1 }}"/>
   {{ end }}
-  {{ if Page + 1 <= PageLimit }}
-  <link rel="next" href="{{ BaseURL }}/users/{{ User.ID }}/{{ Category }}.atom.xml?page={{ Page + 1 }}"/>
+  {{ if .Page + 1 <= .PageLimit }}
+  <link rel="next" href="{{ BaseURL }}/users/{{ .User.ID }}/{{ .Category }}.atom.xml?page={{ .Page + 1 }}"/>
   {{ end }}
-  <updated>{{ Updated }}</updated>
-  <title>{{ Title }}</title>
+  <updated>{{ .Updated }}</updated>
+  <title>{{ .Title }}</title>
   <author>
-    <name>{{ User.Name }}</name>
-    <uri>{{ BaseURL }}/users/{{ User.ID }}/</uri>
+    <name>{{ .User.Name }}</name>
+    <uri>{{ BaseURL }}/users/{{ .User.ID }}/</uri>
   </author>
 
-  {{ range User.Artworks }}
+  {{ range .User.Artworks }}
   <entry>
     <id>{{ BaseURL }}/artworks/{{ .ID }}/</id>
     <link rel="alternate" href="{{ BaseURL }}/artworks/{{ .ID }}/"/>

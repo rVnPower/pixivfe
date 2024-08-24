@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container">
   <h1>Discover novels</h1>
   <div class="switcher">
@@ -15,7 +15,7 @@
     <a href="{{url}}r18" class="switch-button">R-18</a>
   </div>
   <div class="novel-container">
-      {{ range Novels }}
+      {{ range .Novels }}
         {{ include "components/novel-tn" . }}
     {{ end }}
   </div>
@@ -23,4 +23,4 @@
     <a href="" class="pagination-button">Reload</a>
   </div>
 </div>
-{{end}}
+{{ end }}

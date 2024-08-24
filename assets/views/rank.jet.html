@@ -1,20 +1,20 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
 {{ import "components/switcher" }}
+{{ block body() }}
 
 <div class="container">
-  <h1>{{ Title }}</h1>
+  <h1>{{ .Title }}</h1>
 
   <div class="switcher">
-    {{ Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-    {{ Content := isset(Queries.content) ? Queries.content : "all" }}
+    {{ Mode := isset(.Queries.mode) ? .Queries.mode : "daily" }}
+    {{ Content := isset(.Queries.content) ? .Queries.content : "all" }}
 
     {{ url := "" }}
     {{ if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
-    {{ url = "/ranking?date=" + Data.CurrentDate +
+    {{ url = "/ranking?date=" + .Data.CurrentDate +
     "&page=1&content=" }}
     {{ else }}
-    {{ url = "/ranking?mode=" + Mode + "&date=" + Data.CurrentDate + "&page=1&content=" }}
+    {{ url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
     {{ end }}
     <div class="switch-title">Content</div>
     {{ path := slice("all",     "illust",        "manga",  "ugoira") }}
@@ -24,7 +24,7 @@
   <br />
 
   <div class="switcher">
-    {{ url := "/ranking?content=" + Content +"&date=" + Data.CurrentDate
+    {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
     + "&page=1&mode=" }}
     <div class="switch-title">Modes</div>
 
@@ -56,13 +56,13 @@
   <div class="switcher">
     {{ url := "/ranking?content=" + Content + "&mode=" + Mode +
     "&page=1" }}
-    <div class="switch-title">Date (current: {{ Data.CurrentDate }})</div>
-    {{ if Data.PrevDate != "false" }}
-    <a href="{{ url }}&date={{Data.PrevDate}}" class="switch-button"
+    <div class="switch-title">Date (current: {{ .Data.CurrentDate }})</div>
+    {{ if .Data.PrevDate != "false" }}
+    <a href="{{ url }}&date={{.Data.PrevDate}}" class="switch-button"
       >Yesterday</a
     >
-    {{ end }} {{ if Data.NextDate != "false" }}
-    <a href="{{ url }}&date={{Data.NextDate}}" class="switch-button"
+    {{ end }} {{ if .Data.NextDate != "false" }}
+    <a href="{{ url }}&date={{.Data.NextDate}}" class="switch-button"
       >Next day</a
     >
     {{ end }}
@@ -73,15 +73,15 @@
   <br />
 
   <div class="artwork-container">
-    {{ include "components/ranking-tn" Data.Contents }}
+    {{ include "components/ranking-tn" .Data.Contents }}
   </div>
 
   <div class="pagination">
-    {{ url := "/ranking?content=" + Content +"&date=" + Data.CurrentDate
+    {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
     + "&mode=" + Mode + "&page=" }}
-    <small>Page {{ Page }}/{{ PageLimit }}</small>
+    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
     <br />
-    {{ raw: createPaginator(url, "#checkpoint", Page, PageLimit) }}
+    {{ raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
   </div>
 </div>
-{{end}}
+{{ end }}

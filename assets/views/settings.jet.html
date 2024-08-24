@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container" data-hx-boost="false">
   <h1>Settings</h1>
   <p>
@@ -58,7 +58,7 @@
             <input type="radio" name="image-proxy" required="true" value="" />
             No (use built-in proxy)
           </label>
-          {{ range WorkingProxyList }}
+          {{ range .WorkingProxyList }}
           <label>
             <input type="radio" name="image-proxy" required="true" value="{{.}}" />
             {{.}}
@@ -66,7 +66,7 @@
           {{ end }}
           <details>
             <summary>See all built-in proxies</summary>
-            {{ range ProxyList }}
+            {{ range .ProxyList }}
             <label>
               <input type="radio" name="image-proxy" required="true" value="{{.}}" />
               {{.}}
@@ -187,4 +187,4 @@
     <input class="critical" type="submit" value="Reset all cookies/preferences" />
   </form>
 </div>
-{{end}}
+{{ end }}

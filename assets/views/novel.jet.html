@@ -1,35 +1,35 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 <div class="container novel" id="checkpoint">
   <div class="novel-detail">
     <div class="novel-cover">
-      <a href="{{ Novel.CoverURL }}">
-        <img src="{{ Novel.CoverURL }}" alt="{{ Novel.Title }}" />
+      <a href="{{ .Novel.CoverURL }}">
+        <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }}" />
       </a>
     </div>
     <div class="novel-metadata">
-      <div class="novel-title">{{ Novel.Title }}</div>
-      <small><span>{{ Novel.WordCount }} word(s)</span>&nbsp;<span>{{ floor: Novel.ReadingTime / 60 }}
+      <div class="novel-title">{{ .Novel.Title }}</div>
+      <small><span>{{ .Novel.WordCount }} word(s)</span>&nbsp;<span>{{ floor: .Novel.ReadingTime / 60 }}
           min</span></small>
-      <p class="novel-description">{{ raw: Novel.Description }}</p>
+      <p class="novel-description">{{ raw: .Novel.Description }}</p>
 
       <div class="illust-tags">
-        {{ if Novel.AiType == 2 }}
+        {{ if .Novel.AiType == 2 }}
         <span class="illust-tag">
           <span class="illust-tag-name" id="highlight">AI-generated</span>
         </span>
         {{ end }}
-        {{ if Novel.IsOriginal }}
+        {{ if .Novel.IsOriginal }}
         <span class="illust-tag">
           <span class="illust-tag-name">Original</span>
         </span>
         {{ end }}
-        {{ if Novel.Genre != "0" }}
+        {{ if .Novel.Genre != "0" }}
         <span class="illust-tag">
-          <span class="illust-tag-name">{{ novelGenre: Novel.Genre }}</span>
+          <span class="illust-tag-name">{{ novelGenre: .Novel.Genre }}</span>
         </span>
         {{ end }}
-        {{ range Novel.Tags.Tags }} {{ if isEmphasize(.Name) }}
+        {{ range .Novel.Tags.Tags }} {{ if isEmphasize(.Name) }}
         <span class="illust-tag">
           <span class="illust-tag-name" id="highlight">{{ .Name }}</span>
         </span>
@@ -43,19 +43,19 @@
       <div class="illust-tags">
         <span class="illust-tag-attr">
           <img src="/img/eye.png" alt="Views" />
-          {{ Novel.Views }}
+          {{ .Novel.Views }}
         </span>
         <span class="illust-tag-attr">
           <img src="/img/heart-solid.png" alt="Bookmarks" />
-          {{ Novel.Bookmarks }}
+          {{ .Novel.Bookmarks }}
         </span>
         <span class="illust-tag-attr">
           <img src="/img/like.png" alt="Likes" />
-          {{ Novel.Likes }}
+          {{ .Novel.Likes }}
         </span>
         <span class="illust-tag-attr">
           <img src="/img/calendar.png" alt="Date" />
-          {{ parseTime: Novel.CreateDate }}
+          {{ parseTime: .Novel.CreateDate }}
         </span>
       </div>
     </div>
@@ -108,25 +108,25 @@
     </div>
   </div>
   <!-- ----------- -->
-  <div class="novel-content" id="content" data-font="{{ FontType }}" data-lang="{{ Language }}"
-    data-view="{{ ViewMode }}">
+  <div class="novel-content" id="content" data-font="{{ .FontType }}" data-lang="{{ .Language }}"
+    data-view="{{ .ViewMode }}">
     <div class="novel-content-text">
-      {{ raw: renderNovel(Novel.Content) }}
+      {{ raw: renderNovel(.Novel.Content) }}
     </div>
   </div>
   <div class="novel-attr">
-    <a href="/users/{{ User.ID }}"><img src="{{ User.Avatar }}" alt="{{ User.Name }}" class="novel-avatar" />
+    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
     </a>
     <div class="attr-wrap">
       <div class="novel-title">
-        <a href="/users/{{ User.ID }}">{{ User.Name }}</a>
+        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
       </div>
     </div>
   </div>
   <div class="novel-container">
-    {{ range NovelRelated }}
+    {{ range .NovelRelated }}
     {{ include "components/novel-tn" . }}
     {{ end }}
   </div>
 </div>
-{{end}}
+{{ end }}

@@ -1,5 +1,5 @@
-{{extends "layout/default.jet.html"}}
-{{block body()}}
+{{ extends "layout/default" }}
+{{ block body() }}
 
   {{ if Token }}
   <div class="switcher">
@@ -12,17 +12,17 @@
     <a href="/self/following_works">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ include "components/small-tn" Artworks.Following }}
+    {{ include "components/small-tn" .Artworks.Following }}
   </div>
   <br />
   <h2>Recently completed commissions</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" Artworks.Commissions }}
+    {{ include "components/small-tn" .Artworks.Commissions }}
   </div>
   <br />
   <h2>Recommended works</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" Artworks.Recommended }}
+    {{ include "components/small-tn" .Artworks.Recommended }}
   </div>
   <br />
 
@@ -31,7 +31,7 @@
     <a href="/ranking">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ range rank := Artworks.Rankings }}
+    {{ range rank := .Artworks.Rankings }}
     <div class="artwork-large artwork">
       <div class="artwork-additional">
         <div class="artwork-position">{{ rank + 1 }}</div>
@@ -67,7 +67,7 @@
 
   {* <h2>Pixivision</h2>
   <div class="thumbnail-container">
-    {{ range Artworks.Pixivision }}
+    {{ range .Artworks.Pixivision }}
     <a href="{{ .URL }}" class="spotlight-thumbnail">
       <img
         src="{{ .Thumbnail }}"
@@ -84,10 +84,10 @@
 
   <h2>Works by recommended users</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" Artworks.Users }}
+    {{ include "components/small-tn" .Artworks.Users }}
   </div>
   <br />
-  {{ range Artworks.RecommendByTags }}
+  {{ range .Artworks.RecommendByTags }}
   <h2>Recommended illustrations tagged #{{.Name}}</h2>
   <div class="artwork-container">
     {{ include "components/small-tn" .Artworks }}
@@ -98,7 +98,7 @@
   <p>Please check out the sidebar for more features. There used to be a small ranking container here...</p>
   {* <h2>Newest works</h2>
        <div class="artwork-container-scroll">
-       {{ include "components/small-tn" Artworks.Newest }}
+       {{ include "components/small-tn" .Artworks.Newest }}
        </div>
        {{ else }}
        <p><a href="/login">Login</a> to access more features!</p>
@@ -112,7 +112,7 @@
        <a href="/ranking">See more</a>
        </div>
        <div class="artwork-container-scroll">
-       {{ range rank := Artworks.Rankings }}
+       {{ range rank := .Artworks.Rankings }}
        <div class="artwork-large artwork">
        <div class="artwork-additional">
        <div class="artwork-position">{{ rank + 1 }}</div>
@@ -148,7 +148,7 @@
 
   {* <h2>Pixivision</h2>
   <div class="thumbnail-container">
-    {{ range Artworks.Pixivision }}
+    {{ range .Artworks.Pixivision }}
     <a href="{{ .URL }}" class="spotlight-thumbnail">
       <img
         src="{{ .Thumbnail }}"
@@ -164,4 +164,4 @@
   <br /> *}
 
   {{ end }}
-{{end}}
+{{ end }}
