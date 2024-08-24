@@ -52,7 +52,7 @@ func TagPage(c *fiber.Ctx) error {
 
 	urlc := utils.PartialURL{Path: "tags", Query: queries.ReturnMap()}
 
-	return c.Render("tag", fiber.Map{"Title": "Results for " + name, "Tag": tag, "Data": result, "QueriesC": urlc, "TrueTag": param, "Page": pageInt})
+	return Render(c, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
 }
 
 func AdvancedTagPost(c *fiber.Ctx) error {

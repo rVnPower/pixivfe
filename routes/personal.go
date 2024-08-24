@@ -12,7 +12,7 @@ import (
 
 func PromptUserToLoginPage(c *fiber.Ctx) error {
 	c.Status(http.StatusUnauthorized)
-	return c.Render("unauthorized", fiber.Map{})
+	return Render(c, Data_unauthorized{})
 }
 
 func LoginUserPage(c *fiber.Ctx) error {
@@ -60,11 +60,5 @@ func FollowingWorksPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("following", fiber.Map{
-		"Title":    "Following works",
-		"Mode":     mode,
-		"Artworks": works,
-		"CurPage":  page,
-		"Page":     pageInt,
-	})
+	return Render(c, Data_following{Title: "Following works", Mode: mode, Artworks: works, CurPage: page, Page: pageInt})
 }

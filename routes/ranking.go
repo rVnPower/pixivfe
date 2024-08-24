@@ -23,11 +23,5 @@ func RankingPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("rank", fiber.Map{
-		"Title":     "Ranking",
-		"Page":      pageInt,
-		"PageLimit": 10, // hard-coded by pixiv
-		"Date":      date,
-		"Data":      works,
-	})
+	return Render(c, Data_rank{Title: "Ranking", Page: pageInt, PageLimit: 10, Date: date, Data: works})
 }

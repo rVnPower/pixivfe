@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"github.com/CloudyKit/jet/v6"
 	"github.com/go-faker/faker/v4"
 )

@@ -97,7 +97,23 @@ rules:
   languages: [go]
   severity: INFO
   pattern: |
-    c.Render(...)
+    c.Render("$NAME", fiber.Map{$...INSIDE})
   paths:
     exclude:
       - "render_types.go"
+  fix: |
+    Render(c, Data_$NAME{$...INSIDE})
+- id: rule-8
+  message: "c.Render"
+  languages: [go]
+  severity: INFO
+  patterns:
+  - pattern-inside: |
+      c.Render(...)
+  - pattern: |
+      fiber.Map { $...BEFORE, "$A": $B, $...AFTER }
+  fix: |
+    fiber.Map { $...BEFORE, $A: $B, $...AFTER }
+  paths:
+    exclude:
+      - "render.go"

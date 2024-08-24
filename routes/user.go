@@ -59,14 +59,7 @@ func UserPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("user", fiber.Map{
-		"Title":     data.user.Name,
-		"User":      data.user,
-		"Category":  data.category,
-		"PageLimit": data.pageLimit,
-		"Page":      data.page,
-		"MetaImage": data.user.BackgroundImage,
-	})
+	return Render(c, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
 }
 
 func UserAtomFeed(c *fiber.Ctx) error {

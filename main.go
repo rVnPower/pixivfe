@@ -17,7 +17,6 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"codeberg.org/vnpower/pixivfe/v2/utils/kmutex"
 
 	"github.com/goccy/go-json"
@@ -28,7 +27,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	fiber_utils "github.com/gofiber/fiber/v2/utils"
-	"github.com/gofiber/template/jet/v2"
 )
 
 func CanRequestSkipLimiter(c *fiber.Ctx) bool {
@@ -51,23 +49,10 @@ func main() {
 	core.CreateResponseAuditFolder()
 
 	routes.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
-	// the code below is redundant
-	engine := jet.New("./assets/views", ".jet.html")
-	engine.AddFuncMap(utils.GetTemplateFunctions())
-	if config.GlobalServerConfig.InDevelopment {
-		engine.Reload(true)
-	}
-	// gofiber bug: no error even if the templates are invalid??? https://github.com/gofiber/template/issues/341
-	err := engine.Load()
-	if err != nil {
-		panic(err)
-	}
-	// the code above is redundant
 
 	server := fiber.New(fiber.Config{
 		AppName:                 "PixivFE",
 		DisableStartupMessage:   true,
-		Views:                   engine,
 		Prefork:                 false,
 		JSONEncoder:             json.Marshal,
 		JSONDecoder:             json.Unmarshal,
@@ -302,7 +287,9 @@ func main() {
 	proxy.Get("/ugoira.com/*", routes.UgoiraProxy)
 
 	// Initialize and start the proxy checker
-	config.InitializeProxyChecker()
+	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+	config.InitializeProxyChecker(ctx_timeout)
+	cancel()
 
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {

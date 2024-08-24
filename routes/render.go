@@ -69,7 +69,7 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 		return err
 	}
 
-	views.Parse(template_name + ".jet.html", template.String())
+	views.Parse(template_name+".jet.html", template.String())
 
 	return template.Execute(w, variables, data)
 }
@@ -85,6 +85,6 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 // }
 
 // // assumes that the field `field_name` exists, panics otherwise
-// func fieldName[T any](data T, field_name string) any {	
+// func fieldName[T any](data T, field_name string) any {
 // 	return reflect.ValueOf(data).FieldByName(field_name).Interface()
 // }

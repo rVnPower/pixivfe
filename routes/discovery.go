@@ -16,11 +16,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 
 	urlc := utils.PartialURL{Path: "discovery", Query: map[string]string{"mode": mode}}
 
-	return c.Render("discovery", fiber.Map{
-		"Artworks": works,
-		"Title":    "Discovery",
-		"Queries":  urlc,
-	})
+	return Render(c, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
 }
 
 func NovelDiscoveryPage(c *fiber.Ctx) error {
@@ -31,8 +27,5 @@ func NovelDiscoveryPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("novelDiscovery", fiber.Map{
-		"Novels": works,
-		"Title":  "Discovery",
-	})
+	return Render(c, Data_novelDiscovery{Novels: works, Title: "Discovery"})
 }

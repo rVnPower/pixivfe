@@ -3,7 +3,7 @@ package utils
 import "fmt"
 
 type PartialURL struct {
-	Path string
+	Path  string
 	Query map[string]string
 }
 

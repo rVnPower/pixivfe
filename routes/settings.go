@@ -162,10 +162,7 @@ func resetAll(c *fiber.Ctx) error {
 }
 
 func SettingsPage(c *fiber.Ctx) error {
-	return c.Render("settings", fiber.Map{
-		"WorkingProxyList": config.GetWorkingProxies(),
-		"ProxyList":        config.BuiltinProxyList,
-	})
+	return Render(c, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
 func SettingsPost(c *fiber.Ctx) error {

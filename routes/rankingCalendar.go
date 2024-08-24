@@ -78,13 +78,5 @@ func RankingCalendarPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("rankingCalendar", fiber.Map{
-		"Title":       "Ranking calendar",
-		"Render":      render,
-		"Mode":        mode,
-		"Year":        year,
-		"MonthBefore": parseDate(monthBefore),
-		"MonthAfter":  parseDate(monthAfter),
-		"ThisMonth":   parseDate(realDate),
-	})
+	return Render(c, Data_rankingCalendar{Title: "Ranking calendar", Render: render, Mode: mode, Year: year, MonthBefore: parseDate(monthBefore), MonthAfter: parseDate(monthAfter), ThisMonth: parseDate(realDate)})
 }

@@ -36,13 +36,5 @@ func NovelPage(c *fiber.Ctx) error {
 
 	// println("fontType", fontType)
 
-	return c.Render("novel", fiber.Map{
-		"Novel":        novel,
-		"NovelRelated": related,
-		"User":         user,
-		"Title":        novel.Title,
-		"FontType":     fontType,
-		"ViewMode":     viewMode,
-		"Language":     strings.ToLower(novel.Language),
-	})
+	return Render(c, Data_novel{Novel: novel, NovelRelated: related, User: user, Title: novel.Title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
 }

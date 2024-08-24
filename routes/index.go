@@ -19,8 +19,8 @@ func IndexPage(c *fiber.Ctx) error {
 		}
 
 		return Render(c, Data_index{
-			Title: "Landing",
-			Data: *works,
+			Title:      "Landing",
+			Data:       *works,
 			IsLoggedIn: true,
 		})
 	}
@@ -31,9 +31,9 @@ func IndexPage(c *fiber.Ctx) error {
 		return err
 	}
 	return Render(c, Data_index{
-		Title: "Landing",
+		Title:       "Landing",
 		NoTokenData: works,
-		IsLoggedIn: false,
+		IsLoggedIn:  false,
 	})
 }
 

@@ -15,8 +15,5 @@ func NewestPage(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Render("newest", fiber.Map{
-		"Items": works,
-		"Title": "Newest works",
-	})
+	return Render(c, Data_newest{Items: works, Title: "Newest works"})
 }

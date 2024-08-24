@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"codeberg.org/vnpower/pixivision"
-	"github.com/gofiber/fiber/v2"
-
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivision"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func PixivisionHomePage(c *fiber.Ctx) error {
@@ -18,7 +18,7 @@ func PixivisionHomePage(c *fiber.Ctx) error {
 		data[i].Thumbnail = session.ProxyImageUrlNoEscape(c, data[i].Thumbnail)
 	}
 
-	return c.Render("pixivision", fiber.Map{"Data": data})
+	return Render(c, Data_pixivision_index{Data: data})
 }
 
 func PixivisionArticlePage(c *fiber.Ctx) error {
@@ -35,5 +35,5 @@ func PixivisionArticlePage(c *fiber.Ctx) error {
 		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(c, data.Items[i].Avatar)
 	}
 
-	return c.Render("pixivision_article", fiber.Map{"Article": data})
+	return Render(c, Data_pixivision_article{Article: data})
 }
