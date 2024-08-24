@@ -12,8 +12,6 @@ Current proxied URLs don't have weird characters in them. Hopefully it stays thi
 
 Solution: Replace "net/url" with a better third-party module
 
-## Jet Templating Engine Has No Error Reporting
-
-Not sure why.
+## Jet templating engine is not type checked
 
 Solution: [templ](https://github.com/a-h/templ)
