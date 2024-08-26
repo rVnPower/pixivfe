@@ -56,7 +56,6 @@ func main() {
 		Prefork:                 false,
 		JSONEncoder:             json.Marshal,
 		JSONDecoder:             json.Unmarshal,
-		ViewsLayout:             "_layout",
 		EnableTrustedProxyCheck: true,
 		TrustedProxies:          []string{"0.0.0.0/0"},
 		ProxyHeader:             fiber.HeaderXForwardedFor,
@@ -245,7 +244,7 @@ func main() {
 	server.Get("/rankingCalendar", routes.RankingCalendarPage)
 	server.Post("/rankingCalendar", routes.RankingCalendarPicker)
 	server.Get("/users/:id.atom.xml", routes.UserAtomFeed)
-	server.Get("/users/:id/:category?.atom.xml", routes.UserAtomFeed)
+	server.Get("/users/:id/:category.atom.xml", routes.UserAtomFeed)
 	server.Get("/users/:id/:category?", routes.UserPage)
 	server.Get("/artworks/:id/", routes.ArtworkPage).Name("artworks")
 	server.Get("/artworks-multi/:ids/", routes.ArtworkMultiPage)

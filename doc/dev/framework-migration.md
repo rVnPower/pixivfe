@@ -1,5 +1,12 @@
 # Migrating from gofiber to net/http -- the plan
 
-- [x] Templating
-    First, convert all `c.Render("about", ...)` to `Render(c, Data_about{...}`.
-    Then, the templating engine is decoupled from gofiber.
+- Config [already decoupled]
+- Templating [decoupled, waiting for integration]
+- Logging
+- Router 
+  features
+    - /users/:id/:category? (optional path segment)
+    - /i.pximg.net/* (wildcard)
+- Middleware
+  - Rate limit (optional, could be loosely-coupled)
+  - Caching (optional, could be loosely-coupled)
