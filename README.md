@@ -22,20 +22,9 @@ You can keep track of this project's development using the [roadmap](doc/dev/gen
 - No bloat - we only serve HTML, CSS and minimal JS code
 - Open source - you can trust me!
 
-## Hosting
-
-You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, modify the `run.sh` file, and profit!
-I recommend self-hosting your own instance for personal use, instead of relying entirely on official instances.
-
-To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe.pages.dev/hosting-pixivfe/).
-
-PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe.pages.dev/public-image-proxies/).
-See [hosting a Pixiv image proxy](https://pixivfe.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.
-
-
 ## Development
 
-**Requirements:**
+Prerequisites:
 
 - [Go](https://go.dev/doc/install) (to build PixivFE from source)
 - [Sass](https://github.com/sass/dart-sass/) (will be run by PixivFE in development mode)
@@ -46,6 +35,8 @@ To install Dart Sass, you can choose any of the following methods.
 - download executable from [the official release page](https://github.com/sass/dart-sass/releases)
 - `pnpm i -g sass`
 
+Then, run the project:
+
 ```bash
 # Clone the PixivFE repository
 git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
@@ -54,7 +45,14 @@ git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
 PIXIVFE_DEV=1 <other_environment_variables> go run .
 ```
 
-## Instances
+## Hosting PixivFE
+
+You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, modify the `run.sh` file, and profit!
+I recommend self-hosting your own instance for personal use, instead of relying entirely on official instances.
+
+To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe.pages.dev/hosting-pixivfe/).
+
+### Public Instances
 
 <!-- The current instance table is really wide; maybe there's a better way of formatting it without losing information?
 The badges are also difficult to read on a small screen due to Codeberg shrinking the width of the columns -->
@@ -73,6 +71,13 @@ If you are hosting your own instance, you can create a pull request to add it he
 
 For more information on instance uptime, see the [PixivFE instance status page](https://stats.uptimerobot.com/FbEGewWlbX).
 
-## License
+This information is duplicated at https://pixivfe.pages.dev/public-instances/.
 
-License: [AGPL3](https://www.gnu.org/licenses/agpl-3.0.txt)
+## Hosting Image Proxy Server
+
+PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe.pages.dev/public-image-proxies/).
+See [hosting a Pixiv image proxy](https://pixivfe.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.
+
+### Public Instances
+
+[See the current list of image proxy servers](./docs/image-proxies.yml)
