@@ -185,7 +185,11 @@ func defineRoutes() *mux.Router {
 	handlePrefix(router, "/css/", http.FileServer(http.Dir("./assets/css")))
 	handlePrefix(router, "/js/", http.FileServer(http.Dir("./assets/js")))
 
-	// Routes
+	// Proxy routes. cache headers set by upstream servers.
+	handlePrefix(router, "/proxy/i.pximg.net/", CatchError(routes.IPximgProxy)).Methods("GET")
+	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
+	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
+
 	router.HandleFunc("/", CatchError(routes.IndexPage)).Methods("GET")
 	router.HandleFunc("/about", CatchError(routes.AboutPage)).Methods("GET")
 	router.HandleFunc("/newest", CatchError(routes.NewestPage)).Methods("GET")
@@ -204,11 +208,9 @@ func defineRoutes() *mux.Router {
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
 	router.HandleFunc("/pixivision/a/{id}", CatchError(routes.PixivisionArticlePage)).Methods("GET")
 
-	// Settings group
 	router.HandleFunc("/settings", CatchError(routes.SettingsPage)).Methods("GET")
 	router.HandleFunc("/settings/{type}", CatchError(routes.SettingsPost)).Methods("POST")
 
-	// Personal group
 	router.HandleFunc("/self", CatchError(routes.LoginUserPage)).Methods("GET")
 	router.HandleFunc("/self/followingWorks", CatchError(routes.FollowingWorksPage)).Methods("GET")
 	router.HandleFunc("/self/bookmarks", CatchError(routes.LoginBookmarkPage)).Methods("GET")
@@ -216,7 +218,6 @@ func defineRoutes() *mux.Router {
 	router.HandleFunc("/self/deleteBookmark/{id}", CatchError(routes.DeleteBookmarkRoute)).Methods("GET")
 	router.HandleFunc("/self/like/{id}", CatchError(routes.LikeRoute)).Methods("GET")
 
-	// Oembed group
 	router.HandleFunc("/oembed", CatchError(routes.Oembed)).Methods("GET")
 
 	router.HandleFunc("/tags/{name}", CatchError(routes.TagPage)).Methods("GET")
@@ -228,11 +229,6 @@ func defineRoutes() *mux.Router {
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/artworks/"+ routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
-
-	// Proxy routes
-	handlePrefix(router, "/proxy/i.pximg.net/", CatchError(routes.IPximgProxy)).Methods("GET")
-	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
-	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
 
 	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r *http.Request) error {
 		return errors.New("Route not found")
