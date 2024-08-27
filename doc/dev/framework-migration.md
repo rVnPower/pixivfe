@@ -21,6 +21,10 @@ Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
 
 ## Tips
 
-To access `/:abc`, use `r.PathValue("abc")`.
+- To access `/:abc`, use `r.PathValue("abc")`.
+- Want to associate arbitrary value with a request? Use `r.Context.Value()`.
+- Don't use `r.Response`. It's `nil`.
 
-Want to associate arbitrary value with a request? Use `r.Context.Value()`.
+## todo
+
+- correct redirect status codes. currently i put in whatever.

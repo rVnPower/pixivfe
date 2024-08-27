@@ -165,7 +165,11 @@ func main() {
 
 	router := defineRoutes()
 
-	main_handler := func(w http.ResponseWriter, r *http.Request) {
+	main_handler := func(w_ http.ResponseWriter, r *http.Request) {
+		w := &ResponseWriterInterceptStatus{
+			statusCode:     0,
+			ResponseWriter: w_,
+		}
 		// set user context
 		r = r.WithContext(context.WithValue(r.Context(), UserContextKey, &UserContext{}))
 
@@ -191,7 +195,7 @@ func main() {
 			ip := r.RemoteAddr
 			method := r.Method
 			path := r.URL.Path
-			status := r.Response.Status
+			status := w.statusCode
 			err := GetUserContext(r).err
 
 			log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
@@ -265,55 +269,55 @@ func defineRoutes() *mux.Router {
 	router.Handle("/js/", http.FileServer(http.Dir("./assets/js")))
 
 	// Routes
-	router.Get("/").Handler(CatchError(routes.IndexPage))
-	// server.Get("/about", routes.AboutPage)
-	// server.Get("/newest", routes.NewestPage)
-	// server.Get("/discovery", routes.DiscoveryPage)
-	// server.Get("/discovery/novel", routes.NovelDiscoveryPage)
-	// server.Get("/ranking", routes.RankingPage)
-	// server.Get("/rankingCalendar", routes.RankingCalendarPage)
-	// server.Post("/rankingCalendar", routes.RankingCalendarPicker)
-	// server.Get("/users/:id.atom.xml", routes.UserAtomFeed)
-	// server.Get("/users/:id/:category.atom.xml", routes.UserAtomFeed)
-	// server.Get("/users/:id/:category?", routes.UserPage)
-	// server.Get("/artworks/:id/", routes.ArtworkPage).Name("artworks")
-	// server.Get("/artworks-multi/:ids/", routes.ArtworkMultiPage)
-	// server.Get("/novel/:id/", routes.NovelPage)
-	// server.Get("/pixivision", routes.PixivisionHomePage)
-	// server.Get("/pixivision/a/:id", routes.PixivisionArticlePage)
+	router.HandleFunc("/", CatchError(routes.IndexPage)).Methods("GET")
+	router.HandleFunc("/about", CatchError(routes.AboutPage)).Methods("GET")
+	router.HandleFunc("/newest", CatchError(routes.NewestPage)).Methods("GET")
+	router.HandleFunc("/discovery", CatchError(routes.DiscoveryPage)).Methods("GET")
+	router.HandleFunc("/discovery/novel", CatchError(routes.NovelDiscoveryPage)).Methods("GET")
+	router.HandleFunc("/ranking", CatchError(routes.RankingPage)).Methods("GET")
+	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPage)).Methods("GET")
+	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPicker)).Methods("POST")
+	router.HandleFunc("/users/:id.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
+	router.HandleFunc("/users/:id/:category.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
+	router.HandleFunc("/users/:id/:category?", CatchError(routes.UserPage)).Methods("GET")
+	router.HandleFunc("/artworks/:id/", CatchError(routes.ArtworkPage)).Methods("GET")
+	router.HandleFunc("/artworks-multi/:ids/", CatchError(routes.ArtworkMultiPage)).Methods("GET")
+	router.HandleFunc("/novel/:id/", CatchError(routes.NovelPage)).Methods("GET")
+	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
+	router.HandleFunc("/pixivision/a/:id", CatchError(routes.PixivisionArticlePage)).Methods("GET")
 
-	// // Settings group
-	// settings := server.Group("/settings")
-	// settings.Get("/", routes.SettingsPage)
-	// settings.Post("/:type/:noredirect?", routes.SettingsPost)
+	// Settings group
+	settings := router.NewRoute().Path("/settings").Subrouter()
+	settings.HandleFunc("/", CatchError(routes.SettingsPage)).Methods("GET")
+	settings.HandleFunc("/:type/:noredirect?", CatchError(routes.SettingsPost)).Methods("POST")
 
-	// // Personal group
-	// self := server.Group("/self")
-	// self.Get("/", routes.LoginUserPage)
-	// self.Get("/followingWorks", routes.FollowingWorksPage)
-	// self.Get("/bookmarks", routes.LoginBookmarkPage)
-	// self.Get("/addBookmark/:id", routes.AddBookmarkRoute)
-	// self.Get("/deleteBookmark/:id", routes.DeleteBookmarkRoute)
-	// self.Get("/like/:id", routes.LikeRoute)
+	// Personal group
+	self := router.NewRoute().Path("/self").Subrouter()
+	self.HandleFunc("/", CatchError(routes.LoginUserPage)).Methods("GET")
+	self.HandleFunc("/followingWorks", CatchError(routes.FollowingWorksPage)).Methods("GET")
+	self.HandleFunc("/bookmarks", CatchError(routes.LoginBookmarkPage)).Methods("GET")
+	self.HandleFunc("/addBookmark/:id", CatchError(routes.AddBookmarkRoute)).Methods("GET")
+	self.HandleFunc("/deleteBookmark/:id", CatchError(routes.DeleteBookmarkRoute)).Methods("GET")
+	self.HandleFunc("/like/:id", CatchError(routes.LikeRoute)).Methods("GET")
 
-	// // Oembed group
-	// server.Get("/oembed", routes.Oembed)
+	// Oembed group
+	router.HandleFunc("/oembed", CatchError(routes.Oembed)).Methods("GET")
 
-	// server.Get("/tags/:name", routes.TagPage)
-	// server.Post("/tags/:name", routes.TagPage)
-	// server.Get("/tags", routes.TagPage)
-	// server.Post("/tags", routes.AdvancedTagPost)
+	router.HandleFunc("/tags/:name", CatchError(routes.TagPage)).Methods("GET")
+	router.HandleFunc("/tags/:name", CatchError(routes.TagPage)).Methods("POST")
+	router.HandleFunc("/tags", CatchError(routes.TagPage)).Methods("GET")
+	router.HandleFunc("/tags", CatchError(routes.AdvancedTagPost)).Methods("POST")
 
-	// // Legacy illust URL
-	// server.Get("/member_illust.php", func(r *http.Request) error {
-	// 	return r.Redirect("/artworks/" + r.Query("illust_id"))
-	// })
+	// Legacy illust URL
+	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/artworks/"+routes.CompatRequest{Request: r}.Query("illust_id"), http.StatusFound)
+	}).Methods("GET")
 
-	// // Proxy routes
-	// proxy := server.Group("/proxy")
-	// proxy.Get("/i.pximg.net/*", routes.IPximgProxy)
-	// proxy.Get("/s.pximg.net/*", routes.SPximgProxy)
-	// proxy.Get("/ugoira.com/*", routes.UgoiraProxy)
+	// Proxy routes
+	proxy := router.NewRoute().Path("/proxy").Subrouter()
+	proxy.HandleFunc("/i.pximg.net/*", CatchError(routes.IPximgProxy)).Methods("GET")
+	proxy.HandleFunc("/s.pximg.net/*", CatchError(routes.SPximgProxy)).Methods("GET")
+	proxy.HandleFunc("/ugoira.com/*", CatchError(routes.UgoiraProxy)).Methods("GET")
 
 	return router
 }
@@ -322,4 +326,14 @@ func CatchError(handler func(w http.ResponseWriter, r routes.CompatRequest) erro
 	return func(w http.ResponseWriter, r *http.Request) {
 		GetUserContext(r).err = handler(w, routes.CompatRequest{Request: r})
 	}
+}
+
+type ResponseWriterInterceptStatus struct {
+	statusCode int
+	http.ResponseWriter
+}
+
+func (w *ResponseWriterInterceptStatus) WriteHeader(code int) {
+	w.statusCode = code
+	w.ResponseWriter.WriteHeader(code)
 }
