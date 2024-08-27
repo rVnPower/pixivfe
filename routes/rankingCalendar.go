@@ -42,9 +42,9 @@ func RankingCalendarPicker(w http.ResponseWriter, r *http.Request) error {
 	}
 	date := r.FormValue("date")
 
-	return utils.RedirectTo(w, r,"/rankingCalendar",  map[string]string{
-			"mode": mode,
-			"date": date,
+	return utils.RedirectTo(w, r, "/rankingCalendar", map[string]string{
+		"mode": mode,
+		"date": date,
 	})
 }
 

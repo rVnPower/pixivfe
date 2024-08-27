@@ -1,7 +1,6 @@
 package routes
 
 import (
-	html "html/template"
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
@@ -102,7 +101,7 @@ type Data_rank struct {
 }
 type Data_rankingCalendar struct {
 	Title       string
-	Render      html.HTML
+	Render      core.HTML
 	Mode        string
 	Year        int
 	MonthBefore DateWrap

@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-
 func GetQueryParam(r *http.Request, name string, defaultValue ...string) string {
 	if v := r.URL.Query().Get(name); v != "" {
 		return v

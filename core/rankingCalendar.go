@@ -40,9 +40,9 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (template
 	URL := GetRankingCalendarURL(mode, year, month)
 
 	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
- if err != nil {
-   return template.HTML(""), err
- }
+	if err != nil {
+		return template.HTML(""), err
+	}
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
 	// req.AddCookie(&http.Cookie{

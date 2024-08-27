@@ -28,7 +28,7 @@ func LoginUserPage(w http.ResponseWriter, r *http.Request) error {
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	http.Redirect(w, r, "/users/" + userId[0], http.StatusSeeOther)
+	http.Redirect(w, r, "/users/"+userId[0], http.StatusSeeOther)
 	return nil
 }
 
@@ -41,7 +41,7 @@ func LoginBookmarkPage(w http.ResponseWriter, r *http.Request) error {
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	http.Redirect(w, r, "/users/" + userId[0] + "/bookmarks#checkpoint", http.StatusSeeOther)
+	http.Redirect(w, r, "/users/"+userId[0]+"/bookmarks#checkpoint", http.StatusSeeOther)
 	return nil
 }
 

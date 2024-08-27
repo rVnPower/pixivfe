@@ -3,7 +3,6 @@ package core
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"math"
 	"sort"
 
@@ -48,7 +47,7 @@ type User struct {
 	Avatar          string          `json:"imageBig"`
 	Following       int             `json:"following"`
 	MyPixiv         int             `json:"mypixivCount"`
-	Comment         template.HTML   `json:"commentHtml"`
+	Comment         HTML       `json:"commentHtml"`
 	Webpage         string          `json:"webpage"`
 	SocialRaw       json.RawMessage `json:"social"`
 	Artworks        []ArtworkBrief  `json:"artworks"`
