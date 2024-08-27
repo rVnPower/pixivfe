@@ -21,7 +21,7 @@ func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
 	}
-	category := core.UserArtCategory(r.Params("category", string(core.UserArt_Any)))
+	category := core.UserArtCategory(r.Request.Params("category", string(core.UserArt_Any)))
 	err := category.Validate()
 	if err != nil {
 		return userPageData{}, err
@@ -33,7 +33,7 @@ func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
 		return userPageData{}, err
 	}
 
-	user, err := core.GetUserArtwork(r, id, category, page, getTags)
+	user, err := core.GetUserArtwork(r.Request, id, category, page, getTags)
 	if err != nil {
 		return userPageData{}, err
 	}

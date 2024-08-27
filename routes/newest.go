@@ -10,7 +10,7 @@ func NewestPage(w http.ResponseWriter, r CompatRequest) error {
 
 	r18 := r.Query("r18", "false")
 
-	works, err := core.GetNewestArtworks(r, worktype, r18)
+	works, err := core.GetNewestArtworks(r.Request, worktype, r18)
 	if err != nil {
 		return err
 	}

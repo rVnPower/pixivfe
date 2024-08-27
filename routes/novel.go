@@ -16,26 +16,26 @@ func NovelPage(w http.ResponseWriter, r CompatRequest) error {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	novel, err := core.GetNovelByID(r, id)
+	novel, err := core.GetNovelByID(r.Request, id)
 	if err != nil {
 		return err
 	}
 
-	related, err := core.GetNovelRelated(r, id)
+	related, err := core.GetNovelRelated(r.Request, id)
 	if err != nil {
 		return err
 	}
 
-	user, err := core.GetUserBasicInformation(r, novel.UserID)
+	user, err := core.GetUserBasicInformation(r.Request, novel.UserID)
 	if err != nil {
 		return err
 	}
 
-	fontType := session.GetCookie(r, session.Cookie_NovelFontType)
+	fontType := session.GetCookie(r.Request, session.Cookie_NovelFontType)
 	if fontType == "" {
 		fontType = "gothic"
 	}
-	viewMode := session.GetCookie(r, session.Cookie_NovelViewMode)
+	viewMode := session.GetCookie(r.Request, session.Cookie_NovelViewMode)
 	if viewMode == "" {
 		viewMode = strconv.Itoa(novel.Settings.ViewMode)
 	}

@@ -59,8 +59,8 @@ func pixivPostRequest(r *fiber.Ctx, url, payload, token, csrf string, isJSON boo
 }
 
 func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r)
-	csrf := session.GetCookie(r, session.Cookie_CSRF)
+	token := session.GetPixivToken(r.Request)
+	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(r)
@@ -86,8 +86,8 @@ func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r)
-	csrf := session.GetCookie(r, session.Cookie_CSRF)
+	token := session.GetPixivToken(r.Request)
+	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(r)
@@ -109,8 +109,8 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r)
-	csrf := session.GetCookie(r, session.Cookie_CSRF)
+	token := session.GetPixivToken(r.Request)
+	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(r)

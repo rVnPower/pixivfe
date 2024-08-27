@@ -9,7 +9,7 @@ import (
 func DiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
 	mode := r.Query("mode", "safe")
 
-	works, err := core.GetDiscoveryArtwork(r, mode)
+	works, err := core.GetDiscoveryArtwork(r.Request, mode)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func DiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
 func NovelDiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
 	mode := r.Query("mode", "safe")
 
-	works, err := core.GetDiscoveryNovels(r, mode)
+	works, err := core.GetDiscoveryNovels(r.Request, mode)
 	if err != nil {
 		return err
 	}

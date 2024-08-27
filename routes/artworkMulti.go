@@ -34,7 +34,7 @@ func ArtworkMultiPage(w http.ResponseWriter, r CompatRequest) error {
 		go func(i int, id string) {
 			defer wg.Done()
 
-			illust, err := core.GetArtworkByID(r, id, false)
+			illust, err := core.GetArtworkByID(r.Request, id, false)
 			if err != nil {
 				artworks[i] = core.Illust{
 					Title: err.Error(), // this might be flaky

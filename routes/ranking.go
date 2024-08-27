@@ -18,7 +18,7 @@ func RankingPage(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	works, err := core.GetRanking(r, mode, content, date, page)
+	works, err := core.GetRanking(r.Request, mode, content, date, page)
 	if err != nil {
 		return err
 	}
