@@ -11,7 +11,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func pixivPostRequest(r *fiber.Ctx, url, payload, token, csrf string, isJSON bool) error {
+func pixivPostRequest(r CompatRequest, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
@@ -63,7 +63,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	id := r.Params("id")
@@ -82,7 +82,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return r.SendString("Success")
+	return SendString(w, "Success")
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
@@ -90,7 +90,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	id := r.Params("id")
@@ -105,7 +105,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return r.SendString("Success")
+	return SendString(w, "Success")
 }
 
 func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
@@ -113,7 +113,7 @@ func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
 	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	id := r.Params("id")
@@ -127,5 +127,11 @@ func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return r.SendString("Success")
+	return SendString(w, "Success")
+}
+
+func SendString(w http.ResponseWriter, text string) error {
+	w.Header().Set("content-type", "text/plain")
+	_, err :=  w.Write([]byte(text))
+	return err
 }

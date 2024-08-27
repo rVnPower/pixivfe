@@ -58,3 +58,12 @@ func (r CompatRequest) Params(name string, defaultValue ...string) string {
 		}
 	}
 }
+
+func RedirectToRoute(w http.ResponseWriter, r CompatRequest, path string, query_params map[string]string, code int) error {
+	query := url.Values{}
+	for k, v := range query_params {
+		query.Add(k, v)
+	}
+	http.Redirect(w, r.Request, path+query.Encode(), code)
+	return nil
+}

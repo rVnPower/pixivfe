@@ -21,7 +21,7 @@ func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
 	}
-	category := core.UserArtCategory(r.Request.Params("category", string(core.UserArt_Any)))
+	category := core.UserArtCategory(r.Params("category", string(core.UserArt_Any)))
 	err := category.Validate()
 	if err != nil {
 		return userPageData{}, err

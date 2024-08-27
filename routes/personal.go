@@ -18,32 +18,32 @@ func LoginUserPage(w http.ResponseWriter, r CompatRequest) error {
 	token := session.GetPixivToken(r.Request)
 
 	if token == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	r.Redirect("/users/" + userId[0])
+	http.Redirect(w, r.Request, "/users/" + userId[0], http.StatusSeeOther)
 	return nil
 }
 
 func LoginBookmarkPage(w http.ResponseWriter, r CompatRequest) error {
 	token := session.GetPixivToken(r.Request)
 	if token == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	r.Redirect("/users/" + userId[0] + "/bookmarks#checkpoint")
+	http.Redirect(w, r.Request, "/users/" + userId[0] + "/bookmarks#checkpoint", http.StatusSeeOther)
 	return nil
 }
 
 func FollowingWorksPage(w http.ResponseWriter, r CompatRequest) error {
 	if token := session.GetPixivToken(r.Request); token == "" {
-		return PromptUserToLoginPage(r)
+		return PromptUserToLoginPage(w, r)
 	}
 
 	mode := r.Query("mode", "all")
