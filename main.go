@@ -20,6 +20,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/template"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
@@ -55,7 +56,7 @@ func main() {
 	if config.GlobalServerConfig.InDevelopment {
 		core.CreateResponseAuditFolder()
 	}
-	routes.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
+	template.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
 
 	router := defineRoutes()
 
@@ -89,7 +90,7 @@ func main() {
 				code := http.StatusInternalServerError
 				w.WriteHeader(code)
 				// Send custom error page
-				err = routes.Render(w, r, routes.Data_error{Title: "Error", Error: err})
+				err = template.Render(w, r, routes.Data_error{Title: "Error", Error: err})
 				if err != nil {
 					err = utils.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
 					if err != nil {
