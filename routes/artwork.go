@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-func ArtworkPage(w http.ResponseWriter, r CompatRequest) error {
-	id := r.Params("id")
+func ArtworkPage(w http.ResponseWriter, r *http.Request) error {
+	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	illust, err := core.GetArtworkByID(r.Request, id, true)
+	illust, err := core.GetArtworkByID(r, id, true)
 	if err != nil {
 		return err
 	}

@@ -8,10 +8,11 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"github.com/tidwall/gjson"
 )
 
-func pixivPostRequest(r CompatRequest, url, payload, token, csrf string, isJSON bool) error {
+func pixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
@@ -58,15 +59,15 @@ func pixivPostRequest(r CompatRequest, url, payload, token, csrf string, isJSON 
 	return nil
 }
 
-func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r.Request)
-	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
+func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(w, r)
 	}
 
-	id := r.Params("id")
+	id := GetPathVar(r, "id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
@@ -82,19 +83,19 @@ func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	RedirectToWhenceYouCame(w, r)
+	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }
 
-func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r.Request)
-	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
+func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(w, r)
 	}
 
-	id := r.Params("id")
+	id := GetPathVar(r, "id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
@@ -106,19 +107,19 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	RedirectToWhenceYouCame(w, r)
+	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }
 
-func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r.Request)
-	csrf := session.GetCookie(r.Request, session.Cookie_CSRF)
+func LikeRoute(w http.ResponseWriter, r *http.Request) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
 		return PromptUserToLoginPage(w, r)
 	}
 
-	id := r.Params("id")
+	id := GetPathVar(r, "id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
@@ -129,6 +130,6 @@ func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	RedirectToWhenceYouCame(w, r)
+	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }

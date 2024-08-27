@@ -1,19 +1,19 @@
 package routes
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
-func IndexPage(w http.ResponseWriter, r CompatRequest) error {
+func IndexPage(w http.ResponseWriter, r *http.Request) error {
 	// If token is set, do the landing request...
-	if token := session.GetPixivToken(r.Request); token != "" {
-		mode := r.Query("mode", "all")
+	if token := session.GetPixivToken(r); token != "" {
+		mode := GetQueryParam(r, "mode", "all")
 
-		works, err := core.GetLanding(r.Request, mode)
+		works, err := core.GetLanding(r, mode)
 
 		if err != nil {
 			return err
@@ -27,7 +27,7 @@ func IndexPage(w http.ResponseWriter, r CompatRequest) error {
 	}
 
 	// ...otherwise, default to today's illustration ranking
-	works, err := core.GetRanking(r.Request, "daily", "illust", "", "1")
+	works, err := core.GetRanking(r, "daily", "illust", "", "1")
 	if err != nil {
 		return err
 	}
@@ -38,10 +38,10 @@ func IndexPage(w http.ResponseWriter, r CompatRequest) error {
 	})
 }
 
-func Oembed(w http.ResponseWriter, r CompatRequest) error {
-	pageURL := r.BaseURL()
-	artistName := r.Query("a", "")
-	artistURL := r.Query("u", "")
+func Oembed(w http.ResponseWriter, r *http.Request) error {
+	pageURL := utils.Origin(r)
+	artistName := GetQueryParam(r, "a", "")
+	artistURL := GetQueryParam(r, "u", "")
 
 	data := map[string]any{
 		"version":       "1.0",
@@ -52,5 +52,6 @@ func Oembed(w http.ResponseWriter, r CompatRequest) error {
 		"author_url":    artistURL,
 	}
 
-	return json.NewEncoder(w).Encode(data)
+	utils.SendJson(w, data)
+	return nil
 }
