@@ -28,3 +28,6 @@ Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
 ## todo
 
 - correct redirect status codes. currently i put in whatever.
+- test ?r=/redirect_to
+- limiter
+- caching

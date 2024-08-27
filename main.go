@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -55,114 +56,6 @@ func main() {
 	}
 	routes.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
 
-	// server := fiber.New(fiber.Config{
-	// 	AppName:                 "PixivFE",
-	// 	DisableStartupMessage:   true,
-	// 	Prefork:                 false,
-	// 	JSONEncoder:             json.Marshal,
-	// 	JSONDecoder:             json.Unmarshal,
-	// 	EnableTrustedProxyCheck: true,
-	// 	TrustedProxies:          []string{"0.0.0.0/0"},
-	// 	ProxyHeader:             fiber.HeaderXForwardedFor,
-	// 	ErrorHandler: func(r *http.Request, err error) error {
-	// 		log.Println(err)
-
-	// 		// Status code defaults to 500
-	// 		code := fiber.StatusInternalServerError
-
-	// 		// // Retrieve the custom status code if it's a *fiber.Error
-	// 		// var e *fiber.Error
-	// 		// if errors.As(err, &e) {
-	// 		// 	code = e.Code
-	// 		// }
-
-	// 		// Send custom error page
-	// 		r.Status(code)
-	// 		err = routes.Render(w, r, routes.Data_error{Title: "Error", Error: err})
-	// 		if err != nil {
-	// 			return r.Status(code).SendString(fmt.Sprintf("Internal Server Error: %s", err))
-	// 		}
-
-	// 		return nil
-	// 	},
-	// })
-
-	// todo: limiter
-	// if config.GlobalServerConfig.RequestLimit > 0 {
-	// 	keyedSleepingSpot := kmutex.New()
-	// 	server.Use(limiter.New(limiter.Config{
-	// 		Next:              CanRequestSkipLimiter,
-	// 		Expiration:        30 * time.Second,
-	// 		Max:               config.GlobalServerConfig.RequestLimit,
-	// 		LimiterMiddleware: limiter.SlidingWindow{},
-	// 		LimitReached: func(r *http.Request) error {
-	// 			// limit response throughput by pacing, since not every bot reads X-RateLimit-*
-	// 			// on limit reached, they just have to wait
-	// 			// the design of this means that if they send multiple requests when reaching rate limit, they will wait even longer (since `retryAfter` is calculated before anything has slept)
-	// 			retryAfter_s := r.GetRespHeader(fiber.HeaderRetryAfter)
-	// 			retryAfter, err := strconv.ParseUint(retryAfter_s, 10, 64)
-	// 			if err != nil {
-	// 				log.Panicf("response header 'RetryAfter' should be a number: %v", err)
-	// 			}
-	// 			requestIP := r.IP()
-	// 			refcount := keyedSleepingSpot.Lock(requestIP)
-	// 			defer keyedSleepingSpot.Unlock(requestIP)
-	// 			if refcount >= 4 { // on too much concurrent requests
-	// 				// todo: maybe blackhole `requestIP` here
-	// 				log.Println("Limit Reached (Hard)!", requestIP)
-	// 				// close the connection immediately
-	// 				_ = r.Context().Conn().Close()
-	// 				return nil
-	// 			}
-
-	// 			// sleeping
-	// 			// here, sleeping is not the best solution.
-	// 			// todo: close this connection when this IP reaches hard limit
-	// 			dur := time.Duration(retryAfter) * time.Second
-	// 			log.Println("Limit Reached (Soft)! Sleeping for ", dur)
-	// 			ctx, cancel := context.WithTimeout(r.Context(), dur)
-	// 			defer cancel()
-	// 			<-ctx.Done()
-
-	// 			return r.Next()
-	// 		},
-	// 	}))
-	// }
-
-	// todo: caching
-	// if !config.GlobalServerConfig.InDevelopment {
-	// 	server.Use(cache.New(
-	// 		cache.Config{
-	// 			Next: func(r *http.Request) bool {
-	// 				resp_code := r.Response().StatusCode()
-	// 				if resp_code < 200 || resp_code >= 300 {
-	// 					return true
-	// 				}
-
-	// 				// Disable cache for settings page
-	// 				return strings.Contains(r.Path(), "/settings") || r.Path() == "/"
-	// 			},
-	// 			Expiration:           5 * time.Minute,
-	// 			CacheControl:         true,
-	// 			StoreResponseHeaders: true,
-
-	// 			KeyGenerator: func(r *http.Request) string {
-	// 				key := fiber_utils.CopyString(r.OriginalURL())
-	// 				for _, cookieName := range session.AllCookieNames {
-	// 					cookieValue := session.GetCookie(r.Request, cookieName)
-	// 					if cookieValue != "" {
-	// 						key += "\x00\x00"
-	// 						key += string(cookieName)
-	// 						key += "\x00"
-	// 						key += cookieValue
-	// 					}
-	// 				}
-	// 				return key
-	// 			},
-	// 		},
-	// 	))
-	// }
-
 	router := defineRoutes()
 
 	main_handler := func(w_ http.ResponseWriter, r *http.Request) {
@@ -177,19 +70,36 @@ func main() {
 
 		setGlobalHeaders(w, r)
 
+		// redirect any request with ?r=url
+		redirect_to := r.URL.Query().Get("r")
+		if redirect_to != "" {
+			// could this be unsafe since this redirects to any website?
+			http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+		}
+
 		router.ServeHTTP(w, r)
 
-		// todo: test this
-		// redirect any request with ?r=url
-		ret := r.URL.Query().Get("r")
-		if ret != "" {
-			// could this be unsafe since this redirects to any website?
-			http.Redirect(w, r, ret, http.StatusTemporaryRedirect)
-		}
+		CatchError(func(w http.ResponseWriter, r routes.CompatRequest) error {
+			err := GetUserContext(r.Request).err
+			if err != nil { // error handler
+				log.Println(err)
+				code := http.StatusInternalServerError
+				w.WriteHeader(code)
+				// Send custom error page
+				err = routes.Render(w, r, routes.Data_error{Title: "Error", Error: err})
+				if err != nil {
+					err = routes.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
+					if err != nil {
+						return err
+					}
+				}
+			}
+			return nil
+		})(w, r)
 
 		end_time := time.Now()
 
-		if !CanRequestSkipLogger(r) {
+		if !CanRequestSkipLogger(r) { // logger
 			time := start_time
 			latency := end_time.Sub(start_time)
 			ip := r.RemoteAddr
@@ -259,14 +169,18 @@ func setGlobalHeaders(w http.ResponseWriter, r *http.Request) {
 func serveFile(filename string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, filename) }
 }
+
+func handlePrefix(router *mux.Router, pathPrefix string, handler http.Handler) *mux.Route {
+	return router.PathPrefix(pathPrefix).Handler(http.StripPrefix(pathPrefix, handler))
+}
 func defineRoutes() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
-	router.Handle("/img/", http.FileServer(http.Dir("./assets/img")))
-	router.Handle("/css/", http.FileServer(http.Dir("./assets/css")))
-	router.Handle("/js/", http.FileServer(http.Dir("./assets/js")))
+	handlePrefix(router, "/img/", http.FileServer(http.Dir("./assets/img")))
+	handlePrefix(router, "/css/", http.FileServer(http.Dir("./assets/css")))
+	handlePrefix(router, "/js/", http.FileServer(http.Dir("./assets/js")))
 
 	// Routes
 	router.HandleFunc("/", CatchError(routes.IndexPage)).Methods("GET")
@@ -277,34 +191,34 @@ func defineRoutes() *mux.Router {
 	router.HandleFunc("/ranking", CatchError(routes.RankingPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPicker)).Methods("POST")
-	router.HandleFunc("/users/:id.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
-	router.HandleFunc("/users/:id/:category.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
-	router.HandleFunc("/users/:id/:category?", CatchError(routes.UserPage)).Methods("GET")
-	router.HandleFunc("/artworks/:id/", CatchError(routes.ArtworkPage)).Methods("GET")
-	router.HandleFunc("/artworks-multi/:ids/", CatchError(routes.ArtworkMultiPage)).Methods("GET")
-	router.HandleFunc("/novel/:id/", CatchError(routes.NovelPage)).Methods("GET")
+	router.HandleFunc("/users/{id}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
+	router.HandleFunc("/users/{id}/{category}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
+	router.HandleFunc("/users/{id}", CatchError(routes.UserPage)).Methods("GET")
+	router.HandleFunc("/users/{id}/{category}", CatchError(routes.UserPage)).Methods("GET")
+	router.HandleFunc("/artworks/{id}/", CatchError(routes.ArtworkPage)).Methods("GET")
+	router.HandleFunc("/artworks-multi/{ids}/", CatchError(routes.ArtworkMultiPage)).Methods("GET")
+	router.HandleFunc("/novel/{id}/", CatchError(routes.NovelPage)).Methods("GET")
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
-	router.HandleFunc("/pixivision/a/:id", CatchError(routes.PixivisionArticlePage)).Methods("GET")
+	router.HandleFunc("/pixivision/a/{id}", CatchError(routes.PixivisionArticlePage)).Methods("GET")
 
 	// Settings group
-	settings := router.NewRoute().Path("/settings").Subrouter()
-	settings.HandleFunc("/", CatchError(routes.SettingsPage)).Methods("GET")
-	settings.HandleFunc("/:type/:noredirect?", CatchError(routes.SettingsPost)).Methods("POST")
+	router.HandleFunc("/settings", CatchError(routes.SettingsPage)).Methods("GET")
+	router.HandleFunc("/settings/{type}", CatchError(routes.SettingsPost)).Methods("POST")
+	router.HandleFunc("/settings/{type}/{noredirect}?", CatchError(routes.SettingsPost)).Methods("POST")
 
 	// Personal group
-	self := router.NewRoute().Path("/self").Subrouter()
-	self.HandleFunc("/", CatchError(routes.LoginUserPage)).Methods("GET")
-	self.HandleFunc("/followingWorks", CatchError(routes.FollowingWorksPage)).Methods("GET")
-	self.HandleFunc("/bookmarks", CatchError(routes.LoginBookmarkPage)).Methods("GET")
-	self.HandleFunc("/addBookmark/:id", CatchError(routes.AddBookmarkRoute)).Methods("GET")
-	self.HandleFunc("/deleteBookmark/:id", CatchError(routes.DeleteBookmarkRoute)).Methods("GET")
-	self.HandleFunc("/like/:id", CatchError(routes.LikeRoute)).Methods("GET")
+	router.HandleFunc("/self", CatchError(routes.LoginUserPage)).Methods("GET")
+	router.HandleFunc("/self/followingWorks", CatchError(routes.FollowingWorksPage)).Methods("GET")
+	router.HandleFunc("/self/bookmarks", CatchError(routes.LoginBookmarkPage)).Methods("GET")
+	router.HandleFunc("/self/addBookmark/{id}", CatchError(routes.AddBookmarkRoute)).Methods("GET")
+	router.HandleFunc("/self/deleteBookmark/{id}", CatchError(routes.DeleteBookmarkRoute)).Methods("GET")
+	router.HandleFunc("/self/like/{id}", CatchError(routes.LikeRoute)).Methods("GET")
 
 	// Oembed group
 	router.HandleFunc("/oembed", CatchError(routes.Oembed)).Methods("GET")
 
-	router.HandleFunc("/tags/:name", CatchError(routes.TagPage)).Methods("GET")
-	router.HandleFunc("/tags/:name", CatchError(routes.TagPage)).Methods("POST")
+	router.HandleFunc("/tags/{name}", CatchError(routes.TagPage)).Methods("GET")
+	router.HandleFunc("/tags/{name}", CatchError(routes.TagPage)).Methods("POST")
 	router.HandleFunc("/tags", CatchError(routes.TagPage)).Methods("GET")
 	router.HandleFunc("/tags", CatchError(routes.AdvancedTagPost)).Methods("POST")
 
@@ -314,10 +228,13 @@ func defineRoutes() *mux.Router {
 	}).Methods("GET")
 
 	// Proxy routes
-	proxy := router.NewRoute().Path("/proxy").Subrouter()
-	proxy.HandleFunc("/i.pximg.net/*", CatchError(routes.IPximgProxy)).Methods("GET")
-	proxy.HandleFunc("/s.pximg.net/*", CatchError(routes.SPximgProxy)).Methods("GET")
-	proxy.HandleFunc("/ugoira.com/*", CatchError(routes.UgoiraProxy)).Methods("GET")
+	handlePrefix(router, "/proxy/i.pximg.net/", CatchError(routes.IPximgProxy)).Methods("GET")
+	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
+	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
+
+	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r routes.CompatRequest) error {
+		return errors.New("Route not found")
+	}))
 
 	return router
 }
