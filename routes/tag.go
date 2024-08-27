@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/template"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
@@ -49,7 +50,7 @@ func TagPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	urlc := utils.PartialURL{Path: "tags", Query: queries.ReturnMap()}
+	urlc := template.PartialURL{Path: "tags", Query: queries.ReturnMap()}
 
 	return Render(w, r, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
 }

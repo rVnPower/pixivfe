@@ -1,19 +1,26 @@
-package utils
+package template
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type PartialURL struct {
 	Path  string
 	Query map[string]string
 }
 
+func LowercaseFirstChar(s string) string {
+	return strings.ToLower(s[0:1]) + s[1:]
+}
+
 // Turn `url` into /path?other_key=other_value&`key`=
-func unfinishedQuery(url PartialURL, key string) string {
+func UnfinishedQuery(url PartialURL, key string) string {
 	result := fmt.Sprintf("/%s", url.Path)
 	first_query_pair := true
 
 	for k, v := range url.Query {
-		k = lowercaseFirstChar(k)
+		k = LowercaseFirstChar(k)
 
 		if k == key {
 			continue
@@ -45,6 +52,6 @@ func unfinishedQuery(url PartialURL, key string) string {
 	return result
 }
 
-func replaceQuery(url PartialURL, key string, value string) string {
-	return unfinishedQuery(url, key) + value
+func ReplaceQuery(url PartialURL, key string, value string) string {
+	return UnfinishedQuery(url, key) + value
 }

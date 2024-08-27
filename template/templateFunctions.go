@@ -1,4 +1,4 @@
-package utils
+package template
 
 import (
 	"fmt"
@@ -247,10 +247,6 @@ func SwitchButtonAttributes(baseURL, selection, currentSelection string) string 
 	return fmt.Sprintf(`href=%s%s class=switch-button selected=%s`, baseURL, selection, cur)
 }
 
-func lowercaseFirstChar(s string) string {
-	return strings.ToLower(s[0:1]) + s[1:]
-}
-
 func GetTemplateFunctions() map[string]any {
 	return map[string]any{
 		"parseEmojis": func(s string) template.HTML {
@@ -316,8 +312,8 @@ func GetTemplateFunctions() map[string]any {
 		"floor": func(i float64) int {
 			return int(math.Floor(i))
 		},
-		"unfinishedQuery": unfinishedQuery,
-		"replaceQuery":    replaceQuery,
+		"unfinishedQuery": UnfinishedQuery,
+		"replaceQuery":    ReplaceQuery,
 		// "AttrGen": SwitchButtonAttributes,
 	}
 }

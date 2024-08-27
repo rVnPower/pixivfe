@@ -12,6 +12,7 @@ import (
 	"time"
 
 	config "codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"github.com/tidwall/gjson"
 )
 
@@ -90,8 +91,7 @@ func webAPIRequest(context context.Context, URL, token string) HttpResponse {
 	}
 
 	// Make the request
-	resp, err := http.DefaultClient.Do(req)
-
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		return HttpResponse{
 			Ok:         false,
@@ -100,6 +100,7 @@ func webAPIRequest(context context.Context, URL, token string) HttpResponse {
 			Message:    fmt.Sprintf("Failed to send a request to %s\n.", URL),
 		}
 	}
+	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

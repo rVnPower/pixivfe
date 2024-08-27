@@ -1,4 +1,4 @@
-package routes
+package template
 
 import (
 	"io"
@@ -27,7 +27,7 @@ func InitTemplatingEngine(DisableCache bool) {
 			jet.NewOSFileSystemLoader("assets/views"),
 		)
 	}
-	for fn_name, fn := range utils.GetTemplateFunctions() {
+	for fn_name, fn := range GetTemplateFunctions() {
 		views.AddGlobal(fn_name, fn)
 	}
 }

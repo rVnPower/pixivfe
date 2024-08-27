@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 
 	"golang.org/x/net/html"
 )
@@ -49,7 +50,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (template
 	// 	Value: token,
 	// })
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		return "", err
 	}
