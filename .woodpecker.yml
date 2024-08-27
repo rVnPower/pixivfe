@@ -1,6 +1,6 @@
 variables:
   - &alpine_image 'docker.io/alpine:3.19'
-  - path: &when_path
+  - path: &docs_path
       - 'docs/**'
 
 steps:
