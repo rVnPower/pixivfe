@@ -31,7 +31,7 @@ steps:
   deploy-docs:
     image: codeberg.org/xfix/plugin-codeberg-pages-deploy:1
     settings:
-      site_dir: site
+      folder: site
       ssh_key:
         from_secret: DOCS_SSH_KEY
     when:
