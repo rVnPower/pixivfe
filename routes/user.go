@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 type userPageData struct {
@@ -16,7 +16,7 @@ type userPageData struct {
 	page      int
 }
 
-func fetchData(c *fiber.Ctx, getTags bool) (userPageData, error) {
+func fetchData(c *http.Request, getTags bool) (userPageData, error) {
 	id := c.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
@@ -53,7 +53,7 @@ func fetchData(c *fiber.Ctx, getTags bool) (userPageData, error) {
 	return userPageData{user, category, pageLimit, page}, nil
 }
 
-func UserPage(c *fiber.Ctx) error {
+func UserPage(c *http.Request) error {
 	data, err := fetchData(c, true)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func UserPage(c *fiber.Ctx) error {
 	return Render(c, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
 }
 
-func UserAtomFeed(c *fiber.Ctx) error {
+func UserAtomFeed(c *http.Request) error {
 	data, err := fetchData(c, false)
 	if err != nil {
 		return err

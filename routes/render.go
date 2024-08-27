@@ -3,6 +3,8 @@ package routes
 import (
 	"io"
 	"log"
+	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 
@@ -10,14 +12,14 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 
 	"github.com/CloudyKit/jet/v6"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 // global variable, yes.
 var views *jet.Set
 
-func InitTemplatingEngine(InDevelopment bool) {
-	if InDevelopment {
+func InitTemplatingEngine(DisableCache bool) {
+	if DisableCache {
 		views = jet.NewSet(
 			jet.NewOSFileSystemLoader("assets/views"),
 			jet.InDevelopmentMode(), // disable cache
@@ -32,30 +34,11 @@ func InitTemplatingEngine(InDevelopment bool) {
 	}
 }
 
-func Render[T any](c *fiber.Ctx, data T) error {
+func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 	// Pass in values that we want to be available to all pages here
-	token := session.GetPixivToken(c)
-	pageURL := c.BaseURL() + c.OriginalURL()
 
-	cookies := map[string]string{}
-	for _, name := range session.AllCookieNames {
-		value := session.GetCookie(c, name)
-		cookies[string(name)] = value
-	}
-
-	variables := jet.VarMap{}
-
-	// The middleware at line 99 in `main.go` cannot bind these values below if we use this function.
-	variables.Set("BaseURL", c.BaseURL())
-	variables.Set("OriginalURL", c.OriginalURL())
-	variables.Set("PageURL", pageURL)
-	variables.Set("LoggedIn", token != "")
-	variables.Set("Queries", c.Queries())
-	variables.Set("CookieList", cookies)
-
-	c.Context().SetContentType("text/html; charset=utf-8")
-
-	return RenderInner(c.Response().BodyWriter(), variables, data)
+	r.Response.Header.Set("content-type", "text/html; charset=utf-8")
+	return RenderInner(w, GetTemplatingVariables(r), data)
 }
 
 func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
@@ -74,17 +57,37 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 	return template.Execute(w, variables, data)
 }
 
-// func structToMap[T any](data T) map[string]any {
-// 	result := map[string]any{}
-// 	Type := reflect.TypeFor[T]()
-// 	for i := 0; i < Type.NumField(); i += 1 {
-// 		field := Type.Field(i)
-// 		result[field.Name] = fieldName(data, field.Name)
-// 	}
-// 	return result
-// }
+func GetTemplatingVariables(r *http.Request) jet.VarMap {
+	// Pass in values that we want to be available to all pages here
+	token := session.GetPixivToken(r)
+	baseURL := (&url.URL{
+		Scheme: r.URL.Scheme,
+		Opaque: r.URL.Opaque,
+		User:   r.URL.User,
+		Host:   r.URL.Host,
+	}).String()
+	originalURL := (&url.URL{
+		Path:        r.URL.Path,
+		RawPath:     r.URL.RawPath,
+		OmitHost:    r.URL.OmitHost,
+		ForceQuery:  r.URL.ForceQuery,
+		RawQuery:    r.URL.RawQuery,
+		Fragment:    r.URL.Fragment,
+		RawFragment: r.URL.RawFragment,
+	}).String()
+	pageURL := r.URL.String()
 
-// // assumes that the field `field_name` exists, panics otherwise
-// func fieldName[T any](data T, field_name string) any {
-// 	return reflect.ValueOf(data).FieldByName(field_name).Interface()
-// }
+	cookies := map[string]string{}
+	for _, name := range session.AllCookieNames {
+		value := session.GetCookie(r, name)
+		cookies[string(name)] = value
+	}
+
+	return jet.VarMap{}.
+		Set("BaseURL", baseURL).
+		Set("OriginalURL", originalURL).
+		Set("PageURL", pageURL).
+		Set("LoggedIn", token != "").
+		Set("Queries", r.URL.Query().Encode()).
+		Set("CookieList", cookies)
+}

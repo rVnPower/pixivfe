@@ -4,10 +4,10 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivision"
 
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func PixivisionHomePage(c *fiber.Ctx) error {
+func PixivisionHomePage(c *http.Request) error {
 	// Note: don't process images here?
 	data, err := pixivision.GetHomepage()
 	if err != nil {
@@ -21,7 +21,7 @@ func PixivisionHomePage(c *fiber.Ctx) error {
 	return Render(c, Data_pixivision_index{Data: data})
 }
 
-func PixivisionArticlePage(c *fiber.Ctx) error {
+func PixivisionArticlePage(c *http.Request) error {
 	// Note: don't process images here?
 	id := c.Params("id")
 	data, err := pixivision.GetArticle(id)

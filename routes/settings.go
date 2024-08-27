@@ -12,13 +12,13 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	httpc "codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 // todo: allow clear proxy
 // todo: allow clear all settings
 
-func setToken(c *fiber.Ctx) error {
+func setToken(c *http.Request) error {
 	// Parse the value from the form
 	token := c.FormValue("token")
 	if token != "" {
@@ -69,7 +69,7 @@ func setToken(c *fiber.Ctx) error {
 	return errors.New("You submitted an empty/invalid form.")
 }
 
-func setImageServer(c *fiber.Ctx) error {
+func setImageServer(c *http.Request) error {
 	// Parse the value from the form
 	token := c.FormValue("image-proxy")
 	if token != "" {
@@ -80,7 +80,7 @@ func setImageServer(c *fiber.Ctx) error {
 	return nil
 }
 
-func setNovelFontType(c *fiber.Ctx) error {
+func setNovelFontType(c *http.Request) error {
 	fontType := c.FormValue("font-type")
 	if fontType != "" {
 		session.SetCookie(c, session.Cookie_NovelFontType, fontType)
@@ -89,7 +89,7 @@ func setNovelFontType(c *fiber.Ctx) error {
 	return nil
 }
 
-func setNovelViewMode(c *fiber.Ctx) error {
+func setNovelViewMode(c *http.Request) error {
 	viewMode := c.FormValue("view-mode")
 	if viewMode != "" {
 		session.SetCookie(c, session.Cookie_NovelViewMode, viewMode)
@@ -98,7 +98,7 @@ func setNovelViewMode(c *fiber.Ctx) error {
 	return nil
 }
 
-func setThumbnailToNewTab(c *fiber.Ctx) error {
+func setThumbnailToNewTab(c *http.Request) error {
 	ttnt := c.FormValue("ttnt")
 	if ttnt == "_blank" || ttnt == "_self" {
 		session.SetCookie(c, session.Cookie_ThumbnailToNewTab, ttnt)
@@ -107,7 +107,7 @@ func setThumbnailToNewTab(c *fiber.Ctx) error {
 	return nil
 }
 
-func setArtworkPreview(c *fiber.Ctx) error {
+func setArtworkPreview(c *http.Request) error {
 	value := c.FormValue("app")
 	if value == "cover" || value == "button" || value == "" {
 		session.SetCookie(c, session.Cookie_ArtworkPreview, value)
@@ -116,13 +116,13 @@ func setArtworkPreview(c *fiber.Ctx) error {
 	return nil
 }
 
-func setLogout(c *fiber.Ctx) error {
+func setLogout(c *http.Request) error {
 	session.ClearCookie(c, session.Cookie_Token)
 	session.ClearCookie(c, session.Cookie_CSRF)
 	return nil
 }
 
-func setCookie(c *fiber.Ctx) error {
+func setCookie(c *http.Request) error {
 	key := c.FormValue("key")
 	value := c.FormValue("value")
 	for _, cookie_name := range session.AllCookieNames {
@@ -134,7 +134,7 @@ func setCookie(c *fiber.Ctx) error {
 	return fmt.Errorf("Invalid Cookie Name: %s", key)
 }
 
-func setRawCookie(c *fiber.Ctx) error {
+func setRawCookie(c *http.Request) error {
 	raw := c.FormValue("raw")
 	lines := strings.Split(raw, "\n")
 
@@ -156,16 +156,16 @@ func setRawCookie(c *fiber.Ctx) error {
 	return nil
 }
 
-func resetAll(c *fiber.Ctx) error {
+func resetAll(c *http.Request) error {
 	session.ClearAllCookies(c)
 	return nil
 }
 
-func SettingsPage(c *fiber.Ctx) error {
+func SettingsPage(c *http.Request) error {
 	return Render(c, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
-func SettingsPost(c *fiber.Ctx) error {
+func SettingsPost(c *http.Request) error {
 	// NOTE: VnPower: Future maintainers should leave this function alone.
 
 	t := c.Params("type")

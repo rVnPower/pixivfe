@@ -7,10 +7,10 @@ import (
 	"sync"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func ArtworkMultiPage(c *fiber.Ctx) error {
+func ArtworkMultiPage(c *http.Request) error {
 	ids_ := c.Params("ids")
 	ids := strings.Split(ids_, ",")
 

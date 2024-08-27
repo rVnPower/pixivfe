@@ -5,7 +5,7 @@ package session
 import (
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 type CookieName string
@@ -37,11 +37,11 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_ShowArtAI,
 }
 
-func GetCookie(c *fiber.Ctx, name CookieName, defaultValue ...string) string {
+func GetCookie(c *http.Request, name CookieName, defaultValue ...string) string {
 	return c.Cookies(string(name), defaultValue...)
 }
 
-func SetCookie(c *fiber.Ctx, name CookieName, value string) {
+func SetCookie(c *http.Request, name CookieName, value string) {
 	cookie := fiber.Cookie{
 		Name:  string(name),
 		Value: value,
@@ -57,7 +57,7 @@ func SetCookie(c *fiber.Ctx, name CookieName, value string) {
 
 var CookieExpireDelete = time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
 
-func ClearCookie(c *fiber.Ctx, name CookieName) {
+func ClearCookie(c *http.Request, name CookieName) {
 	cookie := fiber.Cookie{
 		Name:  string(name),
 		Value: "",
@@ -71,7 +71,7 @@ func ClearCookie(c *fiber.Ctx, name CookieName) {
 	c.Cookie(&cookie)
 }
 
-func ClearAllCookies(c *fiber.Ctx) {
+func ClearAllCookies(c *http.Request) {
 	for _, name := range AllCookieNames {
 		ClearCookie(c, name)
 	}

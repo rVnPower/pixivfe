@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+
 	"golang.org/x/net/html"
 )
 
@@ -34,7 +34,7 @@ func get_weekday(n time.Weekday) int {
 // note(@iacore):
 // so the funny thing about Pixiv is that they will return this month's data for a request of a future date
 // is it a bug or a feature?
-func GetRankingCalendar(c *fiber.Ctx, mode string, year, month int) (template.HTML, error) {
+func GetRankingCalendar(c *http.Request, mode string, year, month int) (template.HTML, error) {
 	token := session.GetPixivToken(c)
 	URL := GetRankingCalendarURL(mode, year, month)
 

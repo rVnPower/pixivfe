@@ -4,10 +4,10 @@ import (
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func RankingPage(c *fiber.Ctx) error {
+func RankingPage(c *http.Request) error {
 	mode := c.Query("mode", "daily")
 	content := c.Query("content", "all")
 	date := c.Query("date", "")

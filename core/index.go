@@ -5,7 +5,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 	"github.com/tidwall/gjson"
 )
 
@@ -31,7 +31,7 @@ type LandingArtworks struct {
 	RecommendByTags []RecommendedTags
 }
 
-func GetLanding(c *fiber.Ctx, mode string) (*LandingArtworks, error) {
+func GetLanding(c *http.Request, mode string) (*LandingArtworks, error) {
 	var pages struct {
 		Pixivision  []Pixivision `json:"pixivision"`
 		Follow      []int        `json:"follow"`

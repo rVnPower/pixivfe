@@ -3,10 +3,10 @@ package core
 import (
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func GetNewestArtworks(c *fiber.Ctx, worktype string, r18 string) ([]ArtworkBrief, error) {
+func GetNewestArtworks(c *http.Request, worktype string, r18 string) ([]ArtworkBrief, error) {
 	token := session.GetPixivToken(c)
 	URL := GetNewestArtworksURL(worktype, r18, "0")
 

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 type DateWrap struct {
@@ -33,7 +33,7 @@ func parseDate(t time.Time) DateWrap {
 	return d
 }
 
-func RankingCalendarPicker(c *fiber.Ctx) error {
+func RankingCalendarPicker(c *http.Request) error {
 	mode := c.FormValue("mode", "daily")
 	date := c.FormValue("date", "")
 
@@ -45,7 +45,7 @@ func RankingCalendarPicker(c *fiber.Ctx) error {
 	})
 }
 
-func RankingCalendarPage(c *fiber.Ctx) error {
+func RankingCalendarPage(c *http.Request) error {
 	mode := c.Query("mode", "daily")
 	date := c.Query("date", "")
 
