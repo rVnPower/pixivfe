@@ -20,7 +20,7 @@ func makeRequest(w http.ResponseWriter, req *http.Request) error {
 }
 
 func SPximgProxy(w http.ResponseWriter, r CompatRequest) error {
-	URL := fmt.Sprintf("https://s.pximg.net/%s", r.Params("*"))
+	URL := fmt.Sprintf("https://s.pximg.net/%s", r.URL.Path)
 	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
@@ -29,7 +29,7 @@ func SPximgProxy(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func IPximgProxy(w http.ResponseWriter, r CompatRequest) error {
-	URL := fmt.Sprintf("https://i.pximg.net/%s", r.Params("*"))
+	URL := fmt.Sprintf("https://i.pximg.net/%s", r.URL.Path)
 	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func IPximgProxy(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func UgoiraProxy(w http.ResponseWriter, r CompatRequest) error {
-	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", r.Params("*"))
+	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", r.URL.Path)
 	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
