@@ -29,11 +29,10 @@ func setToken(w http.ResponseWriter, r CompatRequest) error {
 
 		// Make a test request to verify the token.
 		// THE TEST URL IS NSFW!
-		req, err := http.NewRequest("GET", "https://www.pixiv.net/en/artworks/115365120", nil)
-		if err != nil {
-			return err
-		}
-		req = req.WithContext(r.Context())
+		req, err := http.NewRequestWithContext(r.Context(), "GET", "https://www.pixiv.net/en/artworks/115365120", nil)
+  if err != nil {
+    return err
+  }
 		req.Header.Add("User-Agent", "Mozilla/5.0")
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",

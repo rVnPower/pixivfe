@@ -21,28 +21,28 @@ func makeRequest(w http.ResponseWriter, req *http.Request) error {
 
 func SPximgProxy(w http.ResponseWriter, r CompatRequest) error {
 	URL := fmt.Sprintf("https://s.pximg.net/%s", r.Params("*"))
-	req, err := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
 	}
-	return makeRequest(w, req.WithContext(r.Context()))
+	return makeRequest(w, req)
 }
 
 func IPximgProxy(w http.ResponseWriter, r CompatRequest) error {
 	URL := fmt.Sprintf("https://i.pximg.net/%s", r.Params("*"))
-	req, err := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Referer", "https://www.pixiv.net/")
-	return makeRequest(w, req.WithContext(r.Context()))
+	return makeRequest(w, req)
 }
 
 func UgoiraProxy(w http.ResponseWriter, r CompatRequest) error {
 	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", r.Params("*"))
-	req, err := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
 		return err
 	}
-	return makeRequest(w, req.WithContext(r.Context()))
+	return makeRequest(w, req)
 }
