@@ -82,7 +82,8 @@ func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return SendString(w, "Success")
+	RedirectToWhenceYouCame(w, r)
+	return nil
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
@@ -105,7 +106,8 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return SendString(w, "Success")
+	RedirectToWhenceYouCame(w, r)
+	return nil
 }
 
 func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
@@ -127,5 +129,6 @@ func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	return SendString(w, "Success")
+	RedirectToWhenceYouCame(w, r)
+	return nil
 }

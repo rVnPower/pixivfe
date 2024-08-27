@@ -1,24 +1,5 @@
 # Migrating from gofiber to net/http -- the plan
 
-- Config [already decoupled]
-- Templating [decoupled, waiting for integration]
-- Router 
-  features
-    - /users/:id/:category? (optional path segment)
-    - /i.pximg.net/* (wildcard)
-- Middleware
-  - Logging
-  - Rate limit (optional, could be loosely-coupled)
-  - Caching (optional, could be loosely-coupled)
-
-## Problem
-
-net/http handlers don't return errors. We have to make our own ServeMux that allows functions to return `error`, possibly.
-
-net/http expects handlers to panic on error, while we don't panic. We need to log the errors anyway.
-
-Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
-
 ## Tips
 
 - To access `/:abc`, use `r.PathValue("abc")`.
@@ -28,6 +9,8 @@ Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
 ## todo
 
 - correct redirect status codes. currently i put in whatever.
-- test ?r=/redirect_to
-- limiter
-- caching
+  - 303 StatusSeeOther: set method to GET
+  - 307 Temporary: method and body not changed
+  - 308 Permanent: method and body not changed
+- add limiter (maybe it should be in nginx)
+- add caching (maybe it should be in nginx)
