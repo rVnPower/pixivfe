@@ -1,5 +1,10 @@
+variables:
+  - &alpine_image 'docker.io/alpine:3.19'
+  - path: &when_path
+      - 'docs/**'
+
 steps:
-  - name: docker-build-image
+  docker-build-image:
     image: woodpeckerci/plugin-docker-buildx
     settings:
       dockerfile: Dockerfile
@@ -12,3 +17,23 @@ steps:
     when:
       branch: [ v2 ]
       event: [ tag, release, manual ]
+
+  generate-docs:
+    image: woodpeckerci/plugin-mkdocs:minimal
+    settings:
+      verbose: true
+    when:
+      branch: [ v2 ]
+      path: *docs_path
+      event: [ push, tag, release, manual ]
+
+  deploy-docs:
+    image: codeberg.org/xfix/plugin-codeberg-pages-deploy:1
+    settings:
+      folder: dist
+      ssh_key:
+        from_secret: DOCS_SSH_KEY
+    when:
+      branch: [ v2 ]
+      path: *docs_path
+      event: [ push, tag, release, manual ]
