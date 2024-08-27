@@ -6,8 +6,8 @@ import (
 	"net/http"
 )
 
-func GetNewestArtworks(c *http.Request, worktype string, r18 string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(c)
+func GetNewestArtworks(r *http.Request, worktype string, r18 string) ([]ArtworkBrief, error) {
+	token := session.GetPixivToken(r)
 	URL := GetNewestArtworksURL(worktype, r18, "0")
 
 	var body struct {
@@ -15,11 +15,11 @@ func GetNewestArtworks(c *http.Request, worktype string, r18 string) ([]ArtworkB
 		// LastId string
 	}
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	err = json.Unmarshal([]byte(resp), &body)
 	if err != nil {

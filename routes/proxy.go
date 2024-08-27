@@ -6,78 +6,43 @@ import (
 	"net/http"
 )
 
-func SPximgProxy(c *http.Request) error {
-	URL := fmt.Sprintf("https://s.pximg.net/%s", c.Params("*"))
-	req, err := http.NewRequest("GET", URL, nil)
-	if err != nil {
-		return err
-	}
-	req = req.WithContext(c.Context())
-
+func makeRequest(w http.ResponseWriter, req *http.Request) error {
 	// Make the request
 	resp, err := http.DefaultClient.Do(req)
-
 	if err != nil {
 		return err
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
+	w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
 
-	c.Set("Content-Type", resp.Header.Get("Content-Type"))
-
-	return c.Send([]byte(body))
+	_, err = io.Copy(w, resp.Body)
+	return err
 }
 
-func IPximgProxy(c *http.Request) error {
-	URL := fmt.Sprintf("https://i.pximg.net/%s", c.Params("*"))
+func SPximgProxy(w http.ResponseWriter, r CompatRequest) error {
+	URL := fmt.Sprintf("https://s.pximg.net/%s", r.Params("*"))
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return err
 	}
-	req = req.WithContext(c.Context())
+	return makeRequest(w, req.WithContext(r.Context()))
+}
+
+func IPximgProxy(w http.ResponseWriter, r CompatRequest) error {
+	URL := fmt.Sprintf("https://i.pximg.net/%s", r.Params("*"))
+	req, err := http.NewRequest("GET", URL, nil)
+	if err != nil {
+		return err
+	}
 	req.Header.Add("Referer", "https://www.pixiv.net/")
-
-	// Make the request
-	resp, err := http.DefaultClient.Do(req)
-
-	if err != nil {
-		return err
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	c.Set("Content-Type", resp.Header.Get("Content-Type"))
-
-	return c.Send([]byte(body))
+	return makeRequest(w, req.WithContext(r.Context()))
 }
 
-func UgoiraProxy(c *http.Request) error {
-	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", c.Params("*"))
+func UgoiraProxy(w http.ResponseWriter, r CompatRequest) error {
+	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", r.Params("*"))
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return err
 	}
-	req = req.WithContext(c.Context())
-
-	// Make the request
-	resp, err := http.DefaultClient.Do(req)
-
-	if err != nil {
-		return err
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	c.Set("Content-Type", resp.Header.Get("Content-Type"))
-
-	return c.Send([]byte(body))
+	return makeRequest(w, req.WithContext(r.Context()))
 }

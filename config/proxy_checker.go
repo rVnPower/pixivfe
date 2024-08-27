@@ -21,12 +21,12 @@ var (
 	stopChan            chan struct{}
 )
 
-func InitializeProxyChecker(c context.Context) {
+func InitializeProxyChecker(r context.Context) {
 	stopChan = make(chan struct{})
-	StartProxyChecker(c)
+	StartProxyChecker(r)
 }
 
-func StartProxyChecker(c context.Context) {
+func StartProxyChecker(r context.Context) {
 	go func() {
 		for {
 			select {
@@ -34,7 +34,7 @@ func StartProxyChecker(c context.Context) {
 				log.Println("Stopping proxy checker...")
 				return
 			default:
-				checkProxies(c)
+				checkProxies(r)
 				if t := GlobalServerConfig.ProxyCheckInterval; t > 0 {
 					time.Sleep(t)
 				} else {
@@ -50,7 +50,7 @@ func StopProxyChecker() {
 	close(stopChan)
 }
 
-func checkProxies(c context.Context) {
+func checkProxies(r context.Context) {
 	logln("Starting proxy check...")
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
@@ -62,7 +62,7 @@ func checkProxies(c context.Context) {
 		wg.Add(1)
 		go func(proxyURL string) {
 			defer wg.Done()
-			isWorking, resp := testProxy(c, proxyURL)
+			isWorking, resp := testProxy(r, proxyURL)
 			status := ""
 			if resp != nil {
 				status = resp.Status
@@ -83,13 +83,13 @@ func checkProxies(c context.Context) {
 	updateWorkingProxies(newWorkingProxies)
 }
 
-func testProxy(c context.Context, proxyBaseURL string) (bool, *http.Response) {
+func testProxy(r context.Context, proxyBaseURL string) (bool, *http.Response) {
 	client := &http.Client{Timeout: proxyCheckTimeout}
 
 	fullURL := fmt.Sprintf("%s%s", strings.TrimRight(proxyBaseURL, "/"), testImagePath)
 	logf("Testing proxy %s with full URL: %s", proxyBaseURL, fullURL)
 
-	req, err := http.NewRequestWithContext(c, "GET", fullURL, nil)
+	req, err := http.NewRequestWithContext(r, "GET", fullURL, nil)
 	if err != nil {
 		logf("Error creating request for proxy %s: %v", proxyBaseURL, err)
 		return false, nil

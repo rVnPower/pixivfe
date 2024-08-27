@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-func ArtworkPage(c *http.Request) error {
-	id := c.Params("id")
+func ArtworkPage(w http.ResponseWriter, r CompatRequest) error {
+	id := r.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	illust, err := core.GetArtworkByID(c, id, true)
+	illust, err := core.GetArtworkByID(r, id, true)
 	if err != nil {
 		return err
 	}
@@ -26,10 +26,10 @@ func ArtworkPage(c *http.Request) error {
 
 	// monkey patching. assuming illust.Images[_].Large is used
 	for _, img := range illust.Images {
-		PreloadImage(c, img.Large)
+		PreloadImage(r, img.Large)
 	}
 
-	return Render(c, Data_artwork{
+	return Render(w, r, Data_artwork{
 		Illust:          *illust,
 		Title:           illust.Title,
 		MetaDescription: metaDescription,
@@ -39,6 +39,6 @@ func ArtworkPage(c *http.Request) error {
 	})
 }
 
-func PreloadImage(c *http.Request, url string) {
-	c.Response().Header.Add("Link", fmt.Sprintf("<%s>; rel=preload; as=image", url))
+func PreloadImage(r *fiber.Ctx, url string) {
+	r.Response().Header.Add("Link", fmt.Sprintf("<%s>; rel=preload; as=image", url))
 }

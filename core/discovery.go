@@ -5,22 +5,22 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"net/http"
 	"github.com/tidwall/gjson"
+	"net/http"
 )
 
-func GetDiscoveryArtwork(c *http.Request, mode string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(c)
+func GetDiscoveryArtwork(r *http.Request, mode string) ([]ArtworkBrief, error) {
+	token := session.GetPixivToken(r)
 
 	URL := GetDiscoveryURL(mode, 100)
 
 	var artworks []ArtworkBrief
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 	if !gjson.Valid(resp) {
 		return nil, fmt.Errorf("Invalid JSON: %v", resp)
 	}
@@ -34,18 +34,18 @@ func GetDiscoveryArtwork(c *http.Request, mode string) ([]ArtworkBrief, error) {
 	return artworks, nil
 }
 
-func GetDiscoveryNovels(c *http.Request, mode string) ([]NovelBrief, error) {
-	token := session.GetPixivToken(c)
+func GetDiscoveryNovels(r *http.Request, mode string) ([]NovelBrief, error) {
+	token := session.GetPixivToken(r)
 
 	URL := GetDiscoveryNovelURL(mode, 100)
 
 	var novels []NovelBrief
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 	if !gjson.Valid(resp) {
 		return nil, fmt.Errorf("Invalid JSON: %v", resp)
 	}

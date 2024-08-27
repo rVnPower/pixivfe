@@ -5,15 +5,15 @@ import (
 	"net/http"
 )
 
-func NewestPage(c *http.Request) error {
-	worktype := c.Query("type", "illust")
+func NewestPage(w http.ResponseWriter, r CompatRequest) error {
+	worktype := r.Query("type", "illust")
 
-	r18 := c.Query("r18", "false")
+	r18 := r.Query("r18", "false")
 
-	works, err := core.GetNewestArtworks(c, worktype, r18)
+	works, err := core.GetNewestArtworks(r, worktype, r18)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, Data_newest{Items: works, Title: "Newest works"})
+	return Render(w, r, Data_newest{Items: works, Title: "Newest works"})
 }

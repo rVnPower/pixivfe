@@ -37,35 +37,31 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_ShowArtAI,
 }
 
-func GetCookie(c *http.Request, name CookieName, defaultValue ...string) string {
-	//return c.Cookies(string(name), defaultValue...)
-	if cookie, err := c.Cookie(string(name)); err != nil {
-		return cookie.Value
+func GetCookie(r *http.Request, name CookieName) string {
+	cookie, err := r.Cookie(string(name))
+	if err != nil {
+		return ""
 	}
-
-	// TODO: Hard-coded?
-	return defaultValue[0]
+	return cookie.Value
 }
 
-func SetCookie(c *http.Request, name CookieName, value string) {
-	cookie := http.Cookie{
+func SetCookie(w http.ResponseWriter, name CookieName, value string) {
+	http.SetCookie(w, &http.Cookie{
 		Name:  string(name),
 		Value: value,
 		Path:  "/",
 		// expires in 30 days from now
-		// Expires:  c.Context().Time().Add(30 * (24 * time.Hour)),
-		Expires:  time.Now().Add(30 * (24 * time.Hour)),
+		Expires:  r.Context().Time().Add(30 * (24 * time.Hour)),
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteStrictMode, // bye-bye cross site forgery
-	}
-	c.AddCookie(&cookie)
+	})
 }
 
 var CookieExpireDelete = time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
 
-func ClearCookie(c *http.Request, name CookieName) {
-	cookie := http.Cookie{
+func ClearCookie(w http.ResponseWriter, name CookieName) {
+	http.SetCookie(w, &http.Cookie{
 		Name:  string(name),
 		Value: "",
 		Path:  "/",
@@ -74,12 +70,11 @@ func ClearCookie(c *http.Request, name CookieName) {
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteStrictMode,
-	}
-	c.AddCookie(&cookie)
+	})
 }
 
-func ClearAllCookies(c *http.Request) {
+func ClearAllCookies(w http.ResponseWriter) {
 	for _, name := range AllCookieNames {
-		ClearCookie(c, name)
+		ClearCookie(w, name)
 	}
 }

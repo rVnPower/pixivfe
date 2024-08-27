@@ -1,46 +1,47 @@
 package routes
 
 import (
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"net/http"
 )
 
-func IndexPage(c *http.Request) error {
-
+func IndexPage(w http.ResponseWriter, r CompatRequest) error {
 	// If token is set, do the landing request...
-	if token := session.GetPixivToken(c); token != "" {
-		mode := c.Query("mode", "all")
+	if token := session.GetPixivToken(r); token != "" {
+		mode := r.Query("mode", "all")
 
-		works, err := core.GetLanding(c, mode)
+		works, err := core.GetLanding(r, mode)
 
 		if err != nil {
 			return err
 		}
 
-		return Render(c, Data_index{
-			Title:      "Landing",
-			Data:       *works,
+		return Render(w, r, Data_index{
+			Title:    "Landing",
+			Data:     *works,
 			LoggedIn: true,
 		})
 	}
 
 	// ...otherwise, default to today's illustration ranking
-	works, err := core.GetRanking(c, "daily", "illust", "", "1")
+	works, err := core.GetRanking(r, "daily", "illust", "", "1")
 	if err != nil {
 		return err
 	}
-	return Render(c, Data_index{
+	return Render(w, r, Data_index{
 		Title:       "Landing",
 		NoTokenData: works,
-		LoggedIn:  false,
+		LoggedIn:    false,
 	})
 }
 
-func Oembed(c *http.Request) error {
-	pageURL := c.BaseURL()
-	artistName := c.Query("a", "")
-	artistURL := c.Query("u", "")
+func Oembed(w http.ResponseWriter, r CompatRequest) error {
+	pageURL := r.BaseURL()
+	artistName := r.Query("a", "")
+	artistURL := r.Query("u", "")
 
 	data := fiber.Map{
 		"version":       "1.0",
@@ -51,5 +52,5 @@ func Oembed(c *http.Request) error {
 		"author_url":    artistURL,
 	}
 
-	return c.JSON(data)
+	return r.JSON(data)
 }

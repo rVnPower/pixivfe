@@ -9,12 +9,12 @@ import (
 	config "codeberg.org/vnpower/pixivfe/v2/config"
 )
 
-func GetPixivToken(c *http.Request) string {
-	return GetCookie(c, Cookie_Token)
+func GetPixivToken(r *http.Request) string {
+	return GetCookie(r, Cookie_Token)
 }
 
-func GetImageProxy(c *http.Request) url.URL {
-	value := GetCookie(c, Cookie_ImageProxy)
+func GetImageProxy(r *http.Request) url.URL {
+	value := GetCookie(r, Cookie_ImageProxy)
 	if value == "" {
 		// fall through to default case
 	} else {
@@ -28,29 +28,29 @@ func GetImageProxy(c *http.Request) url.URL {
 	return config.GlobalServerConfig.ProxyServer
 }
 
-func ProxyImageUrl(c *http.Request, s string) string {
-	proxyOrigin := GetImageProxyPrefix(c)
+func ProxyImageUrl(r *http.Request, s string) string {
+	proxyOrigin := GetImageProxyPrefix(r)
 	s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, proxyOrigin)
 	// s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, "/proxy/i.pximg.net")
 	s = strings.ReplaceAll(s, `https:\/\/s.pximg.net`, "/proxy/s.pximg.net")
 	return s
 }
 
-func ProxyImageUrlNoEscape(c *http.Request, s string) string {
-	proxyOrigin := GetImageProxyPrefix(c)
+func ProxyImageUrlNoEscape(r *http.Request, s string) string {
+	proxyOrigin := GetImageProxyPrefix(r)
 	s = strings.ReplaceAll(s, `https://i.pximg.net`, proxyOrigin)
 	// s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, "/proxy/i.pximg.net")
 	s = strings.ReplaceAll(s, `https://s.pximg.net`, "/proxy/s.pximg.net")
 	return s
 }
 
-func GetImageProxyOrigin(c *http.Request) string {
-	url := GetImageProxy(c)
+func GetImageProxyOrigin(r *http.Request) string {
+	url := GetImageProxy(r)
 	return urlAuthority(url)
 }
 
-func GetImageProxyPrefix(c *http.Request) string {
-	url := GetImageProxy(c)
+func GetImageProxyPrefix(r *http.Request) string {
+	url := GetImageProxy(r)
 	return urlAuthority(url) + url.Path
 	// note: not sure if url.EscapedPath() is useful here. go's standard library is trash at handling URL (:// should be part of the scheme)
 }

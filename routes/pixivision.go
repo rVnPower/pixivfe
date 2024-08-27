@@ -7,33 +7,31 @@ import (
 	"net/http"
 )
 
-func PixivisionHomePage(c *http.Request) error {
-	// Note: don't process images here?
+func PixivisionHomePage(w http.ResponseWriter, r CompatRequest) error {
 	data, err := pixivision.GetHomepage()
 	if err != nil {
 		return err
 	}
 
 	for i := range data {
-		data[i].Thumbnail = session.ProxyImageUrlNoEscape(c, data[i].Thumbnail)
+		data[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data[i].Thumbnail)
 	}
 
-	return Render(c, Data_pixivision_index{Data: data})
+	return Render(w, r, Data_pixivision_index{Data: data})
 }
 
-func PixivisionArticlePage(c *http.Request) error {
-	// Note: don't process images here?
-	id := c.Params("id")
+func PixivisionArticlePage(w http.ResponseWriter, r CompatRequest) error {
+	id := r.Params("id")
 	data, err := pixivision.GetArticle(id)
 	if err != nil {
 		return err
 	}
 
-	data.Thumbnail = session.ProxyImageUrlNoEscape(c, data.Thumbnail)
+	data.Thumbnail = session.ProxyImageUrlNoEscape(r, data.Thumbnail)
 	for i := range data.Items {
-		data.Items[i].Image = session.ProxyImageUrlNoEscape(c, data.Items[i].Image)
-		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(c, data.Items[i].Avatar)
+		data.Items[i].Image = session.ProxyImageUrlNoEscape(r, data.Items[i].Image)
+		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(r, data.Items[i].Avatar)
 	}
 
-	return Render(c, Data_pixivision_article{Article: data})
+	return Render(w, r, Data_pixivision_article{Article: data})
 }

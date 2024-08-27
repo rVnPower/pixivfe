@@ -71,17 +71,17 @@ func (s SearchPageSettings) ReturnMap() map[string]string {
 	}
 }
 
-func GetTagData(c *http.Request, name string) (TagDetail, error) {
+func GetTagData(r *http.Request, name string) (TagDetail, error) {
 	var tag TagDetail
 
 	URL := GetTagDetailURL(name)
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return tag, err
 	}
 
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	err = json.Unmarshal([]byte(response), &tag)
 	if err != nil {
@@ -91,14 +91,14 @@ func GetTagData(c *http.Request, name string) (TagDetail, error) {
 	return tag, nil
 }
 
-func GetSearch(c *http.Request, settings SearchPageSettings) (*SearchResult, error) {
+func GetSearch(r *http.Request, settings SearchPageSettings) (*SearchResult, error) {
 	URL := GetSearchArtworksURL(settings.ReturnMap())
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	// IDK how to do better than this lol
 	temp := strings.ReplaceAll(string(response), `"illust"`, `"works"`)

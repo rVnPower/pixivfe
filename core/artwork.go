@@ -131,16 +131,16 @@ type Illust struct {
 	BookmarkID      string
 }
 
-func GetUserBasicInformation(c *http.Request, id string) (UserBrief, error) {
+func GetUserBasicInformation(r *http.Request, id string) (UserBrief, error) {
 	var user UserBrief
 
 	URL := GetUserInformationURL(id)
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return user, err
 	}
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	err = json.Unmarshal([]byte(response), &user)
 	if err != nil {
@@ -150,17 +150,17 @@ func GetUserBasicInformation(c *http.Request, id string) (UserBrief, error) {
 	return user, nil
 }
 
-func GetArtworkImages(c *http.Request, id string) ([]Image, error) {
+func GetArtworkImages(r *http.Request, id string) ([]Image, error) {
 	var resp []ImageResponse
 	var images []Image
 
 	URL := GetArtworkImagesURL(id)
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	err = json.Unmarshal([]byte(response), &resp)
 	if err != nil {
@@ -188,18 +188,18 @@ func GetArtworkImages(c *http.Request, id string) ([]Image, error) {
 	return images, nil
 }
 
-func GetArtworkComments(c *http.Request, id string) ([]Comment, error) {
+func GetArtworkComments(r *http.Request, id string) ([]Comment, error) {
 	var body struct {
 		Comments []Comment `json:"comments"`
 	}
 
 	URL := GetArtworkCommentsURL(id)
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	err = json.Unmarshal([]byte(response), &body)
 	if err != nil {
@@ -209,7 +209,7 @@ func GetArtworkComments(c *http.Request, id string) ([]Comment, error) {
 	return body.Comments, nil
 }
 
-func GetRelatedArtworks(c *http.Request, id string) ([]ArtworkBrief, error) {
+func GetRelatedArtworks(r *http.Request, id string) ([]ArtworkBrief, error) {
 	var body struct {
 		Illusts []ArtworkBrief `json:"illusts"`
 	}
@@ -217,12 +217,12 @@ func GetRelatedArtworks(c *http.Request, id string) ([]ArtworkBrief, error) {
 	// TODO: keep the hard-coded limit?
 	URL := GetArtworkRelatedURL(id, 96)
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
 
-	response = session.ProxyImageUrl(c, response)
+	response = session.ProxyImageUrl(r, response)
 
 	err = json.Unmarshal([]byte(response), &body)
 	if err != nil {
@@ -232,11 +232,11 @@ func GetRelatedArtworks(c *http.Request, id string) ([]ArtworkBrief, error) {
 	return body.Illusts, nil
 }
 
-func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
+func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 	URL := GetArtworkInformationURL(id)
 
-	token := session.GetPixivToken(c)
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	token := session.GetPixivToken(r)
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +270,7 @@ func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 	go func() {
 		// Get illust images
 		defer wg.Done()
-		images, err := GetArtworkImages(c, id)
+		images, err := GetArtworkImages(r, id)
 		if err != nil {
 
 			cerr <- err
@@ -283,7 +283,7 @@ func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 		// Get basic user information (the URL above does not contain avatars)
 		defer wg.Done()
 		var err error
-		userInfo, err := GetUserBasicInformation(c, illust.UserID)
+		userInfo, err := GetUserBasicInformation(r, illust.UserID)
 		if err != nil {
 			cerr <- err
 			return
@@ -340,7 +340,7 @@ func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 				idsString += fmt.Sprintf("&ids[]=%d", ids[i])
 			}
 
-			recent, err := GetUserArtworks(c, illust.UserID, idsString)
+			recent, err := GetUserArtworks(r, illust.UserID, idsString)
 			if err != nil {
 				cerr <- err
 				return
@@ -356,7 +356,7 @@ func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 		go func() {
 			defer wg.Done()
 			var err error
-			related, err := GetRelatedArtworks(c, id)
+			related, err := GetRelatedArtworks(r, id)
 			if err != nil {
 				cerr <- err
 				return
@@ -370,7 +370,7 @@ func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 				return
 			}
 			var err error
-			comments, err := GetArtworkComments(c, id)
+			comments, err := GetArtworkComments(r, id)
 			if err != nil {
 				cerr <- err
 				return

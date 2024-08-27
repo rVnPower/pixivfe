@@ -10,31 +10,37 @@ import (
 	"net/http"
 )
 
-func NovelPage(c *http.Request) error {
-	id := c.Params("id")
+func NovelPage(w http.ResponseWriter, r CompatRequest) error {
+	id := r.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	novel, err := core.GetNovelByID(c, id)
+	novel, err := core.GetNovelByID(r, id)
 	if err != nil {
 		return err
 	}
 
-	related, err := core.GetNovelRelated(c, id)
+	related, err := core.GetNovelRelated(r, id)
 	if err != nil {
 		return err
 	}
 
-	user, err := core.GetUserBasicInformation(c, novel.UserID)
+	user, err := core.GetUserBasicInformation(r, novel.UserID)
 	if err != nil {
 		return err
 	}
 
-	fontType := session.GetCookie(c, session.Cookie_NovelFontType, "gothic")
-	viewMode := session.GetCookie(c, session.Cookie_NovelViewMode, strconv.Itoa(novel.Settings.ViewMode))
+	fontType := session.GetCookie(r, session.Cookie_NovelFontType)
+	if fontType == "" {
+		fontType = "gothic"
+	}
+	viewMode := session.GetCookie(r, session.Cookie_NovelViewMode)
+	if viewMode == "" {
+		viewMode = strconv.Itoa(novel.Settings.ViewMode)
+	}
 
 	// println("fontType", fontType)
 
-	return Render(c, Data_novel{Novel: novel, NovelRelated: related, User: user, Title: novel.Title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
+	return Render(w, r, Data_novel{Novel: novel, NovelRelated: related, User: user, Title: novel.Title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
 }
