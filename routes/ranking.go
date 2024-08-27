@@ -15,7 +15,7 @@ func RankingPage(c *http.Request) error {
 	page := c.Query("page", "1")
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	works, err := core.GetRanking(c, mode, content, date, page)
