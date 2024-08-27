@@ -129,9 +129,3 @@ func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
 
 	return SendString(w, "Success")
 }
-
-func SendString(w http.ResponseWriter, text string) error {
-	w.Header().Set("content-type", "text/plain")
-	_, err :=  w.Write([]byte(text))
-	return err
-}

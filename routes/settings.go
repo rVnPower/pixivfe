@@ -112,7 +112,7 @@ func setArtworkPreview(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setLogout(w http.ResponseWriter, r CompatRequest) error {
+func setLogout(w http.ResponseWriter, _ CompatRequest) error {
 	session.ClearCookie(w, session.Cookie_Token)
 	session.ClearCookie(w, session.Cookie_CSRF)
 	return nil
@@ -152,7 +152,7 @@ func setRawCookie(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func resetAll(w http.ResponseWriter, r CompatRequest) error {
+func resetAll(w http.ResponseWriter, _ CompatRequest) error {
 	session.ClearAllCookies(w)
 	return nil
 }

@@ -59,6 +59,12 @@ func (r CompatRequest) Params(name string, defaultValue ...string) string {
 	}
 }
 
+func SendString(w http.ResponseWriter, text string) error {
+	w.Header().Set("content-type", "text/plain")
+	_, err :=  w.Write([]byte(text))
+	return err
+}
+
 func RedirectToRoute(w http.ResponseWriter, r CompatRequest, path string, query_params map[string]string, code int) error {
 	query := url.Values{}
 	for k, v := range query_params {
