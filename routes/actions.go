@@ -16,9 +16,9 @@ func pixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON 
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
- if err != nil {
-   return err
- }
+	if err != nil {
+		return err
+	}
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Cookie", "PHPSESSID="+token)

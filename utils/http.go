@@ -1,16 +1,16 @@
 package utils
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
 	"strings"
-)
 
+	"github.com/goccy/go-json"
+)
 
 func SendString(w http.ResponseWriter, text string) error {
 	w.Header().Set("content-type", "text/plain")
-	_, err :=  w.Write([]byte(text))
+	_, err := w.Write([]byte(text))
 	return err
 }
 
