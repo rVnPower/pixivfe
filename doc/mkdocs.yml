@@ -1,0 +1,173 @@
+site_name: PixivFE Documentation
+site_description: >-
+  Documentation for PixivFE
+site_dir: public
+nav:
+  - "Home": "index.md"
+  - "Instance list": "instance-list.md"
+  - "Public image proxies": "public-image-proxies.md"
+  - "Known quirks": "known-quirks.md"
+  - "Hosting":
+    - "Environment variables": "environment-variables.md"
+    - "Hosting PixivFE": "hosting-pixivfe.md"
+    - "Hosting an image proxy server for Pixiv": "hosting-image-proxy-server.md"
+    - "Obtaining the PIXIVFE_TOKEN cookie": "obtaining-pixivfe-token.md"
+repo_name: pixivfe/pixivfe-docs
+repo_url: https://gitlab.com/pixivfe/pixivfe-docs
+edit_uri: edit/master/docs/
+copyright: GFDL-1.3-or-later
+theme:
+  name: material
+  language: en
+  palette:
+    # -- Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark theme
+    # -- Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light theme
+  icon:
+    logo: simple/pixiv
+  favicon: favicon.ico
+  features:
+    # -- Navigation
+    # Instant loading
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#instant-loading
+    - navigation.instant
+
+    # Instant prefetching (sponsor only)
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#instant-prefetching
+    # - navigation.instant.prefetch
+
+    # Progress indicator
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#progress-indicator
+    - navigation.instant.progress
+
+    # Anchor tracking
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#anchor-tracking
+    - navigation.tracking
+
+    # Navigation sections
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-sections
+    - navigation.sections
+
+    # Navigation expansion
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-expansion
+    - navigation.expand
+
+    # Section index pages
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#section-index-pages
+    - navigation.indexes
+
+    # -- Table of contents
+    # Anchor following
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#anchor-following
+    - toc.follow
+
+    # Back-to-top button
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#back-to-top-button
+    - navigation.top
+
+    # -- Code blocks
+    # Code copy button
+    # src: https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#code-copy-button
+    - content.code.copy
+
+    - navigation.footer
+
+    - content.action.edit
+
+    - content.code.annotate
+
+plugins:
+  # -- The search plugin adds a search bar to the header, allowing users to search your documentation. 
+  # src: https://squidfunk.github.io/mkdocs-material/plugins/search/
+  - search:
+      enabled: true
+  - git-revision-date-localized:
+      enabled: true
+      type: date
+      enable_creation_date: true
+  - table-reader
+  - glightbox:
+       effect: fade
+       auto_caption: true
+       caption_position: bottom
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section for reference
+
+  - tables
+  # -- Enable extended support for images
+  # src: https://squidfunk.github.io/mkdocs-material/reference/images/
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - footnotes
+
+  # -- Python Markdown Extensions
+  # The BetterEm extension improves the detection of Markup to emphasize text
+  - pymdownx.betterem
+
+  # Caret, Mark & Tilde
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+
+  # The Details extension makes the Admonition call-outs collapsible, allowing them to be opened and closed by the user
+  - pymdownx.details
+  # The Highlight extension adds support for syntax highlighting of code blocks and inline code blocks
+  # src: https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/#highlight
+  - pymdownx.highlight:
+      use_pygments: true
+      pygments_lang_class: true
+      auto_title: true
+      linenums: true
+      linenums_style: table
+      anchor_linenums: true
+      line_spans: __span
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences
+  # The Tabbed extension allows the usage of content tabs, a simple way to group related content and code blocks under accessible tabs.
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  # The Tasklist extension allows for the usage of GitHub Flavored Markdown inspired task lists.
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+
+extra_javascript:
+  - "https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"
+  - js/tablesort.js
+
+extra_css:
+  - css/extra.css
+
+extra:
+  social:
+    - icon: simple/codeberg
+      link: https://codeberg.org/VnPower/PixivFE
+      name: PixivFE on Codeberg
+    - icon: simple/gitlab
+      link: https://gitlab.com/pixivfe
+      name: PixivFE on GitLab
+
