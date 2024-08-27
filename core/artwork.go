@@ -3,7 +3,6 @@ package core
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"sort"
 	"strings"
 	"sync"
@@ -103,13 +102,13 @@ type ArtworkBrief struct {
 }
 
 type Illust struct {
-	ID              string        `json:"id"`
-	Title           string        `json:"title"`
-	Description     template.HTML `json:"description"`
-	UserID          string        `json:"userId"`
-	UserName        string        `json:"userName"`
-	UserAccount     string        `json:"userAccount"`
-	Date            time.Time     `json:"uploadDate"`
+	ID              string    `json:"id"`
+	Title           string    `json:"title"`
+	Description     HTML `json:"description"`
+	UserID          string    `json:"userId"`
+	UserName        string    `json:"userName"`
+	UserAccount     string    `json:"userAccount"`
+	Date            time.Time `json:"uploadDate"`
 	Images          []Image
 	Tags            []Tag     `json:"tags"`
 	Pages           int       `json:"pageCount"`

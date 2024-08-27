@@ -2,7 +2,6 @@ package template
 
 import (
 	"fmt"
-	"html/template"
 	"math"
 	"math/rand"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 )
+
+type HTML = core.HTML
 
 func GetRandomColor() string {
 	// Some color shade I stole
@@ -42,7 +43,7 @@ func GetRandomColor() string {
 	return colors[rand.Intn(len(colors))]
 }
 
-func ParseEmojis(s string) template.HTML {
+func ParseEmojis(s string) HTML {
 	emojiList := map[string]string{
 		"normal":        "101",
 		"surprise":      "102",
@@ -92,10 +93,10 @@ func ParseEmojis(s string) template.HTML {
 
 		return fmt.Sprintf(`<img src="/proxy/s.pximg.net/common/images/emoji/%s.png" alt="(%s)" class="emoji" />`, id, s)
 	})
-	return template.HTML(parsedString)
+	return HTML(parsedString)
 }
 
-func ParsePixivRedirect(s string) template.HTML {
+func ParsePixivRedirect(s string) HTML {
 	regex := regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
 
 	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
@@ -104,9 +105,9 @@ func ParsePixivRedirect(s string) template.HTML {
 	})
 	escaped, err := url.QueryUnescape(parsedString)
 	if err != nil {
-		return template.HTML(s)
+		return HTML(s)
 	}
-	return template.HTML(escaped)
+	return HTML(escaped)
 }
 
 func EscapeString(s string) string {
@@ -122,7 +123,7 @@ func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
 
-func CreatePaginator(base, ending string, current_page, max_page int) template.HTML {
+func CreatePaginator(base, ending string, current_page, max_page int) HTML {
 	pageUrl := func(page int) string {
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
 	}
@@ -194,7 +195,7 @@ func CreatePaginator(base, ending string, current_page, max_page int) template.H
 	}
 	pages += `</div>`
 
-	return template.HTML(pages)
+	return HTML(pages)
 }
 
 func GetNovelGenre(s string) string {
@@ -249,11 +250,11 @@ func SwitchButtonAttributes(baseURL, selection, currentSelection string) string 
 
 func GetTemplateFunctions() map[string]any {
 	return map[string]any{
-		"parseEmojis": func(s string) template.HTML {
+		"parseEmojis": func(s string) HTML {
 			return ParseEmojis(s)
 		},
 
-		"parsePixivRedirect": func(s string) template.HTML {
+		"parsePixivRedirect": func(s string) HTML {
 			return ParsePixivRedirect(s)
 		},
 		"escapeString": func(s string) string {
@@ -289,7 +290,7 @@ func GetTemplateFunctions() map[string]any {
 		"parseTimeCustomFormat": func(date time.Time, format string) string {
 			return ParseTimeCustomFormat(date, format)
 		},
-		"createPaginator": func(base, ending string, current_page, max_page int) template.HTML {
+		"createPaginator": func(base, ending string, current_page, max_page int) HTML {
 			return CreatePaginator(base, ending, current_page, max_page)
 		},
 		"joinArtworkIds": func(artworks []core.ArtworkBrief) string {
@@ -303,10 +304,10 @@ func GetTemplateFunctions() map[string]any {
 			// this is stupid
 			return s[:len(s)-6]
 		},
-		"renderNovel": func(s string) template.HTML {
+		"renderNovel": func(s string) HTML {
 			s = strings.ReplaceAll(s, "\n", "<br />")
 			s = strings.ReplaceAll(s, "[newpage]", "Insert page separator here.")
-			return template.HTML(s)
+			return HTML(s)
 		},
 		"novelGenre": GetNovelGenre,
 		"floor": func(i float64) int {

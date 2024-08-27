@@ -56,7 +56,7 @@ func TagPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func AdvancedTagPost(w http.ResponseWriter, r *http.Request) error {
-	return utils.RedirectTo(w, r,"/tags", map[string]string{
+	return utils.RedirectTo(w, r, "/tags", map[string]string{
 		"name":     GetQueryParam(r, "name", r.FormValue("name")),
 		"category": GetQueryParam(r, "category", "artworks"),
 		"order":    GetQueryParam(r, "order", "date_d"),
