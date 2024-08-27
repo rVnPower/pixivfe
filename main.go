@@ -171,7 +171,7 @@ func main() {
 
 		start_time := time.Now()
 
-		setGlobalHeaders(w)
+		setGlobalHeaders(w, r)
 
 		router.ServeHTTP(w, r)
 
@@ -240,7 +240,7 @@ func main() {
 	http.Serve(l, http.HandlerFunc(main_handler))
 }
 
-func setGlobalHeaders(w http.ResponseWriter) {
+func setGlobalHeaders(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	header.Add("X-Frame-Options", "DENY")
 	// use this if need iframe: `X-Frame-Options: SAMEORIGIN`
