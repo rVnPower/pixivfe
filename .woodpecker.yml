@@ -37,7 +37,9 @@ steps:
         from_secret: CLOUDFLARE_API_TOKEN
     commands:
       - apk add npm --repository https://dl-cdn.alpinelinux.org/alpine/edge/community/
-      - npx wrangler pages deploy dist --project-name=pixivfe-docs
+      - ls
+      - pwd
+      - npx wrangler pages deploy site --project-name=pixivfe-docs
     when:
       branch: [ v2 ]
       path: *docs_path
