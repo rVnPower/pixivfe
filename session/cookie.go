@@ -38,37 +38,44 @@ var AllCookieNames []CookieName = []CookieName{
 }
 
 func GetCookie(c *http.Request, name CookieName, defaultValue ...string) string {
-	return c.Cookies(string(name), defaultValue...)
+	//return c.Cookies(string(name), defaultValue...)
+	if cookie, err := c.Cookie(string(name)); err != nil {
+		return cookie.Value
+	}
+
+	// TODO: Hard-coded?
+	return defaultValue[0]
 }
 
 func SetCookie(c *http.Request, name CookieName, value string) {
-	cookie := fiber.Cookie{
+	cookie := http.Cookie{
 		Name:  string(name),
 		Value: value,
 		Path:  "/",
 		// expires in 30 days from now
-		Expires:  c.Context().Time().Add(30 * (24 * time.Hour)),
-		HTTPOnly: true,
+		// Expires:  c.Context().Time().Add(30 * (24 * time.Hour)),
+		Expires:  time.Now().Add(30 * (24 * time.Hour)),
+		HttpOnly: true,
 		Secure:   true,
-		SameSite: fiber.CookieSameSiteStrictMode, // bye-bye cross site forgery
+		SameSite: http.SameSiteStrictMode, // bye-bye cross site forgery
 	}
-	c.Cookie(&cookie)
+	c.AddCookie(&cookie)
 }
 
 var CookieExpireDelete = time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
 
 func ClearCookie(c *http.Request, name CookieName) {
-	cookie := fiber.Cookie{
+	cookie := http.Cookie{
 		Name:  string(name),
 		Value: "",
 		Path:  "/",
 		// expires in 30 days from now
 		Expires:  CookieExpireDelete,
-		HTTPOnly: true,
+		HttpOnly: true,
 		Secure:   true,
-		SameSite: fiber.CookieSameSiteStrictMode,
+		SameSite: http.SameSiteStrictMode,
 	}
-	c.Cookie(&cookie)
+	c.AddCookie(&cookie)
 }
 
 func ClearAllCookies(c *http.Request) {

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
-	"net/http"
 )
 
 func SPximgProxy(c *http.Request) error {

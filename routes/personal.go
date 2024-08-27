@@ -7,7 +7,6 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"net/http"
 )
 
 func PromptUserToLoginPage(c *http.Request) error {

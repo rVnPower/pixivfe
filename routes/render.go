@@ -12,7 +12,6 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 
 	"github.com/CloudyKit/jet/v6"
-	"net/http"
 )
 
 // global variable, yes.
