@@ -71,7 +71,6 @@ func manualTest[T any](t *testing.T, data T) {
 
 	for k, v := range map[string]any{
 		"BaseURL":     fakeData[string](),
-		"OriginalURL": fakeData[string](),
 		"PageURL":     fakeData[string](),
 		"LoggedIn":    fakeData[bool](),
 		"Queries":     fakeData[map[string]string](),

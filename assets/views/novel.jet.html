@@ -64,7 +64,7 @@
   <div class="novel-settings">
     <div class="novel-settings-wrapper">
       <span class="dropdown">
-        {{ url := "/settings/novelFontType?noredirect=t&r=" + OriginalURL + "#content" }}
+        {{ url := "/settings/novelFontType" }}
         <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
         <label for="font-type-toggler" class="dropdown-toggler-label">
           <img src="/img/font-family.png" alt="Font family" />
@@ -83,7 +83,7 @@
       </span>
       <img src="/img/font-size.png" alt="Font size" />
       <span class="dropdown">
-        {{ url := "/settings/novelViewMode?r=" + OriginalURL + "#content" }}
+        {{ url := "/settings/novelViewMode" }}
         <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
         <label for="view-mode-toggler" class="dropdown-toggler-label">
           <img src="/img/orientation.png" alt="Orientation" />
@@ -100,7 +100,6 @@
             <input id="vm-d" type="radio" name="view-mode" value="d" />
             <label for="vm-d">Don't force</label>
             <br />
-            <input type="hidden" name="noredirect" value="t" />
             <input type="submit" value="Submit!" />
           </form>
         </div>

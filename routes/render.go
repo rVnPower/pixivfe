@@ -58,7 +58,6 @@ func GetTemplatingVariables(r CompatRequest) jet.VarMap {
 	// Pass in values that we want to be available to all pages here
 	token := session.GetPixivToken(r.Request)
 	baseURL := r.BaseURL()
-	originalURL := r.OriginalURL()
 	pageURL := r.PageURL()
 
 	cookies := map[string]string{}
@@ -69,7 +68,6 @@ func GetTemplatingVariables(r CompatRequest) jet.VarMap {
 
 	return jet.VarMap{}.
 		Set("BaseURL", baseURL).
-		Set("OriginalURL", originalURL).
 		Set("PageURL", pageURL).
 		Set("LoggedIn", token != "").
 		Set("Queries", r.URL.Query().Encode()).

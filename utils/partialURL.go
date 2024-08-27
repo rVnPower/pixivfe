@@ -11,14 +11,11 @@ type PartialURL struct {
 func unfinishedQuery(url PartialURL, key string) string {
 	result := fmt.Sprintf("/%s", url.Path)
 	first_query_pair := true
-	query_param_exists := false
 
 	for k, v := range url.Query {
 		k = lowercaseFirstChar(k)
 
 		if k == key {
-			// Reserve this
-			query_param_exists = true
 			continue
 		}
 
@@ -37,17 +34,13 @@ func unfinishedQuery(url PartialURL, key string) string {
 	}
 
 	// This is to move the matched query to the end of the URL
-	if query_param_exists {
-		var t string
-		if first_query_pair {
-			t = "?"
-		} else {
-			t = "&"
-		}
-		result += fmt.Sprintf("%s%s=", t, key)
+	var t string
+	if first_query_pair {
+		t = "?"
 	} else {
-		// todo: what now? if it doesn't exist, it's a no-op? that doesn't make sense given how navigation works.
+		t = "&"
 	}
+	result += fmt.Sprintf("%s%s=", t, key)
 
 	return result
 }
