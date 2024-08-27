@@ -3,10 +3,10 @@ package routes
 import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func DiscoveryPage(c *fiber.Ctx) error {
+func DiscoveryPage(c *http.Request) error {
 	mode := c.Query("mode", "safe")
 
 	works, err := core.GetDiscoveryArtwork(c, mode)
@@ -19,7 +19,7 @@ func DiscoveryPage(c *fiber.Ctx) error {
 	return Render(c, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
 }
 
-func NovelDiscoveryPage(c *fiber.Ctx) error {
+func NovelDiscoveryPage(c *http.Request) error {
 	mode := c.Query("mode", "safe")
 
 	works, err := core.GetDiscoveryNovels(c, mode)

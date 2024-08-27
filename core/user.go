@@ -9,7 +9,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 // pixivfe internal data type. not used by pixiv.
@@ -73,7 +73,7 @@ func (s *User) ParseSocial() error {
 	return nil
 }
 
-func GetFrequentTags(c *fiber.Ctx, ids string, category UserArtCategory) ([]FrequentTag, error) {
+func GetFrequentTags(c *http.Request, ids string, category UserArtCategory) ([]FrequentTag, error) {
 	var tags []FrequentTag
 	var URL string
 
@@ -96,7 +96,7 @@ func GetFrequentTags(c *fiber.Ctx, ids string, category UserArtCategory) ([]Freq
 	return tags, nil
 }
 
-func GetUserArtworks(c *fiber.Ctx, id, ids string) ([]ArtworkBrief, error) {
+func GetUserArtworks(c *http.Request, id, ids string) ([]ArtworkBrief, error) {
 	var works []ArtworkBrief
 
 	URL := GetUserFullArtworkURL(id, ids)
@@ -130,7 +130,7 @@ func GetUserArtworks(c *fiber.Ctx, id, ids string) ([]ArtworkBrief, error) {
 	return works, nil
 }
 
-func GetUserNovels(c *fiber.Ctx, id, ids string) ([]NovelBrief, error) {
+func GetUserNovels(c *http.Request, id, ids string) ([]NovelBrief, error) {
 	// VnPower: we can merge this function into GetUserArtworks, but I want to make things simple for now
 	var works []NovelBrief
 
@@ -165,7 +165,7 @@ func GetUserNovels(c *fiber.Ctx, id, ids string) ([]NovelBrief, error) {
 	return works, nil
 }
 
-func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page int) (string, int, error) {
+func GetUserArtworksID(c *http.Request, id string, category UserArtCategory, page int) (string, int, error) {
 	URL := GetUserArtworksURL(id)
 
 	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
@@ -248,7 +248,7 @@ func GetUserArtworksID(c *fiber.Ctx, id string, category UserArtCategory, page i
 	return idsString, count, nil
 }
 
-func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int, getTags bool) (User, error) {
+func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
 
 	token := session.GetPixivToken(c)
@@ -354,7 +354,7 @@ func GetUserArtwork(c *fiber.Ctx, id string, category UserArtCategory, page int,
 	return user, nil
 }
 
-func GetUserBookmarks(c *fiber.Ctx, id, mode string, page int) ([]ArtworkBrief, int, error) {
+func GetUserBookmarks(c *http.Request, id, mode string, page int) ([]ArtworkBrief, int, error) {
 	page--
 
 	URL := GetUserBookmarksURL(id, mode, page)

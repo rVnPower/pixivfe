@@ -11,7 +11,7 @@ rules:
     - pattern: |
         http.WebAPIRequest(...)
   - pattern-not-inside: |
-      func $FUNC(c *fiber.Ctx, ...) $RET {
+      func $FUNC(c *http.Request, ...) $RET {
         ...
       }
 # note: the below two rules autofix have slight problems. where `http` is sometimes "net/http". need minor manual tweaking after --autofix.

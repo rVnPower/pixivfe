@@ -7,15 +7,15 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func PromptUserToLoginPage(c *fiber.Ctx) error {
+func PromptUserToLoginPage(c *http.Request) error {
 	c.Status(http.StatusUnauthorized)
 	return Render(c, Data_unauthorized{})
 }
 
-func LoginUserPage(c *fiber.Ctx) error {
+func LoginUserPage(c *http.Request) error {
 	token := session.GetPixivToken(c)
 
 	if token == "" {
@@ -29,7 +29,7 @@ func LoginUserPage(c *fiber.Ctx) error {
 	return nil
 }
 
-func LoginBookmarkPage(c *fiber.Ctx) error {
+func LoginBookmarkPage(c *http.Request) error {
 	token := session.GetPixivToken(c)
 	if token == "" {
 		return PromptUserToLoginPage(c)
@@ -42,7 +42,7 @@ func LoginBookmarkPage(c *fiber.Ctx) error {
 	return nil
 }
 
-func FollowingWorksPage(c *fiber.Ctx) error {
+func FollowingWorksPage(c *http.Request) error {
 	if token := session.GetPixivToken(c); token == "" {
 		return PromptUserToLoginPage(c)
 	}

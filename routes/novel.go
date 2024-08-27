@@ -7,10 +7,10 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func NovelPage(c *fiber.Ctx) error {
+func NovelPage(c *http.Request) error {
 	id := c.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)

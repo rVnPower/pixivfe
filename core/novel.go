@@ -7,7 +7,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 type Novel struct {
@@ -89,7 +89,7 @@ type NovelBrief struct {
 	Genre          string      `json:"genre"`
 }
 
-func GetNovelByID(c *fiber.Ctx, id string) (Novel, error) {
+func GetNovelByID(c *http.Request, id string) (Novel, error) {
 	var novel Novel
 
 	URL := GetNovelURL(id)
@@ -128,7 +128,7 @@ func GetNovelByID(c *fiber.Ctx, id string) (Novel, error) {
 	return novel, nil
 }
 
-func GetNovelRelated(c *fiber.Ctx, id string) ([]NovelBrief, error) {
+func GetNovelRelated(c *http.Request, id string) ([]NovelBrief, error) {
 	var novels struct {
 		List []NovelBrief `json:"novels"`
 	}

@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func ArtworkPage(c *fiber.Ctx) error {
+func ArtworkPage(c *http.Request) error {
 	id := c.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)
@@ -39,6 +39,6 @@ func ArtworkPage(c *fiber.Ctx) error {
 	})
 }
 
-func PreloadImage(c *fiber.Ctx, url string) {
+func PreloadImage(c *http.Request, url string) {
 	c.Response().Header.Add("Link", fmt.Sprintf("<%s>; rel=preload; as=image", url))
 }

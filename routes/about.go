@@ -2,10 +2,10 @@ package routes
 
 import (
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func AboutPage(c *fiber.Ctx) error {
+func AboutPage(c *http.Request) error {
 	return Render(c, Data_about{
 		Time:           config.GlobalServerConfig.StartingTime,
 		Version:        config.GlobalServerConfig.Version,

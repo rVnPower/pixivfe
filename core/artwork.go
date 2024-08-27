@@ -11,7 +11,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
 // Pixiv returns 0, 1, 2 to filter SFW and/or NSFW artworks.
@@ -131,7 +131,7 @@ type Illust struct {
 	BookmarkID      string
 }
 
-func GetUserBasicInformation(c *fiber.Ctx, id string) (UserBrief, error) {
+func GetUserBasicInformation(c *http.Request, id string) (UserBrief, error) {
 	var user UserBrief
 
 	URL := GetUserInformationURL(id)
@@ -150,7 +150,7 @@ func GetUserBasicInformation(c *fiber.Ctx, id string) (UserBrief, error) {
 	return user, nil
 }
 
-func GetArtworkImages(c *fiber.Ctx, id string) ([]Image, error) {
+func GetArtworkImages(c *http.Request, id string) ([]Image, error) {
 	var resp []ImageResponse
 	var images []Image
 
@@ -188,7 +188,7 @@ func GetArtworkImages(c *fiber.Ctx, id string) ([]Image, error) {
 	return images, nil
 }
 
-func GetArtworkComments(c *fiber.Ctx, id string) ([]Comment, error) {
+func GetArtworkComments(c *http.Request, id string) ([]Comment, error) {
 	var body struct {
 		Comments []Comment `json:"comments"`
 	}
@@ -209,7 +209,7 @@ func GetArtworkComments(c *fiber.Ctx, id string) ([]Comment, error) {
 	return body.Comments, nil
 }
 
-func GetRelatedArtworks(c *fiber.Ctx, id string) ([]ArtworkBrief, error) {
+func GetRelatedArtworks(c *http.Request, id string) ([]ArtworkBrief, error) {
 	var body struct {
 		Illusts []ArtworkBrief `json:"illusts"`
 	}
@@ -232,7 +232,7 @@ func GetRelatedArtworks(c *fiber.Ctx, id string) ([]ArtworkBrief, error) {
 	return body.Illusts, nil
 }
 
-func GetArtworkByID(c *fiber.Ctx, id string, full bool) (*Illust, error) {
+func GetArtworkByID(c *http.Request, id string, full bool) (*Illust, error) {
 	URL := GetArtworkInformationURL(id)
 
 	token := session.GetPixivToken(c)
