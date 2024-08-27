@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-func ArtworkMultiPage(w http.ResponseWriter, r CompatRequest) error {
-	ids_ := r.Params("ids")
+func ArtworkMultiPage(w http.ResponseWriter, r *http.Request) error {
+	ids_ := GetPathVar(r, "ids")
 	ids := strings.Split(ids_, ",")
 
 	artworks := make([]core.Illust, len(ids))
@@ -34,7 +34,7 @@ func ArtworkMultiPage(w http.ResponseWriter, r CompatRequest) error {
 		go func(i int, id string) {
 			defer wg.Done()
 
-			illust, err := core.GetArtworkByID(r.Request, id, false)
+			illust, err := core.GetArtworkByID(r, id, false)
 			if err != nil {
 				artworks[i] = core.Illust{
 					Title: err.Error(), // this might be flaky

@@ -10,16 +10,17 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	httpc "codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
-func setToken(w http.ResponseWriter, r CompatRequest) error {
+func setToken(w http.ResponseWriter, r *http.Request) error {
 	token := r.FormValue("token")
 	if token != "" {
-		URL := httpc.GetNewestFromFollowingURL("all", "1")
+		URL := core.GetNewestFromFollowingURL("all", "1")
 
-		_, err := httpc.UnwrapWebAPIRequest(r.Context(), URL, token)
+		_, err := core.UnwrapWebAPIRequest(r.Context(), URL, token)
 		if err != nil {
 			return errors.New("Cannot authorize with supplied token.")
 		}
@@ -27,9 +28,9 @@ func setToken(w http.ResponseWriter, r CompatRequest) error {
 		// Make a test request to verify the token.
 		// THE TEST URL IS NSFW!
 		req, err := http.NewRequestWithContext(r.Context(), "GET", "https://www.pixiv.net/en/artworks/115365120", nil)
-  if err != nil {
-    return err
-  }
+		if err != nil {
+			return err
+		}
 		req.Header.Add("User-Agent", "Mozilla/5.0")
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",
@@ -63,7 +64,7 @@ func setToken(w http.ResponseWriter, r CompatRequest) error {
 	return errors.New("You submitted an empty/invalid form.")
 }
 
-func setImageServer(w http.ResponseWriter, r CompatRequest) error {
+func setImageServer(w http.ResponseWriter, r *http.Request) error {
 	token := r.FormValue("image-proxy")
 	if token != "" {
 		session.SetCookie(w, session.Cookie_ImageProxy, token)
@@ -73,7 +74,7 @@ func setImageServer(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setNovelFontType(w http.ResponseWriter, r CompatRequest) error {
+func setNovelFontType(w http.ResponseWriter, r *http.Request) error {
 	fontType := r.FormValue("font-type")
 	if fontType != "" {
 		session.SetCookie(w, session.Cookie_NovelFontType, fontType)
@@ -82,7 +83,7 @@ func setNovelFontType(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setNovelViewMode(w http.ResponseWriter, r CompatRequest) error {
+func setNovelViewMode(w http.ResponseWriter, r *http.Request) error {
 	viewMode := r.FormValue("view-mode")
 	if viewMode != "" {
 		session.SetCookie(w, session.Cookie_NovelViewMode, viewMode)
@@ -91,7 +92,7 @@ func setNovelViewMode(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setThumbnailToNewTab(w http.ResponseWriter, r CompatRequest) error {
+func setThumbnailToNewTab(w http.ResponseWriter, r *http.Request) error {
 	ttnt := r.FormValue("ttnt")
 	if ttnt == "_blank" || ttnt == "_self" {
 		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, ttnt)
@@ -100,7 +101,7 @@ func setThumbnailToNewTab(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setArtworkPreview(w http.ResponseWriter, r CompatRequest) error {
+func setArtworkPreview(w http.ResponseWriter, r *http.Request) error {
 	value := r.FormValue("app")
 	if value == "cover" || value == "button" || value == "" {
 		session.SetCookie(w, session.Cookie_ArtworkPreview, value)
@@ -109,13 +110,13 @@ func setArtworkPreview(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func setLogout(w http.ResponseWriter, _ CompatRequest) error {
+func setLogout(w http.ResponseWriter, _ *http.Request) error {
 	session.ClearCookie(w, session.Cookie_Token)
 	session.ClearCookie(w, session.Cookie_CSRF)
 	return nil
 }
 
-func setCookie(w http.ResponseWriter, r CompatRequest) error {
+func setCookie(w http.ResponseWriter, r *http.Request) error {
 	key := r.FormValue("key")
 	value := r.FormValue("value")
 	for _, cookie_name := range session.AllCookieNames {
@@ -127,7 +128,7 @@ func setCookie(w http.ResponseWriter, r CompatRequest) error {
 	return fmt.Errorf("Invalid Cookie Name: %s", key)
 }
 
-func setRawCookie(w http.ResponseWriter, r CompatRequest) error {
+func setRawCookie(w http.ResponseWriter, r *http.Request) error {
 	raw := r.FormValue("raw")
 	lines := strings.Split(raw, "\n")
 
@@ -149,17 +150,17 @@ func setRawCookie(w http.ResponseWriter, r CompatRequest) error {
 	return nil
 }
 
-func resetAll(w http.ResponseWriter, _ CompatRequest) error {
+func resetAll(w http.ResponseWriter, _ *http.Request) error {
 	session.ClearAllCookies(w)
 	return nil
 }
 
-func SettingsPage(w http.ResponseWriter, r CompatRequest) error {
+func SettingsPage(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
-func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
-	t := r.Params("type")
+func SettingsPost(w http.ResponseWriter, r *http.Request) error {
+	t := GetPathVar(r, "type")
 	var err error
 
 	switch t {
@@ -191,14 +192,6 @@ func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	RedirectToWhenceYouCame(w, r)
+	utils.RedirectToWhenceYouCame(w, r)
 	return nil
-}
-
-func RedirectToWhenceYouCame(w http.ResponseWriter, r CompatRequest) {
-	if strings.HasPrefix(r.Referer(), r.BaseURL()) {
-		http.Redirect(w, r.Request, r.Referer(), http.StatusSeeOther)
-	} else {
-		w.WriteHeader(200)
-	}
 }

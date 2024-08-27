@@ -10,32 +10,32 @@ import (
 	"net/http"
 )
 
-func NovelPage(w http.ResponseWriter, r CompatRequest) error {
-	id := r.Params("id")
+func NovelPage(w http.ResponseWriter, r *http.Request) error {
+	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	novel, err := core.GetNovelByID(r.Request, id)
+	novel, err := core.GetNovelByID(r, id)
 	if err != nil {
 		return err
 	}
 
-	related, err := core.GetNovelRelated(r.Request, id)
+	related, err := core.GetNovelRelated(r, id)
 	if err != nil {
 		return err
 	}
 
-	user, err := core.GetUserBasicInformation(r.Request, novel.UserID)
+	user, err := core.GetUserBasicInformation(r, novel.UserID)
 	if err != nil {
 		return err
 	}
 
-	fontType := session.GetCookie(r.Request, session.Cookie_NovelFontType)
+	fontType := session.GetCookie(r, session.Cookie_NovelFontType)
 	if fontType == "" {
 		fontType = "gothic"
 	}
-	viewMode := session.GetCookie(r.Request, session.Cookie_NovelViewMode)
+	viewMode := session.GetCookie(r, session.Cookie_NovelViewMode)
 	if viewMode == "" {
 		viewMode = strconv.Itoa(novel.Settings.ViewMode)
 	}

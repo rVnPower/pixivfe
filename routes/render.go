@@ -33,7 +33,7 @@ func InitTemplatingEngine(DisableCache bool) {
 }
 
 // render the template selected based on the name of type `T`
-func Render[T any](w http.ResponseWriter, r CompatRequest, data T) error {
+func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
 	return RenderInner(w, GetTemplatingVariables(r), data)
 }
@@ -54,15 +54,15 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 	return template.Execute(w, variables, data)
 }
 
-func GetTemplatingVariables(r CompatRequest) jet.VarMap {
+func GetTemplatingVariables(r *http.Request) jet.VarMap {
 	// Pass in values that we want to be available to all pages here
-	token := session.GetPixivToken(r.Request)
-	baseURL := r.BaseURL()
-	pageURL := r.PageURL()
+	token := session.GetPixivToken(r)
+	baseURL := utils.Origin(r)
+	pageURL := r.URL.String()
 
 	cookies := map[string]string{}
 	for _, name := range session.AllCookieNames {
-		value := session.GetCookie(r.Request, name)
+		value := session.GetCookie(r, name)
 		cookies[string(name)] = value
 	}
 

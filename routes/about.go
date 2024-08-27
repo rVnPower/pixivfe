@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func AboutPage(w http.ResponseWriter, r CompatRequest) error {
+func AboutPage(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, Data_about{
 		Time:           config.GlobalServerConfig.StartingTime,
 		Version:        config.GlobalServerConfig.Version,

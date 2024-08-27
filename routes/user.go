@@ -16,24 +16,24 @@ type userPageData struct {
 	page      int
 }
 
-func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
-	id := r.Params("id")
+func fetchData(r *http.Request, getTags bool) (userPageData, error) {
+	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
 	}
-	category := core.UserArtCategory(r.Params("category", string(core.UserArt_Any)))
+	category := core.UserArtCategory(GetPathVar(r, "category", string(core.UserArt_Any)))
 	err := category.Validate()
 	if err != nil {
 		return userPageData{}, err
 	}
 
-	page_param := r.Query("page", "1")
+	page_param := GetQueryParam(r, "page", "1")
 	page, err := strconv.Atoi(page_param)
 	if err != nil {
 		return userPageData{}, err
 	}
 
-	user, err := core.GetUserArtwork(r.Request, id, category, page, getTags)
+	user, err := core.GetUserArtwork(r, id, category, page, getTags)
 	if err != nil {
 		return userPageData{}, err
 	}
@@ -53,7 +53,7 @@ func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
 	return userPageData{user, category, pageLimit, page}, nil
 }
 
-func UserPage(w http.ResponseWriter, r CompatRequest) error {
+func UserPage(w http.ResponseWriter, r *http.Request) error {
 	data, err := fetchData(r, true)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func UserPage(w http.ResponseWriter, r CompatRequest) error {
 	return Render(w, r, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
 }
 
-func UserAtomFeed(w http.ResponseWriter, r CompatRequest) error {
+func UserAtomFeed(w http.ResponseWriter, r *http.Request) error {
 	data, err := fetchData(r, false)
 	if err != nil {
 		return err
