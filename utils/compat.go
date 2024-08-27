@@ -55,12 +55,12 @@ func SendString(w http.ResponseWriter, text string) error {
 	return err
 }
 
-func RedirectToRoute(w http.ResponseWriter, r CompatRequest, path string, query_params map[string]string, code int) error {
+func RedirectToRoute(w http.ResponseWriter, r CompatRequest, path string, query_params map[string]string) error {
 	query := url.Values{}
 	for k, v := range query_params {
 		query.Add(k, v)
 	}
-	http.Redirect(w, r.Request, path+query.Encode(), code)
+	http.Redirect(w, r.Request, path+query.Encode(), http.StatusSeeOther)
 	return nil
 }
 

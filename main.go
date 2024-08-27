@@ -226,7 +226,7 @@ func defineRoutes() *mux.Router {
 
 	// Legacy illust URL
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/artworks/"+utils.CompatRequest{Request: r}.Query("illust_id"), http.StatusFound)
+		http.Redirect(w, r, "/artworks/"+utils.CompatRequest{Request: r}.Query("illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
 
 	// Proxy routes
