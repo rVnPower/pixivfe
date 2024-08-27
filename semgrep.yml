@@ -102,7 +102,7 @@ rules:
     exclude:
       - "render_types.go"
   fix: |
-    Render(c, Data_$NAME{$...INSIDE})
+    Render(w, r, Data_$NAME{$...INSIDE})
 - id: rule-8
   message: "c.Render"
   languages: [go]
@@ -117,3 +117,16 @@ rules:
   paths:
     exclude:
       - "render.go"
+- id: rule-9
+  message: "still using *fiber.Ctx"
+  languages: [go]
+  severity: INFO
+  patterns:
+  - pattern: |
+      func $NAME(c *fiber.Ctx) error {
+        $...I
+      }
+  fix: |
+    func $NAME(w http.ResponseWriter, r *http.Request) error {
+      $...I
+    }

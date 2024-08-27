@@ -16,24 +16,24 @@ type userPageData struct {
 	page      int
 }
 
-func fetchData(c *http.Request, getTags bool) (userPageData, error) {
-	id := c.Params("id")
+func fetchData(r *fiber.Ctx, getTags bool) (userPageData, error) {
+	id := r.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
 	}
-	category := core.UserArtCategory(c.Params("category", string(core.UserArt_Any)))
+	category := core.UserArtCategory(r.Params("category", string(core.UserArt_Any)))
 	err := category.Validate()
 	if err != nil {
 		return userPageData{}, err
 	}
 
-	page_param := c.Query("page", "1")
+	page_param := r.Query("page", "1")
 	page, err := strconv.Atoi(page_param)
 	if err != nil {
 		return userPageData{}, err
 	}
 
-	user, err := core.GetUserArtwork(c, id, category, page, getTags)
+	user, err := core.GetUserArtwork(r, id, category, page, getTags)
 	if err != nil {
 		return userPageData{}, err
 	}
@@ -53,25 +53,25 @@ func fetchData(c *http.Request, getTags bool) (userPageData, error) {
 	return userPageData{user, category, pageLimit, page}, nil
 }
 
-func UserPage(c *http.Request) error {
-	data, err := fetchData(c, true)
+func UserPage(w http.ResponseWriter, r CompatRequest) error {
+	data, err := fetchData(r, true)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
+	return Render(w, r, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
 }
 
-func UserAtomFeed(c *http.Request) error {
-	data, err := fetchData(c, false)
+func UserAtomFeed(w http.ResponseWriter, r CompatRequest) error {
+	data, err := fetchData(r, false)
 	if err != nil {
 		return err
 	}
 
-	c.Context().SetContentType("application/atom+xml")
+	w.Header().Set("content-type", "application/atom+xml")
 
-	return Render(c, Data_userAtom{
-		URL:       string(c.Request().RequestURI()),
+	return Render(w, r, Data_userAtom{
+		URL:       r.RequestURI,
 		Title:     data.user.Name,
 		User:      data.user,
 		Category:  data.category,

@@ -47,7 +47,7 @@ type Data_userAtom struct {
 }
 type Data_index struct {
 	Title       string
-	LoggedIn  bool
+	LoggedIn    bool
 	Data        core.LandingArtworks
 	NoTokenData core.Ranking
 }

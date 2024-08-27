@@ -17,13 +17,12 @@ import (
 // todo: allow clear proxy
 // todo: allow clear all settings
 
-func setToken(c *http.Request) error {
-	// Parse the value from the form
-	token := c.FormValue("token")
+func setToken(w http.ResponseWriter, r CompatRequest) error {
+	token := r.FormValue("token")
 	if token != "" {
 		URL := httpc.GetNewestFromFollowingURL("all", "1")
 
-		_, err := httpc.UnwrapWebAPIRequest(c.Context(), URL, token)
+		_, err := httpc.UnwrapWebAPIRequest(r.Context(), URL, token)
 		if err != nil {
 			return errors.New("Cannot authorize with supplied token.")
 		}
@@ -34,7 +33,7 @@ func setToken(c *http.Request) error {
 		if err != nil {
 			return err
 		}
-		req = req.WithContext(c.Context())
+		req = req.WithContext(r.Context())
 		req.Header.Add("User-Agent", "Mozilla/5.0")
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",
@@ -60,81 +59,80 @@ func setToken(c *http.Request) error {
 		}
 
 		// Set the token
-		session.SetCookie(c, session.Cookie_Token, token)
-		session.SetCookie(c, session.Cookie_CSRF, csrf)
+		session.SetCookie(w, session.Cookie_Token, token)
+		session.SetCookie(w, session.Cookie_CSRF, csrf)
 
 		return nil
 	}
 	return errors.New("You submitted an empty/invalid form.")
 }
 
-func setImageServer(c *http.Request) error {
-	// Parse the value from the form
-	token := c.FormValue("image-proxy")
+func setImageServer(w http.ResponseWriter, r CompatRequest) error {
+	token := r.FormValue("image-proxy")
 	if token != "" {
-		session.SetCookie(c, session.Cookie_ImageProxy, token)
+		session.SetCookie(w, session.Cookie_ImageProxy, token)
 	} else {
-		session.ClearCookie(c, session.Cookie_ImageProxy)
+		session.ClearCookie(r, session.Cookie_ImageProxy)
 	}
 	return nil
 }
 
-func setNovelFontType(c *http.Request) error {
-	fontType := c.FormValue("font-type")
+func setNovelFontType(w http.ResponseWriter, r CompatRequest) error {
+	fontType := r.FormValue("font-type")
 	if fontType != "" {
-		session.SetCookie(c, session.Cookie_NovelFontType, fontType)
+		session.SetCookie(w, session.Cookie_NovelFontType, fontType)
 	}
 
 	return nil
 }
 
-func setNovelViewMode(c *http.Request) error {
-	viewMode := c.FormValue("view-mode")
+func setNovelViewMode(w http.ResponseWriter, r CompatRequest) error {
+	viewMode := r.FormValue("view-mode")
 	if viewMode != "" {
-		session.SetCookie(c, session.Cookie_NovelViewMode, viewMode)
+		session.SetCookie(w, session.Cookie_NovelViewMode, viewMode)
 	}
 
 	return nil
 }
 
-func setThumbnailToNewTab(c *http.Request) error {
-	ttnt := c.FormValue("ttnt")
+func setThumbnailToNewTab(w http.ResponseWriter, r CompatRequest) error {
+	ttnt := r.FormValue("ttnt")
 	if ttnt == "_blank" || ttnt == "_self" {
-		session.SetCookie(c, session.Cookie_ThumbnailToNewTab, ttnt)
+		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, ttnt)
 	}
 
 	return nil
 }
 
-func setArtworkPreview(c *http.Request) error {
-	value := c.FormValue("app")
+func setArtworkPreview(w http.ResponseWriter, r CompatRequest) error {
+	value := r.FormValue("app")
 	if value == "cover" || value == "button" || value == "" {
-		session.SetCookie(c, session.Cookie_ArtworkPreview, value)
+		session.SetCookie(w, session.Cookie_ArtworkPreview, value)
 	}
 
 	return nil
 }
 
-func setLogout(c *http.Request) error {
-	session.ClearCookie(c, session.Cookie_Token)
-	session.ClearCookie(c, session.Cookie_CSRF)
+func setLogout(w http.ResponseWriter, r CompatRequest) error {
+	session.ClearCookie(r, session.Cookie_Token)
+	session.ClearCookie(r, session.Cookie_CSRF)
 	return nil
 }
 
-func setCookie(c *http.Request) error {
-	key := c.FormValue("key")
-	value := c.FormValue("value")
+func setCookie(w http.ResponseWriter, r CompatRequest) error {
+	key := r.FormValue("key")
+	value := r.FormValue("value")
 	for _, cookie_name := range session.AllCookieNames {
 		if string(cookie_name) == key {
-			session.SetCookie(c, cookie_name, value)
+			session.SetCookie(w, cookie_name, value)
 			return nil
 		}
 	}
 	return fmt.Errorf("Invalid Cookie Name: %s", key)
 }
 
-func setRawCookie(c *http.Request) error {
-	raw := c.FormValue("raw")
+func setRawCookie(w http.ResponseWriter, r CompatRequest) error {
+	raw := r.FormValue("raw")
 	lines := strings.Split(raw, "\n")
 
 	for _, line := range lines {
@@ -150,48 +148,46 @@ func setRawCookie(c *http.Request) error {
 			continue
 		}
 
-		session.SetCookie(c, name, value)
+		session.SetCookie(w, name, value)
 	}
 	return nil
 }
 
-func resetAll(c *http.Request) error {
-	session.ClearAllCookies(c)
+func resetAll(w http.ResponseWriter, r CompatRequest) error {
+	session.ClearAllCookies(w)
 	return nil
 }
 
-func SettingsPage(c *http.Request) error {
-	return Render(c, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
+func SettingsPage(w http.ResponseWriter, r CompatRequest) error {
+	return Render(w, r, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
-func SettingsPost(c *http.Request) error {
-	// NOTE: VnPower: Future maintainers should leave this function alone.
-
-	t := c.Params("type")
-	noredirect := c.FormValue("noredirect", "") == ""
+func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
+	t := r.Params("type")
+	noredirect := r.FormValue("noredirect", "") == ""
 	var err error
 
 	switch t {
 	case "imageServer":
-		err = setImageServer(c)
+		err = setImageServer(r)
 	case "token":
-		err = setToken(c)
+		err = setToken(r)
 	case "logout":
-		err = setLogout(c)
+		err = setLogout(r)
 	case "reset-all":
-		err = resetAll(c)
+		err = resetAll(r)
 	case "novelFontType":
-		err = setNovelFontType(c)
+		err = setNovelFontType(r)
 	case "thumbnailToNewTab":
-		err = setThumbnailToNewTab(c)
+		err = setThumbnailToNewTab(r)
 	case "novelViewMode":
-		err = setNovelViewMode(c)
+		err = setNovelViewMode(r)
 	case "artworkPreview":
-		err = setArtworkPreview(c)
+		err = setArtworkPreview(r)
 	case "set-cookie":
-		err = setCookie(c)
+		err = setCookie(r)
 	case "raw":
-		err = setRawCookie(c)
+		err = setRawCookie(r)
 	default:
 		err = errors.New("No such setting is available.")
 	}
@@ -204,5 +200,5 @@ func SettingsPost(c *http.Request) error {
 		return nil
 	}
 
-	return c.Redirect("/settings", http.StatusSeeOther)
+	return r.Redirect("/settings", http.StatusSeeOther)
 }

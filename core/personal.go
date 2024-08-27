@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-func GetNewestFromFollowing(c *http.Request, mode, page string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(c)
+func GetNewestFromFollowing(r *http.Request, mode, page string) ([]ArtworkBrief, error) {
+	token := session.GetPixivToken(r)
 	URL := GetNewestFromFollowingURL(mode, page)
 
 	var body struct {
@@ -19,11 +19,11 @@ func GetNewestFromFollowing(c *http.Request, mode, page string) ([]ArtworkBrief,
 		Artworks []ArtworkBrief `json:"illust"`
 	}
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	err = json.Unmarshal([]byte(resp), &body)
 	if err != nil {
