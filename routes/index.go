@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"net/http"
 )
 
 func IndexPage(w http.ResponseWriter, r CompatRequest) error {
@@ -43,7 +43,7 @@ func Oembed(w http.ResponseWriter, r CompatRequest) error {
 	artistName := r.Query("a", "")
 	artistURL := r.Query("u", "")
 
-	data := fiber.Map{
+	data := map[string]any{
 		"version":       "1.0",
 		"embed_type":    "rich",
 		"provider_name": "PixivFE",
@@ -52,5 +52,5 @@ func Oembed(w http.ResponseWriter, r CompatRequest) error {
 		"author_url":    artistURL,
 	}
 
-	return r.JSON(data)
+	return json.NewEncoder(w).Encode(data)
 }

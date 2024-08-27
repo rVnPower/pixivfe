@@ -163,7 +163,7 @@ func SettingsPage(w http.ResponseWriter, r CompatRequest) error {
 
 func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 	t := r.Params("type")
-	noredirect := r.FormValue("noredirect", "") == ""
+	noredirect := r.FormValue("noredirect") == ""
 	var err error
 
 	switch t {
@@ -199,5 +199,6 @@ func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 		return nil
 	}
 
-	return r.Redirect("/settings", http.StatusSeeOther)
+	http.Redirect(w, r.Request, "/settings", http.StatusSeeOther)
+	return nil
 }
