@@ -55,7 +55,7 @@ func TagPage(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func AdvancedTagPost(w http.ResponseWriter, r CompatRequest) error {
-	return RedirectToRoute(w, r,"/tags", map[string]string{
+	return utils.RedirectToRoute(w, r,"/tags", map[string]string{
 		"name":     r.Query("name", r.FormValue("name")),
 		"category": r.Query("category", "artworks"),
 		"order":    r.Query("order", "date_d"),
