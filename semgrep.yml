@@ -146,3 +146,10 @@ rules:
   #   func $NAME(w http.ResponseWriter, r *http.Request) error {
   #     $...I
   #   }
+- id: rule-11
+  message: "Use StatusSeeOther or StatusPermanentRedirect"
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern: |
+      StatusFound
