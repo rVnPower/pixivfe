@@ -35,7 +35,10 @@ func CanRequestSkipLimiter(r *http.Request) bool {
 func CanRequestSkipLogger(r *http.Request) bool {
 	// return false
 	path := r.URL.Path
-	return CanRequestSkipLimiter(r) ||
+	return strings.HasPrefix(path, "/img/") ||
+		strings.HasPrefix(path, "/css/") ||
+		strings.HasPrefix(path, "/js/") ||
+		strings.HasPrefix(path, "/proxy/s.pximg.net/") ||
 		strings.HasPrefix(path, "/proxy/i.pximg.net/")
 }
 
@@ -81,7 +84,6 @@ func main() {
 			// all the routes are listed here
 			router.ServeHTTP(w, r)
 		}
-
 
 		CatchError(func(w http.ResponseWriter, r *http.Request) error {
 			err := GetUserContext(r).err
@@ -228,7 +230,7 @@ func defineRoutes() *mux.Router {
 
 	// Legacy illust URL
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/artworks/"+ routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
 
 	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r *http.Request) error {
