@@ -45,8 +45,7 @@ func RankingCalendarPicker(w http.ResponseWriter, r CompatRequest) error {
 	return utils.RedirectToRoute(w, r,"/rankingCalendar",  map[string]string{
 			"mode": mode,
 			"date": date,
-		
-	}, http.StatusFound)
+	})
 }
 
 func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {

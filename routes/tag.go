@@ -69,5 +69,5 @@ func AdvancedTagPost(w http.ResponseWriter, r CompatRequest) error {
 		"tool":     r.Query("tool", r.FormValue("tool")),
 		"scd":      r.Query("scd", r.FormValue("scd")),
 		"ecd":      r.Query("ecd", r.FormValue("ecd")),
-	}, http.StatusFound)
+	})
 }
