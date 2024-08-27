@@ -55,22 +55,27 @@ rules:
   severity: WARNING
   # severity: INVENTORY
   patterns:
-  - pattern-inside: |
-      $REQ, $ERR := http.NewRequest($...ARGV)
-      ...
-  - pattern-not: |
-      $REQ, $ERR := http.NewRequest($...ARGV)
+  - pattern: |
+      $REQ, $ERR := http.NewRequestWithContext($...ARGV)
       if $ERR != nil {
-        ...
+        $...I
       }
       $REQ = $REQ.WithContext($CTX)
-      ...
   fix: |
-      $REQ, err := http.NewRequest($...ARGV)
+      $REQ, err := http.NewRequestWithContext($...ARGV)
       if err != nil {
-        return err
+        $...I
       }
-      $REQ = $REQ.WithContext(c.Context())
+- id: rule-3a
+  message: "http request without context"
+  languages: [go]
+  severity: WARNING
+  # severity: INVENTORY
+  patterns:
+  - pattern: |
+      http.NewRequest($...ARGV)
+  fix: |
+      http.NewRequestWithContext(r.Context(), $...ARGV)
 - id: rule-4
   message: "fmt.Sprint on string"
   languages: [go]
@@ -120,7 +125,7 @@ rules:
 - id: rule-9
   message: "still using *fiber.Ctx"
   languages: [go]
-  severity: INFO
+  severity: INVENTORY
   patterns:
   - pattern: |
       func $NAME(c *fiber.Ctx) error {
@@ -130,3 +135,14 @@ rules:
     func $NAME(w http.ResponseWriter, r *http.Request) error {
       $...I
     }
+- id: rule-10
+  message: "masquerading CompatRequest"
+  languages: [go]
+  severity: INFO
+  patterns:
+  - pattern: |
+      $FUNC((r : *http.Request))
+  # fix: |
+  #   func $NAME(w http.ResponseWriter, r *http.Request) error {
+  #     $...I
+  #   }
