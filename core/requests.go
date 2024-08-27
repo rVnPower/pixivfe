@@ -64,16 +64,15 @@ func WebAPIRequest(context context.Context, URL, token string) HttpResponse {
 }
 
 func webAPIRequest(context context.Context, URL, token string) HttpResponse {
-	req, err := http.NewRequest("GET", URL, nil)
-	if err != nil {
-		return HttpResponse{
-			Ok:         false,
-			StatusCode: 0,
-			Body:       "",
-			Message:    fmt.Sprintf("Failed to create a request to %s\n.", URL),
-		}
-	}
-	req = req.WithContext(context)
+	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
+ if err != nil {
+   return HttpResponse{
+ 			Ok:         false,
+ 			StatusCode: 0,
+ 			Body:       "",
+ 			Message:    fmt.Sprintf("Failed to create a request to %s\n.", URL),
+ 		}
+ }
 
 	req.Header.Add("User-Agent", config.GlobalServerConfig.UserAgent)
 	req.Header.Add("Accept-Language", config.GlobalServerConfig.AcceptLanguage)

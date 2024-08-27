@@ -14,11 +14,10 @@ import (
 func pixivPostRequest(r *fiber.Ctx, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
-	if err != nil {
-		return err
-	}
-	req = req.WithContext(r.Context())
+	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
+ if err != nil {
+   return err
+ }
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
