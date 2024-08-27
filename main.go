@@ -185,22 +185,8 @@ func main() {
 			method := r.Method
 			path := r.URL.Path
 			status := r.Response.Status
-			// err := ???
-			
-			// todo: logger
-			// server.Use(logger.New(
-			// 	logger.Config{
-			// 		Format: "${time} +${latency} ${ip} ${method} ${path} ${status} ${error} \n",
-			// 		Next:   CanRequestSkipLogger,
-			// 		CustomTags: map[string]logger.LogFunc{
-			// 			// make latency always print in seconds
-			// 			logger.TagLatency: func(output logger.Buffer, c *http.Request, data *logger.Data, extraParam string) (int, error) {
-			// 				latency := data.Stop.Sub(data.Start).Seconds()
-			// 				return output.WriteString(fmt.Sprintf("%.6f", latency))
-			// 			},
-			// 		},
-			// 	},
-			// ))
+
+			log.Printf("%v +%v %v %v %v %v {todo: print error (where is error?)}", time, latency, ip, method, path, status)
 		}
 
 	}
@@ -261,15 +247,17 @@ func setGlobalHeaders(r *http.Request) {
 	header.Add("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()")
 }
 
+func serveFile(filename string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, filename) }
+}
 func defineRoutes() http.ServeMux {
 	router := http.ServeMux{}
 
-	// todo
-	// server.Static("/favicon.ico", "./assets/img/favicon.ico")
-	// server.Static("/robots.txt", "./assets/robots.txt")
-	// server.Static("/img/", "./assets/img")
-	// server.Static("/css/", "./assets/css")
-	// server.Static("/js/", "./assets/js")
+	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
+	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
+	router.Handle("/img/", http.FileServer(http.Dir("./assets/img")))
+	router.Handle("/css/", http.FileServer(http.Dir("./assets/css")))
+	router.Handle("/js/", http.FileServer(http.Dir("./assets/js")))
 
 	// server.Use(recover.New(recover.Config{EnableStackTrace: config.GlobalServerConfig.InDevelopment}))
 
