@@ -5,8 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"codeberg.org/vnpower/pixivfe/v2/core"
 	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
 type DateWrap struct {
@@ -40,7 +42,7 @@ func RankingCalendarPicker(w http.ResponseWriter, r CompatRequest) error {
 	}
 	date := r.FormValue("date")
 
-	return RedirectToRoute(w, r,"/rankingCalendar",  map[string]string{
+	return utils.RedirectToRoute(w, r,"/rankingCalendar",  map[string]string{
 			"mode": mode,
 			"date": date,
 		
