@@ -64,7 +64,7 @@ func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {
 			return err
 		}
 	} else {
-		now := r.Context().Time()
+		now := time.Now()
 		year = now.Year()
 		month = int(now.Month())
 	}
