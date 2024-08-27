@@ -28,7 +28,18 @@ steps:
       path: *docs_path
       event: [ push, tag, release, manual ]
 
-  deploy-docs:
+  deploy-docs-cloudflare:
+    image: *alpine_image
+    environment:
+      VERCEL_ORG_ID:
+        from_secret: CLOUDFLARE_ACCOUNT_ID
+      VERCEL_PROJECT_ID:
+        from_secret: CLOUDFLARE_API_TOKEN
+    commands:
+      - apk add npm --repository https://dl-cdn.alpinelinux.org/alpine/edge/community/
+      - npx wrangler pages deploy dist --project-name=pixivfe-docs
+
+  deploy-docs-codeberg:
     image: codeberg.org/xfix/plugin-codeberg-pages-deploy:1
     settings:
       folder: site
