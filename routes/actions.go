@@ -34,10 +34,11 @@ func pixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON 
 	// 	Value: token,
 	// })
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		return errors.New("Failed to do this action.")
 	}
+	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

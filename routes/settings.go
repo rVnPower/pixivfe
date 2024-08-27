@@ -37,10 +37,11 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 			Value: token,
 		})
 
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := utils.HttpClient.Do(req)
 		if err != nil {
 			return errors.New("Cannot authorize with supplied token.")
 		}
+		defer resp.Body.Close()
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {

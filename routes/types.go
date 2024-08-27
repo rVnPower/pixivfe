@@ -1,12 +1,17 @@
 package routes
 
 import (
-	"html/template"
+	html "html/template"
+	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/template"
 	"codeberg.org/vnpower/pixivision"
 )
+
+func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
+	return template.Render(w, r, data)
+}
 
 // Tutorial: adding new types in this file
 // Whenever you add new types, update `TestTemplates` in render_test.go to include the type in the test
@@ -55,7 +60,7 @@ type Data_unauthorized struct{}
 type Data_discovery struct {
 	Artworks []core.ArtworkBrief
 	Title    string
-	Queries  utils.PartialURL
+	Queries  template.PartialURL
 }
 type Data_novelDiscovery struct {
 	Novels []core.NovelBrief
@@ -97,7 +102,7 @@ type Data_rank struct {
 }
 type Data_rankingCalendar struct {
 	Title       string
-	Render      template.HTML
+	Render      html.HTML
 	Mode        string
 	Year        int
 	MonthBefore DateWrap
@@ -112,7 +117,7 @@ type Data_tag struct {
 	Title    string
 	Tag      core.TagDetail
 	Data     core.SearchResult
-	QueriesC utils.PartialURL
+	QueriesC template.PartialURL
 	TrueTag  string
 	Page     int
 }
