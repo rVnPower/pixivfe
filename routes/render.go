@@ -57,14 +57,14 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 
 func GetTemplatingVariables(r CompatRequest) jet.VarMap {
 	// Pass in values that we want to be available to all pages here
-	token := session.GetPixivToken(r)
+	token := session.GetPixivToken(r.Request)
 	baseURL := r.BaseURL()
 	originalURL := r.OriginalURL()
 	pageURL := r.PageURL()
 
 	cookies := map[string]string{}
 	for _, name := range session.AllCookieNames {
-		value := session.GetCookie(r, name)
+		value := session.GetCookie(r.Request, name)
 		cookies[string(name)] = value
 	}
 
