@@ -6,15 +6,20 @@ import (
 	"net/http"
 )
 
-func makeRequest(w http.ResponseWriter, req *http.Request) error {
+func copyRequest(w http.ResponseWriter, req *http.Request) error {
 	// Make the request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
 	}
 
-	w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
+	// copy headers
+	header := w.Header()
+	for k, v := range resp.Header {
+		header[k] = v
+	}
 
+	// copy body
 	_, err = io.Copy(w, resp.Body)
 	return err
 }
@@ -25,7 +30,7 @@ func SPximgProxy(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return makeRequest(w, req)
+	return copyRequest(w, req)
 }
 
 func IPximgProxy(w http.ResponseWriter, r *http.Request) error {
@@ -35,7 +40,7 @@ func IPximgProxy(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	req.Header.Add("Referer", "https://www.pixiv.net/")
-	return makeRequest(w, req)
+	return copyRequest(w, req)
 }
 
 func UgoiraProxy(w http.ResponseWriter, r *http.Request) error {
@@ -44,5 +49,5 @@ func UgoiraProxy(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return makeRequest(w, req)
+	return copyRequest(w, req)
 }
