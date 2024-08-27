@@ -51,7 +51,7 @@ func SetCookie(w http.ResponseWriter, name CookieName, value string) {
 		Value: value,
 		Path:  "/",
 		// expires in 30 days from now
-		Expires:  r.Context().Time().Add(30 * (24 * time.Hour)),
+		Expires:  time.Now().Add(30 * (24 * time.Hour)),
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteStrictMode, // bye-bye cross site forgery

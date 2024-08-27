@@ -34,15 +34,17 @@ func parseDate(t time.Time) DateWrap {
 }
 
 func RankingCalendarPicker(w http.ResponseWriter, r CompatRequest) error {
-	mode := r.FormValue("mode", "daily")
-	date := r.FormValue("date", "")
+	mode := r.FormValue("mode")
+	if mode == "" {
+		mode = "daily"
+	}
+	date := r.FormValue("date")
 
-	return r.RedirectToRoute("/rankingCalendar", fiber.Map{
-		"queries": map[string]string{
+	return RedirectToRoute(w, r,"/rankingCalendar",  map[string]string{
 			"mode": mode,
 			"date": date,
-		},
-	})
+		
+	}, http.StatusFound)
 }
 
 func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {

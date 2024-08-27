@@ -55,21 +55,19 @@ func TagPage(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func AdvancedTagPost(w http.ResponseWriter, r CompatRequest) error {
-	return r.RedirectToRoute("/tags", fiber.Map{
-		"queries": map[string]string{
-			"name":     r.Query("name", r.FormValue("name")),
-			"category": r.Query("category", "artworks"),
-			"order":    r.Query("order", "date_d"),
-			"mode":     r.Query("mode", "safe"),
-			"ratio":    r.Query("ratio"),
-			"page":     r.Query("page", "1"),
-			"wlt":      r.Query("wlt", r.FormValue("wlt")),
-			"wgt":      r.Query("wgt", r.FormValue("wgt")),
-			"hlt":      r.Query("hlt", r.FormValue("hlt")),
-			"hgt":      r.Query("hgt", r.FormValue("hgt")),
-			"tool":     r.Query("tool", r.FormValue("tool")),
-			"scd":      r.Query("scd", r.FormValue("scd")),
-			"ecd":      r.Query("ecd", r.FormValue("ecd")),
-		},
+	return RedirectToRoute(w, r,"/tags", map[string]string{
+		"name":     r.Query("name", r.FormValue("name")),
+		"category": r.Query("category", "artworks"),
+		"order":    r.Query("order", "date_d"),
+		"mode":     r.Query("mode", "safe"),
+		"ratio":    r.Query("ratio"),
+		"page":     r.Query("page", "1"),
+		"wlt":      r.Query("wlt", r.FormValue("wlt")),
+		"wgt":      r.Query("wgt", r.FormValue("wgt")),
+		"hlt":      r.Query("hlt", r.FormValue("hlt")),
+		"hgt":      r.Query("hgt", r.FormValue("hgt")),
+		"tool":     r.Query("tool", r.FormValue("tool")),
+		"scd":      r.Query("scd", r.FormValue("scd")),
+		"ecd":      r.Query("ecd", r.FormValue("ecd")),
 	}, http.StatusFound)
 }

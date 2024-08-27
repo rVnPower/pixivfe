@@ -26,7 +26,7 @@ func ArtworkPage(w http.ResponseWriter, r CompatRequest) error {
 
 	// monkey patching. assuming illust.Images[_].Large is used
 	for _, img := range illust.Images {
-		PreloadImage(r, img.Large)
+		PreloadImage(w, img.Large)
 	}
 
 	return Render(w, r, Data_artwork{
@@ -39,6 +39,6 @@ func ArtworkPage(w http.ResponseWriter, r CompatRequest) error {
 	})
 }
 
-func PreloadImage(r *fiber.Ctx, url string) {
-	r.Response().Header.Add("Link", fmt.Sprintf("<%s>; rel=preload; as=image", url))
+func PreloadImage(w http.ResponseWriter, url string) {
+	w.Header().Add("Link", fmt.Sprintf("<%s>; rel=preload; as=image", url))
 }
