@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"net/http"
 	"github.com/tidwall/gjson"
 )
 

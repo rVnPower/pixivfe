@@ -7,7 +7,6 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
-	"net/http"
 )
 
 func TagPage(c *http.Request) error {
