@@ -1,16 +1,18 @@
 # Roadmap
 
+Planned features.
+
 ## To implement
 
 /settings/
 
 - [x] Merge login page with settings page
 - [x] Persistence (http-only secure cookies)
-- [User Settings](user-customization.md)
+- [User Settings](features/user-customization.md)
 
 /novel/
 
-- [Novel support](novels.md)  
+- [Novel support](features/novels.md)  
 Might need some ideas for the reader's UI.  
 Allow options for font size and family?  
 Black and white backgrounds?  
