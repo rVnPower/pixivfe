@@ -10,3 +10,8 @@
   - Logging
   - Rate limit (optional, could be loosely-coupled)
   - Caching (optional, could be loosely-coupled)
+
+
+## Tips
+
+To access `/:abc`, use `r.PathValue("abc")`.
