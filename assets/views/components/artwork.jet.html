@@ -36,11 +36,11 @@
   </div>
   <div class="artwork-actions">
     {{ if isset(.BookmarkData) && LoggedIn }}
-    <a href="/self/deleteBookmark/{{ .BookmarkID }}?r={{ OriginalURL }}">
+    <a href="/self/deleteBookmark/{{ .BookmarkID }}">
       <img src="/img/heart-red.png" alt="Bookmarked" />
     </a>
     {{ else }}
-    <a href="/self/addBookmark/{{ .ID }}?r={{ OriginalURL }}">
+    <a href="/self/addBookmark/{{ .ID }}">
       <img src="/img/heart-outline.png" alt="Bookmark" />
     </a>
     {{ end }}
@@ -49,7 +49,7 @@
     <img src="/img/like-blue.png" alt="Liked" />
 
     {{ else }}
-    <a href="/self/like/{{ .ID }}?r={{ OriginalURL }}">
+    <a href="/self/like/{{ .ID }}">
       <img src="/img/like-outline.png" alt="Like" />
     </a>
     {{ end }}

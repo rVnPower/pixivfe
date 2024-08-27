@@ -160,7 +160,6 @@ func SettingsPage(w http.ResponseWriter, r CompatRequest) error {
 
 func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 	t := r.Params("type")
-	noredirect := r.FormValue("noredirect") == ""
 	var err error
 
 	switch t {
@@ -192,10 +191,14 @@ func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	if !noredirect {
-		return nil
-	}
-
-	http.Redirect(w, r.Request, "/settings", http.StatusSeeOther)
+	RedirectToWhenceYouCame(w, r)
 	return nil
+}
+
+func RedirectToWhenceYouCame(w http.ResponseWriter, r CompatRequest) {
+	if strings.HasPrefix(r.Referer(), r.BaseURL()) {
+		http.Redirect(w, r.Request, r.Referer(), http.StatusSeeOther)
+	} else {
+		w.WriteHeader(200)
+	}
 }

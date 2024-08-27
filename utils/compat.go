@@ -20,17 +20,6 @@ func (r CompatRequest) BaseURL() string {
 		Host:   r.URL.Host,
 	}).String()
 }
-func (r CompatRequest) OriginalURL() string {
-	return (&url.URL{
-		Path:        r.URL.Path,
-		RawPath:     r.URL.RawPath,
-		OmitHost:    r.URL.OmitHost,
-		ForceQuery:  r.URL.ForceQuery,
-		RawQuery:    r.URL.RawQuery,
-		Fragment:    r.URL.Fragment,
-		RawFragment: r.URL.RawFragment,
-	}).String()
-}
 func (r CompatRequest) PageURL() string {
 	return r.URL.String()
 }

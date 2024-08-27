@@ -72,17 +72,11 @@ func main() {
 		setGlobalHeaders(w, r)
 
 		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
+			// strip trailing / to make router behave
 			url := r.URL
 			url.Path, _ = strings.CutSuffix(url.Path, "/")
-			http.Redirect(w, r, url.String(), http.StatusFound)
+			http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 		} else {
-			// redirect any request with ?r=url
-			redirect_to := r.URL.Query().Get("r")
-			if redirect_to != "" {
-				// could this be unsafe since this redirects to any website?
-				http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
-			}
-	
 			// all the routes are listed here
 			router.ServeHTTP(w, r)
 		}
@@ -91,7 +85,7 @@ func main() {
 		CatchError(func(w http.ResponseWriter, r utils.CompatRequest) error {
 			err := GetUserContext(r.Request).err
 			if err != nil { // error handler
-				log.Println(err)
+				log.Println("Within handler: ", err)
 				code := http.StatusInternalServerError
 				w.WriteHeader(code)
 				// Send custom error page
@@ -168,7 +162,7 @@ func setGlobalHeaders(w http.ResponseWriter, r *http.Request) {
 	header.Add("X-Frame-Options", "DENY")
 	// use this if need iframe: `X-Frame-Options: SAMEORIGIN`
 	header.Add("X-Content-Type-Options", "nosniff")
-	header.Add("Referrer-Policy", "no-referrer")
+	header.Add("Referrer-Policy", "same-origin") // needed for settings redirect
 	header.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
 	header.Add("Content-Security-Policy", fmt.Sprintf("base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' %s; media-src 'self' %s; connect-src 'self'; form-action 'self'; frame-ancestors 'none';", session.GetImageProxyOrigin(r), session.GetImageProxyOrigin(r)))
 	// use this if need iframe: `frame-ancestors 'self'`
@@ -213,7 +207,6 @@ func defineRoutes() *mux.Router {
 	// Settings group
 	router.HandleFunc("/settings", CatchError(routes.SettingsPage)).Methods("GET")
 	router.HandleFunc("/settings/{type}", CatchError(routes.SettingsPost)).Methods("POST")
-	router.HandleFunc("/settings/{type}/{noredirect}?", CatchError(routes.SettingsPost)).Methods("POST")
 
 	// Personal group
 	router.HandleFunc("/self", CatchError(routes.LoginUserPage)).Methods("GET")
