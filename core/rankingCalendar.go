@@ -2,14 +2,15 @@ package core
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"time"
 
+	"golang.org/x/net/html"
+	"github.com/andybalholm/cascadia"
+	
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 
-	"golang.org/x/net/html"
 )
 
 func get_weekday(n time.Weekday) int {
@@ -32,16 +33,18 @@ func get_weekday(n time.Weekday) int {
 	return 0
 }
 
+var selector_img = cascadia.MustCompile("img")
+
 // note(@iacore):
 // so the funny thing about Pixiv is that they will return this month's data for a request of a future date
 // is it a bug or a feature?
-func GetRankingCalendar(r *http.Request, mode string, year, month int) (template.HTML, error) {
+func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, error) {
 	token := session.GetPixivToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
 
 	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
 	if err != nil {
-		return template.HTML(""), err
+		return HTML(""), err
 	}
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
@@ -61,26 +64,17 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (template
 	if err != nil {
 		return "", err
 	}
-
+	
 	// Find and print all links on the web page
 	var links []string
-	var link func(*html.Node)
-	link = func(n *html.Node) {
-		if n.Type == html.ElementNode && n.Data == "img" {
-			for _, a := range n.Attr {
-				if a.Key == "data-src" {
-					// adds a new link entry when the attribute matches
-					links = append(links, session.ProxyImageUrlNoEscape(r, a.Val))
-				}
+	for _, node := range cascadia.QueryAll(doc, selector_img) {
+		for _, attr := range node.Attr {
+			if attr.Key == "data-src" {
+				// adds a new link entry when the attribute matches
+				links = append(links, session.ProxyImageUrlNoEscape(r, attr.Val))
 			}
 		}
-
-		// traverses the HTML of the webpage from the first child node
-		for r := n.FirstChild; r != nil; r = r.NextSibling {
-			link(r)
-		}
 	}
-	link(doc)
 
 	// now := r.Context().Time()
 	// yearNow := now.Year()
@@ -100,5 +94,5 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (template
 			renderString += fmt.Sprintf(`<div class="calendar-node"><span>%d</span></div>`, i+1)
 		}
 	}
-	return template.HTML(renderString), nil
+	return HTML(renderString), nil
 }
