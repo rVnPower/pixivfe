@@ -16,7 +16,7 @@ type userPageData struct {
 	page      int
 }
 
-func fetchData(r *fiber.Ctx, getTags bool) (userPageData, error) {
+func fetchData(r CompatRequest, getTags bool) (userPageData, error) {
 	id := r.Params("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return userPageData{}, err
