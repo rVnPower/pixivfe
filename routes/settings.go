@@ -113,8 +113,8 @@ func setArtworkPreview(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func setLogout(w http.ResponseWriter, r CompatRequest) error {
-	session.ClearCookie(r, session.Cookie_Token)
-	session.ClearCookie(r, session.Cookie_CSRF)
+	session.ClearCookie(r.Request, session.Cookie_Token)
+	session.ClearCookie(r.Request, session.Cookie_CSRF)
 	return nil
 }
 

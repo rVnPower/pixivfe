@@ -14,7 +14,7 @@ func ArtworkPage(w http.ResponseWriter, r CompatRequest) error {
 		return fmt.Errorf("Invalid ID: %s", id)
 	}
 
-	illust, err := core.GetArtworkByID(r, id, true)
+	illust, err := core.GetArtworkByID(r.Request, id, true)
 	if err != nil {
 		return err
 	}

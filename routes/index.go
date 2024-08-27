@@ -10,10 +10,10 @@ import (
 
 func IndexPage(w http.ResponseWriter, r CompatRequest) error {
 	// If token is set, do the landing request...
-	if token := session.GetPixivToken(r); token != "" {
+	if token := session.GetPixivToken(r.Request); token != "" {
 		mode := r.Query("mode", "all")
 
-		works, err := core.GetLanding(r, mode)
+		works, err := core.GetLanding(r.Request, mode)
 
 		if err != nil {
 			return err
@@ -27,7 +27,7 @@ func IndexPage(w http.ResponseWriter, r CompatRequest) error {
 	}
 
 	// ...otherwise, default to today's illustration ranking
-	works, err := core.GetRanking(r, "daily", "illust", "", "1")
+	works, err := core.GetRanking(r.Request, "daily", "illust", "", "1")
 	if err != nil {
 		return err
 	}

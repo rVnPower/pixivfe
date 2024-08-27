@@ -40,11 +40,11 @@ func TagPage(w http.ResponseWriter, r CompatRequest) error {
 		Page:     page,
 	}
 
-	tag, err := core.GetTagData(r, name)
+	tag, err := core.GetTagData(r.Request, name)
 	if err != nil {
 		return err
 	}
-	result, err := core.GetSearch(r, queries)
+	result, err := core.GetSearch(r.Request, queries)
 	if err != nil {
 		return err
 	}

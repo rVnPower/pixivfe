@@ -149,7 +149,7 @@ func main() {
 	// 			KeyGenerator: func(r *http.Request) string {
 	// 				key := fiber_utils.CopyString(r.OriginalURL())
 	// 				for _, cookieName := range session.AllCookieNames {
-	// 					cookieValue := session.GetCookie(r, cookieName)
+	// 					cookieValue := session.GetCookie(r.Request, cookieName)
 	// 					if cookieValue != "" {
 	// 						key += "\x00\x00"
 	// 						key += string(cookieName)

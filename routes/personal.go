@@ -15,7 +15,7 @@ func PromptUserToLoginPage(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func LoginUserPage(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r)
+	token := session.GetPixivToken(r.Request)
 
 	if token == "" {
 		return PromptUserToLoginPage(r)
@@ -29,7 +29,7 @@ func LoginUserPage(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func LoginBookmarkPage(w http.ResponseWriter, r CompatRequest) error {
-	token := session.GetPixivToken(r)
+	token := session.GetPixivToken(r.Request)
 	if token == "" {
 		return PromptUserToLoginPage(r)
 	}
@@ -42,7 +42,7 @@ func LoginBookmarkPage(w http.ResponseWriter, r CompatRequest) error {
 }
 
 func FollowingWorksPage(w http.ResponseWriter, r CompatRequest) error {
-	if token := session.GetPixivToken(r); token == "" {
+	if token := session.GetPixivToken(r.Request); token == "" {
 		return PromptUserToLoginPage(r)
 	}
 
@@ -54,7 +54,7 @@ func FollowingWorksPage(w http.ResponseWriter, r CompatRequest) error {
 		return err
 	}
 
-	works, err := core.GetNewestFromFollowing(r, mode, page)
+	works, err := core.GetNewestFromFollowing(r.Request, mode, page)
 	if err != nil {
 		return err
 	}

@@ -73,7 +73,7 @@ func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {
 	monthBefore := realDate.AddDate(0, -1, 0)
 	monthAfter := realDate.AddDate(0, 1, 0)
 
-	render, err := core.GetRankingCalendar(r, mode, year, month)
+	render, err := core.GetRankingCalendar(r.Request, mode, year, month)
 	if err != nil {
 		return err
 	}
