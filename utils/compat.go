@@ -1,6 +1,7 @@
-package routes
+package utils
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/url"
 
@@ -72,4 +73,8 @@ func RedirectToRoute(w http.ResponseWriter, r CompatRequest, path string, query_
 	}
 	http.Redirect(w, r.Request, path+query.Encode(), code)
 	return nil
+}
+
+func WriteJson(w http.ResponseWriter, data any) {
+	json.NewEncoder(w).Encode(data)
 }

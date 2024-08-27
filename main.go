@@ -20,6 +20,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {
@@ -70,16 +71,24 @@ func main() {
 
 		setGlobalHeaders(w, r)
 
-		// redirect any request with ?r=url
-		redirect_to := r.URL.Query().Get("r")
-		if redirect_to != "" {
-			// could this be unsafe since this redirects to any website?
-			http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
+			url := r.URL
+			url.Path, _ = strings.CutSuffix(url.Path, "/")
+			http.Redirect(w, r, url.String(), http.StatusFound)
+		} else {
+			// redirect any request with ?r=url
+			redirect_to := r.URL.Query().Get("r")
+			if redirect_to != "" {
+				// could this be unsafe since this redirects to any website?
+				http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+			}
+	
+			// all the routes are listed here
+			router.ServeHTTP(w, r)
 		}
 
-		router.ServeHTTP(w, r)
 
-		CatchError(func(w http.ResponseWriter, r routes.CompatRequest) error {
+		CatchError(func(w http.ResponseWriter, r utils.CompatRequest) error {
 			err := GetUserContext(r.Request).err
 			if err != nil { // error handler
 				log.Println(err)
@@ -88,7 +97,7 @@ func main() {
 				// Send custom error page
 				err = routes.Render(w, r, routes.Data_error{Title: "Error", Error: err})
 				if err != nil {
-					err = routes.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
+					err = utils.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
 					if err != nil {
 						return err
 					}
@@ -195,9 +204,9 @@ func defineRoutes() *mux.Router {
 	router.HandleFunc("/users/{id}/{category}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
 	router.HandleFunc("/users/{id}", CatchError(routes.UserPage)).Methods("GET")
 	router.HandleFunc("/users/{id}/{category}", CatchError(routes.UserPage)).Methods("GET")
-	router.HandleFunc("/artworks/{id}/", CatchError(routes.ArtworkPage)).Methods("GET")
-	router.HandleFunc("/artworks-multi/{ids}/", CatchError(routes.ArtworkMultiPage)).Methods("GET")
-	router.HandleFunc("/novel/{id}/", CatchError(routes.NovelPage)).Methods("GET")
+	router.HandleFunc("/artworks/{id}", CatchError(routes.ArtworkPage)).Methods("GET")
+	router.HandleFunc("/artworks-multi/{ids}", CatchError(routes.ArtworkMultiPage)).Methods("GET")
+	router.HandleFunc("/novel/{id}", CatchError(routes.NovelPage)).Methods("GET")
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
 	router.HandleFunc("/pixivision/a/{id}", CatchError(routes.PixivisionArticlePage)).Methods("GET")
 
@@ -224,7 +233,7 @@ func defineRoutes() *mux.Router {
 
 	// Legacy illust URL
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/artworks/"+routes.CompatRequest{Request: r}.Query("illust_id"), http.StatusFound)
+		http.Redirect(w, r, "/artworks/"+utils.CompatRequest{Request: r}.Query("illust_id"), http.StatusFound)
 	}).Methods("GET")
 
 	// Proxy routes
@@ -232,16 +241,16 @@ func defineRoutes() *mux.Router {
 	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
 	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
 
-	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r routes.CompatRequest) error {
+	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r utils.CompatRequest) error {
 		return errors.New("Route not found")
 	}))
 
 	return router
 }
 
-func CatchError(handler func(w http.ResponseWriter, r routes.CompatRequest) error) http.HandlerFunc {
+func CatchError(handler func(w http.ResponseWriter, r utils.CompatRequest) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		GetUserContext(r).err = handler(w, routes.CompatRequest{Request: r})
+		GetUserContext(r).err = handler(w, utils.CompatRequest{Request: r})
 	}
 }
 
