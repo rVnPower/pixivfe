@@ -7,10 +7,10 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func TagPage(c *fiber.Ctx) error {
+func TagPage(c *http.Request) error {
 	param := c.Params("name", c.Query("name"))
 	name, err := url.PathUnescape(param)
 	if err != nil {
@@ -55,7 +55,7 @@ func TagPage(c *fiber.Ctx) error {
 	return Render(c, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
 }
 
-func AdvancedTagPost(c *fiber.Ctx) error {
+func AdvancedTagPost(c *http.Request) error {
 	return c.RedirectToRoute("/tags", fiber.Map{
 		"queries": map[string]string{
 			"name":     c.Query("name", c.FormValue("name")),

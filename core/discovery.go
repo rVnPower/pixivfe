@@ -5,11 +5,11 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 	"github.com/tidwall/gjson"
 )
 
-func GetDiscoveryArtwork(c *fiber.Ctx, mode string) ([]ArtworkBrief, error) {
+func GetDiscoveryArtwork(c *http.Request, mode string) ([]ArtworkBrief, error) {
 	token := session.GetPixivToken(c)
 
 	URL := GetDiscoveryURL(mode, 100)
@@ -34,7 +34,7 @@ func GetDiscoveryArtwork(c *fiber.Ctx, mode string) ([]ArtworkBrief, error) {
 	return artworks, nil
 }
 
-func GetDiscoveryNovels(c *fiber.Ctx, mode string) ([]NovelBrief, error) {
+func GetDiscoveryNovels(c *http.Request, mode string) ([]NovelBrief, error) {
 	token := session.GetPixivToken(c)
 
 	URL := GetDiscoveryNovelURL(mode, 100)

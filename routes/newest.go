@@ -2,10 +2,10 @@ package routes
 
 import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func NewestPage(c *fiber.Ctx) error {
+func NewestPage(c *http.Request) error {
 	worktype := c.Query("type", "illust")
 
 	r18 := c.Query("r18", "false")

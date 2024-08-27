@@ -4,10 +4,10 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/session"
 
 	"github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func GetNewestFromFollowing(c *fiber.Ctx, mode, page string) ([]ArtworkBrief, error) {
+func GetNewestFromFollowing(c *http.Request, mode, page string) ([]ArtworkBrief, error) {
 	token := session.GetPixivToken(c)
 	URL := GetNewestFromFollowingURL(mode, page)
 

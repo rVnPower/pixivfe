@@ -27,18 +27,12 @@ type HttpResponse struct {
 const DevDir_Response = "/tmp/pixivfe-dev/resp"
 
 func CreateResponseAuditFolder() error {
-	if config.GlobalServerConfig.InDevelopment {
-		// {err := os.RemoveAll(DevDir_Response)
-		// if err != nil {
-		// 	log.Println(err)
-		// }}
+	// err := os.RemoveAll(DevDir_Response)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
-		err := os.MkdirAll(DevDir_Response, 0o700)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	return os.MkdirAll(DevDir_Response, 0o700)
 }
 
 func logResponseBody(body string) (string, error) {

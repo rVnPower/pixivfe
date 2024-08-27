@@ -5,10 +5,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func SPximgProxy(c *fiber.Ctx) error {
+func SPximgProxy(c *http.Request) error {
 	URL := fmt.Sprintf("https://s.pximg.net/%s", c.Params("*"))
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
@@ -33,7 +33,7 @@ func SPximgProxy(c *fiber.Ctx) error {
 	return c.Send([]byte(body))
 }
 
-func IPximgProxy(c *fiber.Ctx) error {
+func IPximgProxy(c *http.Request) error {
 	URL := fmt.Sprintf("https://i.pximg.net/%s", c.Params("*"))
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
@@ -59,7 +59,7 @@ func IPximgProxy(c *fiber.Ctx) error {
 	return c.Send([]byte(body))
 }
 
-func UgoiraProxy(c *fiber.Ctx) error {
+func UgoiraProxy(c *http.Request) error {
 	URL := fmt.Sprintf("https://ugoira.com/api/mp4/%s", c.Params("*"))
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {

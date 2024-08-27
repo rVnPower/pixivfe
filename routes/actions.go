@@ -8,11 +8,11 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 	"github.com/tidwall/gjson"
 )
 
-func pixivPostRequest(c *fiber.Ctx, url, payload, token, csrf string, isJSON bool) error {
+func pixivPostRequest(c *http.Request, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
@@ -60,7 +60,7 @@ func pixivPostRequest(c *fiber.Ctx, url, payload, token, csrf string, isJSON boo
 	return nil
 }
 
-func AddBookmarkRoute(c *fiber.Ctx) error {
+func AddBookmarkRoute(c *http.Request) error {
 	token := session.GetPixivToken(c)
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
@@ -87,7 +87,7 @@ func AddBookmarkRoute(c *fiber.Ctx) error {
 	return c.SendString("Success")
 }
 
-func DeleteBookmarkRoute(c *fiber.Ctx) error {
+func DeleteBookmarkRoute(c *http.Request) error {
 	token := session.GetPixivToken(c)
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 
@@ -110,7 +110,7 @@ func DeleteBookmarkRoute(c *fiber.Ctx) error {
 	return c.SendString("Success")
 }
 
-func LikeRoute(c *fiber.Ctx) error {
+func LikeRoute(c *http.Request) error {
 	token := session.GetPixivToken(c)
 	csrf := session.GetCookie(c, session.Cookie_CSRF)
 

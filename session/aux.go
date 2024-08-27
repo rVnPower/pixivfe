@@ -2,18 +2,18 @@ package session
 
 import (
 	"log"
+	"net/http"
 	"net/url"
 	"strings"
 
 	config "codeberg.org/vnpower/pixivfe/v2/config"
-	"github.com/gofiber/fiber/v2"
 )
 
-func GetPixivToken(c *fiber.Ctx) string {
+func GetPixivToken(c *http.Request) string {
 	return GetCookie(c, Cookie_Token)
 }
 
-func GetImageProxy(c *fiber.Ctx) url.URL {
+func GetImageProxy(c *http.Request) url.URL {
 	value := GetCookie(c, Cookie_ImageProxy)
 	if value == "" {
 		// fall through to default case
@@ -28,7 +28,7 @@ func GetImageProxy(c *fiber.Ctx) url.URL {
 	return config.GlobalServerConfig.ProxyServer
 }
 
-func ProxyImageUrl(c *fiber.Ctx, s string) string {
+func ProxyImageUrl(c *http.Request, s string) string {
 	proxyOrigin := GetImageProxyPrefix(c)
 	s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, proxyOrigin)
 	// s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, "/proxy/i.pximg.net")
@@ -36,7 +36,7 @@ func ProxyImageUrl(c *fiber.Ctx, s string) string {
 	return s
 }
 
-func ProxyImageUrlNoEscape(c *fiber.Ctx, s string) string {
+func ProxyImageUrlNoEscape(c *http.Request, s string) string {
 	proxyOrigin := GetImageProxyPrefix(c)
 	s = strings.ReplaceAll(s, `https://i.pximg.net`, proxyOrigin)
 	// s = strings.ReplaceAll(s, `https:\/\/i.pximg.net`, "/proxy/i.pximg.net")
@@ -44,12 +44,12 @@ func ProxyImageUrlNoEscape(c *fiber.Ctx, s string) string {
 	return s
 }
 
-func GetImageProxyOrigin(c *fiber.Ctx) string {
+func GetImageProxyOrigin(c *http.Request) string {
 	url := GetImageProxy(c)
 	return urlAuthority(url)
 }
 
-func GetImageProxyPrefix(c *fiber.Ctx) string {
+func GetImageProxyPrefix(c *http.Request) string {
 	url := GetImageProxy(c)
 	return urlAuthority(url) + url.Path
 	// note: not sure if url.EscapedPath() is useful here. go's standard library is trash at handling URL (:// should be part of the scheme)

@@ -3,10 +3,10 @@ package routes
 import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"github.com/gofiber/fiber/v2"
+	"net/http"
 )
 
-func IndexPage(c *fiber.Ctx) error {
+func IndexPage(c *http.Request) error {
 
 	// If token is set, do the landing request...
 	if token := session.GetPixivToken(c); token != "" {
@@ -37,7 +37,7 @@ func IndexPage(c *fiber.Ctx) error {
 	})
 }
 
-func Oembed(c *fiber.Ctx) error {
+func Oembed(c *http.Request) error {
 	pageURL := c.BaseURL()
 	artistName := c.Query("a", "")
 	artistURL := c.Query("u", "")
