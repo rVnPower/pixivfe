@@ -1,10 +1,8 @@
-# A unified documentation for PixivFE
-
-## Proposals
+# Proposals
 
 This section contains some potential features or redesigns that can be implemented into PixivFE.
 
-### Pixivision
+## Pixivision
 **Summary**: Pixivision is a service owned by Pixiv that publishes articles about various types of artwork themes...
 
 **Notes**: [Pixivision](https://www.pixivision.net/en/) is an independent service. Most of the data comes from Pixivision's website.
@@ -14,7 +12,7 @@ Pixivision does not provide an API for data access. Pages on Pixivision seems to
 - Write a separate module for Pixivision and integrate it into PixivFE.
 - We do web scraping and HTML parsing for this one.
 
-### Sketch
+## Sketch
 
 **Summary**: Sketch is a service owned by Pixiv that allow users to livestream, mostly for their drawing process.
 
@@ -26,7 +24,7 @@ Detailed notes TBA.
 - Thanks to the public API, pages could be build easily.
 - For the streaming part, we may have to include a JavaScript library for HLS streaming.
 
-### Ugoira support
+## Ugoira support
 
 **Summary**: Ugoiras are Pixiv's "animated image" format.
 
@@ -39,7 +37,7 @@ You can checkout Pixiv's implementation on their own ugoira player [here](https:
 - GIF/APNG/WEBP renderer.
 - Some people want to convert ugoiras to video formats? (no idea)
 
-### Landing page
+## Landing page
 
 **Summary**: PixivFE's homepage.
 
@@ -51,7 +49,7 @@ The only thing left is to write the frontend for them. Detailed notes TBA.
 - Spend some time to write some HTML/SCSS.
 - Currently, you have to authenticate (login) in order to access the *full* landing page. Can we show the *full* page to unauthenticated users as well?
 
-### Popular artworks
+## Popular artworks
 
 **Summary**: Pixiv has a "Sort by views" and "Sort by bookmarks" feature that is only available for premium users.
 
@@ -61,7 +59,7 @@ The only thing left is to write the frontend for them. Detailed notes TBA.
 - Look into repos that attempts to retrieve popular artworks
 - If search "hacking" is possible, could there be more "hacks" around?
 
-### "User discovery" page
+## "User discovery" page
 
 **Summary**: Like artwork discovery, but it is for users.
 
@@ -71,7 +69,7 @@ The development for this page has been put on hold because of it, since "followi
 **Ideas**:
 - It is easy to implement thanks to the API.
 
-### Search suggestions
+## Search suggestions
 
 **Summary**: Pixiv provides [an API endpoint](https://www.pixiv.net/ajax/search/suggestion?mode=all&lang=en) for search suggestions.
 
@@ -82,7 +80,7 @@ The development for this page has been put on hold because of it, since "followi
 - We can implement JavaScript to fetch the suggestions every time the user focuses on the search bar.
 - We can create a separate page just for this.
 
-### App API support
+## App API support
 
 **Summary**: Apart of the public AJAX API, Pixiv also provides a private API, used specifically for mobile applications.
 
@@ -92,37 +90,15 @@ I added this section because there are some limitations to the public API (follo
 **Ideas**:
 - Write more stuff when desperate.
 
-### Novel page
-### Image grid layout
-### Series
-### Server's PixivFE Git version/commit
-### Artwork filters
-### Quick download button
-### Download all buttons for all containers
-### Filters
-### Page profile
-### Option to open in new tabs
-### Download button in artwork page
-### Option to select default image quality in artwork page
-
-## Flaws
-
-This section documents some bad/buggy designs in PixivFE's design, both frontend and backend.
-
-### Cookies management / validation
-
-All cookie values could be set directly without validation. Should we be concerned?
-
-### "Switchers"
-
-Switchers should know what the current value is.
-
-### "kmutex"
-
-Sometimes panics.
-
-## References
-
-This section contains multiple external links to materials/resources that could help.
-
-- [pixiv.pics](https://www.pixiv.pics/)
+## Novel page
+## Image grid layout
+## Series
+## Server's PixivFE Git version/commit
+## Artwork filters
+## Quick download button
+## Download all buttons for all containers
+## Filters
+## Page profile
+## Option to open in new tabs
+## Download button in artwork page
+## Option to select default image quality in artwork page

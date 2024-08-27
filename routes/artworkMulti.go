@@ -58,6 +58,12 @@ func ArtworkMultiPage(w http.ResponseWriter, r *http.Request) error {
 		return err_global
 	}
 
+	for _, illust := range artworks {
+		for _, img := range illust.Images {
+			PreloadImage(w, img.Large)
+		}
+	}
+
 	return Render(w, r, Data_artworkMulti{
 		Artworks: artworks,
 		Title:    fmt.Sprintf("(%d images)", len(artworks)),
