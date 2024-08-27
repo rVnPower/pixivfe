@@ -14,9 +14,6 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/session"
 )
 
-// todo: allow clear proxy
-// todo: allow clear all settings
-
 func setToken(w http.ResponseWriter, r CompatRequest) error {
 	token := r.FormValue("token")
 	if token != "" {
