@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gorilla/mux"
+
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-
-	"github.com/gorilla/mux"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {
