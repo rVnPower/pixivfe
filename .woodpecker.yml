@@ -20,9 +20,8 @@ steps:
 
   generate-docs:
     image: woodpeckerci/plugin-mkdocs:minimal
-    directory: doc/
     settings:
-      site_dir: build/
+      site_dir: build
       verbose: true
       pip_install_file: requirements.txt
     when:
@@ -32,7 +31,6 @@ steps:
 
   deploy-docs:
     image: codeberg.org/xfix/plugin-codeberg-pages-deploy:1
-    directory: doc/
     settings:
       folder: build
       ssh_key:
