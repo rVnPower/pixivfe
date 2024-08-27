@@ -10,8 +10,12 @@ import (
 )
 
 func PromptUserToLoginPage(w http.ResponseWriter, r CompatRequest) error {
-	r.Response.StatusCode = http.StatusUnauthorized
-	return Render(w, r, Data_unauthorized{})
+	err := Render(w, r, Data_unauthorized{})
+	if err != nil {
+		return err
+	}
+	w.WriteHeader(http.StatusUnauthorized)
+	return nil
 }
 
 func LoginUserPage(w http.ResponseWriter, r CompatRequest) error {
