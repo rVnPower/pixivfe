@@ -10,19 +10,19 @@ import (
 	"net/http"
 )
 
-func ArtworkMultiPage(c *http.Request) error {
-	ids_ := c.Params("ids")
+func ArtworkMultiPage(w http.ResponseWriter, r CompatRequest) error {
+	ids_ := r.Params("ids")
 	ids := strings.Split(ids_, ",")
 
 	artworks := make([]core.Illust, len(ids))
 
 	wg := sync.WaitGroup{}
 	// // gofiber/fasthttp's API is trash
-	// // i can't replace c.Context() with this
+	// // i can't replace r.Context() with this
 	// // so i guess we will have to wait for network traffic to finish on error
-	// ctx, cancel := context.WithCancel(c.Context())
+	// ctx, cancel := context.WithCancel(r.Context())
 	// defer cancel()
-	// c.SetUserContext(ctx)
+	// r.SetUserContext(ctx)
 	var err_global error = nil
 	for i, id := range ids {
 		if _, err := strconv.Atoi(id); err != nil {
@@ -34,7 +34,7 @@ func ArtworkMultiPage(c *http.Request) error {
 		go func(i int, id string) {
 			defer wg.Done()
 
-			illust, err := core.GetArtworkByID(c, id, false)
+			illust, err := core.GetArtworkByID(r, id, false)
 			if err != nil {
 				artworks[i] = core.Illust{
 					Title: err.Error(), // this might be flaky
@@ -58,7 +58,7 @@ func ArtworkMultiPage(c *http.Request) error {
 		return err_global
 	}
 
-	return Render(c, Data_artworkMulti{
+	return Render(w, r, Data_artworkMulti{
 		Artworks: artworks,
 		Title:    fmt.Sprintf("(%d images)", len(artworks)),
 	})

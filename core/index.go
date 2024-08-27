@@ -5,8 +5,8 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"github.com/goccy/go-json"
-	"net/http"
 	"github.com/tidwall/gjson"
+	"net/http"
 )
 
 type Pixivision struct {
@@ -31,7 +31,7 @@ type LandingArtworks struct {
 	RecommendByTags []RecommendedTags
 }
 
-func GetLanding(c *http.Request, mode string) (*LandingArtworks, error) {
+func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 	var pages struct {
 		Pixivision  []Pixivision `json:"pixivision"`
 		Follow      []int        `json:"follow"`
@@ -51,12 +51,12 @@ func GetLanding(c *http.Request, mode string) (*LandingArtworks, error) {
 
 	var landing LandingArtworks
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 
 	if err != nil {
 		return &landing, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	if !gjson.Valid(resp) {
 		return nil, fmt.Errorf("Invalid JSON: %v", resp)

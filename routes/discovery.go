@@ -6,26 +6,26 @@ import (
 	"net/http"
 )
 
-func DiscoveryPage(c *http.Request) error {
-	mode := c.Query("mode", "safe")
+func DiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
+	mode := r.Query("mode", "safe")
 
-	works, err := core.GetDiscoveryArtwork(c, mode)
+	works, err := core.GetDiscoveryArtwork(r, mode)
 	if err != nil {
 		return err
 	}
 
 	urlc := utils.PartialURL{Path: "discovery", Query: map[string]string{"mode": mode}}
 
-	return Render(c, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
+	return Render(w, r, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
 }
 
-func NovelDiscoveryPage(c *http.Request) error {
-	mode := c.Query("mode", "safe")
+func NovelDiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
+	mode := r.Query("mode", "safe")
 
-	works, err := core.GetDiscoveryNovels(c, mode)
+	works, err := core.GetDiscoveryNovels(r, mode)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, Data_novelDiscovery{Novels: works, Title: "Discovery"})
+	return Render(w, r, Data_novelDiscovery{Novels: works, Title: "Discovery"})
 }

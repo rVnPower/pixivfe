@@ -33,11 +33,11 @@ func parseDate(t time.Time) DateWrap {
 	return d
 }
 
-func RankingCalendarPicker(c *http.Request) error {
-	mode := c.FormValue("mode", "daily")
-	date := c.FormValue("date", "")
+func RankingCalendarPicker(w http.ResponseWriter, r CompatRequest) error {
+	mode := r.FormValue("mode", "daily")
+	date := r.FormValue("date", "")
 
-	return c.RedirectToRoute("/rankingCalendar", fiber.Map{
+	return r.RedirectToRoute("/rankingCalendar", fiber.Map{
 		"queries": map[string]string{
 			"mode": mode,
 			"date": date,
@@ -45,9 +45,9 @@ func RankingCalendarPicker(c *http.Request) error {
 	})
 }
 
-func RankingCalendarPage(c *http.Request) error {
-	mode := c.Query("mode", "daily")
-	date := c.Query("date", "")
+func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {
+	mode := r.Query("mode", "daily")
+	date := r.Query("date", "")
 
 	var year int
 	var month int
@@ -64,7 +64,7 @@ func RankingCalendarPage(c *http.Request) error {
 			return err
 		}
 	} else {
-		now := c.Context().Time()
+		now := r.Context().Time()
 		year = now.Year()
 		month = int(now.Month())
 	}
@@ -73,10 +73,10 @@ func RankingCalendarPage(c *http.Request) error {
 	monthBefore := realDate.AddDate(0, -1, 0)
 	monthAfter := realDate.AddDate(0, 1, 0)
 
-	render, err := core.GetRankingCalendar(c, mode, year, month)
+	render, err := core.GetRankingCalendar(r, mode, year, month)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, Data_rankingCalendar{Title: "Ranking calendar", Render: render, Mode: mode, Year: year, MonthBefore: parseDate(monthBefore), MonthAfter: parseDate(monthAfter), ThisMonth: parseDate(realDate)})
+	return Render(w, r, Data_rankingCalendar{Title: "Ranking calendar", Render: render, Mode: mode, Year: year, MonthBefore: parseDate(monthBefore), MonthAfter: parseDate(monthAfter), ThisMonth: parseDate(realDate)})
 }

@@ -9,55 +9,55 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/session"
 )
 
-func PromptUserToLoginPage(c *http.Request) error {
-	c.Status(http.StatusUnauthorized)
-	return Render(c, Data_unauthorized{})
+func PromptUserToLoginPage(w http.ResponseWriter, r CompatRequest) error {
+	r.Status(http.StatusUnauthorized)
+	return Render(w, r, Data_unauthorized{})
 }
 
-func LoginUserPage(c *http.Request) error {
-	token := session.GetPixivToken(c)
+func LoginUserPage(w http.ResponseWriter, r CompatRequest) error {
+	token := session.GetPixivToken(r)
 
 	if token == "" {
-		return PromptUserToLoginPage(c)
+		return PromptUserToLoginPage(r)
 	}
 
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	c.Redirect("/users/" + userId[0])
+	r.Redirect("/users/" + userId[0])
 	return nil
 }
 
-func LoginBookmarkPage(c *http.Request) error {
-	token := session.GetPixivToken(c)
+func LoginBookmarkPage(w http.ResponseWriter, r CompatRequest) error {
+	token := session.GetPixivToken(r)
 	if token == "" {
-		return PromptUserToLoginPage(c)
+		return PromptUserToLoginPage(r)
 	}
 
 	// The left part of the token is the member ID
 	userId := strings.Split(token, "_")
 
-	c.Redirect("/users/" + userId[0] + "/bookmarks#checkpoint")
+	r.Redirect("/users/" + userId[0] + "/bookmarks#checkpoint")
 	return nil
 }
 
-func FollowingWorksPage(c *http.Request) error {
-	if token := session.GetPixivToken(c); token == "" {
-		return PromptUserToLoginPage(c)
+func FollowingWorksPage(w http.ResponseWriter, r CompatRequest) error {
+	if token := session.GetPixivToken(r); token == "" {
+		return PromptUserToLoginPage(r)
 	}
 
-	mode := c.Query("mode", "all")
-	page := c.Query("page", "1")
+	mode := r.Query("mode", "all")
+	page := r.Query("page", "1")
 
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		return err
 	}
 
-	works, err := core.GetNewestFromFollowing(c, mode, page)
+	works, err := core.GetNewestFromFollowing(r, mode, page)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, Data_following{Title: "Following works", Mode: mode, Artworks: works, CurPage: page, Page: pageInt})
+	return Render(w, r, Data_following{Title: "Following works", Mode: mode, Artworks: works, CurPage: page, Page: pageInt})
 }

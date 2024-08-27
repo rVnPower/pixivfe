@@ -9,14 +9,14 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
-func TagPage(c *http.Request) error {
-	param := c.Params("name", c.Query("name"))
+func TagPage(w http.ResponseWriter, r CompatRequest) error {
+	param := r.Params("name", r.Query("name"))
 	name, err := url.PathUnescape(param)
 	if err != nil {
 		return err
 	}
 
-	page := c.Query("page", "1")
+	page := r.Query("page", "1")
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		return err
@@ -26,51 +26,50 @@ func TagPage(c *http.Request) error {
 	// I made a struct type just to manage the queries
 	queries := core.SearchPageSettings{
 		Name:     name,
-		Category: c.Query("category", "artworks"),
-		Order:    c.Query("order", "date_d"),
-		Mode:     c.Query("mode", "safe"),
-		Ratio:    c.Query("ratio", ""),
-		Wlt:      c.Query("wlt", ""),
-		Wgt:      c.Query("wgt", ""),
-		Hlt:      c.Query("hlt", ""),
-		Hgt:      c.Query("hgt", ""),
-		Tool:     c.Query("tool", ""),
-		Scd:      c.Query("scd", ""),
-		Ecd:      c.Query("ecd", ""),
+		Category: r.Query("category", "artworks"),
+		Order:    r.Query("order", "date_d"),
+		Mode:     r.Query("mode", "safe"),
+		Ratio:    r.Query("ratio", ""),
+		Wlt:      r.Query("wlt", ""),
+		Wgt:      r.Query("wgt", ""),
+		Hlt:      r.Query("hlt", ""),
+		Hgt:      r.Query("hgt", ""),
+		Tool:     r.Query("tool", ""),
+		Scd:      r.Query("scd", ""),
+		Ecd:      r.Query("ecd", ""),
 		Page:     page,
 	}
 
-	tag, err := core.GetTagData(c, name)
+	tag, err := core.GetTagData(r, name)
 	if err != nil {
 		return err
 	}
-	result, err := core.GetSearch(c, queries)
+	result, err := core.GetSearch(r, queries)
 	if err != nil {
 		return err
 	}
 
 	urlc := utils.PartialURL{Path: "tags", Query: queries.ReturnMap()}
 
-	return Render(c, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
+	return Render(w, r, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
 }
 
-func AdvancedTagPost(c *http.Request) error {
-	return c.RedirectToRoute("/tags", fiber.Map{
+func AdvancedTagPost(w http.ResponseWriter, r CompatRequest) error {
+	return r.RedirectToRoute("/tags", fiber.Map{
 		"queries": map[string]string{
-			"name":     c.Query("name", c.FormValue("name")),
-			"category": c.Query("category", "artworks"),
-			"order":    c.Query("order", "date_d"),
-			"mode":     c.Query("mode", "safe"),
-			"ratio":    c.Query("ratio"),
-			"page":     c.Query("page", "1"),
-			"wlt":      c.Query("wlt", c.FormValue("wlt")),
-			"wgt":      c.Query("wgt", c.FormValue("wgt")),
-			"hlt":      c.Query("hlt", c.FormValue("hlt")),
-			"hgt":      c.Query("hgt", c.FormValue("hgt")),
-			"tool":     c.Query("tool", c.FormValue("tool")),
-			"scd":      c.Query("scd", c.FormValue("scd")),
-			"ecd":      c.Query("ecd", c.FormValue("ecd")),
+			"name":     r.Query("name", r.FormValue("name")),
+			"category": r.Query("category", "artworks"),
+			"order":    r.Query("order", "date_d"),
+			"mode":     r.Query("mode", "safe"),
+			"ratio":    r.Query("ratio"),
+			"page":     r.Query("page", "1"),
+			"wlt":      r.Query("wlt", r.FormValue("wlt")),
+			"wgt":      r.Query("wgt", r.FormValue("wgt")),
+			"hlt":      r.Query("hlt", r.FormValue("hlt")),
+			"hgt":      r.Query("hgt", r.FormValue("hgt")),
+			"tool":     r.Query("tool", r.FormValue("tool")),
+			"scd":      r.Query("scd", r.FormValue("scd")),
+			"ecd":      r.Query("ecd", r.FormValue("ecd")),
 		},
 	}, http.StatusFound)
-
 }

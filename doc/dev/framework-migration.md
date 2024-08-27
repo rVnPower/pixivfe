@@ -15,8 +15,12 @@
 
 net/http handlers don't return errors. We have to make our own ServeMux that allows functions to return `error`, possibly.
 
+net/http expects handlers to panic on error, while we don't panic. We need to log the errors anyway.
+
+Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
+
 ## Tips
 
 To access `/:abc`, use `r.PathValue("abc")`.
 
-Idea: we create a compat layer of {w, r} that has the same API as *fiber.Ctx.
+Want to associate arbitrary value with a request? Use `r.Context.Value()`.

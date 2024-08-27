@@ -34,16 +34,16 @@ type Ranking struct {
 	NextDate    string
 }
 
-func GetRanking(c *http.Request, mode, content, date, page string) (Ranking, error) {
+func GetRanking(r *http.Request, mode, content, date, page string) (Ranking, error) {
 	URL := GetRankingURL(mode, content, date, page)
 
 	var ranking Ranking
 
-	resp := WebAPIRequest(c.Context(), URL, "")
+	resp := WebAPIRequest(r.Context(), URL, "")
 	if !resp.Ok {
 		return ranking, errors.New(resp.Message)
 	}
-	proxiedResp := session.ProxyImageUrl(c, resp.Body)
+	proxiedResp := session.ProxyImageUrl(r, resp.Body)
 
 	err := json.Unmarshal([]byte(proxiedResp), &ranking)
 	if err != nil {

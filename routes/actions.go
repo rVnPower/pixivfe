@@ -11,14 +11,14 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func pixivPostRequest(c *http.Request, url, payload, token, csrf string, isJSON bool) error {
+func pixivPostRequest(r *fiber.Ctx, url, payload, token, csrf string, isJSON bool) error {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return err
 	}
-	req = req.WithContext(c.Context())
+	req = req.WithContext(r.Context())
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
@@ -59,15 +59,15 @@ func pixivPostRequest(c *http.Request, url, payload, token, csrf string, isJSON 
 	return nil
 }
 
-func AddBookmarkRoute(c *http.Request) error {
-	token := session.GetPixivToken(c)
-	csrf := session.GetCookie(c, session.Cookie_CSRF)
+func AddBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(c)
+		return PromptUserToLoginPage(r)
 	}
 
-	id := c.Params("id")
+	id := r.Params("id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
@@ -79,22 +79,22 @@ func AddBookmarkRoute(c *http.Request) error {
 "comment": "",
 "tags": []
 }`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf, true); err != nil {
+	if err := pixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
-	return c.SendString("Success")
+	return r.SendString("Success")
 }
 
-func DeleteBookmarkRoute(c *http.Request) error {
-	token := session.GetPixivToken(c)
-	csrf := session.GetCookie(c, session.Cookie_CSRF)
+func DeleteBookmarkRoute(w http.ResponseWriter, r CompatRequest) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(c)
+		return PromptUserToLoginPage(r)
 	}
 
-	id := c.Params("id")
+	id := r.Params("id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
@@ -102,31 +102,31 @@ func DeleteBookmarkRoute(c *http.Request) error {
 	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
 	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf, false); err != nil {
+	if err := pixivPostRequest(r, URL, payload, token, csrf, false); err != nil {
 		return err
 	}
 
-	return c.SendString("Success")
+	return r.SendString("Success")
 }
 
-func LikeRoute(c *http.Request) error {
-	token := session.GetPixivToken(c)
-	csrf := session.GetCookie(c, session.Cookie_CSRF)
+func LikeRoute(w http.ResponseWriter, r CompatRequest) error {
+	token := session.GetPixivToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
-		return PromptUserToLoginPage(c)
+		return PromptUserToLoginPage(r)
 	}
 
-	id := c.Params("id")
+	id := r.Params("id")
 	if id == "" {
 		return errors.New("No ID provided.")
 	}
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	if err := pixivPostRequest(c, URL, payload, token, csrf, true); err != nil {
+	if err := pixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
-	return c.SendString("Success")
+	return r.SendString("Success")
 }

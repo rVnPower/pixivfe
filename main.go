@@ -17,16 +17,8 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	// "codeberg.org/vnpower/pixivfe/v2/utils/kmutex"
-	// "github.com/CloudyKit/jet/v6"
-	// "github.com/goccy/go-json"
-	// "net/http"
-	// "net/http/middleware/cache"
-	// "net/http/middleware/compress"
-	// "net/http/middleware/limiter"
-	// "net/http/middleware/logger"
-	// "net/http/middleware/recover"
-	// fiber_utils "net/http/utils"
+
+	"github.com/gorilla/mux"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {
@@ -42,6 +34,18 @@ func CanRequestSkipLogger(r *http.Request) bool {
 	path := r.URL.Path
 	return CanRequestSkipLimiter(r) ||
 		strings.HasPrefix(path, "/proxy/i.pximg.net/")
+}
+
+type UserContext struct {
+	err error
+}
+
+type userContextKey struct{}
+
+var UserContextKey = userContextKey{}
+
+func GetUserContext(r *http.Request) *UserContext {
+	return r.Context().Value(UserContextKey).(*UserContext)
 }
 
 func main() {
@@ -60,7 +64,7 @@ func main() {
 	// 	EnableTrustedProxyCheck: true,
 	// 	TrustedProxies:          []string{"0.0.0.0/0"},
 	// 	ProxyHeader:             fiber.HeaderXForwardedFor,
-	// 	ErrorHandler: func(c *http.Request, err error) error {
+	// 	ErrorHandler: func(r *http.Request, err error) error {
 	// 		log.Println(err)
 
 	// 		// Status code defaults to 500
@@ -73,10 +77,10 @@ func main() {
 	// 		// }
 
 	// 		// Send custom error page
-	// 		c.Status(code)
-	// 		err = routes.Render(c, routes.Data_error{Title: "Error", Error: err})
+	// 		r.Status(code)
+	// 		err = routes.Render(w, r, routes.Data_error{Title: "Error", Error: err})
 	// 		if err != nil {
-	// 			return c.Status(code).SendString(fmt.Sprintf("Internal Server Error: %s", err))
+	// 			return r.Status(code).SendString(fmt.Sprintf("Internal Server Error: %s", err))
 	// 		}
 
 	// 		return nil
@@ -91,23 +95,23 @@ func main() {
 	// 		Expiration:        30 * time.Second,
 	// 		Max:               config.GlobalServerConfig.RequestLimit,
 	// 		LimiterMiddleware: limiter.SlidingWindow{},
-	// 		LimitReached: func(c *http.Request) error {
+	// 		LimitReached: func(r *http.Request) error {
 	// 			// limit response throughput by pacing, since not every bot reads X-RateLimit-*
 	// 			// on limit reached, they just have to wait
 	// 			// the design of this means that if they send multiple requests when reaching rate limit, they will wait even longer (since `retryAfter` is calculated before anything has slept)
-	// 			retryAfter_s := c.GetRespHeader(fiber.HeaderRetryAfter)
+	// 			retryAfter_s := r.GetRespHeader(fiber.HeaderRetryAfter)
 	// 			retryAfter, err := strconv.ParseUint(retryAfter_s, 10, 64)
 	// 			if err != nil {
 	// 				log.Panicf("response header 'RetryAfter' should be a number: %v", err)
 	// 			}
-	// 			requestIP := c.IP()
+	// 			requestIP := r.IP()
 	// 			refcount := keyedSleepingSpot.Lock(requestIP)
 	// 			defer keyedSleepingSpot.Unlock(requestIP)
 	// 			if refcount >= 4 { // on too much concurrent requests
 	// 				// todo: maybe blackhole `requestIP` here
 	// 				log.Println("Limit Reached (Hard)!", requestIP)
 	// 				// close the connection immediately
-	// 				_ = c.Context().Conn().Close()
+	// 				_ = r.Context().Conn().Close()
 	// 				return nil
 	// 			}
 
@@ -116,11 +120,11 @@ func main() {
 	// 			// todo: close this connection when this IP reaches hard limit
 	// 			dur := time.Duration(retryAfter) * time.Second
 	// 			log.Println("Limit Reached (Soft)! Sleeping for ", dur)
-	// 			ctx, cancel := context.WithTimeout(c.Context(), dur)
+	// 			ctx, cancel := context.WithTimeout(r.Context(), dur)
 	// 			defer cancel()
 	// 			<-ctx.Done()
 
-	// 			return c.Next()
+	// 			return r.Next()
 	// 		},
 	// 	}))
 	// }
@@ -129,23 +133,23 @@ func main() {
 	// if !config.GlobalServerConfig.InDevelopment {
 	// 	server.Use(cache.New(
 	// 		cache.Config{
-	// 			Next: func(c *http.Request) bool {
-	// 				resp_code := c.Response().StatusCode()
+	// 			Next: func(r *http.Request) bool {
+	// 				resp_code := r.Response().StatusCode()
 	// 				if resp_code < 200 || resp_code >= 300 {
 	// 					return true
 	// 				}
 
 	// 				// Disable cache for settings page
-	// 				return strings.Contains(c.Path(), "/settings") || c.Path() == "/"
+	// 				return strings.Contains(r.Path(), "/settings") || r.Path() == "/"
 	// 			},
 	// 			Expiration:           5 * time.Minute,
 	// 			CacheControl:         true,
 	// 			StoreResponseHeaders: true,
 
-	// 			KeyGenerator: func(c *http.Request) string {
-	// 				key := fiber_utils.CopyString(c.OriginalURL())
+	// 			KeyGenerator: func(r *http.Request) string {
+	// 				key := fiber_utils.CopyString(r.OriginalURL())
 	// 				for _, cookieName := range session.AllCookieNames {
-	// 					cookieValue := session.GetCookie(c, cookieName)
+	// 					cookieValue := session.GetCookie(r, cookieName)
 	// 					if cookieValue != "" {
 	// 						key += "\x00\x00"
 	// 						key += string(cookieName)
@@ -162,9 +166,12 @@ func main() {
 	router := defineRoutes()
 
 	main_handler := func(w http.ResponseWriter, r *http.Request) {
+		// set user context
+		r = r.WithContext(context.WithValue(r.Context(), UserContextKey, &UserContext{}))
+
 		start_time := time.Now()
 
-		setGlobalHeaders(r)
+		setGlobalHeaders(w)
 
 		router.ServeHTTP(w, r)
 
@@ -185,10 +192,10 @@ func main() {
 			method := r.Method
 			path := r.URL.Path
 			status := r.Response.Status
+			err := GetUserContext(r).err
 
-			log.Printf("%v +%v %v %v %v %v {todo: print error (where is error?)}", time, latency, ip, method, path, status)
+			log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
 		}
-
 	}
 
 	// Initialize and start the proxy checker
@@ -233,10 +240,8 @@ func main() {
 	http.Serve(l, http.HandlerFunc(main_handler))
 }
 
-// todo: if this doesn't work, need to use `w.Header()`
-func setGlobalHeaders(r *http.Request) {
-	// Respond with global HTTP headers
-	header := r.Response.Header
+func setGlobalHeaders(w http.ResponseWriter) {
+	header := w.Header()
 	header.Add("X-Frame-Options", "DENY")
 	// use this if need iframe: `X-Frame-Options: SAMEORIGIN`
 	header.Add("X-Content-Type-Options", "nosniff")
@@ -250,8 +255,8 @@ func setGlobalHeaders(r *http.Request) {
 func serveFile(filename string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, filename) }
 }
-func defineRoutes() http.ServeMux {
-	router := http.ServeMux{}
+func defineRoutes() *mux.Router {
+	router := mux.NewRouter()
 
 	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
@@ -259,11 +264,8 @@ func defineRoutes() http.ServeMux {
 	router.Handle("/css/", http.FileServer(http.Dir("./assets/css")))
 	router.Handle("/js/", http.FileServer(http.Dir("./assets/js")))
 
-	// server.Use(recover.New(recover.Config{EnableStackTrace: config.GlobalServerConfig.InDevelopment}))
-
-	// // Routes
-
-	// server.Get("/", routes.IndexPage)
+	// Routes
+	router.Get("/").Handler(CatchError(routes.IndexPage))
 	// server.Get("/about", routes.AboutPage)
 	// server.Get("/newest", routes.NewestPage)
 	// server.Get("/discovery", routes.DiscoveryPage)
@@ -303,8 +305,8 @@ func defineRoutes() http.ServeMux {
 	// server.Post("/tags", routes.AdvancedTagPost)
 
 	// // Legacy illust URL
-	// server.Get("/member_illust.php", func(c *http.Request) error {
-	// 	return c.Redirect("/artworks/" + c.Query("illust_id"))
+	// server.Get("/member_illust.php", func(r *http.Request) error {
+	// 	return r.Redirect("/artworks/" + r.Query("illust_id"))
 	// })
 
 	// // Proxy routes
@@ -314,4 +316,10 @@ func defineRoutes() http.ServeMux {
 	// proxy.Get("/ugoira.com/*", routes.UgoiraProxy)
 
 	return router
+}
+
+func CatchError(handler func(w http.ResponseWriter, r routes.CompatRequest) error) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		GetUserContext(r).err = handler(w, routes.CompatRequest{Request: r})
+	}
 }

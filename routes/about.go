@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func AboutPage(c *http.Request) error {
-	return Render(c, Data_about{
+func AboutPage(w http.ResponseWriter, r CompatRequest) error {
+	return Render(w, r, Data_about{
 		Time:           config.GlobalServerConfig.StartingTime,
 		Version:        config.GlobalServerConfig.Version,
 		ImageProxy:     config.GlobalServerConfig.ProxyServer.String(),

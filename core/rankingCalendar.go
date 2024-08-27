@@ -34,15 +34,15 @@ func get_weekday(n time.Weekday) int {
 // note(@iacore):
 // so the funny thing about Pixiv is that they will return this month's data for a request of a future date
 // is it a bug or a feature?
-func GetRankingCalendar(c *http.Request, mode string, year, month int) (template.HTML, error) {
-	token := session.GetPixivToken(c)
+func GetRankingCalendar(r *http.Request, mode string, year, month int) (template.HTML, error) {
+	token := session.GetPixivToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
 
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return template.HTML(""), err
 	}
-	req = req.WithContext(c.Context())
+	req = req.WithContext(r.Context())
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Cookie", "PHPSESSID="+token)
 	// req.AddCookie(&http.Cookie{
@@ -70,19 +70,19 @@ func GetRankingCalendar(c *http.Request, mode string, year, month int) (template
 			for _, a := range n.Attr {
 				if a.Key == "data-src" {
 					// adds a new link entry when the attribute matches
-					links = append(links, session.ProxyImageUrlNoEscape(c, a.Val))
+					links = append(links, session.ProxyImageUrlNoEscape(r, a.Val))
 				}
 			}
 		}
 
 		// traverses the HTML of the webpage from the first child node
-		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			link(c)
+		for r := n.FirstChild; r != nil; r = r.NextSibling {
+			link(r)
 		}
 	}
 	link(doc)
 
-	// now := c.Context().Time()
+	// now := r.Context().Time()
 	// yearNow := now.Year()
 	// monthNow := now.Month()
 	lastMonth := time.Date(year, time.Month(month), 0, 0, 0, 0, 0, time.UTC)

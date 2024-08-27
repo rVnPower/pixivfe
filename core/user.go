@@ -43,17 +43,17 @@ type FrequentTag struct {
 }
 
 type User struct {
-	ID              string                 `json:"userId"`
-	Name            string                 `json:"name"`
-	Avatar          string                 `json:"imageBig"`
-	Following       int                    `json:"following"`
-	MyPixiv         int                    `json:"mypixivCount"`
-	Comment         template.HTML          `json:"commentHtml"`
-	Webpage         string                 `json:"webpage"`
-	SocialRaw       json.RawMessage        `json:"social"`
-	Artworks        []ArtworkBrief         `json:"artworks"`
-	Novels          []NovelBrief           `json:"novels"`
-	Background      map[string]any `json:"background"`
+	ID              string          `json:"userId"`
+	Name            string          `json:"name"`
+	Avatar          string          `json:"imageBig"`
+	Following       int             `json:"following"`
+	MyPixiv         int             `json:"mypixivCount"`
+	Comment         template.HTML   `json:"commentHtml"`
+	Webpage         string          `json:"webpage"`
+	SocialRaw       json.RawMessage `json:"social"`
+	Artworks        []ArtworkBrief  `json:"artworks"`
+	Novels          []NovelBrief    `json:"novels"`
+	Background      map[string]any  `json:"background"`
 	ArtworksCount   int
 	FrequentTags    []FrequentTag
 	Social          map[string]map[string]string
@@ -73,7 +73,7 @@ func (s *User) ParseSocial() error {
 	return nil
 }
 
-func GetFrequentTags(c *http.Request, ids string, category UserArtCategory) ([]FrequentTag, error) {
+func GetFrequentTags(r *http.Request, ids string, category UserArtCategory) ([]FrequentTag, error) {
 	var tags []FrequentTag
 	var URL string
 
@@ -83,7 +83,7 @@ func GetFrequentTags(c *http.Request, ids string, category UserArtCategory) ([]F
 		URL = GetFrequentNovelTagsURL(ids)
 	}
 
-	response, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -96,16 +96,16 @@ func GetFrequentTags(c *http.Request, ids string, category UserArtCategory) ([]F
 	return tags, nil
 }
 
-func GetUserArtworks(c *http.Request, id, ids string) ([]ArtworkBrief, error) {
+func GetUserArtworks(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
 	var works []ArtworkBrief
 
 	URL := GetUserFullArtworkURL(id, ids)
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	var body struct {
 		Illusts map[int]json.RawMessage `json:"works"`
@@ -130,17 +130,17 @@ func GetUserArtworks(c *http.Request, id, ids string) ([]ArtworkBrief, error) {
 	return works, nil
 }
 
-func GetUserNovels(c *http.Request, id, ids string) ([]NovelBrief, error) {
+func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 	// VnPower: we can merge this function into GetUserArtworks, but I want to make things simple for now
 	var works []NovelBrief
 
 	URL := GetUserFullNovelURL(id, ids)
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	var body struct {
 		Novels map[int]json.RawMessage `json:"works"`
@@ -165,10 +165,10 @@ func GetUserNovels(c *http.Request, id, ids string) ([]NovelBrief, error) {
 	return works, nil
 }
 
-func GetUserArtworksID(c *http.Request, id string, category UserArtCategory, page int) (string, int, error) {
+func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, page int) (string, int, error) {
 	URL := GetUserArtworksURL(id)
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return "", -1, err
 	}
@@ -248,19 +248,19 @@ func GetUserArtworksID(c *http.Request, id string, category UserArtCategory, pag
 	return idsString, count, nil
 }
 
-func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
+func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
 
-	token := session.GetPixivToken(c)
+	token := session.GetPixivToken(r)
 
 	URL := GetUserInformationURL(id)
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, token)
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
 	if err != nil {
 		return user, err
 	}
 
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	err = json.Unmarshal([]byte(resp), &user)
 	if err != nil {
@@ -269,7 +269,7 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 
 	if category == UserArt_Bookmarks {
 		// Bookmarks
-		works, count, err := GetUserBookmarks(c, id, "show", page)
+		works, count, err := GetUserBookmarks(r, id, "show", page)
 		if err != nil {
 			return user, err
 		}
@@ -279,14 +279,14 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 		// Public bookmarks count
 		user.ArtworksCount = count
 	} else if category == UserArt_Novel {
-		ids, count, err := GetUserArtworksID(c, id, category, page)
+		ids, count, err := GetUserArtworksID(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
 
 		if count > 0 {
 			// Check if the user has artworks available or not
-			works, err := GetUserNovels(c, id, ids)
+			works, err := GetUserNovels(r, id, ids)
 			if err != nil {
 				return user, err
 			}
@@ -300,7 +300,7 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 			user.Novels = works
 
 			if getTags {
-				user.FrequentTags, err = GetFrequentTags(c, ids, category)
+				user.FrequentTags, err = GetFrequentTags(r, ids, category)
 				if err != nil {
 					return user, err
 				}
@@ -310,14 +310,14 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 		// Artworks count
 		user.ArtworksCount = count
 	} else {
-		ids, count, err := GetUserArtworksID(c, id, category, page)
+		ids, count, err := GetUserArtworksID(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
 
 		if count > 0 {
 			// Check if the user has artworks available or not
-			works, err := GetUserArtworks(c, id, ids)
+			works, err := GetUserArtworks(r, id, ids)
 			if err != nil {
 				return user, err
 			}
@@ -331,7 +331,7 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 			user.Artworks = works
 
 			if getTags {
-				user.FrequentTags, err = GetFrequentTags(c, ids, category)
+				user.FrequentTags, err = GetFrequentTags(r, ids, category)
 				if err != nil {
 					return user, err
 				}
@@ -354,16 +354,16 @@ func GetUserArtwork(c *http.Request, id string, category UserArtCategory, page i
 	return user, nil
 }
 
-func GetUserBookmarks(c *http.Request, id, mode string, page int) ([]ArtworkBrief, int, error) {
+func GetUserBookmarks(r *http.Request, id, mode string, page int) ([]ArtworkBrief, int, error) {
 	page--
 
 	URL := GetUserBookmarksURL(id, mode, page)
 
-	resp, err := UnwrapWebAPIRequest(c.Context(), URL, "")
+	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
 	if err != nil {
 		return nil, -1, err
 	}
-	resp = session.ProxyImageUrl(c, resp)
+	resp = session.ProxyImageUrl(r, resp)
 
 	var body struct {
 		Artworks []json.RawMessage `json:"works"`
