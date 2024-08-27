@@ -23,7 +23,7 @@ func RedirectTo(w http.ResponseWriter, r *http.Request, path string, query_param
 	for k, v := range query_params {
 		query.Add(k, v)
 	}
-	http.Redirect(w, r, path+query.Encode(), http.StatusSeeOther)
+	http.Redirect(w, r, path+"?"+query.Encode(), http.StatusSeeOther)
 	return nil
 }
 
