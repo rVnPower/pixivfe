@@ -35,22 +35,22 @@ func parseDate(t time.Time) DateWrap {
 	return d
 }
 
-func RankingCalendarPicker(w http.ResponseWriter, r CompatRequest) error {
+func RankingCalendarPicker(w http.ResponseWriter, r *http.Request) error {
 	mode := r.FormValue("mode")
 	if mode == "" {
 		mode = "daily"
 	}
 	date := r.FormValue("date")
 
-	return utils.RedirectToRoute(w, r,"/rankingCalendar",  map[string]string{
+	return utils.RedirectTo(w, r,"/rankingCalendar",  map[string]string{
 			"mode": mode,
 			"date": date,
 	})
 }
 
-func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {
-	mode := r.Query("mode", "daily")
-	date := r.Query("date", "")
+func RankingCalendarPage(w http.ResponseWriter, r *http.Request) error {
+	mode := GetQueryParam(r, "mode", "daily")
+	date := GetQueryParam(r, "date", "")
 
 	var year int
 	var month int
@@ -76,7 +76,7 @@ func RankingCalendarPage(w http.ResponseWriter, r CompatRequest) error {
 	monthBefore := realDate.AddDate(0, -1, 0)
 	monthAfter := realDate.AddDate(0, 1, 0)
 
-	render, err := core.GetRankingCalendar(r.Request, mode, year, month)
+	render, err := core.GetRankingCalendar(r, mode, year, month)
 	if err != nil {
 		return err
 	}

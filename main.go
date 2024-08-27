@@ -82,8 +82,8 @@ func main() {
 		}
 
 
-		CatchError(func(w http.ResponseWriter, r utils.CompatRequest) error {
-			err := GetUserContext(r.Request).err
+		CatchError(func(w http.ResponseWriter, r *http.Request) error {
+			err := GetUserContext(r).err
 			if err != nil { // error handler
 				log.Println("Within handler: ", err)
 				code := http.StatusInternalServerError
@@ -226,7 +226,7 @@ func defineRoutes() *mux.Router {
 
 	// Legacy illust URL
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/artworks/"+utils.CompatRequest{Request: r}.Query("illust_id"), http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/artworks/"+ routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
 
 	// Proxy routes
@@ -234,16 +234,16 @@ func defineRoutes() *mux.Router {
 	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
 	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
 
-	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r utils.CompatRequest) error {
+	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r *http.Request) error {
 		return errors.New("Route not found")
 	}))
 
 	return router
 }
 
-func CatchError(handler func(w http.ResponseWriter, r utils.CompatRequest) error) http.HandlerFunc {
+func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		GetUserContext(r).err = handler(w, utils.CompatRequest{Request: r})
+		GetUserContext(r).err = handler(w, r)
 	}
 }
 

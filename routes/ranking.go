@@ -7,18 +7,18 @@ import (
 	"net/http"
 )
 
-func RankingPage(w http.ResponseWriter, r CompatRequest) error {
-	mode := r.Query("mode", "daily")
-	content := r.Query("content", "all")
-	date := r.Query("date", "")
+func RankingPage(w http.ResponseWriter, r *http.Request) error {
+	mode := GetQueryParam(r, "mode", "daily")
+	content := GetQueryParam(r, "content", "all")
+	date := GetQueryParam(r, "date", "")
 
-	page := r.Query("page", "1")
+	page := GetQueryParam(r, "page", "1")
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		return err
 	}
 
-	works, err := core.GetRanking(r.Request, mode, content, date, page)
+	works, err := core.GetRanking(r, mode, content, date, page)
 	if err != nil {
 		return err
 	}

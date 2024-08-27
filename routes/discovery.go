@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func DiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
-	mode := r.Query("mode", "safe")
+func DiscoveryPage(w http.ResponseWriter, r *http.Request) error {
+	mode := GetQueryParam(r, "mode", "safe")
 
-	works, err := core.GetDiscoveryArtwork(r.Request, mode)
+	works, err := core.GetDiscoveryArtwork(r, mode)
 	if err != nil {
 		return err
 	}
@@ -19,10 +19,10 @@ func DiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
 	return Render(w, r, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
 }
 
-func NovelDiscoveryPage(w http.ResponseWriter, r CompatRequest) error {
-	mode := r.Query("mode", "safe")
+func NovelDiscoveryPage(w http.ResponseWriter, r *http.Request) error {
+	mode := GetQueryParam(r, "mode", "safe")
 
-	works, err := core.GetDiscoveryNovels(r.Request, mode)
+	works, err := core.GetDiscoveryNovels(r, mode)
 	if err != nil {
 		return err
 	}
