@@ -72,7 +72,7 @@ func setImageServer(w http.ResponseWriter, r CompatRequest) error {
 	if token != "" {
 		session.SetCookie(w, session.Cookie_ImageProxy, token)
 	} else {
-		session.ClearCookie(r, session.Cookie_ImageProxy)
+		session.ClearCookie(w, session.Cookie_ImageProxy)
 	}
 	return nil
 }
@@ -169,25 +169,25 @@ func SettingsPost(w http.ResponseWriter, r CompatRequest) error {
 
 	switch t {
 	case "imageServer":
-		err = setImageServer(r)
+		err = setImageServer(w, r)
 	case "token":
-		err = setToken(r)
+		err = setToken(w, r)
 	case "logout":
-		err = setLogout(r)
+		err = setLogout(w, r)
 	case "reset-all":
-		err = resetAll(r)
+		err = resetAll(w, r)
 	case "novelFontType":
-		err = setNovelFontType(r)
+		err = setNovelFontType(w, r)
 	case "thumbnailToNewTab":
-		err = setThumbnailToNewTab(r)
+		err = setThumbnailToNewTab(w, r)
 	case "novelViewMode":
-		err = setNovelViewMode(r)
+		err = setNovelViewMode(w, r)
 	case "artworkPreview":
-		err = setArtworkPreview(r)
+		err = setArtworkPreview(w, r)
 	case "set-cookie":
-		err = setCookie(r)
+		err = setCookie(w, r)
 	case "raw":
-		err = setRawCookie(r)
+		err = setRawCookie(w, r)
 	default:
 		err = errors.New("No such setting is available.")
 	}
