@@ -46,6 +46,7 @@ theme:
         name: Switch to light theme
   icon:
     logo: simple/pixiv
+    repo: simple/codeberg
   favicon: favicon.ico
   features:
     # -- Navigation
