@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="View this page on PixivFE." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+     
+  <title>PixivFE - PixivFE</title>
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
+  <script src="/js/htmx@1.9.10.min.js"
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
+
+  <script src="/js/illust-preview.js" defer></script>
+  <meta property="og:title" content="PixivFE" />
+  <meta property="og:site_name" content="PixivFE" />
+  <meta property="og:type" content="article" />
+  <meta content="summary_large_image" name="twitter:card" />
+
+  <meta property="og:url" content="/about" />
+  
+  <link rel="alternate" type="application/json+oembed" href="/oembed">
+  
+
+  
+
+  
+</head>
+
+<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
+  data-hx-indicator="#loading-indicator">
+  <div id="loading-indicator"></div>
+  <nav>
+    <div class="navigation-wrapper">
+      <span class="navbar-entry">
+        <span class="sidebar-container">
+          <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
+          <label for="sidebar-toggler" class="sidebar-label">
+            <img src="/img/menu-thin.png" alt="Menu" width="30" height="30" />
+          </label>
+          <div class="sidebar">
+            <ul class="sidebar-list">
+              <a class="sidebar-item" href="/discovery">
+                <img src="/img/compass.png" alt="compass" />Discovery</a>
+              <a class="sidebar-item" href="/ranking">
+                <img src="/img/crown.png" alt="crown" />Ranking</a>
+              <a class="sidebar-item" href="/rankingCalendar">
+                <img src="/img/calendar.png" alt="calendar" />Ranking history</a>
+              <a class="sidebar-item" href="/newest">
+                <img src="/img/sparkling.png" alt="sparkling" />Newest</a>
+              <br />
+              <a class="sidebar-item" href="/self/followingWorks">
+                <img src="/img/users.png" alt="users" />Latest by followed</a>
+              <a class="sidebar-item" href="/self/bookmarks">
+                <img src="/img/heart.png" alt="heart" />Your bookmarks</a>
+              <a class="sidebar-item" href="/self">
+                <img src="/img/user.png" alt="user" />Your profile</a>
+              <br />
+              <a class="sidebar-item" href="/settings">
+                <img src="/img/settings.png" alt="settings" />Settings</a>
+              <a class="sidebar-item" href="/about">
+                <img src="/img/about.svg" alt="about" />About</a>
+              <br />
+              <a class="sidebar-item" href="https://codeberg.org/vnpower/pixivfe">
+                <img src="/img/globe.png" alt="globe" />Source code</a>
+            </ul>
+          </div>
+        </span>
+        <a class="navbar-brand" href="/">
+          <img src="/img/favicon.ico" alt="PixivFE icon" />
+          <span>PixivFE</span>
+        </a>
+      </span>
+
+      <span class="navbar-entry">
+        <form action="/tags" method="post" class="search-form" autocomplete="off">
+          <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
+          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit" hidden /></label>
+        </form>
+      </span>
+
+      <a class="navbar-entry" href="/settings">
+        <img src="/img/cog.svg" alt="Settings" />
+      </a>
+    </div>
+    <div class="navbar-shadow"></div>
+  </nav>
+  <script src="/js/on-page-load.js"></script>
+  <main>
+    
+<div class="container">
+  <h1>About PixivFE</h1>
+  <p>PixivFE is a Pixiv frontend. It lets you enjoy art on Pixiv without needless interruption.</p>
+  <p>The instance you are looking at is provided by the owner of this domain. If you want to host PixivFE yourself, check out <a href="https://codeberg.org/vnpower/pixivfe">the source repository</a>.</p>
+  <h2>Server information</h2>
+  <ul>
+    <li>
+      <b>Version:</b> v2.7.1<br />PixivFE's version this server is
+      running
+    </li>
+    <li>
+      <b>Started PixivFE (UTC)</b>: 2024-08-28 04:57 <br />The date when PixivFE
+      started on this server
+    </li>
+    <li>
+      <b>Default image proxy server</b>: https://pixiv.ducks.party<br />The default image
+      proxy server that was set on this server, used to proxy images from
+      i.pximg.net
+    </li>
+    <li>
+      <b>Accept-Language header</b>: en-US,en;q=0.5<br />The value of the
+      Accept-Language header this server uses to request to Pixiv's APIs.
+    </li>
+  </ul>
+</div>
+
+  </main>
+  <div id="site-config">
+    <span id="artworkPreview"></span>
+  </div>
+</body>
+
+</html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="View this page on PixivFE." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+     
+  <title>Error - PixivFE</title>
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
+  <script src="/js/htmx@1.9.10.min.js"
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
+
+  <script src="/js/illust-preview.js" defer></script>
+  <meta property="og:title" content="Error" />
+  <meta property="og:site_name" content="PixivFE" />
+  <meta property="og:type" content="article" />
+  <meta content="summary_large_image" name="twitter:card" />
+
+  <meta property="og:url" content="/about" />
+  
+  <link rel="alternate" type="application/json+oembed" href="/oembed">
+  
+
+  
+
+  
+</head>
+
+<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
+  data-hx-indicator="#loading-indicator">
+  <div id="loading-indicator"></div>
+  <nav>
+    <div class="navigation-wrapper">
+      <span class="navbar-entry">
+        <span class="sidebar-container">
+          <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
+          <label for="sidebar-toggler" class="sidebar-label">
+            <img src="/img/menu-thin.png" alt="Menu" width="30" height="30" />
+          </label>
+          <div class="sidebar">
+            <ul class="sidebar-list">
+              <a class="sidebar-item" href="/discovery">
+                <img src="/img/compass.png" alt="compass" />Discovery</a>
+              <a class="sidebar-item" href="/ranking">
+                <img src="/img/crown.png" alt="crown" />Ranking</a>
+              <a class="sidebar-item" href="/rankingCalendar">
+                <img src="/img/calendar.png" alt="calendar" />Ranking history</a>
+              <a class="sidebar-item" href="/newest">
+                <img src="/img/sparkling.png" alt="sparkling" />Newest</a>
+              <br />
+              <a class="sidebar-item" href="/self/followingWorks">
+                <img src="/img/users.png" alt="users" />Latest by followed</a>
+              <a class="sidebar-item" href="/self/bookmarks">
+                <img src="/img/heart.png" alt="heart" />Your bookmarks</a>
+              <a class="sidebar-item" href="/self">
+                <img src="/img/user.png" alt="user" />Your profile</a>
+              <br />
+              <a class="sidebar-item" href="/settings">
+                <img src="/img/settings.png" alt="settings" />Settings</a>
+              <a class="sidebar-item" href="/about">
+                <img src="/img/about.svg" alt="about" />About</a>
+              <br />
+              <a class="sidebar-item" href="https://codeberg.org/vnpower/pixivfe">
+                <img src="/img/globe.png" alt="globe" />Source code</a>
+            </ul>
+          </div>
+        </span>
+        <a class="navbar-brand" href="/">
+          <img src="/img/favicon.ico" alt="PixivFE icon" />
+          <span>PixivFE</span>
+        </a>
+      </span>
+
+      <span class="navbar-entry">
+        <form action="/tags" method="post" class="search-form" autocomplete="off">
+          <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
+          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit" hidden /></label>
+        </form>
+      </span>
+
+      <a class="navbar-entry" href="/settings">
+        <img src="/img/cog.svg" alt="Settings" />
+      </a>
+    </div>
+    <div class="navbar-shadow"></div>
+  </nav>
+  <script src="/js/on-page-load.js"></script>
+  <main>
+    
+<div class="container error">
+    <h1>An error occured</h1>
+    <p>This is what you got instead ¯\_(ツ)_/¯</p>
+    <br />
+    Too many requests
+    <hr />
+    <p>If you think this error should not occur, you can help
+        us by submitting an issue to the <a href="https://codeberg.org/VnPower/PixivFE/issues/new">upstream repository</a>!
+    </p>
+</div>
+
+  </main>
+  <div id="site-config">
+    <span id="artworkPreview"></span>
+  </div>
+</body>
+
+</html>
