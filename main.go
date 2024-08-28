@@ -11,10 +11,12 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/time/rate"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
@@ -54,6 +56,42 @@ func GetUserContext(r *http.Request) *UserContext {
 	return r.Context().Value(UserContextKey).(*UserContext)
 }
 
+// Todo: Should we put middlewares in a separate file?
+// IPRateLimiter represents an IP rate limiter.
+type IPRateLimiter struct {
+	ips     map[string]*rate.Limiter
+	mu      *sync.RWMutex
+	limiter *rate.Limiter
+}
+
+// NewIPRateLimiter creates a new instance of IPRateLimiter with the given rate limit.
+func NewIPRateLimiter(r rate.Limit, burst int) *IPRateLimiter {
+	return &IPRateLimiter{
+		ips:     make(map[string]*rate.Limiter),
+		mu:      &sync.RWMutex{},
+		limiter: rate.NewLimiter(r, burst),
+	}
+}
+
+// Allow checks if the request from the given IP is allowed.
+func (lim *IPRateLimiter) Allow(ip string) bool {
+	lim.mu.RLock()
+	rl, exists := lim.ips[ip]
+	lim.mu.RUnlock()
+
+	if !exists {
+		lim.mu.Lock()
+		rl, exists = lim.ips[ip]
+		if !exists {
+			rl = rate.NewLimiter(lim.limiter.Limit(), lim.limiter.Burst())
+			lim.ips[ip] = rl
+		}
+		lim.mu.Unlock()
+	}
+
+	return rl.Allow()
+}
+
 func main() {
 	config.GlobalServerConfig.InitializeConfig()
 	if config.GlobalServerConfig.InDevelopment {
@@ -66,6 +104,7 @@ func main() {
 	defer cancel()
 	config.InitializeProxyChecker(ctx_timeout)
 
+	_ = NewIPRateLimiter(0, 0)
 	router := defineRoutes()
 
 	main_handler := func(w_ http.ResponseWriter, r *http.Request) {
@@ -92,6 +131,7 @@ func main() {
 
 		CatchError(func(w http.ResponseWriter, r *http.Request) error {
 			err := GetUserContext(r).err
+
 			if err != nil { // error handler
 				log.Println("Within handler: ", err)
 				code := http.StatusInternalServerError
