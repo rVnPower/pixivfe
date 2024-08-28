@@ -28,6 +28,7 @@ func main() {
 	ctx_timeout, cancel := context.WithTimeout(context.Background(), config.ProxyCheckerTimeout)
 	defer cancel()
 	config.InitializeProxyChecker(ctx_timeout)
+	handlers.InitializeRateLimiter()
 
 	router := handlers.DefineRoutes()
 
@@ -35,7 +36,7 @@ func main() {
 		router.ServeHTTP(w, r)
 		handlers.ErrorHandler(w, r)
 	}
-	// main_handler = handlers.RateLimitRequest(main_handler)
+	main_handler = handlers.RateLimitRequest(main_handler)
 	main_handler = handlers.LogRequest(main_handler)
 
 	// run sass when in development mode
