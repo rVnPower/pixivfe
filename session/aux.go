@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	config "codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/config"
 )
 
 func GetPixivToken(r *http.Request) string {
