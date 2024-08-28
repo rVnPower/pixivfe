@@ -67,7 +67,7 @@ func manualTest[T any](t *testing.T, data T) {
 		log.Panicf("struct name does not start with 'Data_': %s", route_name)
 	}
 
-	// log.Println("Testing " + route_name)
+	// log.Print("Testing " + route_name)
 
 	variables := jet.VarMap{}
 

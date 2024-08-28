@@ -9,23 +9,59 @@ import (
 	"path"
 	"time"
 
+	"github.com/openzipkin/zipkin-go"
+	"github.com/openzipkin/zipkin-go/reporter"
+	http_reporter "github.com/openzipkin/zipkin-go/reporter/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
-	"github.com/openzipkin/zipkin-go"
 )
 
 const DevDir_Response = "/tmp/pixivfe-dev/resp"
 
 var optionSaveResponse bool
 
-func Init(saveResponse bool, tracer *zipkin.Tracer) error {
+func Init(saveResponse bool) error {
 	optionSaveResponse = saveResponse
-	utils.Tracer = tracer
 	if optionSaveResponse {
-		return os.MkdirAll(DevDir_Response, 0o700)
-	} else {
-		return nil
+		err := os.MkdirAll(DevDir_Response, 0o700)
+		if err != nil {
+			return err
+		}
 	}
+
+	var reporter reporter.Reporter = nil
+
+	_, enableReporting := config.LookupEnv("PIXIVFE_ENABLE_ZIPKIN")
+	if enableReporting {
+		reporter = http_reporter.NewReporter("http://localhost:9411/api/v2/spans")
+		defer func() {
+			_ = reporter.Close()
+		}()
+	} else {
+		// comment out this block in logging is too verbose
+		reporter = LogReporter{l: log.New(os.Stderr, "", log.Flags())}
+		defer func() {
+			_ = reporter.Close()
+		}()
+	}
+
+	// this is purely theoretical. the port is used for distributed tracing.
+	endpoint, err := zipkin.NewEndpoint("pixivfe", "localhost:8282")
+	if err != nil {
+		log.Fatalf("unable to create local endpoint: %+v\n", err)
+	}
+
+	// initialize our tracer
+	tracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
+	if err != nil {
+		log.Fatalf("unable to create tracer: %+v\n", err)
+	}
+
+	utils.Tracer = tracer
+
+	return nil
 }
 
 type ServerPerformance struct {
@@ -56,7 +92,7 @@ func LogServerRoundTrip(context context.Context, perf ServerPerformance) {
 		log.Printf("Internal Server Error: %s", perf.Error)
 	}
 
-	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("Served %v %v %v %v", perf.Method, perf.Path, perf.Status, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("%v %v %v %v", perf.Method, perf.Path, perf.Status, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
 	span.Tag("RemoteAddr", perf.RemoteAddr)
 	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
@@ -67,13 +103,13 @@ func LogAPIRoundTrip(context context.Context, perf APIPerformance) {
 			var err error
 			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
 			if err != nil {
-				log.Println("When saving response to file: ", err)
+				log.Print("When saving response to file: ", err)
 			} else {
-				log.Println(fmt.Sprintf("[API] %v %v saved to %v", perf.Method, perf.Url, perf.ResponseFilename))
+				log.Printf("[API] %v %v saved to %v", perf.Method, perf.Url, perf.ResponseFilename)
 			}
 		}
 		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
-			log.Println("(WARN) non-2xx response from pixiv:")
+			log.Print("(WARN) non-2xx response from pixiv:")
 		}
 	}
 	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("API %v %v %v", perf.Method, perf.Url, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
