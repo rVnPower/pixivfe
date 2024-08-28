@@ -29,29 +29,37 @@ func main() {
 	handlers.InitializeRateLimiter()
 
 	router := handlers.DefineRoutes()
+	router.Use(handlers.ProvideUserContext) // most outer / first executed middleware
+	router.Use(handlers.LogRequest)
+	router.Use(handlers.SetPrivacyHeaders)
+	router.Use(handlers.RateLimitRequest)
+	router.Use(handlers.HandleError)
 
-	main_handler := router.ServeHTTP
-	main_handler = handlers.HandleError(main_handler)
-	main_handler = handlers.RateLimitRequest(main_handler)
-	main_handler = handlers.LogRequest(main_handler)
-	main_handler = handlers.SetUserContext(main_handler)
-
-	// run sass when in development mode
+	// watch and compile sass when in development mode
 	if config.GlobalConfig.InDevelopment {
-		go func() {
-			cmd := exec.Command("sass", "--watch", "assets/css")
-			cmd.Stdout = os.Stderr // Sass quirk
-			cmd.Stderr = os.Stderr
-			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pdeathsig: syscall.SIGHUP}
-			runtime.LockOSThread() // Go quirk https://github.com/golang/go/issues/27505
-			err := cmd.Run()
-			if err != nil {
-				log.Print(fmt.Errorf("when running sass: %w", err))
-			}
-		}()
+		go run_sass()
 	}
 
 	// Listen
+	err := http.Serve(chooseListener(), router)
+	if err != http.ErrServerClosed {
+		log.Print(err)
+	}
+}
+
+func run_sass() {
+	cmd := exec.Command("sass", "--watch", "assets/css")
+	cmd.Stdout = os.Stderr // Sass quirk
+	cmd.Stderr = os.Stderr
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pdeathsig: syscall.SIGHUP}
+	runtime.LockOSThread() // Go quirk https://github.com/golang/go/issues/27505
+	err := cmd.Run()
+	if err != nil {
+		log.Print(fmt.Errorf("when running sass: %w", err))
+	}
+}
+
+func chooseListener() net.Listener {
 	var l net.Listener
 	if config.GlobalConfig.UnixSocket != "" {
 		ln, err := net.Listen("unix", config.GlobalConfig.UnixSocket)
@@ -70,5 +78,5 @@ func main() {
 		addr = ln.Addr().String()
 		log.Printf("Listening on http://%v/\n", addr)
 	}
-	http.Serve(l, http.HandlerFunc(main_handler))
+	return l
 }

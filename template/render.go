@@ -35,9 +35,9 @@ func Init(DisableCache bool) {
 // render the template selected based on the name of type `T`
 func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
-	// todo: think about caching a bit more
+	// todo: think about caching a bit more. see doc/dev/features/caching.md
 	// w.Header().Set("expires", time.Now().Add(config.ExpiresIn).Format(time.RFC1123))
-	SetHTMLPrivacyHeaders(w, r)
+	w.WriteHeader(200)
 	return RenderInner(w, GetTemplatingVariables(r), data)
 }
 

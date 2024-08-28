@@ -69,12 +69,12 @@ func InitializeRateLimiter() {
 	limiter = NewIPRateLimiter(rate.Limit(r), 3)
 }
 
-func RateLimitRequest(handler http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func RateLimitRequest(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 		if CanRequestSkipLimiter(r) {
-			handler(w, r)
+			h.ServeHTTP(w, r)
 			return
 		}
 
@@ -91,7 +91,7 @@ func RateLimitRequest(handler http.HandlerFunc) http.HandlerFunc {
 				return err
 			})(w, r)
 		} else {
-			handler(w, r)
+			h.ServeHTTP(w, r)
 		}
-	}
+	})
 }

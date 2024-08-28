@@ -34,9 +34,9 @@ func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http
 	}
 }
 
-func HandleError(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		handler(w, r)
+func HandleError(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h.ServeHTTP(w, r)
 
 		err := GetUserContext(r).Err
 
@@ -52,5 +52,5 @@ func HandleError(handler func(w http.ResponseWriter, r *http.Request)) http.Hand
 				log.Panicf("[fix this ASAP] Error rendering error route: %s", err)
 			}
 		}
-	}
+	})
 }

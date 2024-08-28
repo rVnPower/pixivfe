@@ -13,8 +13,10 @@ func handlePrefix(router *mux.Router, pathPrefix string, handler http.Handler) *
 	return router.PathPrefix(pathPrefix).Handler(http.StripPrefix(pathPrefix, handler))
 }
 
-func serveFile(filename string) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, filename) }
+func serveFile(filename string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filename)
+	}
 }
 
 func DefineRoutes() *mux.Router {
@@ -28,8 +30,6 @@ func DefineRoutes() *mux.Router {
 		url.Path = url.Path[0 : len(url.Path)-1]
 		http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 	})
-
-	//router.Use(MiddlewareChain)
 
 	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
@@ -82,6 +82,7 @@ func DefineRoutes() *mux.Router {
 		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
 
+	// fallback route (if nothing else matches)
 	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r *http.Request) error {
 		return errors.New("Route not found")
 	}))

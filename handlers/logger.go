@@ -29,10 +29,10 @@ func CanRequestSkipLogger(r *http.Request) bool {
 			(strings.HasPrefix(path, "/proxy/s.pximg.net/") || strings.HasPrefix(path, "/proxy/i.pximg.net/")))
 }
 
-func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
-	return func(w_ http.ResponseWriter, r *http.Request) {
+func LogRequest(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w_ http.ResponseWriter, r *http.Request) {
 		if CanRequestSkipLogger(r) {
-			f(w_, r)
+			h.ServeHTTP(w_, r)
 		} else {
 			w := &ResponseWriterInterceptStatus{
 				statusCode:     0,
@@ -42,7 +42,7 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 
 			start_time := time.Now()
 
-			f(w, r)
+			h.ServeHTTP(w, r)
 
 			end_time := time.Now()
 
@@ -56,5 +56,5 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 				Error:      GetUserContext(r).Err,
 			})
 		}
-	}
+	})
 }
