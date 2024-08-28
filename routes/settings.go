@@ -45,7 +45,7 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
-			return errors.New("Cannot parse the response from Pixiv. Please report this issue.")
+			return errors.New("Cannot fetch the response body from Pixiv. Please report this issue.")
 		}
 
 		// CSRF token
