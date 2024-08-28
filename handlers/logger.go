@@ -44,14 +44,14 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 
 		end_time := time.Now()
 
-		audit.TraceRoute(audit.RoutePerf{
+		audit.LogServerRoundTrip(audit.ServerPerformance{
 			StartTime:   start_time,
 			EndTime:     end_time,
 			RemoteAddr:  r.RemoteAddr,
 			Method:      r.Method,
 			Path:        r.URL.Path,
 			Status:      w.statusCode,
-			Err:         GetUserContext(r).Err,
+			Error:         GetUserContext(r).Err,
 			SkipLogging: CanRequestSkipLogger(r),
 		})
 	}
