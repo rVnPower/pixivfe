@@ -82,7 +82,7 @@ func RateLimitRequest(handler http.HandlerFunc) http.HandlerFunc {
 			CatchError(func(w http.ResponseWriter, r *http.Request) error {
 				err := errors.New("Too many requests")
 				GetUserContext(r).Err = err
-				GetUserContext(r).StatusCode = http.StatusTooManyRequests
+				GetUserContext(r).ErrorStatusCodeOverride = http.StatusTooManyRequests
 
 				err = routes.ErrorPage(w, r, err)
 				if err != nil {

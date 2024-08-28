@@ -12,8 +12,8 @@ import (
 )
 
 type UserContext struct {
-	Err        error
-	StatusCode int
+	Err error
+	ErrorStatusCodeOverride int
 }
 
 type userContextKey struct{}
@@ -41,8 +41,8 @@ func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http
 			maps.Copy(w.Header(), header_backup)
 			GetUserContext(r).Err = err
 		} else {
-			_, _ = recorder.Body.WriteTo(w)
 			w.WriteHeader(recorder.Code)
+			_, _ = recorder.Body.WriteTo(w)
 		}
 	}
 }
@@ -52,7 +52,7 @@ func ErrorHandler(w http.ResponseWriter, r *http.Request) { // error handler
 
 	if err != nil {
 		log.Printf("Internal Server Error: %s", err)
-		code := GetUserContext(r).StatusCode
+		code := GetUserContext(r).ErrorStatusCodeOverride
 		if code == 0 {
 			code = http.StatusInternalServerError
 		}
