@@ -1,19 +1,15 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"log"
-	"maps"
 	"net"
 	"net/http"
-	"net/http/httptest"
 	"os"
 	"os/exec"
 	"runtime"
-	"slices"
 	"strings"
 	"sync"
 	"syscall"
@@ -24,6 +20,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	. "codeberg.org/vnpower/pixivfe/v2/handler"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/template"
 )
@@ -44,19 +41,6 @@ func CanRequestSkipLogger(r *http.Request) bool {
 		strings.HasPrefix(path, "/js/") ||
 		strings.HasPrefix(path, "/proxy/s.pximg.net/") ||
 		strings.HasPrefix(path, "/proxy/i.pximg.net/")
-}
-
-type UserContext struct {
-	err        error
-	statusCode int
-}
-
-type userContextKey struct{}
-
-var UserContextKey = userContextKey{}
-
-func GetUserContext(r *http.Request) *UserContext {
-	return r.Context().Value(UserContextKey).(*UserContext)
 }
 
 // Todo: Should we put middlewares in a separate file?
@@ -108,7 +92,7 @@ func MiddlewareChain(handler http.Handler) http.Handler {
 
 		if !limiter.Allow(ip) {
 			CatchError(func(w http.ResponseWriter, r *http.Request) error {
-				GetUserContext(r).statusCode = http.StatusTooManyRequests
+				GetUserContext(r).StatusCode = http.StatusTooManyRequests
 				return errors.New("Too many requests")
 			})(w, r)
 		} else {
@@ -152,23 +136,7 @@ func main() {
 			router.ServeHTTP(w, r)
 		}
 
-		{ // error handler
-			err := GetUserContext(r).err
-
-			if err != nil {
-				log.Printf("Internal Server Error: %s", err)
-				code := GetUserContext(r).statusCode
-				if code == 0 {
-					code = http.StatusInternalServerError
-				}
-				w.WriteHeader(code)
-				// Send custom error page
-				err = routes.ErrorPage(w, r, err)
-				if err != nil {
-					log.Printf("Error rendering error route: %s", err)
-				}
-			}
-		}
+		ErrorHandler(w, r)
 
 		end_time := time.Now()
 
@@ -179,7 +147,7 @@ func main() {
 			method := r.Method
 			path := r.URL.Path
 			status := w.statusCode
-			err := GetUserContext(r).err
+			err := GetUserContext(r).Err
 
 			log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
 		}
@@ -290,29 +258,6 @@ func defineRoutes() *mux.Router {
 	}))
 
 	return router
-}
-
-func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		header_backup := http.Header{}
-		for k, v := range w.Header() {
-			header_backup[k] = slices.Clone(v)
-		}
-		recorder := httptest.ResponseRecorder{
-			HeaderMap: w.Header(),
-			Body:      new(bytes.Buffer),
-			Code:      200,
-		}
-		err := handler(&recorder, r)
-		if err != nil {
-			clear(header_backup)
-			maps.Copy(w.Header(), header_backup)
-			GetUserContext(r).err = err
-		} else {
-			_, _ = recorder.Body.WriteTo(w)
-			w.WriteHeader(recorder.Code)
-		}
-	}
 }
 
 type ResponseWriterInterceptStatus struct {
