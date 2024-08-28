@@ -15,7 +15,7 @@ Every server request should be traced, but currently not.
 ```
 wget https://repo1.maven.org/maven2/io/zipkin/zipkin-server/3.4.1/zipkin-server-3.4.1-exec.jar
 java -jar zipkin-server-3.4.1-exec.jar
-# start pixivfe
+PIXIVFE_ENABLE_ZIPKIN=1 go run .
 ```
 
 That's it!

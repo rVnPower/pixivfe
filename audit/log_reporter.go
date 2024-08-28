@@ -13,7 +13,7 @@ type LogReporter struct {
 }
 
 func (rr LogReporter) Send(m model.SpanModel) {
-	rr.l.Printf("%s | %v +%.3fs", m.Name,  m.Timestamp.Format(time.RFC3339), float64(m.Duration) / float64(time.Second) )
+	rr.l.Printf("%v +%-5.3f %s", m.Timestamp.Format("2006-01-02 15:04:05.000"), float64(m.Duration)/float64(time.Second), m.Name)
 }
 
 func (rr LogReporter) Close() error {

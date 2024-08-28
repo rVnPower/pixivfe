@@ -9,6 +9,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/oklog/ulid/v2"
 	"github.com/openzipkin/zipkin-go"
 	"github.com/openzipkin/zipkin-go/reporter"
 	http_reporter "github.com/openzipkin/zipkin-go/reporter/http"
@@ -18,7 +19,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
-const DevDir_Response = "/tmp/pixivfe-dev/resp"
+const DevDir_Response = "/tmp/pixivfe/r"
 
 var optionSaveResponse bool
 
@@ -103,21 +104,20 @@ func LogAPIRoundTrip(context context.Context, perf APIPerformance) {
 			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
 			if err != nil {
 				log.Print("When saving response to file: ", err)
-			} else {
-				log.Printf("[API] %v %v saved to %v", perf.Method, perf.Url, perf.ResponseFilename)
 			}
 		}
 		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
 			log.Print("(WARN) non-2xx response from pixiv:")
 		}
 	}
-	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("API %v %v %v", perf.Method, perf.Url, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("API %v %v %v %v", perf.Method, perf.Url, perf.Error, perf.ResponseFilename), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
 	span.Tag("ResponseFilename", perf.ResponseFilename)
 	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
 
 func writeResponseBodyToFile(body string) (string, error) {
-	filename := path.Join(DevDir_Response, time.Now().UTC().Format(time.RFC3339Nano))
+	id := ulid.Make().String()
+	filename := path.Join(DevDir_Response, id[len(id)-6:])
 	err := os.WriteFile(filename, []byte(body), 0o600)
 	if err != nil {
 		return "", err
