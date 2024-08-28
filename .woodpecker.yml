@@ -1,7 +1,7 @@
 variables:
   - &alpine_image 'docker.io/alpine:3.19'
   - path: &docs_path
-      - 'docs/**'
+      - 'doc/**'
 
 steps:
   docker-build-image:
