@@ -232,154 +232,180 @@ func GetRelatedArtworks(r *http.Request, id string) ([]ArtworkBrief, error) {
 }
 
 func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
-	urlArtInfo := GetArtworkInformationURL(id)
-
 	token := session.GetPixivToken(r)
-	response, err := API_GET_UnwrapJson(r.Context(), urlArtInfo, token)
-	if err != nil {
-		return nil, err
-	}
 
 	var illust struct {
-		*Illust
+		Illust
+		UserIllusts map[int]any     `json:"userIllusts"`
+		RawTags     json.RawMessage `json:"tags"`
 
-		// recent illustrations by same user
-		Recent  map[int]any     `json:"userIllusts"`
-		RawTags json.RawMessage `json:"tags"`
+		// In this object:
+		// "userId": "54395645",
+		// "userName": "ムロマキ",
+		// "userAccount": "doberman6969",
+		// missing avatar. if we have avatar, we can skip the user request below
 	}
-
-	// Parse basic illust information
-	err = json.Unmarshal([]byte(response), &illust)
-	if err != nil {
-		return nil, err
+	var illust2 struct {
+		Images       []Image
+		RelatedWorks []ArtworkBrief
+		CommentsList []Comment
 	}
-
-	if illust.BookmarkData != nil {
-		t := illust.BookmarkData.(map[string]any)
-		illust.BookmarkID = t["id"].(string)
-	}
-
-	// Begin testing here
 
 	wg := sync.WaitGroup{}
-	cerr := make(chan error, 6)
+	cerr := make(chan error, 7)
 
-	wg.Add(3)
-
+	// Get illust images
+	wg.Add(1)
 	go func() {
-		// Get illust images
 		defer wg.Done()
+
 		images, err := GetArtworkImages(r, id)
 		if err != nil {
-
 			cerr <- err
 			return
 		}
-		illust.Images = images
-	}()
-
-	go func() {
-		// Get basic user information (the URL above does not contain avatars)
-		defer wg.Done()
-		var err error
-		userInfo, err := GetUserBasicInformation(r, illust.UserID)
-		if err != nil {
-			cerr <- err
-			return
-		}
-		illust.User = userInfo
-	}()
-
-	go func() {
-		defer wg.Done()
-		var err error
-		// Extract tags
-		var tags struct {
-			Tags []struct {
-				Tag         string            `json:"tag"`
-				Translation map[string]string `json:"translation"`
-			} `json:"tags"`
-		}
-		err = json.Unmarshal(illust.RawTags, &tags)
-		if err != nil {
-			cerr <- err
-			return
-		}
-
-		var tagsList []Tag
-		for _, tag := range tags.Tags {
-			var newTag Tag
-			newTag.Name = tag.Tag
-			newTag.TranslatedName = tag.Translation["en"]
-
-			tagsList = append(tagsList, newTag)
-		}
-		illust.Tags = tagsList
+		illust2.Images = images
 	}()
 
 	if full {
-		wg.Add(3)
-
+		// Get related artworks
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			var err error
-			// Get recent artworks
-			ids := make([]int, 0)
 
-			for k := range illust.Recent {
-				ids = append(ids, k)
-			}
-
-			sort.Sort(sort.Reverse(sort.IntSlice(ids)))
-
-			idsString := ""
-			count := min(len(ids), 20)
-
-			for i := 0; i < count; i++ {
-				idsString += fmt.Sprintf("&ids[]=%d", ids[i])
-			}
-
-			recent, err := GetUserArtworks(r, illust.UserID, idsString)
-			if err != nil {
-				cerr <- err
-				return
-			}
-			sort.Slice(recent[:], func(i, j int) bool {
-				left := recent[i].ID
-				right := recent[j].ID
-				return numberGreaterThan(left, right)
-			})
-			illust.RecentWorks = recent
-		}()
-
-		go func() {
-			defer wg.Done()
 			var err error
 			related, err := GetRelatedArtworks(r, id)
 			if err != nil {
 				cerr <- err
 				return
 			}
-			illust.RelatedWorks = related
+			illust2.RelatedWorks = related
 		}()
 
+		// Get reader comments
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if illust.CommentDisabled == 1 {
-				return
-			}
-			var err error
+
+			// if illust.CommentDisabled == 1 {
+			// 	return
+			// }
 			comments, err := GetArtworkComments(r, id)
 			if err != nil {
 				cerr <- err
 				return
 			}
-			illust.CommentsList = comments
+			illust2.CommentsList = comments
 		}()
 	}
 
+	// Get basic illust information
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		urlArtInfo := GetArtworkInformationURL(id)
+		response, err := API_GET_UnwrapJson(r.Context(), urlArtInfo, token)
+		if err != nil {
+			cerr <- err
+			return
+		}
+
+		err = json.Unmarshal([]byte(response), &illust)
+		if err != nil {
+			cerr <- err
+			return
+		}
+
+		if illust.BookmarkData != nil {
+			t := illust.BookmarkData.(map[string]any)
+			illust.BookmarkID = t["id"].(string)
+		}
+
+		// Get basic user information (the URL above does not contain avatars)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			userInfo, err := GetUserBasicInformation(r, illust.UserID)
+			if err != nil {
+				cerr <- err
+				return
+			}
+			illust.User = userInfo
+		}()
+
+		// translate tags
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			var tags struct {
+				Tags []struct {
+					Tag         string            `json:"tag"`
+					Translation map[string]string `json:"translation"`
+				} `json:"tags"`
+			}
+			err := json.Unmarshal(illust.RawTags, &tags)
+			if err != nil {
+				cerr <- err
+				return
+			}
+
+			var tagsList []Tag
+			for _, tag := range tags.Tags {
+				var newTag Tag
+				newTag.Name = tag.Tag
+				newTag.TranslatedName = tag.Translation["en"]
+
+				tagsList = append(tagsList, newTag)
+			}
+			illust.Tags = tagsList
+		}()
+
+		if full {
+			// Get recent artworks
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+
+				var err error
+				ids := make([]int, 0)
+
+				for k := range illust.UserIllusts {
+					ids = append(ids, k)
+				}
+
+				sort.Sort(sort.Reverse(sort.IntSlice(ids)))
+
+				idsString := ""
+				count := min(len(ids), 20)
+
+				for i := 0; i < count; i++ {
+					idsString += fmt.Sprintf("&ids[]=%d", ids[i])
+				}
+
+				recent, err := GetUserArtworks(r, illust.UserID, idsString)
+				if err != nil {
+					cerr <- err
+					return
+				}
+				sort.Slice(recent[:], func(i, j int) bool {
+					left := recent[i].ID
+					right := recent[j].ID
+					return numberGreaterThan(left, right)
+				})
+				illust.RecentWorks = recent
+			}()
+		}
+	}()
+
 	wg.Wait()
 	close(cerr)
+
+	illust.Images = illust2.Images
+	illust.RelatedWorks = illust2.RelatedWorks
+	illust.CommentsList = illust2.CommentsList
 
 	all_errors := []error{}
 	for suberr := range cerr {
@@ -393,5 +419,5 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 	// If this artwork is an ugoira
 	illust.IsUgoira = strings.Contains(illust.Images[0].Original, "ugoira")
 
-	return illust.Illust, nil
+	return &illust.Illust, nil
 }
