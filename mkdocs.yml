@@ -22,7 +22,7 @@ nav:
     - dev/user-customization.md
 repo_name: vnpower/pixivfe
 repo_url: https://codeberg.org/vnpower/pixivfe
-edit_uri: edit/master/doc/
+edit_uri: _edit/v2/doc/
 copyright: GFDL-1.3-or-later
 theme:
   name: material
