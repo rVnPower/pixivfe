@@ -12,3 +12,5 @@ dev.sh
 /tmp
 # exclude changes to pixivfe_token.txt
 docker/pixivfe_token.txt
+# Pipfile generated when using pipenv
+Pipfile
