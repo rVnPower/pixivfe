@@ -46,7 +46,7 @@ theme:
         name: Switch to light theme
   icon:
     logo: simple/pixiv
-  favicon: assets/img/favicon.ico
+  favicon: favicon.ico
   features:
     # -- Navigation
     # Instant loading
