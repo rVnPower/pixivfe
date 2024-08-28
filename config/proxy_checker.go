@@ -31,14 +31,14 @@ func StartProxyChecker(r context.Context) {
 		for {
 			select {
 			case <-stopChan:
-				log.Println("Stopping proxy checker...")
+				log.Print("Stopping proxy checker...")
 				return
 			default:
 				checkProxies(r)
 				if t := GlobalServerConfig.ProxyCheckInterval; t > 0 {
 					time.Sleep(t)
 				} else {
-					log.Println("Proxy check interval set to 0, disabling auto-check from now on.")
+					log.Print("Proxy check interval set to 0, disabling auto-check from now on.")
 					select {} // Sweet dreams!
 				}
 			}
@@ -126,5 +126,5 @@ func logf(format string, v ...any) {
 }
 
 func logln(v ...any) {
-	log.Println(v...)
+	log.Print(v...)
 }

@@ -27,7 +27,7 @@ func setup() {
 		log.Fatalf("could not launch browser: %v", err)
 	}
 
-	log.Println("Setup is complete")
+	log.Print("Setup is complete")
 }
 
 func teardown() {
@@ -38,7 +38,7 @@ func teardown() {
 	if err := pw.Stop(); err != nil {
 		log.Fatalf("could not stop Playwright: %v", err)
 	}
-	log.Println("Teardown is complete")
+	log.Print("Teardown is complete")
 }
 
 // TestMain can be used for global setup and teardown
