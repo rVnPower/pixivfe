@@ -94,7 +94,7 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 
 	URL := GetNovelURL(id)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return novel, err
 	}
@@ -114,7 +114,7 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 		illustid := re_d.FindString(s)
 
 		URL := GetInsertIllustURL(novel.ID, illustid)
-		response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+		response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 		if err != nil {
 			return "Cannot insert illust" + illustid
 		}
@@ -136,7 +136,7 @@ func GetNovelRelated(r *http.Request, id string) ([]NovelBrief, error) {
 	// hard-coded value, may change
 	URL := GetNovelRelatedURL(id, 50)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return novels.List, err
 	}

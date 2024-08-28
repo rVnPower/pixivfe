@@ -3,7 +3,6 @@ package routes
 import (
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"regexp"
 	"slices"
@@ -20,18 +19,19 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 	if token != "" {
 		URL := core.GetNewestFromFollowingURL("all", "1")
 
-		_, err := core.UnwrapWebAPIRequest(r.Context(), URL, token)
+		_, err := core.API_GET_UnwrapJson(r.Context(), URL, token)
 		if err != nil {
 			return errors.New("Cannot authorize with supplied token.")
 		}
 
 		// Make a test request to verify the token.
 		// THE TEST URL IS NSFW!
-		resp, err := core.PixivGetRequest(r.Context(), "https://www.pixiv.net/en/artworks/115365120", token)
+		resp, err := core.API_GET(r.Context(), "https://www.pixiv.net/en/artworks/115365120", token)
 		if err != nil {
 			return err
 		}
-		if !resp.Ok {
+
+		if resp.StatusCode != 200 {
 			return errors.New("Cannot authorize with supplied token.")
 		}
 

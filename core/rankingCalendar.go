@@ -41,7 +41,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	token := session.GetPixivToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
 
-	resp, err := PixivGetRequest(r.Context(), URL, token)
+	resp, err := API_GET(r.Context(), URL, token)
 	if err != nil {
 		return "", err
 	}

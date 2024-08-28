@@ -16,7 +16,7 @@ func GetDiscoveryArtwork(r *http.Request, mode string) ([]ArtworkBrief, error) {
 
 	var artworks []ArtworkBrief
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func GetDiscoveryNovels(r *http.Request, mode string) ([]NovelBrief, error) {
 
 	var novels []NovelBrief
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}

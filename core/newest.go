@@ -15,7 +15,7 @@ func GetNewestArtworks(r *http.Request, worktype string, r18 string) ([]ArtworkB
 		// LastId string
 	}
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}
