@@ -2,7 +2,7 @@
 {{ block body() }}
 
 <div class="container">
-{{ if !.LoggedIn }}
+  {{ if !.LoggedIn }}
   <p>Not logged in. You can login <a href="/settings">here</a>.</p>
   <div class="component-header">
     <h2>Today's illustration rankings</h2>
@@ -12,7 +12,7 @@
     {{ include "components/ranking-tn" .NoTokenData.Contents }}
   </div>
 
-{{ else }}
+  {{ else }}
   <div class="switcher">
     <span class="switch-title">Filter</span>
     <a href="/?mode=all" class="switch-button">All</a>
@@ -39,6 +39,6 @@
   <br />
   {{ end }}
 
-{{ end }}
+  {{ end }}
 </div>
 {{ end }}
