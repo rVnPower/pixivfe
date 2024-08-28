@@ -1,63 +1,14 @@
 package routes
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
-	"github.com/tidwall/gjson"
 )
-
-func pixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON bool) error {
-	requestBody := []byte(payload)
-
-	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
-	if err != nil {
-		return err
-	}
-	req.Header.Add("User-Agent", "Mozilla/5.0")
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("x-csrf-token", csrf)
-	req.AddCookie(&http.Cookie{
-		Name:  "PHPSESSID",
-		Value: token,
-	})
-
-	if isJSON {
-		req.Header.Add("Content-Type", "application/json; charset=utf-8")
-	} else {
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-	}
-	
-	resp, err := utils.HttpClient.Do(req)
-	if err != nil {
-		return errors.New("Failed to do this action.")
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return errors.New("Cannot parse the response from Pixiv. Please report this issue.")
-	}
-	body_s := string(body)
-	if !gjson.Valid(body_s) {
-		return fmt.Errorf("Invalid JSON: %v", body_s)
-	}
-	errr := gjson.Get(body_s, "error")
-
-	if !errr.Exists() {
-		return errors.New("Incompatible request body.")
-	}
-
-	if errr.Bool() {
-		return errors.New("Pixiv: Invalid request.")
-	}
-	return nil
-}
 
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	token := session.GetPixivToken(r)
@@ -79,7 +30,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 "comment": "",
 "tags": []
 }`, id)
-	if err := pixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
+	if err := core.PixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
@@ -103,7 +54,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
 	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	if err := pixivPostRequest(r, URL, payload, token, csrf, false); err != nil {
+	if err := core.PixivPostRequest(r, URL, payload, token, csrf, false); err != nil {
 		return err
 	}
 
@@ -126,7 +77,7 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	if err := pixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
+	if err := core.PixivPostRequest(r, URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
