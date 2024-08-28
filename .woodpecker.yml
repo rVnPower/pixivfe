@@ -1,8 +1,7 @@
 variables:
   - &alpine_image 'docker.io/alpine:3.19'
   - path: &docs_path
-      - 'doc/**'
-      - 'mkdocs.yml'
+      include: ['doc/**', 'mkdocs.yml']
 
 steps:
   docker-build-image:
@@ -25,9 +24,10 @@ steps:
       verbose: true
       pip_install_file: doc/requirements.txt
     when:
-      branch: [ v2 ]
-      path: *docs_path
-      event: [ push, tag, release, manual ]
+      - event: push
+        path: *docs_path
+        branch: [ v2 ]
+      - event: [ tag, release, manual ]
 
   deploy-docs-cloudflare:
     image: *alpine_image
@@ -40,8 +40,9 @@ steps:
       - apk add npm --repository https://dl-cdn.alpinelinux.org/alpine/edge/community/
       - npx wrangler pages deploy site --project-name=pixivfe-docs
     when:
-      branch: [ v2 ]
-      path: *docs_path
-      event: [ push, tag, release, manual ]
+      - event: push
+        path: *docs_path
+        branch: [ v2 ]
+      - event: [ tag, release, manual ]
     depends_on:
       - generate-docs
