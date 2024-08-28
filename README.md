@@ -11,7 +11,7 @@ A privacy-respecting alternative front-end for Pixiv that doesn't suck.
 ![CI badge](https://ci.codeberg.org/api/badges/12556/status.svg)
 [![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
 
-Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:eientei.org) on Matrix! You can also see the [Known quirks](https://pixivfe.pages.dev/known-quirks/) page to check if your issue has a known solution.
+Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:eientei.org) on Matrix! You can also see the [Known quirks](https://pixivfe-docs.pages.dev/known-quirks/) page to check if your issue has a known solution.
 
 You can keep track of this project's development using the [roadmap](doc/dev/general.md).
 
@@ -50,7 +50,7 @@ PIXIVFE_DEV=1 <other_environment_variables> go run .
 You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, modify the `run.sh` file, and profit!
 I recommend self-hosting your own instance for personal use, instead of relying entirely on official instances.
 
-To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe.pages.dev/hosting-pixivfe/).
+To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe-docs.pages.dev/hosting-pixivfe/).
 
 ### Public Instances
 
@@ -71,12 +71,12 @@ If you are hosting your own instance, you can create a pull request to add it he
 
 For more information on instance uptime, see the [PixivFE instance status page](https://stats.uptimerobot.com/FbEGewWlbX).
 
-This information is duplicated at https://pixivfe.pages.dev/public-instances/.
+This information is duplicated at https://pixivfe-docs.pages.dev/public-instances/.
 
 ## Hosting Image Proxy Server
 
-PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe.pages.dev/public-image-proxies/).
-See [hosting a Pixiv image proxy](https://pixivfe.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.
+PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe-docs.pages.dev/public-image-proxies/).
+See [hosting a Pixiv image proxy](https://pixivfe-docs.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.
 
 ### Public Instances
 
