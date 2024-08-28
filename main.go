@@ -30,12 +30,11 @@ func main() {
 
 	router := handlers.DefineRoutes()
 
-	main_handler := func(w http.ResponseWriter, r *http.Request) {
-		router.ServeHTTP(w, r)
-		handlers.ErrorHandler(w, r)
-	}
+	main_handler := router.ServeHTTP
+	main_handler = handlers.HandleError(main_handler)
 	main_handler = handlers.RateLimitRequest(main_handler)
 	main_handler = handlers.LogRequest(main_handler)
+	main_handler = handlers.SetUserContext(main_handler)
 
 	// run sass when in development mode
 	if config.GlobalConfig.InDevelopment {

@@ -8,15 +8,8 @@ import (
 	"net/http/httptest"
 	"slices"
 
-	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 )
-
-type UserContext = user_context.UserContext
-
-func GetUserContext(r *http.Request) *UserContext {
-	return user_context.GetUserContext(r.Context())
-}
 
 func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -41,19 +34,23 @@ func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http
 	}
 }
 
-func ErrorHandler(w http.ResponseWriter, r *http.Request) { // error handler
-	err := GetUserContext(r).Err
+func HandleError(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		handler(w, r)
 
-	if err != nil {
-		code := GetUserContext(r).ErrorStatusCodeOverride
-		if code == 0 {
-			code = http.StatusInternalServerError
-		}
-		w.WriteHeader(code)
-		// Send custom error page
-		err = routes.ErrorPage(w, r, err)
+		err := GetUserContext(r).Err
+
 		if err != nil {
-			log.Panicf("[fix this ASAP] Error rendering error route: %s", err)
+			code := GetUserContext(r).ErrorStatusCodeOverride
+			if code == 0 {
+				code = http.StatusInternalServerError
+			}
+			w.WriteHeader(code)
+			// Send custom error page
+			err = routes.ErrorPage(w, r, err)
+			if err != nil {
+				log.Panicf("[fix this ASAP] Error rendering error route: %s", err)
+			}
 		}
 	}
 }

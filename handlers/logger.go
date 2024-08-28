@@ -7,7 +7,6 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/audit"
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
 )
 
 type ResponseWriterInterceptStatus struct {
@@ -40,7 +39,6 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 				ResponseWriter: w_,
 			}
 			// set user context
-			r = r.WithContext(user_context.WithContext(r.Context()))
 
 			start_time := time.Now()
 

@@ -147,11 +147,11 @@ func _API_POST(context context.Context, url, payload, token, csrf string, isJSON
 	err2 := gjson.Get(body_s, "error")
 
 	if !err2.Exists() {
-		return resp, fmt.Errorf("Incompatible request body. %w", err2)
+		return resp, fmt.Errorf("Incompatible request body.")
 	}
 
 	if err2.Bool() {
-		return resp, fmt.Errorf("Pixiv: Invalid request. %w", err2)
+		return resp, fmt.Errorf("Pixiv: Invalid request.")
 	}
 	return resp, nil
 }
