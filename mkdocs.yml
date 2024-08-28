@@ -185,7 +185,3 @@ extra:
     - icon: simple/codeberg
       link: https://codeberg.org/VnPower/PixivFE
       name: PixivFE on Codeberg
-    - icon: simple/gitlab
-      link: https://gitlab.com/pixivfe
-      name: PixivFE on GitLab
-
