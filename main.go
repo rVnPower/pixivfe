@@ -11,18 +11,16 @@ import (
 	"runtime"
 	"syscall"
 
+	"codeberg.org/vnpower/pixivfe/v2/audit"
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/handlers"
 	"codeberg.org/vnpower/pixivfe/v2/template"
 )
 
 func main() {
-	config.GlobalServerConfig.InitializeConfig()
-	if config.GlobalServerConfig.InDevelopment {
-		core.CreateResponseAuditFolder()
-	}
-	template.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
+	config.GlobalServerConfig.LoadConfig()
+	audit.Init(config.GlobalServerConfig.InDevelopment)
+	template.Init(config.GlobalServerConfig.InDevelopment)
 
 	// Initialize and start the proxy checker
 	ctx_timeout, cancel := context.WithTimeout(context.Background(), config.ProxyCheckerTimeout)

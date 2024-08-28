@@ -45,7 +45,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
-	template.InitTemplatingEngine(false)
+	template.Init(false)
 
 	m.Run()
 }
