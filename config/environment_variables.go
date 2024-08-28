@@ -65,7 +65,7 @@ var EnvList []*EnvVar = []*EnvVar{
 	},
 	{
 		Name:       "PIXIVFE_REQUESTLIMIT",
-		CommonName: "limit number of request per 30 seconds",
+		CommonName: "Limit number of request per 30 seconds",
 		// **Required**: No
 		//
 		// Set this to a number to enable the built-in rate limiter. For example `PIXIVFE_REQUESTLIMIT=15`.
