@@ -1,15 +1,19 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"log"
+	"maps"
 	"net"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"runtime"
+	"slices"
 	"strings"
 	"sync"
 	"syscall"
@@ -23,7 +27,6 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/template"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {
@@ -45,7 +48,8 @@ func CanRequestSkipLogger(r *http.Request) bool {
 }
 
 type UserContext struct {
-	err error
+	err        error
+	statusCode int
 }
 
 type userContextKey struct{}
@@ -96,7 +100,6 @@ var limiter *IPRateLimiter = NewIPRateLimiter(0, 0)
 
 func MiddlewareChain(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 		if CanRequestSkipLogger(r) {
@@ -105,20 +108,13 @@ func MiddlewareChain(handler http.Handler) http.Handler {
 		}
 
 		if !limiter.Allow(ip) {
-			err := errors.New("Too many requests")
-			log.Println("Within handler: ", err)
-			code := http.StatusTooManyRequests
-			w.WriteHeader(code)
-			// Send custom error page
-			err = template.Render(w, r, routes.Data_error{Title: "Error", Error: err})
-			if err != nil {
-				err = utils.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
-				if err != nil {
-					return
-				}
-			}
+			CatchError(func(w http.ResponseWriter, r *http.Request) error {
+				GetUserContext(r).statusCode = http.StatusTooManyRequests
+				return errors.New("Too many requests")
+			})(w, r)
+		} else {
+			handler.ServeHTTP(w, r)
 		}
-		handler.ServeHTTP(w, r)
 	})
 }
 
@@ -130,7 +126,7 @@ func main() {
 	template.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
 
 	// Initialize and start the proxy checker
-	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx_timeout, cancel := context.WithTimeout(context.Background(), config.ProxyCheckerTimeout)
 	defer cancel()
 	config.InitializeProxyChecker(ctx_timeout)
 
@@ -150,34 +146,32 @@ func main() {
 		setGlobalHeaders(w, r)
 
 		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
-			// strip trailing / to make router behave
+			// redirect handler: strip trailing / to make router behave
 			url := r.URL
 			url.Path, _ = strings.CutSuffix(url.Path, "/")
 			http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 		} else {
-			// all the routes are listed here
+			// handler of all other routes
 			router.ServeHTTP(w, r)
 		}
 
-		CatchError(func(w http.ResponseWriter, r *http.Request) error {
+		{ // error handler
 			err := GetUserContext(r).err
 
-			if err != nil { // error handler
-				log.Println("Within handler: ", err)
-				code := http.StatusInternalServerError
+			if err != nil {
+				log.Printf("Internal Server Error: %s", err)
+				code := GetUserContext(r).statusCode
+				if code == 0 {
+					code = http.StatusInternalServerError
+				}
 				w.WriteHeader(code)
 				// Send custom error page
-				err = template.Render(w, r, routes.Data_error{Title: "Error", Error: err})
+				err = routes.ErrorPage(w, r, err)
 				if err != nil {
-					err = utils.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
-					if err != nil {
-						return err
-					}
+					log.Printf("Error rendering error route: %s", err)
 				}
 			}
-
-			return nil
-		})(w, r)
+		}
 
 		end_time := time.Now()
 
@@ -233,10 +227,12 @@ func main() {
 
 func setGlobalHeaders(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
+	header.Add("Referrer-Policy", "same-origin") // needed for settings redirect
+	
+	// headers below are HTML-only
 	header.Add("X-Frame-Options", "DENY")
 	// use this if need iframe: `X-Frame-Options: SAMEORIGIN`
 	header.Add("X-Content-Type-Options", "nosniff")
-	header.Add("Referrer-Policy", "same-origin") // needed for settings redirect
 	header.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
 	header.Add("Content-Security-Policy", fmt.Sprintf("base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' %s; media-src 'self' %s; connect-src 'self'; form-action 'self'; frame-ancestors 'none';", session.GetImageProxyOrigin(r), session.GetImageProxyOrigin(r)))
 	// use this if need iframe: `frame-ancestors 'self'`
@@ -315,7 +311,24 @@ func defineRoutes() *mux.Router {
 
 func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		GetUserContext(r).err = handler(w, r)
+		header_backup := http.Header{}
+		for k, v := range w.Header() {
+			header_backup[k] = slices.Clone(v)
+		}
+		recorder := httptest.ResponseRecorder{
+			HeaderMap: w.Header(),
+			Body:      new(bytes.Buffer),
+			Code:      200,
+		}
+		err := handler(&recorder, r)
+		if err != nil {
+			clear(header_backup)
+			maps.Copy(w.Header(), header_backup)
+			GetUserContext(r).err = err
+		} else {
+			_, _ = recorder.Body.WriteTo(w)
+			w.WriteHeader(recorder.Code)
+		}
 	}
 }
 
