@@ -86,6 +86,15 @@ The value of the `User-Agent` header used for requests to Pixiv's API.
 
 The value of the `Accept-Language` header used for requests to Pixiv's API. Change this to modify the response language.
 
+### `PIXIVFE_PROXY_CHECK_INTERVAL`
+
+**Required**: No
+
+**Default:** `480`
+
+The interval in minutes between proxy checks. Defaults to 480 minutes (8 hours) if not set.
+You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
+
 ### `PIXIVFE_DEV`
 
 **Required**: No
