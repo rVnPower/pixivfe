@@ -19,7 +19,7 @@ steps:
       event: [ tag, release, manual ]
 
   generate-docs:
-    image: woodpeckerci/plugin-mkdocs:minimal
+    image: woodpeckerci/plugin-mkdocs:latest
     settings:
       verbose: true
       pip_install_file: doc/requirements.txt
