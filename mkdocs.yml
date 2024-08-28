@@ -12,6 +12,14 @@ nav:
     - "Hosting PixivFE": "hosting-pixivfe.md"
     - "Hosting an image proxy server for Pixiv": "hosting-image-proxy-server.md"
     - "Obtaining the PIXIVFE_TOKEN cookie": "obtaining-pixivfe-token.md"
+  - "Development":
+    - dev/index.md
+    - dev/framework-migration.md
+    - dev/general.md
+    - dev/novels.md
+    - dev/pitfalls.md
+    - dev/unified.md
+    - dev/user-customization.md
 repo_name: vnpower/pixivfe
 repo_url: https://codeberg.org/vnpower/pixivfe
 edit_uri: edit/master/doc/
@@ -38,7 +46,7 @@ theme:
         name: Switch to light theme
   icon:
     logo: simple/pixiv
-  favicon: favicon.ico
+  favicon: assets/img/favicon.ico
   features:
     # -- Navigation
     # Instant loading
