@@ -27,30 +27,17 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 
 		// Make a test request to verify the token.
 		// THE TEST URL IS NSFW!
-		req, err := http.NewRequestWithContext(r.Context(), "GET", "https://www.pixiv.net/en/artworks/115365120", nil)
+		resp, err := core.PixivGetRequest(r.Context(), "https://www.pixiv.net/en/artworks/115365120", token)
 		if err != nil {
 			return err
 		}
-		req.Header.Add("User-Agent", "Mozilla/5.0")
-		req.AddCookie(&http.Cookie{
-			Name:  "PHPSESSID",
-			Value: token,
-		})
-
-		resp, err := utils.HttpClient.Do(req)
-		if err != nil {
+		if !resp.Ok {
 			return errors.New("Cannot authorize with supplied token.")
-		}
-		defer resp.Body.Close()
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return errors.New("Cannot fetch the response body from Pixiv. Please report this issue.")
 		}
 
 		// CSRF token
 		r := regexp.MustCompile(`"token":"([0-9a-f]+)"`)
-		csrf := r.FindStringSubmatch(string(body))[1]
+		csrf := r.FindStringSubmatch(resp.Body)[1]
 
 		if csrf == "" {
 			return errors.New("Cannot authorize with supplied token.")
