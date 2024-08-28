@@ -1,7 +1,6 @@
 package audit
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
