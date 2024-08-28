@@ -61,6 +61,11 @@ func main() {
 	}
 	template.InitTemplatingEngine(config.GlobalServerConfig.InDevelopment)
 
+	// Initialize and start the proxy checker
+	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	config.InitializeProxyChecker(ctx_timeout)
+
 	router := defineRoutes()
 
 	main_handler := func(w_ http.ResponseWriter, r *http.Request) {
@@ -117,11 +122,6 @@ func main() {
 			log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
 		}
 	}
-
-	// Initialize and start the proxy checker
-	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	config.InitializeProxyChecker(ctx_timeout)
 
 	// run sass when in development mode
 	if config.GlobalServerConfig.InDevelopment {
