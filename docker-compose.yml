@@ -27,5 +27,5 @@ services:
 secrets:
   pixivfe_token:
     # Copy the contents of the `PHPSESSID` cookie into `pixivfe_token.txt`
-    # See https://pixivfe.pages.dev/obtaining-pixivfe-token/ for instructions
+    # See https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/ for instructions
     file: ./docker/pixivfe_token.txt
