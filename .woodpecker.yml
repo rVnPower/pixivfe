@@ -5,7 +5,7 @@ variables:
 
 steps:
   docker-build-image:
-    image: woodpeckerci/plugin-docker-buildx
+    image: woodpeckerci/plugin-docker-buildx:latest
     settings:
       dockerfile: Dockerfile
       repo: vnpower/pixivfe
