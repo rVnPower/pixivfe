@@ -2,6 +2,7 @@ variables:
   - &alpine_image 'docker.io/alpine:3.19'
   - path: &docs_path
       - 'doc/**'
+      - 'mkdocs.yml'
 
 steps:
   docker-build-image:
