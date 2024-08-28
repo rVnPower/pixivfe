@@ -1,17 +1,17 @@
-{{ if !.IsUgoira }}
+{{- if !.IsUgoira }}
 <div class="illust-images">
-  {{ range index := .Images }}
+  {{- range index := .Images }}
   <a href="{{ .Original }}" target="_blank">
-    {{ if .Width != 0 && .Height != 0 }}
+    {{- if .Width != 0 && .Height != 0 }}
     {* todo: do not reflow the page because of loading image *}
     <img src="{{ .Large }}" alt="Page {{ index }}" data-width="{{.Width}}" data-height="{{.Height}}" />
-    {{ else }}
+    {{- else }}
     <img src="{{ .Large }}" alt="Page {{ index }}" />
-    {{ end }}
+    {{- end }}
   </a>
-  {{ end }}
+  {{- end }}
 </div>
-{{ else }}
+{{- else }}
 <div class="illust-images">
   <video autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
     src="/proxy/ugoira.com/{{ .ID }}">
@@ -21,7 +21,7 @@
 <a href="/proxy/ugoira.com/{{ .ID }}">Download</a>
 <br />
 <a href="https://ugoira.com/i/{{ .ID }}">Go to ugoira.com for more options</a>
-{{ end }}
+{{- end }}
 
 <div class="illust-attr">
   <div class="illust-author-attr">
@@ -35,24 +35,24 @@
     </div>
   </div>
   <div class="artwork-actions">
-    {{ if isset(.BookmarkData) && LoggedIn }}
+    {{- if isset(.BookmarkData) && LoggedIn }}
     <a href="/self/deleteBookmark/{{ .BookmarkID }}">
       <img src="/img/heart-red.png" alt="Bookmarked" />
     </a>
-    {{ else }}
+    {{- else }}
     <a href="/self/addBookmark/{{ .ID }}">
       <img src="/img/heart-outline.png" alt="Bookmark" />
     </a>
-    {{ end }}
+    {{- end }}
 
-    {{ if .Liked && LoggedIn}}
+    {{- if .Liked && LoggedIn}}
     <img src="/img/like-blue.png" alt="Liked" />
 
-    {{ else }}
+    {{- else }}
     <a href="/self/like/{{ .ID }}">
       <img src="/img/like-outline.png" alt="Like" />
     </a>
-    {{ end }}
+    {{- end }}
   </div>
 </div>
 
@@ -63,40 +63,40 @@
 <div class="illust-tags">
   <span class="illust-tag-attr">
     <img src="/img/eye.png" alt="Views" />
-    {{ .Views }}
+    {{- .Views }}
   </span>
   <span class="illust-tag-attr">
     <img src="/img/heart-solid.png" alt="Bookmarks" />
-    {{ .Bookmarks }}
+    {{- .Bookmarks }}
   </span>
   <span class="illust-tag-attr">
     <img src="/img/like.png" alt="Likes" />
-    {{ .Likes }}
+    {{- .Likes }}
   </span>
   <span class="illust-tag-attr">
     <img src="/img/calendar.png" alt="Date" />
-    {{ parseTime: .Date }}
+    {{- parseTime: .Date }}
   </span>
 </div>
 
 <div class="illust-tags">
-  {{ if .AiType == 2 }}
+  {{- if .AiType == 2 }}
   <span class="illust-tag">
     <span class="illust-tag-name" id="highlight">AI-generated</span>
   </span>
-  {{ end }} {{ range .Tags }} {{ if isEmphasize(.Name) }}
+  {{- end }} {{ range .Tags }} {{ if isEmphasize(.Name) }}
   <span class="illust-tag">
     <span class="illust-tag-name" id="highlight">{{ .Name }}</span>
   </span>
-  {{ else }}
+  {{- else }}
   <span class="illust-tag">
     <span class="illust-tag-name"><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span><span
       class="illust-tag-translation">{{ .TranslatedName }}</span>
   </span>
-  {{ end }} {{ end }}
+  {{- end }} {{ end }}
 </div>
 <br />
 <div class="illust-description">
-  {{ raw: parsePixivRedirect(.Description) }}
+  {{- raw: parsePixivRedirect(.Description) }}
 </div>
 <br />

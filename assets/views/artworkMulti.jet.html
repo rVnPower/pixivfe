@@ -1,8 +1,8 @@
-{{ extends "layout/default" }}
-{{ block body() }}
-{{ range .Artworks }}
+{{- extends "layout/default" }}
+{{- block body() }}
+{{- range .Artworks }}
 <div class="container illust">
-{{ include "components/artwork" . }}
+{{- include "components/artwork" . }}
 </div>
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}

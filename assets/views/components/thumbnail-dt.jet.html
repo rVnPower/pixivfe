@@ -1,16 +1,16 @@
-{{ target := CookieList["pixivfe-ThumbnailToNewTab"] }}
+{{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
 <div class="artwork-image">
   <div class="artwork-additional">
-    {{ if .XRestrict != 0 }}
+    {{- if .XRestrict != 0 }}
     <div class="artwork-profanity-label">
       <span>{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
     </div>
-    {{ end }} {{ if .Pages > 1 }}
+    {{- end }} {{ if .Pages > 1 }}
     <div class="artwork-page-count"><span>&boxbox; {{ .Pages }}</span></div>
-    {{ end }}
-    {{ if .IllustType == 2 }}
+    {{- end }}
+    {{- if .IllustType == 2 }}
     <div class="artwork-page-count"><span>&#9654;</span></div>
-    {{ end }}
+    {{- end }}
 
   </div>
   <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">

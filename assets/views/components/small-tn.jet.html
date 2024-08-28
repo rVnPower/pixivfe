@@ -1,4 +1,4 @@
-{{ range . }} {{ if .ID == "#" }}
+{{- range . }} {{ if .ID == "#" }}
 <div class="artwork-small artwork">
   <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
   <div class="artwork-title">
@@ -11,9 +11,9 @@
     >
   </div>
 </div>
-{{ else if .ID }}
+{{- else if .ID }}
 <div class="artwork-small artwork">
   {{ include "thumbnail-dt" . }} {{ include "thumbnail-tt" . }} {{ include
   "thumbnail-at" . }}
 </div>
-{{ end }} {{ end }}
+{{- end }} {{ end }}

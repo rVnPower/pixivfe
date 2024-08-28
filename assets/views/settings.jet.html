@@ -1,5 +1,5 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container" data-hx-boost="false">
   <h1>Settings</h1>
   <p>
@@ -58,20 +58,20 @@
             <input type="radio" name="image-proxy" required="true" value="" />
             No (use built-in proxy)
           </label>
-          {{ range .WorkingProxyList }}
+          {{- range .WorkingProxyList }}
           <label>
             <input type="radio" name="image-proxy" required="true" value="{{.}}" />
-            {{.}}
+            {{-.}}
           </label>
-          {{ end }}
+          {{- end }}
           <details>
             <summary>See all built-in proxies</summary>
-            {{ range .ProxyList }}
+            {{- range .ProxyList }}
             <label>
               <input type="radio" name="image-proxy" required="true" value="{{.}}" />
-              {{.}}
+              {{-.}}
             </label>
-            {{ end }}
+            {{- end }}
           </details>
           <input type="submit" value="Use selected proxy" />
         </form>
@@ -158,7 +158,7 @@
     Please note that some cookies here such as ShowArtR18,
     ShowArtR18G, and ShowArtAI are for features still under development.
   </div>
-  {{ range k, v := CookieList }}
+  {{- range k, v := CookieList }}
   <div class="settings-set-cookie">
     <h3>{{k}}</h3>
     <form action="/settings/set-cookie" method="post">
@@ -168,7 +168,7 @@
     </form>
 
   </div>
-  {{ end }}
+  {{- end }}
   <div>
 
     <h3>Raw settings</h3>
@@ -187,4 +187,4 @@
     <input class="critical" type="submit" value="Reset all cookies/preferences" />
   </form>
 </div>
-{{ end }}
+{{- end }}

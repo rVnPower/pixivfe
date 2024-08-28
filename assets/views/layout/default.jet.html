@@ -3,13 +3,16 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="description" content="View this page on PixivFE." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Read this on PixivFE" />
 
-  {{ title := "" }} {{ if isset(.Title) }} {{ title = .Title }} {{ else }} {{
-  title = "PixivFE" }} {{ end }}
-  <title>{{ title }} - PixivFE</title>
+  {{ title := "PixivFE" }}
+  {{- if isset(.Title) -}}
+  {{ title = .Title + " - PixivFE" }}
+  {{ end -}}
+  <title>{{ title }}</title>
 
+  <link href="/favicon.ico" rel="icon" />
   <link href="/css/style.css" rel="stylesheet" />
 
   <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
@@ -17,26 +20,28 @@
     integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
 
   <script src="/js/illust-preview.js" defer></script>
+
+  <meta content="summary_large_image" name="twitter:card" />
+
   <meta property="og:title" content="{{ title }}" />
   <meta property="og:site_name" content="PixivFE" />
   <meta property="og:type" content="article" />
-  <meta content="summary_large_image" name="twitter:card" />
-
   <meta property="og:url" content="{{ PageURL }}" />
-  {{ if isset(.MetaAuthor) }}
+
+  {{- if isset(.MetaAuthor) }}
   <link rel="alternate" type="application/json+oembed"
     href="{{ BaseURL }}/oembed?a={{ .MetaAuthor }}&u={{ BaseURL }}/users/{{ .MetaAuthorID }}">
-  {{else}}
+  {{- else }}
   <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed">
-  {{end}}
+  {{- end -}}
 
-  {{ if isset(.MetaDescription) }}
+  {{- if isset(.MetaDescription) }}
   <meta property="og:description" content="{{.MetaDescription}}" />
-  {{end}}
+  {{- end -}}
 
-  {{ if isset(.MetaImage) }}
+  {{- if isset(.MetaImage) }}
   <meta property="og:image" content="{{ .MetaImage }}" />
-  {{ end }}
+  {{- end }}
 </head>
 
 <body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
@@ -99,7 +104,7 @@
   </nav>
   <script src="/js/on-page-load.js"></script>
   <main>
-    {{yield body()}}
+    {{- yield body() }}
   </main>
   <div id="site-config">
     <span id="artworkPreview">{{CookieList["pixivfe-ArtworkPreview"]}}</span>

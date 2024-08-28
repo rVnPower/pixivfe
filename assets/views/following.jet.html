@@ -1,5 +1,5 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container">
   <h1>Newest works from people you follow</h1>
   <div class="switcher">
@@ -10,10 +10,10 @@
   </div>
   <div class="artwork-container">{{ include "components/small-tn" .Artworks }}</div>
   <div class="pagination">
-    {{ url := "/self/following_works" + "?mode=" + .Mode + "&page=" }}
+    {{- url := "/self/following_works" + "?mode=" + .Mode + "&page=" }}
     <small>Page {{ .CurPage }}</small>
     <br />
-    {{ raw: createPaginator(url, "#checkpoint", .Page, -1) }}
+    {{- raw: createPaginator(url, "#checkpoint", .Page, -1) }}
   </div>
 </div>
-{{ end }}
+{{- end }}

@@ -1,18 +1,18 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 
 <div class="container">
-  {{ if !.LoggedIn }}
+  {{- if !.LoggedIn }}
   <p>Not logged in. You can login <a href="/settings">here</a>.</p>
   <div class="component-header">
     <h2>Today's illustration rankings</h2>
     <a href="/ranking?content=all">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ include "components/ranking-tn" .NoTokenData.Contents }}
+    {{- include "components/ranking-tn" .NoTokenData.Contents }}
   </div>
 
-  {{ else }}
+  {{- else }}
   <div class="switcher">
     <span class="switch-title">Filter</span>
     <a href="/?mode=all" class="switch-button">All</a>
@@ -23,22 +23,22 @@
     <a href="/self/followingWorks">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ include "components/small-tn" .Data.Following }}
+    {{- include "components/small-tn" .Data.Following }}
   </div>
   <br />
   <h2>Recommended works</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Data.Recommended }}
+    {{- include "components/small-tn" .Data.Recommended }}
   </div>
   <br />
-  {{ range .Data.RecommendByTags }}
+  {{- range .Data.RecommendByTags }}
   <h2>Recommended illustrations tagged <a href="/tags/{{.Name}}">#{{.Name}}</a></h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks }}
+    {{- include "components/small-tn" .Artworks }}
   </div>
   <br />
-  {{ end }}
+  {{- end }}
 
-  {{ end }}
+  {{- end }}
 </div>
-{{ end }}
+{{- end }}

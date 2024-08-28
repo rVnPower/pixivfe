@@ -1,14 +1,14 @@
-{{ extends "layout/default" }}
-{{ import "components/switcher" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- import "components/switcher" }}
+{{- block body() }}
 
 <div class="container">
   <div class="tag-header">
-    {{ if .Tag.Metadata.ID }}
+    {{- if .Tag.Metadata.ID }}
     <a href="/artworks/{{ .Tag.Metadata.ID }}">
       <img class="tag-thumbnail" src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" />
     </a>
-    {{ end }}
+    {{- end }}
 
     <div class="tag-details">
       <b class="main-tag">#{{ .Tag.Name }}</b>
@@ -22,59 +22,59 @@
   </div>
 
   <div class="artwork-container-scroll">
-    {{ range .Data.RelatedTags }}
+    {{- range .Data.RelatedTags }}
     <a href="/tags/{{ . }}">
       <div class="tag-container">
         <div class="main">#{{ . }}</div>
       </div>
     </a>
-    {{ end }}
+    {{- end }}
   </div>
-  {{ Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
-  {{ Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
-  {{ Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
-  {{ Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
-  {{ SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
+  {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
+  {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
+  {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
+  {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
+  {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
   <div class="switcher">
     <div class="switch-title">Category</div>
-    {{ URL := unfinishedQuery(.QueriesC, "category") }}
-    {{ path := slice("artworks", "illustrations", "manga")}}
-    {{ name := slice("Artworks", "Illustrations", "Manga")}}
-    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
+    {{- URL := unfinishedQuery(.QueriesC, "category") }}
+    {{- path := slice("artworks", "illustrations", "manga")}}
+    {{- name := slice("Artworks", "Illustrations", "Manga")}}
+    {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Order</div>
-    {{ URL := unfinishedQuery(.QueriesC, "order") }}
-    {{ path := slice("date_d", "date")}}
-    {{ name := slice("Newest", "Oldest")}}
-    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
+    {{- URL := unfinishedQuery(.QueriesC, "order") }}
+    {{- path := slice("date_d", "date")}}
+    {{- name := slice("Newest", "Oldest")}}
+    {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Filter</div>
-    {{ URL := unfinishedQuery(.QueriesC, "mode") }}
-    {{ path := slice("all", "safe", "r18")}}
-    {{ name := slice("All", "Safe", "R-18")}}
-    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
+    {{- URL := unfinishedQuery(.QueriesC, "mode") }}
+    {{- path := slice("all", "safe", "r18")}}
+    {{- name := slice("All", "Safe", "R-18")}}
+    {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Ratio</div>
-    {{ URL := unfinishedQuery(.QueriesC, "ratio") }}
-    {{ path := slice("", "-0.5", "0", "0.5")}}
-    {{ name := slice("All", "Portrait", "Square", "Landscape")}}
-    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
+    {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
+    {{- path := slice("", "-0.5", "0", "0.5")}}
+    {{- name := slice("All", "Portrait", "Square", "Landscape")}}
+    {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
   </div>
   <div class="switcher">
     <div class="switch-title">Search mode</div>
-    {{ URL := unfinishedQuery(.QueriesC, "smode") }}
-    {{ path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-    {{ name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-    {{ yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
+    {{- URL := unfinishedQuery(.QueriesC, "smode") }}
+    {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
+    {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+    {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
   </div>
   <details>
     <summary>
       <h2>Advanced settings</h2>
     </summary>
-    {{ URL := unfinishedQuery(.QueriesC, "") }}
+    {{- URL := unfinishedQuery(.QueriesC, "") }}
     <form action="{{ URL }}&name={{ .QueriesC.Query["Name"] }}" method="post">
       <label for="wlt">Minimum image width</label>
       <input type="text" name="wlt" value="{{ .QueriesC.Query["Wlt"] }}" />
@@ -93,29 +93,29 @@
       <input type="submit" value="Set" />
     </form>
   </details>
-  {{ if .Data.Popular.Recent }}
+  {{- if .Data.Popular.Recent }}
   <h2>Popular artworks</h2>
   <h3>Recent</h3>
   <div class="artwork-container-scroll">
-    {{ include "components/small-tn" .Data.Popular.Recent }}
+    {{- include "components/small-tn" .Data.Popular.Recent }}
   </div>
   <h3>All Time</h3>
   <div class="artwork-container-scroll">
-    {{ include "components/small-tn" .Data.Popular.Permanent }}
+    {{- include "components/small-tn" .Data.Popular.Permanent }}
   </div>
-  {{ end }}
+  {{- end }}
   {* Switchers here *}
   <br />
   <h2>Works</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Data.Artworks.Artworks }}
+    {{- include "components/small-tn" .Data.Artworks.Artworks }}
   </div>
 
   <div class="pagination">
-    {{ url := unfinishedQuery(.QueriesC, "page") }}
+    {{- url := unfinishedQuery(.QueriesC, "page") }}
     <small>Page {{ .Page }}</small>
     <br />
-    {{ raw: createPaginator(url, "#checkpoint", .Page, -1) }}
+    {{- raw: createPaginator(url, "#checkpoint", .Page, -1) }}
   </div>
 </div>
-{{ end }}
+{{- end }}

@@ -1,5 +1,5 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container">
   <h1>Discover novels</h1>
   <div class="switcher">
@@ -8,19 +8,19 @@
     <a href="/discovery/novel" class="switch-button">Novels</a>
   </div>
   <div class="switcher">
-    {{ url := "/discovery/novel?mode=" }}
+    {{- url := "/discovery/novel?mode=" }}
     <div class="switch-title">Filter</div>
     <a href="{{url}}all" class="switch-button">All</a>
     <a href="{{url}}safe" class="switch-button">Safe</a>
     <a href="{{url}}r18" class="switch-button">R-18</a>
   </div>
   <div class="novel-container">
-      {{ range .Novels }}
-        {{ include "components/novel-tn" . }}
-    {{ end }}
+      {{- range .Novels }}
+        {{- include "components/novel-tn" . }}
+    {{- end }}
   </div>
   <div class="pagination">
     <a href="" class="pagination-button">Reload</a>
   </div>
 </div>
-{{ end }}
+{{- end }}

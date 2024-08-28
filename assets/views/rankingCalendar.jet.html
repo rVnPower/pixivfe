@@ -1,9 +1,9 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container">
     <h1>Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
     <div class="switcher">
-        {{ url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
+        {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
         <span class="switch-title">Modes</span>
         <a href="{{ url }}daily" class="switch-button">Daily</a>
         <a href="{{ url }}weekly" class="switch-button">Weekly</a>
@@ -49,13 +49,13 @@
             <div>Sat</div>
         </div>
         <div class="calendar-board">
-            {{ raw: .Render }}
+            {{- raw: .Render }}
         </div>
     </div>
     <div class="pagination">
-        {{ url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+        {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
         <a href="{{ url }}{{ .MonthBefore.Link }}" class="pagination-button ">Last month</a>
         <a href="{{ url }}{{ .MonthAfter.Link }}" class="pagination-button ">Next month</a>
     </div>
 </div>
-{{ end }}
+{{- end }}

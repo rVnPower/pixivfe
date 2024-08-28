@@ -1,5 +1,5 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container">
   <h1>Discover artworks</h1>
   <div class="switcher">
@@ -14,10 +14,10 @@
     <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="switch-button">R-18</a>
   </div>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks }}
+    {{- include "components/small-tn" .Artworks }}
   </div>
   <div class="pagination">
     <a href="" class="pagination-button">Reload</a>
   </div>
 </div>
-{{ end }}
+{{- end }}

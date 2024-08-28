@@ -1,7 +1,7 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 
-  {{ if Token }}
+  {{- if Token }}
   <div class="switcher">
     <span class="switch-title">Filter</span>
     <a href="/?mode=all" class="switch-button">All</a>
@@ -12,17 +12,17 @@
     <a href="/self/following_works">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ include "components/small-tn" .Artworks.Following }}
+    {{- include "components/small-tn" .Artworks.Following }}
   </div>
   <br />
   <h2>Recently completed commissions</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks.Commissions }}
+    {{- include "components/small-tn" .Artworks.Commissions }}
   </div>
   <br />
   <h2>Recommended works</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks.Recommended }}
+    {{- include "components/small-tn" .Artworks.Recommended }}
   </div>
   <br />
 
@@ -31,17 +31,17 @@
     <a href="/ranking">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{ range rank := .Artworks.Rankings }}
+    {{- range rank := .Artworks.Rankings }}
     <div class="artwork-large artwork">
       <div class="artwork-additional">
         <div class="artwork-position">{{ rank + 1 }}</div>
 
-        {{ if .Pages > 1 }}
+        {{- if .Pages > 1 }}
         <div class="artwork-page-count">
           <span class="boxbox"> &boxbox;&nbsp; </span>
           <span>2</span>
         </div>
-        {{ end }}
+        {{- end }}
       </div>
       <a href="/artworks/{{ .ID }}#checkpoint">
         <img src="{{ .Thumbnail }}" alt="{{ .Title }}" />
@@ -61,13 +61,13 @@
         >
       </div>
     </div>
-    {{ end }}
+    {{- end }}
   </div>
   <br />
 
   {* <h2>Pixivision</h2>
   <div class="thumbnail-container">
-    {{ range .Artworks.Pixivision }}
+    {{- range .Artworks.Pixivision }}
     <a href="{{ .URL }}" class="spotlight-thumbnail">
       <img
         src="{{ .Thumbnail }}"
@@ -78,29 +78,29 @@
         <h2 class="spotlight-title">{{ .Title }}</h2>
       </div>
     </a>
-    {{ end }}
+    {{- end }}
   </div>
   <br /> *}
 
   <h2>Works by recommended users</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks.Users }}
+    {{- include "components/small-tn" .Artworks.Users }}
   </div>
   <br />
-  {{ range .Artworks.RecommendByTags }}
+  {{- range .Artworks.RecommendByTags }}
   <h2>Recommended illustrations tagged #{{.Name}}</h2>
   <div class="artwork-container">
-    {{ include "components/small-tn" .Artworks }}
+    {{- include "components/small-tn" .Artworks }}
   </div>
   <br />
-  {{ end }}
+  {{- end }}
   <h2>Welcome!</h2>
   <p>Please check out the sidebar for more features. There used to be a small ranking container here...</p>
   {* <h2>Newest works</h2>
        <div class="artwork-container-scroll">
-       {{ include "components/small-tn" .Artworks.Newest }}
+       {{- include "components/small-tn" .Artworks.Newest }}
        </div>
-       {{ else }}
+       {{- else }}
        <p><a href="/login">Login</a> to access more features!</p>
        <p>
        Enjoying this frontend so far? I need your opinions and ideas to improve
@@ -112,17 +112,17 @@
        <a href="/ranking">See more</a>
        </div>
        <div class="artwork-container-scroll">
-       {{ range rank := .Artworks.Rankings }}
+       {{- range rank := .Artworks.Rankings }}
        <div class="artwork-large artwork">
        <div class="artwork-additional">
        <div class="artwork-position">{{ rank + 1 }}</div>
 
-       {{ if .Pages > 1 }}
+       {{- if .Pages > 1 }}
        <div class="artwork-page-count">
        <span class="boxbox"> &boxbox;&nbsp; </span>
        <span>2</span>
        </div>
-       {{ end }}
+       {{- end }}
        </div>
        <a href="/artworks/{{ .ID }}#checkpoint">
        <img src="{{ .Thumbnail }}" alt="{{ .Title }}" />
@@ -142,13 +142,13 @@
        >
        </div>
        </div>
-       {{ end }}
+       {{- end }}
        </div>
        <br /> *}
 
   {* <h2>Pixivision</h2>
   <div class="thumbnail-container">
-    {{ range .Artworks.Pixivision }}
+    {{- range .Artworks.Pixivision }}
     <a href="{{ .URL }}" class="spotlight-thumbnail">
       <img
         src="{{ .Thumbnail }}"
@@ -159,9 +159,9 @@
         <h2 class="spotlight-title">{{ .Title }}</h2>
       </div>
     </a>
-    {{ end }}
+    {{- end }}
   </div>
   <br /> *}
 
-  {{ end }}
-{{ end }}
+  {{- end }}
+{{- end }}

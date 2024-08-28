@@ -1,25 +1,25 @@
-{{ extends "layout/default" }}
-{{ import "components/switcher" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- import "components/switcher" }}
+{{- block body() }}
 
 <div class="container">
   <h1>{{ .Title }}</h1>
 
   <div class="switcher">
-    {{ Mode := isset(.Queries.mode) ? .Queries.mode : "daily" }}
-    {{ Content := isset(.Queries.content) ? .Queries.content : "all" }}
+    {{- Mode := isset(.Queries.mode) ? .Queries.mode : "daily" }}
+    {{- Content := isset(.Queries.content) ? .Queries.content : "all" }}
 
-    {{ url := "" }}
-    {{ if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
+    {{- url := "" }}
+    {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
     {{ url = "/ranking?date=" + .Data.CurrentDate +
     "&page=1&content=" }}
-    {{ else }}
-    {{ url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
-    {{ end }}
+    {{- else }}
+    {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+    {{- end }}
     <div class="switch-title">Content</div>
-    {{ path := slice("all",     "illust",        "manga",  "ugoira") }}
-    {{ name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Content)}}
+    {{- path := slice("all",     "illust",        "manga",  "ugoira") }}
+    {{- name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Content)}}
   </div>
   <br />
 
@@ -28,28 +28,28 @@
     + "&page=1&mode=" }}
     <div class="switch-title">Modes</div>
 
-    {{ path := slice("daily", "weekly") }}
-    {{ name := slice("Daily", "Weekly")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+    {{- path := slice("daily", "weekly") }}
+    {{- name := slice("Daily", "Weekly")}}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
 
-    {{ if Content != "ugoira" }}
+    {{- if Content != "ugoira" }}
 
-    {{ path := slice("monthly", "rookie") }}
-    {{ name := slice("Monthly", "Rookie")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+    {{- path := slice("monthly", "rookie") }}
+    {{- name := slice("Monthly", "Rookie")}}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
 
-    {{ end }}
+    {{- end }}
 
     <span class="switch-seperator"></span>
-    {{ path := slice("daily_r18", "weekly_r18") }}
-    {{ name := slice("Daily (R-18)", "Weekly (R-18)")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+    {{- path := slice("daily_r18", "weekly_r18") }}
+    {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
     <br />
-    {{ if Content == "all" }}
-    {{ path := slice("original", "male", "female") }}
-    {{ name := slice("Original", "Popular among males", "Popular among females")}}
-    {{ yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
-    {{ end }}
+    {{- if Content == "all" }}
+    {{- path := slice("original", "male", "female") }}
+    {{- name := slice("Original", "Popular among males", "Popular among females")}}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+    {{- end }}
   </div>
   <br />
 
@@ -57,15 +57,15 @@
     {{ url := "/ranking?content=" + Content + "&mode=" + Mode +
     "&page=1" }}
     <div class="switch-title">Date (current: {{ .Data.CurrentDate }})</div>
-    {{ if .Data.PrevDate != "false" }}
+    {{- if .Data.PrevDate != "false" }}
     <a href="{{ url }}&date={{.Data.PrevDate}}" class="switch-button"
       >Yesterday</a
     >
-    {{ end }} {{ if .Data.NextDate != "false" }}
+    {{- end }} {{ if .Data.NextDate != "false" }}
     <a href="{{ url }}&date={{.Data.NextDate}}" class="switch-button"
       >Next day</a
     >
-    {{ end }}
+    {{- end }}
     <a href="{{ url }}" class="switch-button">Latest</a>
     <span class="switch-seperator"></span>
     <a href="/rankingCalendar">Ranking calendar</a>
@@ -73,7 +73,7 @@
   <br />
 
   <div class="artwork-container">
-    {{ include "components/ranking-tn" .Data.Contents }}
+    {{- include "components/ranking-tn" .Data.Contents }}
   </div>
 
   <div class="pagination">
@@ -81,7 +81,7 @@
     + "&mode=" + Mode + "&page=" }}
     <small>Page {{ .Page }}/{{ .PageLimit }}</small>
     <br />
-    {{ raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
+    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
   </div>
 </div>
-{{ end }}
+{{- end }}

@@ -1,12 +1,12 @@
-{{ extends "layout/default" }}
-{{ block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="container illust">
 	<h2>{{.Article.Title}}</h2>
-	{{ range _, desc := .Article.Description }}
+	{{- range _, desc := .Article.Description }}
 	<p>{{desc}}</p>
-	{{ end }}
+	{{- end }}
 
-	{{ range _, item := .Article.Items }}
+	{{- range _, item := .Article.Items }}
 	<div class="illust-images">
 
 		<div class="illust-attr">
@@ -25,6 +25,6 @@
 		</div>
 		<img src="{{item.Image}}" alt="{{item.Title}}" />
 	</div>
-	{{ end }}
+	{{- end }}
 </div>
-{{ end }}
+{{- end }}
