@@ -82,7 +82,7 @@ func GetFrequentTags(r *http.Request, ids string, category UserArtCategory) ([]F
 		URL = GetFrequentNovelTagsURL(ids)
 	}
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func GetUserArtworks(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
 
 	URL := GetUserFullArtworkURL(id, ids)
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 
 	URL := GetUserFullNovelURL(id, ids)
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, page int) (string, int, error) {
 	URL := GetUserArtworksURL(id)
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return "", -1, err
 	}
@@ -254,7 +254,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 
 	URL := GetUserInformationURL(id)
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return user, err
 	}
@@ -358,7 +358,7 @@ func GetUserBookmarks(r *http.Request, id, mode string, page int) ([]ArtworkBrie
 
 	URL := GetUserBookmarksURL(id, mode, page)
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, -1, err
 	}

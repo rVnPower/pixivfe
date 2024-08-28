@@ -1,7 +1,6 @@
 package core
 
 import (
-	"errors"
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
@@ -39,14 +38,11 @@ func GetRanking(r *http.Request, mode, content, date, page string) (Ranking, err
 
 	var ranking Ranking
 
-	resp, err := PixivGetRequest(r.Context(), URL, "")
+	resp, err := API_GET(r.Context(), URL, "")
 	if err != nil {
 		return ranking, err
 	}
 
-	if !resp.Ok {
-		return ranking, errors.New(resp.Message)
-	}
 	proxiedResp := session.ProxyImageUrl(r, resp.Body)
 
 	err = json.Unmarshal([]byte(proxiedResp), &ranking)

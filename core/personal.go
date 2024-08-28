@@ -19,7 +19,7 @@ func GetNewestFromFollowing(r *http.Request, mode, page string) ([]ArtworkBrief,
 		Artworks []ArtworkBrief `json:"illust"`
 	}
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}

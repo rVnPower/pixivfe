@@ -18,10 +18,8 @@ import (
 )
 
 type SimpleHTTPResponse struct {
-	Ok         bool
 	StatusCode int
-	Body    string
-	Message string
+	Body       string
 }
 
 const DevDir_Response = "/tmp/pixivfe-dev/resp"
@@ -35,42 +33,24 @@ func CreateResponseAuditFolder() error {
 	return os.MkdirAll(DevDir_Response, 0o700)
 }
 
-func logResponseBody(body string) (string, error) {
-	filename := path.Join(DevDir_Response, time.Now().UTC().Format(time.RFC3339Nano))
-	err := os.WriteFile(filename, []byte(body), 0o600)
-	if err != nil {
-		return "", err
-	}
-	return filename, nil
-}
-
 // send GET
-func PixivGetRequest(context context.Context, URL, token string) (SimpleHTTPResponse, error) {
-	resp, err := _PixivGETRequest(context, URL, token)
+func API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, error) {
+	start_time := time.Now()
+	res, resp, err := _API_GET(context, url, token)
+	end_time := time.Now()
+	logResponse(resp, err, "GET", url, token, res.Body, start_time, end_time)
 	if err != nil {
-		return SimpleHTTPResponse{}, fmt.Errorf("While sending request to %s: %w", URL, err)
+		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
 	}
-	if config.GlobalServerConfig.InDevelopment {
-		if resp.Ok {
-			filename, err := logResponseBody(resp.Body)
-			if err != nil {
-				log.Println(err)
-			}
-			if !(300 > resp.StatusCode && resp.StatusCode >= 200) {
-				log.Println("(WARN) non-2xx response from pixiv:")
-			}
-			log.Println("->", URL, "->", resp.StatusCode, filename)
-		} else {
-			log.Println("->", URL, "ERR", resp.Message)
-		}
-	}
-	return resp, nil
+	return res, nil
 }
 
-func _PixivGETRequest(context context.Context, URL, token string) (SimpleHTTPResponse, error) {
-	req, err := http.NewRequestWithContext(context, "GET", URL, nil)
+func _API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, *http.Response, error) {
+	var res SimpleHTTPResponse
+
+	req, err := http.NewRequestWithContext(context, "GET", url, nil)
 	if err != nil {
-		return SimpleHTTPResponse{}, err
+		return res, nil, err
 	}
 
 	req.Header.Add("User-Agent", config.GlobalServerConfig.UserAgent)
@@ -91,34 +71,28 @@ func _PixivGETRequest(context context.Context, URL, token string) (SimpleHTTPRes
 	// Make the request
 	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
-		return SimpleHTTPResponse{}, err
+		return res, nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return SimpleHTTPResponse{}, err
+		return res, resp, err
 	}
 
-	resp2 := SimpleHTTPResponse{
-		Ok:         true,
+	res = SimpleHTTPResponse{
 		StatusCode: resp.StatusCode,
 		Body:       string(body),
-		Message:    "",
 	}
-
-	return resp2, nil
+	return res, resp, nil
 }
 
-func UnwrapWebAPIRequest(context context.Context, URL, token string) (string, error) {
-	resp, err := PixivGetRequest(context, URL, token)
+func API_GET_UnwrapJson(context context.Context, url string, token string) (string, error) {
+	resp, err := API_GET(context, url, token)
 	if err != nil {
 		return "", err
 	}
 
-	if !resp.Ok {
-		return "", errors.New(resp.Message)
-	}
 	if !gjson.Valid(resp.Body) {
 		return "", fmt.Errorf("Invalid JSON: %v", resp.Body)
 	}
@@ -137,12 +111,23 @@ func UnwrapWebAPIRequest(context context.Context, URL, token string) (string, er
 }
 
 // send POST
-func PixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON bool) error {
+func API_POST(r *http.Request, url, payload, token, csrf string, isJSON bool) error {
+	start_time := time.Now()
+	resp, err := _API_POST(r, url, payload, token, csrf, isJSON)
+	end_time := time.Now()
+	logResponse(resp, err, "POST", url, token, "", start_time, end_time)	
+	if err != nil {
+		return fmt.Errorf("While POST %s: %w", url, err)
+	}
+	return err
+}
+
+func _API_POST(r *http.Request, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
 	requestBody := []byte(payload)
 
 	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
-		return err
+		return nil, err
 	}
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
@@ -157,31 +142,31 @@ func PixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON 
 	} else {
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 	}
-	
+
 	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
-		return errors.New("Failed to do this action.")
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return errors.New("Cannot parse the response from Pixiv. Please report this issue.")
+		return resp, err
 	}
 	body_s := string(body)
 	if !gjson.Valid(body_s) {
-		return fmt.Errorf("Invalid JSON: %v", body_s)
+		return resp, fmt.Errorf("Invalid JSON: %v", body_s)
 	}
-	errr := gjson.Get(body_s, "error")
+	err2 := gjson.Get(body_s, "error")
 
-	if !errr.Exists() {
-		return errors.New("Incompatible request body.")
+	if !err2.Exists() {
+		return resp, fmt.Errorf("Incompatible request body. %w", err2)
 	}
 
-	if errr.Bool() {
-		return errors.New("Pixiv: Invalid request.")
+	if err2.Bool() {
+		return resp, fmt.Errorf("Pixiv: Invalid request. %w", err2)
 	}
-	return nil
+	return resp, nil
 }
 
 func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
@@ -201,4 +186,38 @@ func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
 	// copy body
 	_, err = io.Copy(w, resp.Body)
 	return err
+}
+
+func logResponse(resp *http.Response, err error, method, url, token, body string, start_time, end_time time.Time) {
+	if config.GlobalServerConfig.InDevelopment {
+		errs := ""
+		if err != nil {
+			errs = fmt.Sprintf("ERR %v", err)
+		}
+		if resp != nil {
+			filename := ""
+			if body != "" {
+				var err error
+				filename, err = writeResponseBodyToFile(body)
+				if err != nil {
+					log.Println(err)
+				}
+			}
+			if !(300 > resp.StatusCode && resp.StatusCode >= 200) {
+				log.Println("(WARN) non-2xx response from pixiv:")
+			}
+			log.Println("->", url, "->", resp.StatusCode, filename, errs)
+		} else {
+			log.Println("->", url, errs)
+		}
+	}
+}
+
+func writeResponseBodyToFile(body string) (string, error) {
+	filename := path.Join(DevDir_Response, time.Now().UTC().Format(time.RFC3339Nano))
+	err := os.WriteFile(filename, []byte(body), 0o600)
+	if err != nil {
+		return "", err
+	}
+	return filename, nil
 }

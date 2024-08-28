@@ -135,7 +135,7 @@ func GetUserBasicInformation(r *http.Request, id string) (UserBrief, error) {
 
 	URL := GetUserInformationURL(id)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return user, err
 	}
@@ -155,7 +155,7 @@ func GetArtworkImages(r *http.Request, id string) ([]Image, error) {
 
 	URL := GetArtworkImagesURL(id)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -194,7 +194,7 @@ func GetArtworkComments(r *http.Request, id string) ([]Comment, error) {
 
 	URL := GetArtworkCommentsURL(id)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +216,7 @@ func GetRelatedArtworks(r *http.Request, id string) ([]ArtworkBrief, error) {
 	// TODO: keep the hard-coded limit?
 	URL := GetArtworkRelatedURL(id, 96)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
@@ -235,7 +235,7 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 	URL := GetArtworkInformationURL(id)
 
 	token := session.GetPixivToken(r)
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, token)
+	response, err := API_GET_UnwrapJson(r.Context(), URL, token)
 	if err != nil {
 		return nil, err
 	}

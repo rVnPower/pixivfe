@@ -51,7 +51,7 @@ func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 
 	var landing LandingArtworks
 
-	resp, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 
 	if err != nil {
 		return &landing, err

@@ -76,7 +76,7 @@ func GetTagData(r *http.Request, name string) (TagDetail, error) {
 
 	URL := GetTagDetailURL(name)
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return tag, err
 	}
@@ -94,7 +94,7 @@ func GetTagData(r *http.Request, name string) (TagDetail, error) {
 func GetSearch(r *http.Request, settings SearchPageSettings) (*SearchResult, error) {
 	URL := GetSearchArtworksURL(settings.ReturnMap())
 
-	response, err := UnwrapWebAPIRequest(r.Context(), URL, "")
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return nil, err
 	}
