@@ -1,21 +1,26 @@
 package audit
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"path"
 	"time"
 
-	config "codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
+	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"github.com/openzipkin/zipkin-go"
 )
 
 const DevDir_Response = "/tmp/pixivfe-dev/resp"
 
 var optionSaveResponse bool
 
-func Init(saveResponse bool) error {
+func Init(saveResponse bool, tracer *zipkin.Tracer) error {
 	optionSaveResponse = saveResponse
+	utils.Tracer = tracer
 	if optionSaveResponse {
 		return os.MkdirAll(DevDir_Response, 0o700)
 	} else {
@@ -46,35 +51,34 @@ type APIPerformance struct {
 	ResponseFilename string
 }
 
-func LogServerRoundTrip(perf ServerPerformance) {
+func LogServerRoundTrip(context context.Context, perf ServerPerformance) {
 	if perf.Error != nil {
 		log.Printf("Internal Server Error: %s", perf.Error)
 	}
 
-	if !perf.SkipLogging {
-		// todo: log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
-	}
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("%v %v %v %v", perf.Method, perf.Path, perf.Status, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span.Tag("RemoteAddr", perf.RemoteAddr)
+	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
 
-func LogAPIRoundTrip(perf APIPerformance) {
+func LogAPIRoundTrip(context context.Context, perf APIPerformance) {
 	if perf.Response != nil {
 		if perf.Body != "" && optionSaveResponse {
 			var err error
 			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
 			if err != nil {
 				log.Println("When saving response to file: ", err)
+			} else {
+				log.Println(fmt.Sprintf("[API] %v %v saved to %v", perf.Method, perf.Url, perf.ResponseFilename))
 			}
 		}
 		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
 			log.Println("(WARN) non-2xx response from pixiv:")
 		}
 	}
-	// structured logging
-	if config.GlobalServerConfig.InDevelopment {
-		// todo
-	} else {
-		// todo
-	}
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("%v %v %v", perf.Method, perf.Url, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span.Tag("ResponseFilename", perf.ResponseFilename)
+	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
 
 func writeResponseBodyToFile(body string) (string, error) {

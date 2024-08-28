@@ -104,7 +104,7 @@ type ArtworkBrief struct {
 type Illust struct {
 	ID              string    `json:"id"`
 	Title           string    `json:"title"`
-	Description     HTML `json:"description"`
+	Description     HTML      `json:"description"`
 	UserID          string    `json:"userId"`
 	UserName        string    `json:"userName"`
 	UserAccount     string    `json:"userAccount"`

@@ -30,7 +30,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 "comment": "",
 "tags": []
 }`, id)
-	if err := core.API_POST(r, URL, payload, token, csrf, true); err != nil {
+	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 
@@ -54,7 +54,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
 	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	if err := core.API_POST(r, URL, payload, token, csrf, false); err != nil {
+	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
 		return err
 	}
 
@@ -77,7 +77,7 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	if err := core.API_POST(r, URL, payload, token, csrf, true); err != nil {
+	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
 		return err
 	}
 

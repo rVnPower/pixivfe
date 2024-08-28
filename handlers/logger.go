@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/audit"
+	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
 )
 
 type ResponseWriterInterceptStatus struct {
@@ -36,7 +36,7 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 			ResponseWriter: w_,
 		}
 		// set user context
-		r = r.WithContext(context.WithValue(r.Context(), UserContextKey, &UserContext{}))
+		r = r.WithContext(user_context.WithContext(r.Context()))
 
 		start_time := time.Now()
 
@@ -44,14 +44,14 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 
 		end_time := time.Now()
 
-		audit.LogServerRoundTrip(audit.ServerPerformance{
+		audit.LogServerRoundTrip(r.Context(), audit.ServerPerformance{
 			StartTime:   start_time,
 			EndTime:     end_time,
 			RemoteAddr:  r.RemoteAddr,
 			Method:      r.Method,
 			Path:        r.URL.Path,
 			Status:      w.statusCode,
-			Error:         GetUserContext(r).Err,
+			Error:       GetUserContext(r).Err,
 			SkipLogging: CanRequestSkipLogger(r),
 		})
 	}
