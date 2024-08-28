@@ -38,7 +38,7 @@ type ServerConfig struct {
 	ProxyCheckInterval time.Duration // Proxy check interval
 }
 
-func (s *ServerConfig) InitializeConfig() error {
+func (s *ServerConfig) LoadConfig() error {
 	s.setVersion()
 
 	CollectAllEnv()

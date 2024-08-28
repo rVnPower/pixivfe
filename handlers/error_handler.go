@@ -51,7 +51,6 @@ func ErrorHandler(w http.ResponseWriter, r *http.Request) { // error handler
 	err := GetUserContext(r).Err
 
 	if err != nil {
-		log.Printf("Internal Server Error: %s", err)
 		code := GetUserContext(r).ErrorStatusCodeOverride
 		if code == 0 {
 			code = http.StatusInternalServerError
@@ -60,7 +59,7 @@ func ErrorHandler(w http.ResponseWriter, r *http.Request) { // error handler
 		// Send custom error page
 		err = routes.ErrorPage(w, r, err)
 		if err != nil {
-			log.Printf("Error rendering error route: %s", err)
+			log.Panicf("[fix this ASAP] Error rendering error route: %s", err)
 		}
 	}
 }
