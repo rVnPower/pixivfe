@@ -56,7 +56,7 @@ func LogServerRoundTrip(context context.Context, perf ServerPerformance) {
 		log.Printf("Internal Server Error: %s", perf.Error)
 	}
 
-	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("%v %v %v %v", perf.Method, perf.Path, perf.Status, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("Served %v %v %v %v", perf.Method, perf.Path, perf.Status, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
 	span.Tag("RemoteAddr", perf.RemoteAddr)
 	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
@@ -76,7 +76,7 @@ func LogAPIRoundTrip(context context.Context, perf APIPerformance) {
 			log.Println("(WARN) non-2xx response from pixiv:")
 		}
 	}
-	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("%v %v %v", perf.Method, perf.Url, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
+	span, _ := utils.Tracer.StartSpanFromContext(context, fmt.Sprintf("API %v %v %v", perf.Method, perf.Url, perf.Error), zipkin.StartTime(perf.StartTime), zipkin.Parent(user_context.GetUserContext(context).Parent))
 	span.Tag("ResponseFilename", perf.ResponseFilename)
 	span.FinishedWithDuration(perf.EndTime.Sub(perf.StartTime))
 }
