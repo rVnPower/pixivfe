@@ -16,7 +16,7 @@ import (
 // global variable, yes.
 var views *jet.Set
 
-func InitTemplatingEngine(DisableCache bool) {
+func Init(DisableCache bool) {
 	if DisableCache {
 		views = jet.NewSet(
 			jet.NewOSFileSystemLoader("assets/views"),

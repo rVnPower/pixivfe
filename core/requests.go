@@ -6,12 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"os"
-	"path"
 	"time"
 
+	"codeberg.org/vnpower/pixivfe/v2/audit"
 	config "codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 	"github.com/tidwall/gjson"
@@ -22,23 +20,12 @@ type SimpleHTTPResponse struct {
 	Body       string
 }
 
-const DevDir_Response = "/tmp/pixivfe-dev/resp"
-
-func CreateResponseAuditFolder() error {
-	// err := os.RemoveAll(DevDir_Response)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-
-	return os.MkdirAll(DevDir_Response, 0o700)
-}
-
 // send GET
 func API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, error) {
 	start_time := time.Now()
 	res, resp, err := _API_GET(context, url, token)
 	end_time := time.Now()
-	logResponse(resp, err, "GET", url, token, res.Body, start_time, end_time)
+	audit.LogAPIRoundTrip(resp, err, "GET", url, token, res.Body, start_time, end_time)
 	if err != nil {
 		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
 	}
@@ -115,7 +102,7 @@ func API_POST(r *http.Request, url, payload, token, csrf string, isJSON bool) er
 	start_time := time.Now()
 	resp, err := _API_POST(r, url, payload, token, csrf, isJSON)
 	end_time := time.Now()
-	logResponse(resp, err, "POST", url, token, "", start_time, end_time)	
+	audit.LogAPIRoundTrip(resp, err, "POST", url, token, "", start_time, end_time)
 	if err != nil {
 		return fmt.Errorf("While POST %s: %w", url, err)
 	}
@@ -186,38 +173,4 @@ func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
 	// copy body
 	_, err = io.Copy(w, resp.Body)
 	return err
-}
-
-func logResponse(resp *http.Response, err error, method, url, token, body string, start_time, end_time time.Time) {
-	if config.GlobalServerConfig.InDevelopment {
-		errs := ""
-		if err != nil {
-			errs = fmt.Sprintf("ERR %v", err)
-		}
-		if resp != nil {
-			filename := ""
-			if body != "" {
-				var err error
-				filename, err = writeResponseBodyToFile(body)
-				if err != nil {
-					log.Println(err)
-				}
-			}
-			if !(300 > resp.StatusCode && resp.StatusCode >= 200) {
-				log.Println("(WARN) non-2xx response from pixiv:")
-			}
-			log.Println("->", url, "->", resp.StatusCode, filename, errs)
-		} else {
-			log.Println("->", url, errs)
-		}
-	}
-}
-
-func writeResponseBodyToFile(body string) (string, error) {
-	filename := path.Join(DevDir_Response, time.Now().UTC().Format(time.RFC3339Nano))
-	err := os.WriteFile(filename, []byte(body), 0o600)
-	if err != nil {
-		return "", err
-	}
-	return filename, nil
 }

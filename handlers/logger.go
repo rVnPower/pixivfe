@@ -2,11 +2,22 @@ package handlers
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"codeberg.org/vnpower/pixivfe/v2/audit"
 )
+
+type ResponseWriterInterceptStatus struct {
+	statusCode int
+	http.ResponseWriter
+}
+
+func (w *ResponseWriterInterceptStatus) WriteHeader(code int) {
+	w.statusCode = code
+	w.ResponseWriter.WriteHeader(code)
+}
 
 func CanRequestSkipLogger(r *http.Request) bool {
 	// return false
@@ -33,26 +44,15 @@ func LogRequest(f func(w http.ResponseWriter, r *http.Request)) func(w http.Resp
 
 		end_time := time.Now()
 
-		if !CanRequestSkipLogger(r) { // logger
-			time := start_time
-			latency := end_time.Sub(start_time)
-			ip := r.RemoteAddr
-			method := r.Method
-			path := r.URL.Path
-			status := w.statusCode
-			err := GetUserContext(r).Err
-
-			log.Printf("%v +%v %v %v %v %v %v", time, latency, ip, method, path, status, err)
-		}
+		audit.TraceRoute(audit.RoutePerf{
+			StartTime:   start_time,
+			EndTime:     end_time,
+			RemoteAddr:  r.RemoteAddr,
+			Method:      r.Method,
+			Path:        r.URL.Path,
+			Status:      w.statusCode,
+			Err:         GetUserContext(r).Err,
+			SkipLogging: CanRequestSkipLogger(r),
+		})
 	}
-}
-
-type ResponseWriterInterceptStatus struct {
-	statusCode int
-	http.ResponseWriter
-}
-
-func (w *ResponseWriterInterceptStatus) WriteHeader(code int) {
-	w.statusCode = code
-	w.ResponseWriter.WriteHeader(code)
 }
