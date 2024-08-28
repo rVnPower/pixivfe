@@ -86,7 +86,7 @@ func setNovelFontType(w http.ResponseWriter, r *http.Request) error {
 
 func setNovelViewMode(w http.ResponseWriter, r *http.Request) error {
 	viewMode := r.FormValue("view-mode")
-	if viewMode != "" {
+	if viewMode == "1" || viewMode == "2" || viewMode == "" {
 		session.SetCookie(w, session.Cookie_NovelViewMode, viewMode)
 	}
 
