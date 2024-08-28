@@ -25,7 +25,6 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
-	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/template"
 )
 
@@ -143,8 +142,6 @@ func main() {
 
 		start_time := time.Now()
 
-		setGlobalHeaders(w, r)
-
 		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
 			// redirect handler: strip trailing / to make router behave
 			url := r.URL
@@ -223,20 +220,6 @@ func main() {
 		log.Printf("Listening on http://%v/\n", addr)
 	}
 	http.Serve(l, http.HandlerFunc(main_handler))
-}
-
-func setGlobalHeaders(w http.ResponseWriter, r *http.Request) {
-	header := w.Header()
-	header.Add("Referrer-Policy", "same-origin") // needed for settings redirect
-	
-	// headers below are HTML-only
-	header.Add("X-Frame-Options", "DENY")
-	// use this if need iframe: `X-Frame-Options: SAMEORIGIN`
-	header.Add("X-Content-Type-Options", "nosniff")
-	header.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
-	header.Add("Content-Security-Policy", fmt.Sprintf("base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' %s; media-src 'self' %s; connect-src 'self'; form-action 'self'; frame-ancestors 'none';", session.GetImageProxyOrigin(r), session.GetImageProxyOrigin(r)))
-	// use this if need iframe: `frame-ancestors 'self'`
-	header.Add("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()")
 }
 
 func serveFile(filename string) func(w http.ResponseWriter, r *http.Request) {

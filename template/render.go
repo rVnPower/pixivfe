@@ -6,9 +6,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
-	// "time"
 
-	// "codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/session"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 
@@ -39,6 +37,7 @@ func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
 	// todo: think about caching a bit more
 	// w.Header().Set("expires", time.Now().Add(config.ExpiresIn).Format(time.RFC1123))
+	SetHTMLPrivacyHeaders(w, r)
 	return RenderInner(w, GetTemplatingVariables(r), data)
 }
 
