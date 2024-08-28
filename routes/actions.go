@@ -21,19 +21,18 @@ func pixivPostRequest(r *http.Request, url, payload, token, csrf string, isJSON 
 	}
 	req.Header.Add("User-Agent", "Mozilla/5.0")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Cookie", "PHPSESSID="+token)
 	req.Header.Add("x-csrf-token", csrf)
+	req.AddCookie(&http.Cookie{
+		Name:  "PHPSESSID",
+		Value: token,
+	})
 
 	if isJSON {
 		req.Header.Add("Content-Type", "application/json; charset=utf-8")
 	} else {
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 	}
-	// req.AddCookie(&http.Cookie{
-	// 	Name:  "PHPSESSID",
-	// 	Value: token,
-	// })
-
+	
 	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		return errors.New("Failed to do this action.")
