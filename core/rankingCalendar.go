@@ -3,14 +3,13 @@ package core
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
-	"golang.org/x/net/html"
 	"github.com/andybalholm/cascadia"
-	
-	"codeberg.org/vnpower/pixivfe/v2/session"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"golang.org/x/net/html"
 
+	"codeberg.org/vnpower/pixivfe/v2/session"
 )
 
 func get_weekday(n time.Weekday) int {
@@ -42,25 +41,13 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	token := session.GetPixivToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
 
-	req, err := http.NewRequestWithContext(r.Context(), "GET", URL, nil)
-	if err != nil {
-		return HTML(""), err
-	}
-	
-	req.Header.Add("User-Agent", "Mozilla/5.0")
-	req.AddCookie(&http.Cookie{
-		Name:  "PHPSESSID",
-		Value: token,
-	})
-
-	resp, err := utils.HttpClient.Do(req)
+	resp, err := PixivGetRequest(r.Context(), URL, token)
 	if err != nil {
 		return "", err
 	}
-	defer resp.Body.Close()
 
 	// Use the html package to parse the response body from the request
-	doc, err := html.Parse(resp.Body)
+	doc, err := html.Parse(strings.NewReader(resp.Body))
 	if err != nil {
 		return "", err
 	}
