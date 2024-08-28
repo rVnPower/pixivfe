@@ -31,7 +31,6 @@ func DefineRoutes() *mux.Router {
 		http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 	})
 
-	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
 	handlePrefix(router, "/img/", http.FileServer(http.Dir("./assets/img")))
 	handlePrefix(router, "/css/", http.FileServer(http.Dir("./assets/css")))
