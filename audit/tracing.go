@@ -41,7 +41,7 @@ func Init(saveResponse bool) error {
 		}()
 	} else {
 		// comment out this block in logging is too verbose
-		reporter = LogReporter{l: log.New(os.Stderr, "", log.Flags())}
+		reporter = NewLogReporter()
 		defer func() {
 			_ = reporter.Close()
 		}()
