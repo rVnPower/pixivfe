@@ -42,3 +42,5 @@ steps:
       branch: [ v2 ]
       path: *docs_path
       event: [ push, tag, release, manual ]
+    depends_on:
+      - generate-docs
