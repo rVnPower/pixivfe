@@ -2,12 +2,16 @@ package handlers
 
 import (
 	"errors"
+	"math"
 	"net"
 	"net/http"
 	"strings"
 	"sync"
 
 	"golang.org/x/time/rate"
+
+	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/routes"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {
@@ -15,7 +19,8 @@ func CanRequestSkipLimiter(r *http.Request) bool {
 	return strings.HasPrefix(path, "/img/") ||
 		strings.HasPrefix(path, "/css/") ||
 		strings.HasPrefix(path, "/js/") ||
-		strings.HasPrefix(path, "/proxy/s.pximg.net/")
+		strings.HasPrefix(path, "/proxy/s.pximg.net/") ||
+		strings.HasPrefix(path, "/favicon.ico")
 }
 
 // Todo: Should we put middlewares in a separate file?
@@ -54,7 +59,15 @@ func (lim *IPRateLimiter) Allow(ip string) bool {
 	return rl.Allow()
 }
 
-var limiter *IPRateLimiter = NewIPRateLimiter(0, 0)
+var limiter *IPRateLimiter
+
+func InitializeRateLimiter() {
+	r := float64(config.GlobalServerConfig.RequestLimit) / 30.0
+	if config.GlobalServerConfig.RequestLimit < 1 {
+		r = math.Inf(1)
+	}
+	limiter = NewIPRateLimiter(rate.Limit(r), 3)
+}
 
 func RateLimitRequest(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -67,8 +80,15 @@ func RateLimitRequest(handler http.HandlerFunc) http.HandlerFunc {
 
 		if !limiter.Allow(ip) {
 			CatchError(func(w http.ResponseWriter, r *http.Request) error {
+				err := errors.New("Too many requests")
+				GetUserContext(r).Err = err
 				GetUserContext(r).StatusCode = http.StatusTooManyRequests
-				return errors.New("Too many requests")
+
+				err = routes.ErrorPage(w, r, err)
+				if err != nil {
+					println("Error rendering error route: %s", err)
+				}
+				return err
 			})(w, r)
 		} else {
 			handler(w, r)
