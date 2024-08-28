@@ -92,6 +92,36 @@ func (lim *IPRateLimiter) Allow(ip string) bool {
 	return rl.Allow()
 }
 
+var limiter *IPRateLimiter = NewIPRateLimiter(0, 0)
+
+func MiddlewareChain(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+
+		if CanRequestSkipLogger(r) {
+			handler.ServeHTTP(w, r)
+			return
+		}
+
+		if !limiter.Allow(ip) {
+			err := errors.New("Too many requests")
+			log.Println("Within handler: ", err)
+			code := http.StatusTooManyRequests
+			w.WriteHeader(code)
+			// Send custom error page
+			err = template.Render(w, r, routes.Data_error{Title: "Error", Error: err})
+			if err != nil {
+				err = utils.SendString(w, (fmt.Sprintf("Internal Server Error: %s", err)))
+				if err != nil {
+					return
+				}
+			}
+		}
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	config.GlobalServerConfig.InitializeConfig()
 	if config.GlobalServerConfig.InDevelopment {
@@ -104,10 +134,10 @@ func main() {
 	defer cancel()
 	config.InitializeProxyChecker(ctx_timeout)
 
-	_ = NewIPRateLimiter(0, 0)
 	router := defineRoutes()
 
 	main_handler := func(w_ http.ResponseWriter, r *http.Request) {
+		println("main handler")
 		w := &ResponseWriterInterceptStatus{
 			statusCode:     0,
 			ResponseWriter: w_,
@@ -145,6 +175,7 @@ func main() {
 					}
 				}
 			}
+
 			return nil
 		})(w, r)
 
@@ -221,6 +252,8 @@ func handlePrefix(router *mux.Router, pathPrefix string, handler http.Handler) *
 }
 func defineRoutes() *mux.Router {
 	router := mux.NewRouter()
+
+	//router.Use(MiddlewareChain)
 
 	router.HandleFunc("/favicon.ico", serveFile("./assets/img/favicon.ico"))
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
