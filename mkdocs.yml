@@ -15,11 +15,16 @@ nav:
   - "Development":
     - dev/index.md
     - dev/framework-migration.md
-    - dev/general.md
-    - dev/novels.md
-    - dev/pitfalls.md
-    - dev/unified.md
-    - dev/user-customization.md
+    - dev/coding-tips.md
+    - dev/design-flaws.md
+    - dev/feature-ideas.md
+    - dev/helpful-resources.md
+    - dev/roadmap.md
+    - "Features":
+      - dev/features/caching.md
+      - dev/features/novels.md
+      - dev/features/tracing.md
+      - dev/features/user-customization.md
 repo_name: VnPower/PixivFE
 repo_url: https://codeberg.org/VnPower/PixivFE
 edit_uri: _edit/v2/doc/
