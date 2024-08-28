@@ -232,10 +232,10 @@ func GetRelatedArtworks(r *http.Request, id string) ([]ArtworkBrief, error) {
 }
 
 func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
-	URL := GetArtworkInformationURL(id)
+	urlArtInfo := GetArtworkInformationURL(id)
 
 	token := session.GetPixivToken(r)
-	response, err := API_GET_UnwrapJson(r.Context(), URL, token)
+	response, err := API_GET_UnwrapJson(r.Context(), urlArtInfo, token)
 	if err != nil {
 		return nil, err
 	}

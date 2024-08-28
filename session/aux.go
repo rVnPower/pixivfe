@@ -25,7 +25,7 @@ func GetImageProxy(r *http.Request) url.URL {
 			return *proxyUrl
 		}
 	}
-	return config.GlobalServerConfig.ProxyServer
+	return config.GlobalConfig.ProxyServer
 }
 
 func ProxyImageUrl(r *http.Request, s string) string {

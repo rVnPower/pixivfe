@@ -7,9 +7,9 @@ import (
 
 func AboutPage(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, Data_about{
-		Time:           config.GlobalServerConfig.StartingTime,
-		Version:        config.GlobalServerConfig.Version,
-		ImageProxy:     config.GlobalServerConfig.ProxyServer.String(),
-		AcceptLanguage: config.GlobalServerConfig.AcceptLanguage,
+		Time:           config.GlobalConfig.StartingTime,
+		Version:        config.GlobalConfig.Version,
+		ImageProxy:     config.GlobalConfig.ProxyServer.String(),
+		AcceptLanguage: config.GlobalConfig.AcceptLanguage,
 	})
 }

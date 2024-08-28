@@ -62,8 +62,8 @@ func (lim *IPRateLimiter) Allow(ip string) bool {
 var limiter *IPRateLimiter
 
 func InitializeRateLimiter() {
-	r := float64(config.GlobalServerConfig.RequestLimit) / 30.0
-	if config.GlobalServerConfig.RequestLimit < 1 {
+	r := float64(config.GlobalConfig.RequestLimit) / 30.0
+	if config.GlobalConfig.RequestLimit < 1 {
 		r = math.Inf(1)
 	}
 	limiter = NewIPRateLimiter(rate.Limit(r), 3)

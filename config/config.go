@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var GlobalServerConfig ServerConfig
+var GlobalConfig ServerConfig
 
 type ServerConfig struct {
 	// Required
@@ -135,7 +135,7 @@ func (s *ServerConfig) setVersion() {
 }
 
 func GetRandomDefaultToken() string {
-	defaultToken := GlobalServerConfig.Token[rand.Intn(len(GlobalServerConfig.Token))]
+	defaultToken := GlobalConfig.Token[rand.Intn(len(GlobalConfig.Token))]
 
 	return defaultToken
 }

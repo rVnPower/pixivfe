@@ -18,9 +18,9 @@ import (
 )
 
 func main() {
-	config.GlobalServerConfig.LoadConfig()
-	audit.Init(config.GlobalServerConfig.InDevelopment)
-	template.Init(config.GlobalServerConfig.InDevelopment)
+	config.GlobalConfig.LoadConfig()
+	audit.Init(config.GlobalConfig.InDevelopment)
+	template.Init(config.GlobalConfig.InDevelopment)
 
 	// Initialize and start the proxy checker
 	ctx_timeout, cancel := context.WithTimeout(context.Background(), config.ProxyCheckerTimeout)
@@ -38,7 +38,7 @@ func main() {
 	main_handler = handlers.LogRequest(main_handler)
 
 	// run sass when in development mode
-	if config.GlobalServerConfig.InDevelopment {
+	if config.GlobalConfig.InDevelopment {
 		go func() {
 			cmd := exec.Command("sass", "--watch", "assets/css")
 			cmd.Stdout = os.Stderr // Sass quirk
@@ -54,15 +54,15 @@ func main() {
 
 	// Listen
 	var l net.Listener
-	if config.GlobalServerConfig.UnixSocket != "" {
-		ln, err := net.Listen("unix", config.GlobalServerConfig.UnixSocket)
+	if config.GlobalConfig.UnixSocket != "" {
+		ln, err := net.Listen("unix", config.GlobalConfig.UnixSocket)
 		if err != nil {
 			panic(err)
 		}
 		l = ln
-		log.Printf("Listening on domain socket %v\n", config.GlobalServerConfig.UnixSocket)
+		log.Printf("Listening on domain socket %v\n", config.GlobalConfig.UnixSocket)
 	} else {
-		addr := config.GlobalServerConfig.Host + ":" + config.GlobalServerConfig.Port
+		addr := config.GlobalConfig.Host + ":" + config.GlobalConfig.Port
 		ln, err := net.Listen("tcp", addr)
 		if err != nil {
 			log.Panicf("failed to listen: %v", err)

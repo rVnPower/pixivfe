@@ -40,8 +40,8 @@ func _API_GET(context context.Context, url string, token string) (SimpleHTTPResp
 		return res, nil, err
 	}
 
-	req.Header.Add("User-Agent", config.GlobalServerConfig.UserAgent)
-	req.Header.Add("Accept-Language", config.GlobalServerConfig.AcceptLanguage)
+	req.Header.Add("User-Agent", config.GlobalConfig.UserAgent)
+	req.Header.Add("Accept-Language", config.GlobalConfig.AcceptLanguage)
 
 	if token == "" {
 		req.AddCookie(&http.Cookie{

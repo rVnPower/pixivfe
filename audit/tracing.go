@@ -72,7 +72,6 @@ type ServerPerformance struct {
 	Path        string
 	Status      int
 	Error       error
-	SkipLogging bool
 }
 
 type APIPerformance struct {
