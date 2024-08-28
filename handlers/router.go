@@ -25,7 +25,7 @@ func DefineRoutes() *mux.Router {
 		return r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/")
 	}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := r.URL
-		url.Path = url.Path[0:len(url.Path)-1]
+		url.Path = url.Path[0 : len(url.Path)-1]
 		http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 	})
 

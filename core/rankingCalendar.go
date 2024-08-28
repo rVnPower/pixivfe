@@ -51,7 +51,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	if err != nil {
 		return "", err
 	}
-	
+
 	// Find and print all links on the web page
 	var links []string
 	for _, node := range cascadia.QueryAll(doc, selector_img) {

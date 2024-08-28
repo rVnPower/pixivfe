@@ -25,7 +25,7 @@ func API_GET(context context.Context, url string, token string) (SimpleHTTPRespo
 	start_time := time.Now()
 	res, resp, err := _API_GET(context, url, token)
 	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIPerformance{Response: resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
+	audit.LogAPIRoundTrip(context, audit.APIPerformance{Response: resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
 	if err != nil {
 		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
 	}
@@ -98,21 +98,21 @@ func API_GET_UnwrapJson(context context.Context, url string, token string) (stri
 }
 
 // send POST
-func API_POST(r *http.Request, url, payload, token, csrf string, isJSON bool) error {
+func API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) error {
 	start_time := time.Now()
-	resp, err := _API_POST(r, url, payload, token, csrf, isJSON)
+	resp, err := _API_POST(context, url, payload, token, csrf, isJSON)
 	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIPerformance{Response: resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
+	audit.LogAPIRoundTrip(context, audit.APIPerformance{Response: resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
 	if err != nil {
 		return fmt.Errorf("While POST %s: %w", url, err)
 	}
 	return err
 }
 
-func _API_POST(r *http.Request, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
+func _API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
 	requestBody := []byte(payload)
 
-	req, err := http.NewRequestWithContext(r.Context(), "POST", url, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequestWithContext(context, "POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return nil, err
 	}

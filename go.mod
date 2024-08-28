@@ -9,6 +9,7 @@ require (
 	github.com/go-faker/faker/v4 v4.5.0
 	github.com/goccy/go-json v0.10.3
 	github.com/gorilla/mux v1.8.1
+	github.com/openzipkin/zipkin-go v0.4.3
 	github.com/playwright-community/playwright-go v0.4501.1
 	github.com/tidwall/gjson v1.17.3
 	golang.org/x/net v0.28.0

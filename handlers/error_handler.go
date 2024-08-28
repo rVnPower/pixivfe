@@ -8,20 +8,14 @@ import (
 	"net/http/httptest"
 	"slices"
 
+	"codeberg.org/vnpower/pixivfe/v2/handlers/user_context"
 	"codeberg.org/vnpower/pixivfe/v2/routes"
 )
 
-type UserContext struct {
-	Err error
-	ErrorStatusCodeOverride int
-}
-
-type userContextKey struct{}
-
-var UserContextKey = userContextKey{}
+type UserContext = user_context.UserContext
 
 func GetUserContext(r *http.Request) *UserContext {
-	return r.Context().Value(UserContextKey).(*UserContext)
+	return user_context.GetUserContext(r.Context())
 }
 
 func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {

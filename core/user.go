@@ -47,7 +47,7 @@ type User struct {
 	Avatar          string          `json:"imageBig"`
 	Following       int             `json:"following"`
 	MyPixiv         int             `json:"mypixivCount"`
-	Comment         HTML       `json:"commentHtml"`
+	Comment         HTML            `json:"commentHtml"`
 	Webpage         string          `json:"webpage"`
 	SocialRaw       json.RawMessage `json:"social"`
 	Artworks        []ArtworkBrief  `json:"artworks"`

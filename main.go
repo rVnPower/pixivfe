@@ -11,6 +11,9 @@ import (
 	"runtime"
 	"syscall"
 
+	"github.com/openzipkin/zipkin-go"
+	zipkin_httpreporter "github.com/openzipkin/zipkin-go/reporter/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/audit"
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/handlers"
@@ -18,8 +21,25 @@ import (
 )
 
 func main() {
+	reporter := zipkin_httpreporter.NewReporter("http://localhost:9411/api/v2/spans")
+	defer func() {
+		_ = reporter.Close()
+	}()
+
+	// this is purely theoretical. the port is used for distributed tracing.
+	endpoint, err := zipkin.NewEndpoint("pixivfe", "localhost:8282")
+	if err != nil {
+		log.Fatalf("unable to create local endpoint: %+v\n", err)
+	}
+
+	// initialize our tracer
+	tracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
+	if err != nil {
+		log.Fatalf("unable to create tracer: %+v\n", err)
+	}
+
 	config.GlobalServerConfig.LoadConfig()
-	audit.Init(config.GlobalServerConfig.InDevelopment)
+	audit.Init(config.GlobalServerConfig.InDevelopment, tracer)
 	template.Init(config.GlobalServerConfig.InDevelopment)
 
 	// Initialize and start the proxy checker
