@@ -14,13 +14,11 @@ func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 
 // Tutorial: adding new types in this file
 // Whenever you add new types, update `TestTemplates` in render_test.go to include the type in the test
-// Do not use pointer in Data_* struct. faker will insert nil.
-// Do not name template file a.b.jet.html or it won't be able to be used here, since Data_a.b is not a valid identifier.
+//
+// Warnings:
+// - Do not use pointer in Data_* struct. faker will insert nil.
+// - Do not name template file a.b.jet.html or it won't be able to be used here, since Data_a.b is not a valid identifier.
 
-type Data_error struct {
-	Title string
-	Error error
-}
 type Data_about struct {
 	Time           string
 	Version        string
@@ -39,31 +37,28 @@ type Data_artworkMulti struct {
 	Artworks []core.Illust
 	Title    string
 }
-type Data_userAtom struct {
-	URL       string
-	Title     string
-	User      core.User
-	Category  core.UserArtCategory
-	Updated   string
-	PageLimit int
-	Page      int
-	// MetaImage string
+type Data_diagnostics struct {}
+type Data_discovery struct {
+	Artworks []core.ArtworkBrief
+	Title    string
+	Queries  template.PartialURL
+}
+type Data_error struct {
+	Title string
+	Error error
+}
+type Data_following struct {
+	Title    string
+	Mode     string
+	Artworks []core.ArtworkBrief
+	CurPage  string
+	Page     int
 }
 type Data_index struct {
 	Title       string
 	LoggedIn    bool
 	Data        core.LandingArtworks
 	NoTokenData core.Ranking
-}
-type Data_unauthorized struct{}
-type Data_discovery struct {
-	Artworks []core.ArtworkBrief
-	Title    string
-	Queries  template.PartialURL
-}
-type Data_novelDiscovery struct {
-	Novels []core.NovelBrief
-	Title  string
 }
 type Data_newest struct {
 	Items []core.ArtworkBrief
@@ -78,12 +73,9 @@ type Data_novel struct {
 	ViewMode     string
 	Language     string
 }
-type Data_following struct {
-	Title    string
-	Mode     string
-	Artworks []core.ArtworkBrief
-	CurPage  string
-	Page     int
+type Data_novelDiscovery struct {
+	Novels []core.NovelBrief
+	Title  string
 }
 type Data_pixivision_index struct {
 	Data []pixivision.Article
@@ -120,6 +112,7 @@ type Data_tag struct {
 	TrueTag  string
 	Page     int
 }
+type Data_unauthorized struct{}
 type Data_user struct {
 	Title     string
 	User      core.User
@@ -127,4 +120,14 @@ type Data_user struct {
 	PageLimit int
 	Page      int
 	MetaImage string
+}
+type Data_userAtom struct {
+	URL       string
+	Title     string
+	User      core.User
+	Category  core.UserArtCategory
+	Updated   string
+	PageLimit int
+	Page      int
+	// MetaImage string
 }

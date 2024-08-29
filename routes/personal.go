@@ -7,14 +7,15 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/request_context"
 )
 
 func PromptUserToLoginPage(w http.ResponseWriter, r *http.Request) error {
+	request_context.Get(r).RenderStatusCode = http.StatusUnauthorized
 	err := Render(w, r, Data_unauthorized{})
 	if err != nil {
 		return err
 	}
-	w.WriteHeader(http.StatusUnauthorized)
 	return nil
 }
 

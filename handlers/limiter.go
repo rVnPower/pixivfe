@@ -19,8 +19,7 @@ func CanRequestSkipLimiter(r *http.Request) bool {
 	return strings.HasPrefix(path, "/img/") ||
 		strings.HasPrefix(path, "/css/") ||
 		strings.HasPrefix(path, "/js/") ||
-		strings.HasPrefix(path, "/proxy/s.pximg.net/") ||
-		strings.HasPrefix(path, "/favicon.ico")
+		strings.HasPrefix(path, "/proxy/s.pximg.net/")
 }
 
 // Todo: Should we put middlewares in a separate file?
@@ -79,17 +78,7 @@ func RateLimitRequest(h http.Handler) http.Handler {
 		}
 
 		if !limiter.Allow(ip) {
-			CatchError(func(w http.ResponseWriter, r *http.Request) error {
-				err := errors.New("Too many requests")
-				GetUserContext(r).Error = err
-				GetUserContext(r).ErrorStatusCode = http.StatusTooManyRequests
-
-				err = routes.ErrorPage(w, r, err)
-				if err != nil {
-					println("Error rendering error route: %s", err)
-				}
-				return err
-			})(w, r)
+			routes.ErrorPage(w, r, errors.New("Too many requests"), http.StatusTooManyRequests)
 		} else {
 			h.ServeHTTP(w, r)
 		}

@@ -1,7 +1,6 @@
 package audit
 
 import (
-	"context"
 	"log"
 	"os"
 	"path"
@@ -25,15 +24,15 @@ func Init(saveResponse bool) error {
 	return nil
 }
 
-func LogServerRoundTrip(context context.Context, perf ServedRequestSpan) {
+func LogServerRoundTrip(perf ServedRequestSpan) {
 	if perf.Error != nil {
 		log.Printf("Internal Server Error: %s", perf.Error)
 	}
 
-	Log(perf)
+	LogAndRecord(perf)
 }
 
-func LogAPIRoundTrip(context context.Context, perf APIRequestSpan) {
+func LogAPIRoundTrip(perf APIRequestSpan) {
 	if perf.Response != nil {
 		if perf.Body != "" && optionSaveResponse {
 			var err error
@@ -47,7 +46,7 @@ func LogAPIRoundTrip(context context.Context, perf APIRequestSpan) {
 		}
 	}
 
-	Log(perf)
+	LogAndRecord(perf)
 }
 
 func writeResponseBodyToFile(body string) (string, error) {

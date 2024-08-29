@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"bytes"
-	"log"
 	"maps"
 	"net/http"
 	"net/http/httptest"
 	"slices"
 
 	"codeberg.org/vnpower/pixivfe/v2/routes"
+	"codeberg.org/vnpower/pixivfe/v2/request_context"
 )
 
 func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
@@ -26,7 +26,7 @@ func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http
 		if err != nil {
 			clear(header_backup)
 			maps.Copy(w.Header(), header_backup)
-			GetUserContext(r).Error = err
+			request_context.Get(r).CaughtError = err
 		} else {
 			w.WriteHeader(recorder.Code)
 			_, _ = recorder.Body.WriteTo(w)
@@ -38,16 +38,10 @@ func HandleError(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.ServeHTTP(w, r)
 
-		err := GetUserContext(r).Error
+		err := request_context.Get(r).CaughtError
 
 		if err != nil {
-			code := GetUserContext(r).ErrorStatusCode
-			w.WriteHeader(code)
-			// Send custom error page
-			err = routes.ErrorPage(w, r, err)
-			if err != nil {
-				log.Panicf("[fix this ASAP] Error rendering error route: %s", err)
-			}
+			routes.ErrorPage(w, r, err, http.StatusInternalServerError)
 		}
 	})
 }

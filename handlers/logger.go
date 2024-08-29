@@ -7,6 +7,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/audit"
 	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/request_context"
 )
 
 type ResponseWriterInterceptStatus struct {
@@ -25,6 +26,7 @@ func CanRequestSkipLogger(r *http.Request) bool {
 	return strings.HasPrefix(path, "/img/") ||
 		strings.HasPrefix(path, "/css/") ||
 		strings.HasPrefix(path, "/js/") ||
+		strings.HasPrefix(path, "/diagnostics") ||
 		(config.GlobalConfig.InDevelopment &&
 			(strings.HasPrefix(path, "/proxy/s.pximg.net/") || strings.HasPrefix(path, "/proxy/i.pximg.net/")))
 }
@@ -46,14 +48,16 @@ func LogRequest(h http.Handler) http.Handler {
 
 			end_time := time.Now()
 
-			audit.LogServerRoundTrip(r.Context(), audit.ServedRequestSpan{
+			audit.LogServerRoundTrip(audit.ServedRequestSpan{
 				StartTime:  start_time,
 				EndTime:    end_time,
-				RemoteAddr: r.RemoteAddr,
+				RequestId:  request_context.Get(r).RequestId,
 				Method:     r.Method,
 				Path:       r.URL.Path,
 				Status:     w.statusCode,
-				Error:      GetUserContext(r).Error,
+				Referer:    r.Referer(),
+				RemoteAddr: r.RemoteAddr,
+				Error:      request_context.Get(r).CaughtError,
 			})
 		}
 	})

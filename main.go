@@ -29,11 +29,12 @@ func main() {
 	handlers.InitializeRateLimiter()
 
 	router := handlers.DefineRoutes()
-	router.Use(handlers.ProvideUserContext) // most outer / first executed middleware
-	router.Use(handlers.LogRequest)
-	router.Use(handlers.SetPrivacyHeaders)
+	// the first middleware is the most outer / first executed one
+	router.Use(handlers.ProvideUserContext) // needed for everything else
+	router.Use(handlers.LogRequest) // all pages need this
+	router.Use(handlers.SetPrivacyHeaders) // all pages need this
+	router.Use(handlers.HandleError) // if the inner handler fails, this shows the error page instead
 	router.Use(handlers.RateLimitRequest)
-	router.Use(handlers.HandleError)
 
 	// watch and compile sass when in development mode
 	if config.GlobalConfig.InDevelopment {

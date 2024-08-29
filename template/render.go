@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/utils"
 
 	"github.com/CloudyKit/jet/v6"
@@ -37,7 +38,7 @@ func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
 	// todo: think about caching a bit more. see doc/dev/features/caching.md
 	// w.Header().Set("expires", time.Now().Add(config.ExpiresIn).Format(time.RFC1123))
-	w.WriteHeader(200)
+	w.WriteHeader(request_context.Get(r).RenderStatusCode)
 	return RenderInner(w, GetTemplatingVariables(r), data)
 }
 

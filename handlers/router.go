@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func handlePrefix(router *mux.Router, pathPrefix string, handler http.Handler) *mux.Route {
+func handleStripPrefix(router *mux.Router, pathPrefix string, handler http.Handler) *mux.Route {
 	return router.PathPrefix(pathPrefix).Handler(http.StripPrefix(pathPrefix, handler))
 }
 
@@ -32,30 +32,39 @@ func DefineRoutes() *mux.Router {
 	})
 
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
-	handlePrefix(router, "/img/", http.FileServer(http.Dir("./assets/img")))
-	handlePrefix(router, "/css/", http.FileServer(http.Dir("./assets/css")))
-	handlePrefix(router, "/js/", http.FileServer(http.Dir("./assets/js")))
+	handleStripPrefix(router, "/img/", http.FileServer(http.Dir("./assets/img")))
+	handleStripPrefix(router, "/css/", http.FileServer(http.Dir("./assets/css")))
+	handleStripPrefix(router, "/js/", http.FileServer(http.Dir("./assets/js")))
 
 	// Proxy routes. cache headers set by upstream servers.
-	handlePrefix(router, "/proxy/i.pximg.net/", CatchError(routes.IPximgProxy)).Methods("GET")
-	handlePrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
-	handlePrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
+	handleStripPrefix(router, "/proxy/i.pximg.net/", CatchError(routes.IPximgProxy)).Methods("GET")
+	handleStripPrefix(router, "/proxy/s.pximg.net/", CatchError(routes.SPximgProxy)).Methods("GET")
+	handleStripPrefix(router, "/proxy/ugoira.com/", CatchError(routes.UgoiraProxy)).Methods("GET")
 
 	router.HandleFunc("/", CatchError(routes.IndexPage)).Methods("GET")
 	router.HandleFunc("/about", CatchError(routes.AboutPage)).Methods("GET")
 	router.HandleFunc("/newest", CatchError(routes.NewestPage)).Methods("GET")
 	router.HandleFunc("/discovery", CatchError(routes.DiscoveryPage)).Methods("GET")
 	router.HandleFunc("/discovery/novel", CatchError(routes.NovelDiscoveryPage)).Methods("GET")
+	
 	router.HandleFunc("/ranking", CatchError(routes.RankingPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPicker)).Methods("POST")
+	
 	router.HandleFunc("/users/{id}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
 	router.HandleFunc("/users/{id}/{category}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
 	router.HandleFunc("/users/{id}", CatchError(routes.UserPage)).Methods("GET")
 	router.HandleFunc("/users/{id}/{category}", CatchError(routes.UserPage)).Methods("GET")
+	
 	router.HandleFunc("/artworks/{id}", CatchError(routes.ArtworkPage)).Methods("GET")
 	router.HandleFunc("/artworks-multi/{ids}", CatchError(routes.ArtworkMultiPage)).Methods("GET")
+	// Legacy illust URL
+	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
+	}).Methods("GET")
+	
 	router.HandleFunc("/novel/{id}", CatchError(routes.NovelPage)).Methods("GET")
+
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
 	router.HandleFunc("/pixivision/a/{id}", CatchError(routes.PixivisionArticlePage)).Methods("GET")
 
@@ -76,15 +85,14 @@ func DefineRoutes() *mux.Router {
 	router.HandleFunc("/tags", CatchError(routes.TagPage)).Methods("GET")
 	router.HandleFunc("/tags", CatchError(routes.AdvancedTagPost)).Methods("POST")
 
-	// Legacy illust URL
-	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
-	}).Methods("GET")
+	router.HandleFunc("/diagnostics", CatchError(routes.Diagnostics)).Methods("GET")
+	router.HandleFunc("/diagnostics/spans.json", CatchError(routes.DiagnosticsData)).Methods("GET")
+	router.HandleFunc("/diagnostics/reset", routes.ResetDiagnosticsData)
 
 	// fallback route (if nothing else matches)
-	router.NewRoute().HandlerFunc(CatchError(func(w http.ResponseWriter, r *http.Request) error {
-		return errors.New("Route not found")
-	}))
+	router.NewRoute().HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		routes.ErrorPage(w, r, errors.New("Route not found"), http.StatusNotFound)
+	})
 
 	return router
 }
