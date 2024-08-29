@@ -2,9 +2,7 @@ package audit
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -17,25 +15,6 @@ type Span interface {
 
 func Duration(span Span) time.Duration {
 	return span.GetEndTime().Sub(span.GetStartTime())
-}
-
-// logger with no timestamp prefix, because we control the timestamps
-var Logger = log.New(os.Stderr, "", 0)
-
-var RecordedSpans = []Span{}
-
-// should be configurable. set to 0 to disable recording
-var MaxRecordedCount = 128
-
-func LogAndRecord(span Span) {
-	Logger.Printf("%v +%-5.3f %s", span.GetStartTime().Format("2006-01-02 15:04:05.000"), float64(Duration(span))/float64(time.Second), span.LogLine())
-
-	if MaxRecordedCount != 0 {
-		if len(RecordedSpans)+1 == MaxRecordedCount {
-			RecordedSpans = RecordedSpans[1:]
-		}
-		RecordedSpans = append(RecordedSpans, span)
-	}
 }
 
 type ServedRequestSpan struct {

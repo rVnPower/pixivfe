@@ -46,23 +46,23 @@ func DefineRoutes() *mux.Router {
 	router.HandleFunc("/newest", CatchError(routes.NewestPage)).Methods("GET")
 	router.HandleFunc("/discovery", CatchError(routes.DiscoveryPage)).Methods("GET")
 	router.HandleFunc("/discovery/novel", CatchError(routes.NovelDiscoveryPage)).Methods("GET")
-	
+
 	router.HandleFunc("/ranking", CatchError(routes.RankingPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPage)).Methods("GET")
 	router.HandleFunc("/rankingCalendar", CatchError(routes.RankingCalendarPicker)).Methods("POST")
-	
+
 	router.HandleFunc("/users/{id}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
 	router.HandleFunc("/users/{id}/{category}.atom.xml", CatchError(routes.UserAtomFeed)).Methods("GET")
 	router.HandleFunc("/users/{id}", CatchError(routes.UserPage)).Methods("GET")
 	router.HandleFunc("/users/{id}/{category}", CatchError(routes.UserPage)).Methods("GET")
-	
+
 	router.HandleFunc("/artworks/{id}", CatchError(routes.ArtworkPage)).Methods("GET")
 	router.HandleFunc("/artworks-multi/{ids}", CatchError(routes.ArtworkMultiPage)).Methods("GET")
 	// Legacy illust URL
 	router.HandleFunc("/member_illust.php", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
-	
+
 	router.HandleFunc("/novel/{id}", CatchError(routes.NovelPage)).Methods("GET")
 
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")

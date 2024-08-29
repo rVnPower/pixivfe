@@ -4,24 +4,25 @@ import (
 	"log"
 	"os"
 	"path"
+	"time"
 
 	"github.com/oklog/ulid/v2"
 )
 
-const DevDir_Response = "/tmp/pixivfe/r"
+// logger with no timestamp prefix, because we control the timestamps
+var Logger = log.New(os.Stderr, "", 0)
 
-var optionSaveResponse bool
+var RecordedSpans = []Span{}
 
-func Init(saveResponse bool) error {
-	optionSaveResponse = saveResponse
-	if optionSaveResponse {
-		err := os.MkdirAll(DevDir_Response, 0o700)
-		if err != nil {
-			return err
+func LogAndRecord(span Span) {
+	Logger.Printf("%v +%-5.3f %s", span.GetStartTime().Format("2006-01-02 15:04:05.000"), float64(Duration(span))/float64(time.Second), span.LogLine())
+
+	if MaxRecordedCount != 0 {
+		if len(RecordedSpans)+1 == MaxRecordedCount {
+			RecordedSpans = RecordedSpans[1:]
 		}
+		RecordedSpans = append(RecordedSpans, span)
 	}
-
-	return nil
 }
 
 func LogServerRoundTrip(perf ServedRequestSpan) {

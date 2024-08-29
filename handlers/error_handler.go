@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"slices"
 
-	"codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/routes"
 )
 
 func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {

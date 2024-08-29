@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"codeberg.org/vnpower/pixivfe/v2/template"
 	"codeberg.org/vnpower/pixivfe/v2/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/template"
 )
 
 func ErrorPage(w http.ResponseWriter, r *http.Request, err error, statusCode int) {

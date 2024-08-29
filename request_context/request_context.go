@@ -15,16 +15,16 @@ var userContextKey = userContextKeyType{}
 
 type RequestContext struct {
 	// for tracing
-	RequestId  string
+	RequestId string
 	// for error handling. normal error page don't need to set this.
-	CaughtError      error
+	CaughtError error
 	// for Render[T]
 	RenderStatusCode int
 }
 
 func Make() RequestContext {
 	return RequestContext{
-		RequestId:  ulid.Make().String(),
+		RequestId:        ulid.Make().String(),
 		RenderStatusCode: 200,
 	}
 }

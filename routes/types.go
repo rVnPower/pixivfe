@@ -37,7 +37,7 @@ type Data_artworkMulti struct {
 	Artworks []core.Illust
 	Title    string
 }
-type Data_diagnostics struct {}
+type Data_diagnostics struct{}
 type Data_discovery struct {
 	Artworks []core.ArtworkBrief
 	Title    string

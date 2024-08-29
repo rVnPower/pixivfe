@@ -7,7 +7,7 @@ Every server request is traced.
 
 ## How to see flamegraph
 
-Run PixivFE in dev mode, visit some pages, then visit URL /diagnostics.
+Run PixivFE **in dev mode**, visit some pages, then visit URL /diagnostics.
 
 ## Useful for fixing Vega-Lite
 
