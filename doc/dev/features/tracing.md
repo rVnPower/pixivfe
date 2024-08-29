@@ -3,21 +3,8 @@
 Every request to pixiv websites should go through core/requests.go.
 
 Every request to pixiv websites is traced.
-Every server request should be traced, but currently not.
+Every server request is traced.
 
-## Todo
+## How to see flamegraph
 
-- [x] Trace asset route
-- [x] Trace every server route
-
-## How to use tracing
-
-```
-wget https://repo1.maven.org/maven2/io/zipkin/zipkin-server/3.4.1/zipkin-server-3.4.1-exec.jar
-java -jar zipkin-server-3.4.1-exec.jar
-PIXIVFE_ENABLE_ZIPKIN=1 go run .
-```
-
-That's it!
-
-To see the spans, open http://localhost:9411/ and click "RUN QUERY".
+(todo) Run PixivFE in dev mode, then visit URL /debug/flamegraph.

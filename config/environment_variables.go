@@ -110,11 +110,6 @@ var EnvList []*EnvVar = []*EnvVar{
 		// The interval in minutes between proxy checks. Defaults to 480 minutes (8 hours) if not set.
 		// You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
 	},
-	{
-		Name:       "PIXIVFE_ENABLE_ZIPKIN",
-		CommonName: "report spans to http://localhost:9411/api/v2/spans",
-		// **Required**: No
-	},
 }
 
 // ======================================================================

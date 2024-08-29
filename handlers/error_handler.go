@@ -26,7 +26,7 @@ func CatchError(handler func(w http.ResponseWriter, r *http.Request) error) http
 		if err != nil {
 			clear(header_backup)
 			maps.Copy(w.Header(), header_backup)
-			GetUserContext(r).Err = err
+			GetUserContext(r).Error = err
 		} else {
 			w.WriteHeader(recorder.Code)
 			_, _ = recorder.Body.WriteTo(w)
@@ -38,13 +38,10 @@ func HandleError(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.ServeHTTP(w, r)
 
-		err := GetUserContext(r).Err
+		err := GetUserContext(r).Error
 
 		if err != nil {
-			code := GetUserContext(r).ErrorStatusCodeOverride
-			if code == 0 {
-				code = http.StatusInternalServerError
-			}
+			code := GetUserContext(r).ErrorStatusCode
 			w.WriteHeader(code)
 			// Send custom error page
 			err = routes.ErrorPage(w, r, err)

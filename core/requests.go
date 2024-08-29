@@ -25,7 +25,7 @@ func API_GET(context context.Context, url string, token string) (SimpleHTTPRespo
 	start_time := time.Now()
 	res, resp, err := _API_GET(context, url, token)
 	end_time := time.Now()
-	audit.LogAPIRoundTrip(context, audit.APIPerformance{Response: resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
+	audit.LogAPIRoundTrip(context, audit.APIRequestSpan{Response: resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
 	if err != nil {
 		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
 	}
@@ -102,7 +102,7 @@ func API_POST(context context.Context, url, payload, token, csrf string, isJSON 
 	start_time := time.Now()
 	resp, err := _API_POST(context, url, payload, token, csrf, isJSON)
 	end_time := time.Now()
-	audit.LogAPIRoundTrip(context, audit.APIPerformance{Response: resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
+	audit.LogAPIRoundTrip(context, audit.APIRequestSpan{Response: resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
 	if err != nil {
 		return fmt.Errorf("While POST %s: %w", url, err)
 	}

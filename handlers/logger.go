@@ -46,14 +46,14 @@ func LogRequest(h http.Handler) http.Handler {
 
 			end_time := time.Now()
 
-			audit.LogServerRoundTrip(r.Context(), audit.ServerPerformance{
+			audit.LogServerRoundTrip(r.Context(), audit.ServedRequestSpan{
 				StartTime:  start_time,
 				EndTime:    end_time,
 				RemoteAddr: r.RemoteAddr,
 				Method:     r.Method,
 				Path:       r.URL.Path,
 				Status:     w.statusCode,
-				Error:      GetUserContext(r).Err,
+				Error:      GetUserContext(r).Error,
 			})
 		}
 	})
