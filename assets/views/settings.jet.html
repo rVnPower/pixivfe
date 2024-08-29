@@ -61,7 +61,7 @@
           {{- range .WorkingProxyList }}
           <label>
             <input type="radio" name="image-proxy" required="true" value="{{.}}" />
-            {{-.}}
+            {{- .}}
           </label>
           {{- end }}
           <details>
@@ -69,7 +69,7 @@
             {{- range .ProxyList }}
             <label>
               <input type="radio" name="image-proxy" required="true" value="{{.}}" />
-              {{-.}}
+              {{- .}}
             </label>
             {{- end }}
           </details>

@@ -1,6 +1,7 @@
 package template_test
 
 import (
+	"encoding/json"
 	"io"
 	"log"
 	"os"
@@ -8,13 +9,25 @@ import (
 	"strings"
 	"testing"
 
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	. "codeberg.org/vnpower/pixivfe/v2/routes"
-	template "codeberg.org/vnpower/pixivfe/v2/template"
+	"codeberg.org/vnpower/pixivfe/v2/template"
+
 	"github.com/CloudyKit/jet/v6"
 	"github.com/go-faker/faker/v4"
 )
 
-func TestTemplates(t *testing.T) {
+func TestMain(m *testing.M) {
+	err := os.Chdir("..")
+	if err != nil {
+		panic(err)
+	}
+	template.Init(false)
+
+	m.Run()
+}
+
+func TestAutoRender(t *testing.T) {
 	test[Data_about](t)
 	test[Data_artwork](t)
 	test[Data_artworkMulti](t)
@@ -35,16 +48,6 @@ func TestTemplates(t *testing.T) {
 	test[Data_unauthorized](t)
 	test[Data_user](t)
 	test[Data_userAtom](t)
-}
-
-func TestMain(m *testing.M) {
-	err := os.Chdir("..")
-	if err != nil {
-		panic(err)
-	}
-	template.Init(false)
-
-	m.Run()
 }
 
 func fakeData[T any]() T {

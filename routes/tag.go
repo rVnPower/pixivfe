@@ -51,8 +51,8 @@ func TagPage(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	urlc := template.PartialURL{Path: "tags", Query: queries.ReturnMap()}
-
-	return Render(w, r, Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt})
+	data := Data_tag{Title: "Results for " + name, Tag: tag, Data: *result, QueriesC: urlc, TrueTag: param, Page: pageInt}
+	return Render(w, r, data)
 }
 
 func AdvancedTagPost(w http.ResponseWriter, r *http.Request) error {
