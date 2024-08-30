@@ -11,30 +11,30 @@ import (
 )
 
 type Novel struct {
-	Bookmarks      int       `json:"bookmarkCount"`
-	CommentCount   int       `json:"commentCount"`
-	MarkerCount    int       `json:"markerCount"`
-	CreateDate     time.Time `json:"createDate"`
-	UploadDate     time.Time `json:"uploadDate"`
-	Description    string    `json:"description"`
-	ID             string    `json:"id"`
-	Title          string    `json:"title"`
-	Likes          int       `json:"likeCount"`
-	Pages          int       `json:"pageCount"`
-	UserID         string    `json:"userId"`
-	UserName       string    `json:"userName"`
-	Views          int       `json:"viewCount"`
-	IsOriginal     bool      `json:"isOriginal"`
-	IsBungei       bool      `json:"isBungei"`
-	XRestrict      int       `json:"xRestrict"`
-	Restrict       int       `json:"restrict"`
-	Content        string    `json:"content"`
-	CoverURL       string    `json:"coverUrl"`
-	IsBookmarkable bool      `json:"isBookmarkable"`
-	BookmarkData   any       `json:"bookmarkData"`
-	LikeData       bool      `json:"likeData"`
-	PollData       any       `json:"pollData"`
-	Marker         any       `json:"marker"`
+	Bookmarks      int           `json:"bookmarkCount"`
+	CommentCount   int           `json:"commentCount"`
+	MarkerCount    int           `json:"markerCount"`
+	CreateDate     time.Time     `json:"createDate"`
+	UploadDate     time.Time     `json:"uploadDate"`
+	Description    string        `json:"description"`
+	ID             string        `json:"id"`
+	Title          string        `json:"title"`
+	Likes          int           `json:"likeCount"`
+	Pages          int           `json:"pageCount"`
+	UserID         string        `json:"userId"`
+	UserName       string        `json:"userName"`
+	Views          int           `json:"viewCount"`
+	IsOriginal     bool          `json:"isOriginal"`
+	IsBungei       bool          `json:"isBungei"`
+	XRestrict      int           `json:"xRestrict"`
+	Restrict       int           `json:"restrict"`
+	Content        string        `json:"content"`
+	CoverURL       string        `json:"coverUrl"`
+	IsBookmarkable bool          `json:"isBookmarkable"`
+	BookmarkData   *BookmarkData `json:"bookmarkData"`
+	LikeData       bool          `json:"likeData"`
+	// PollData       any           `json:"pollData"`
+	// Marker         any           `json:"marker"`
 	Tags           struct {
 		AuthorID string `json:"authorId"`
 		IsLocked bool   `json:"isLocked"`
@@ -43,7 +43,7 @@ type Novel struct {
 		} `json:"tags"`
 		Writable bool `json:"writable"`
 	} `json:"tags"`
-	SeriesNavData any  `json:"seriesNavData"`
+	// SeriesNavData any  `json:"seriesNavData"`
 	HasGlossary   bool `json:"hasGlossary"`
 	IsUnlisted    bool `json:"isUnlisted"`
 	// seen values: zh-cn, ja
@@ -62,31 +62,31 @@ type Novel struct {
 }
 
 type NovelBrief struct {
-	ID             string    `json:"id"`
-	Title          string    `json:"title"`
-	XRestrict      int       `json:"xRestrict"`
-	Restrict       int       `json:"restrict"`
-	CoverURL       string    `json:"url"`
-	Tags           []string  `json:"tags"`
-	UserID         string    `json:"userId"`
-	UserName       string    `json:"userName"`
-	UserAvatar     string    `json:"profileImageUrl"`
-	TextCount      int       `json:"textCount"`
-	WordCount      int       `json:"wordCount"`
-	ReadingTime    int       `json:"readingTime"`
-	Description    string    `json:"description"`
-	IsBookmarkable bool      `json:"isBookmarkable"`
-	BookmarkData   any       `json:"bookmarkData"`
-	Bookmarks      int       `json:"bookmarkCount"`
-	IsOriginal     bool      `json:"isOriginal"`
-	CreateDate     time.Time `json:"createDate"`
-	UpdateDate     time.Time `json:"updateDate"`
-	IsMasked       bool      `json:"isMasked"`
-	SeriesID       string    `json:"seriesId"`
-	SeriesTitle    string    `json:"seriesTitle"`
-	IsUnlisted     bool      `json:"isUnlisted"`
-	AiType         int       `json:"aiType"`
-	Genre          string    `json:"genre"`
+	ID             string        `json:"id"`
+	Title          string        `json:"title"`
+	XRestrict      int           `json:"xRestrict"`
+	Restrict       int           `json:"restrict"`
+	CoverURL       string        `json:"url"`
+	Tags           []string      `json:"tags"`
+	UserID         string        `json:"userId"`
+	UserName       string        `json:"userName"`
+	UserAvatar     string        `json:"profileImageUrl"`
+	TextCount      int           `json:"textCount"`
+	WordCount      int           `json:"wordCount"`
+	ReadingTime    int           `json:"readingTime"`
+	Description    string        `json:"description"`
+	IsBookmarkable bool          `json:"isBookmarkable"`
+	BookmarkData   *BookmarkData `json:"bookmarkData"`
+	Bookmarks      int           `json:"bookmarkCount"`
+	IsOriginal     bool          `json:"isOriginal"`
+	CreateDate     time.Time     `json:"createDate"`
+	UpdateDate     time.Time     `json:"updateDate"`
+	IsMasked       bool          `json:"isMasked"`
+	SeriesID       string        `json:"seriesId"`
+	SeriesTitle    string        `json:"seriesTitle"`
+	IsUnlisted     bool          `json:"isUnlisted"`
+	AiType         int           `json:"aiType"`
+	Genre          string        `json:"genre"`
 }
 
 func GetNovelByID(r *http.Request, id string) (Novel, error) {

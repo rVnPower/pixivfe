@@ -1,7 +1,6 @@
 package template_test
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"os"
@@ -9,12 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"codeberg.org/vnpower/pixivfe/v2/core"
+	"github.com/CloudyKit/jet/v6"
+	"pgregory.net/rapid"
+
 	. "codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/template"
-
-	"github.com/CloudyKit/jet/v6"
-	"github.com/go-faker/faker/v4"
 )
 
 func TestMain(m *testing.M) {
@@ -27,45 +25,50 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-func TestAutoRender(t *testing.T) {
-	test[Data_about](t)
-	test[Data_artwork](t)
-	test[Data_artworkMulti](t)
-	test[Data_diagnostics](t)
-	test[Data_discovery](t)
-	test[Data_error](t, Data_error{Title: fakeData[string](), Error: io.EOF})
-	test[Data_following](t)
-	test[Data_index](t)
-	test[Data_newest](t)
-	test[Data_novel](t)
-	test[Data_novelDiscovery](t)
-	test[Data_pixivision_article](t)
-	test[Data_pixivision_index](t)
-	test[Data_rank](t)
-	test[Data_rankingCalendar](t)
-	test[Data_settings](t)
-	test[Data_tag](t)
-	test[Data_unauthorized](t)
-	test[Data_user](t)
-	test[Data_userAtom](t)
+func allowAll[T any](T) bool {
+	return true
 }
 
-func fakeData[T any]() T {
-	var data T
-	faker.FakeData(&data)
-	return data
+func TestAutoRender(t *testing.T) {
+	test[Data_about](t, allowAll)
+	test[Data_artwork](t, allowAll)
+	test[Data_artworkMulti](t, allowAll)
+	test[Data_diagnostics](t, allowAll)
+	test[Data_discovery](t, allowAll)
+	test[Data_error](t, func(d Data_error) bool { return d.Error != nil })
+	test[Data_following](t, allowAll)
+	test[Data_index](t, allowAll)
+	test[Data_newest](t, allowAll)
+	test[Data_novel](t, allowAll)
+	test[Data_novelDiscovery](t, allowAll)
+	test[Data_pixivision_article](t, allowAll)
+	test[Data_pixivision_index](t, allowAll)
+	test[Data_rank](t, allowAll)
+	test[Data_rankingCalendar](t, allowAll)
+	test[Data_settings](t, allowAll)
+	test[Data_tag](t, allowAll)
+	test[Data_unauthorized](t, allowAll)
+	test[Data_user](t, allowAll)
+	test[Data_userAtom](t, allowAll)
+}
+
+func fakeData[T any](t *rapid.T, label string) T {
+	return rapid.Make[T]().Draw(t, label)
 }
 
 // test template with fake data
-func test[T any](t *testing.T, data ...T) {
-	if len(data) == 0 {
-		testWith(t, fakeData[T]())
-	} else {
-		testWith(t, data[0])
-	}
+func test[T any](t *testing.T, filter func(T) bool) {
+	t.Run(
+		reflect.TypeFor[T]().Name(),
+		rapid.MakeCheck(func(t *rapid.T) {
+			gen := rapid.Make[T]().Filter(filter)
+			sample := gen.Draw(t, "sample")
+			testWith(t, sample)
+		}),
+	)
 }
 
-func testWith[T any](t *testing.T, data T) {
+func testWith[T any](t *rapid.T, data T) {
 	route_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", route_name)
@@ -76,11 +79,11 @@ func testWith[T any](t *testing.T, data T) {
 	variables := jet.VarMap{}
 
 	for k, v := range map[string]any{
-		"BaseURL":    fakeData[string](),
-		"PageURL":    fakeData[string](),
-		"LoggedIn":   fakeData[bool](),
-		"Queries":    fakeData[map[string]string](),
-		"CookieList": fakeData[map[string]string](),
+		"BaseURL":    fakeData[string](t, "BaseURL"),
+		"PageURL":    fakeData[string](t, "PageURL"),
+		"LoggedIn":   fakeData[bool](t, "LoggedIn"),
+		"Queries":    fakeData[map[string]string](t, "Queries"),
+		"CookieList": fakeData[map[string]string](t, "CookieList"),
 	} {
 		variables.Set(k, v)
 	}

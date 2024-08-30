@@ -5,7 +5,7 @@ package config
 import (
 	"errors"
 	"log"
-	"math/rand"
+	"math/rand/v2"
 	"net/url"
 	"strconv"
 	"strings"
@@ -135,7 +135,7 @@ func (s *ServerConfig) setVersion() {
 }
 
 func GetRandomDefaultToken() string {
-	defaultToken := GlobalConfig.Token[rand.Intn(len(GlobalConfig.Token))]
+	defaultToken := GlobalConfig.Token[rand.IntN(len(GlobalConfig.Token))]
 
 	return defaultToken
 }

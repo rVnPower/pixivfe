@@ -3,7 +3,7 @@ package template
 import (
 	"fmt"
 	"math"
-	"math/rand"
+	"math/rand/v2"
 	"net/url"
 	"regexp"
 	"strings"
@@ -40,7 +40,7 @@ func GetRandomColor() string {
 	}
 
 	// Randomly choose one and return
-	return colors[rand.Intn(len(colors))]
+	return colors[rand.IntN(len(colors))]
 }
 
 func ParseEmojis(s string) HTML {

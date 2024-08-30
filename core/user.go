@@ -42,17 +42,19 @@ type FrequentTag struct {
 }
 
 type User struct {
-	ID              string          `json:"userId"`
-	Name            string          `json:"name"`
-	Avatar          string          `json:"imageBig"`
-	Following       int             `json:"following"`
-	MyPixiv         int             `json:"mypixivCount"`
-	Comment         HTML            `json:"commentHtml"`
-	Webpage         string          `json:"webpage"`
-	SocialRaw       json.RawMessage `json:"social"`
-	Artworks        []ArtworkBrief  `json:"artworks"`
-	Novels          []NovelBrief    `json:"novels"`
-	Background      map[string]any  `json:"background"`
+	ID         string          `json:"userId"`
+	Name       string          `json:"name"`
+	Avatar     string          `json:"imageBig"`
+	Following  int             `json:"following"`
+	MyPixiv    int             `json:"mypixivCount"`
+	Comment    HTML            `json:"commentHtml"`
+	Webpage    string          `json:"webpage"`
+	SocialRaw  json.RawMessage `json:"social"`
+	Artworks   []ArtworkBrief  `json:"artworks"`
+	Novels     []NovelBrief    `json:"novels"`
+	Background *struct {
+		Url string `json:"url"`
+	} `json:"background"`
 	ArtworksCount   int
 	FrequentTags    []FrequentTag
 	Social          map[string]map[string]string
@@ -347,7 +349,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 	}
 
 	if user.Background != nil {
-		user.BackgroundImage = user.Background["url"].(string)
+		user.BackgroundImage = user.Background.Url
 	}
 
 	return user, nil

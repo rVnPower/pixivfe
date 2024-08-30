@@ -6,7 +6,6 @@ require (
 	codeberg.org/vnpower/pixivision v0.1.1
 	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/andybalholm/cascadia v1.3.2
-	github.com/go-faker/faker/v4 v4.5.0
 	github.com/goccy/go-json v0.10.3
 	github.com/gorilla/mux v1.8.1
 	github.com/oklog/ulid/v2 v2.1.0
@@ -15,6 +14,7 @@ require (
 	github.com/tidwall/gjson v1.17.3
 	golang.org/x/net v0.28.0
 	golang.org/x/time v0.6.0
+	pgregory.net/rapid v1.1.0
 )
 
 require (
@@ -28,5 +28,4 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
-	golang.org/x/text v0.17.0 // indirect
 )

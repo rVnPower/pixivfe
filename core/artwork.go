@@ -87,41 +87,45 @@ type UserBrief struct {
 	Avatar string `json:"imageBig"`
 }
 
+type BookmarkData struct {
+	Id string `json:"id"`
+}
+
 type ArtworkBrief struct {
-	ID           string `json:"id"`
-	Title        string `json:"title"`
-	ArtistID     string `json:"userId"`
-	ArtistName   string `json:"userName"`
-	ArtistAvatar string `json:"profileImageUrl"`
-	Thumbnail    string `json:"url"`
-	Pages        int    `json:"pageCount"`
-	XRestrict    int    `json:"xRestrict"`
-	AiType       int    `json:"aiType"`
-	Bookmarked   any    `json:"bookmarkData"`
-	IllustType   int    `json:"illustType"`
+	ID           string        `json:"id"`
+	Title        string        `json:"title"`
+	ArtistID     string        `json:"userId"`
+	ArtistName   string        `json:"userName"`
+	ArtistAvatar string        `json:"profileImageUrl"`
+	Thumbnail    string        `json:"url"`
+	Pages        int           `json:"pageCount"`
+	XRestrict    int           `json:"xRestrict"`
+	AiType       int           `json:"aiType"`
+	BookmarkData *BookmarkData `json:"bookmarkData"`
+	IllustType   int           `json:"illustType"`
 }
 
 type Illust struct {
-	ID              string    `json:"id"`
-	Title           string    `json:"title"`
-	Description     HTML      `json:"description"`
-	UserID          string    `json:"userId"`
-	UserName        string    `json:"userName"`
-	UserAccount     string    `json:"userAccount"`
-	Date            time.Time `json:"uploadDate"`
+	ID              string        `json:"id"`
+	Title           string        `json:"title"`
+	Description     HTML          `json:"description"`
+	UserID          string        `json:"userId"`
+	UserName        string        `json:"userName"`
+	UserAccount     string        `json:"userAccount"`
+	Date            time.Time     `json:"uploadDate"`
+	Tags            []Tag         `json:"tags"`
+	Pages           int           `json:"pageCount"`
+	Bookmarks       int           `json:"bookmarkCount"`
+	Likes           int           `json:"likeCount"`
+	Comments        int           `json:"commentCount"`
+	Views           int           `json:"viewCount"`
+	CommentDisabled int           `json:"commentOff"`
+	SanityLevel     int           `json:"sl"`
+	XRestrict       xRestrict     `json:"xRestrict"`
+	AiType          aiType        `json:"aiType"`
+	BookmarkData    *BookmarkData `json:"bookmarkData"`
+	Liked           bool          `json:"likeData"`
 	Images          []Image
-	Tags            []Tag     `json:"tags"`
-	Pages           int       `json:"pageCount"`
-	Bookmarks       int       `json:"bookmarkCount"`
-	Likes           int       `json:"likeCount"`
-	Comments        int       `json:"commentCount"`
-	Views           int       `json:"viewCount"`
-	CommentDisabled int       `json:"commentOff"`
-	SanityLevel     int       `json:"sl"`
-	XRestrict       xRestrict `json:"xRestrict"`
-	AiType          aiType    `json:"aiType"`
-	BookmarkData    any       `json:"bookmarkData"`
-	Liked           bool      `json:"likeData"`
 	User            UserBrief
 	RecentWorks     []ArtworkBrief
 	RelatedWorks    []ArtworkBrief
@@ -236,8 +240,8 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 
 	var illust struct {
 		Illust
-		UserIllusts map[int]any     `json:"userIllusts"`
-		RawTags     json.RawMessage `json:"tags"`
+		UserIllusts map[int]*struct{} `json:"userIllusts"`
+		RawTags     json.RawMessage   `json:"tags"`
 
 		// In this object:
 		// "userId": "54395645",
@@ -318,8 +322,7 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 		}
 
 		if illust.BookmarkData != nil {
-			t := illust.BookmarkData.(map[string]any)
-			illust.BookmarkID = t["id"].(string)
+			illust.BookmarkID = illust.BookmarkData.Id
 		}
 
 		// Get basic user information (the URL above does not contain avatars)
