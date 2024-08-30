@@ -94,11 +94,7 @@ I added this section because there are some limitations to the public API (follo
 ## Image grid layout
 ## Series
 ## Server's PixivFE Git version/commit
-## Artwork filters
-## Quick download button
 ## Download all buttons for all containers
-## Filters
 ## Page profile
-## Option to open in new tabs
 ## Download button in artwork page
 ## Option to select default image quality in artwork page
