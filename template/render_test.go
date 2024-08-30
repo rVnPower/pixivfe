@@ -1,7 +1,6 @@
 package template_test
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"os"
@@ -9,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"codeberg.org/vnpower/pixivfe/v2/core"
 	. "codeberg.org/vnpower/pixivfe/v2/routes"
 	"codeberg.org/vnpower/pixivfe/v2/template"
 
