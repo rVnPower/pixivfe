@@ -13,7 +13,7 @@
 ## todo
 
 - [x] [add caching](features/caching.md)
-- [ ] add limiter (maybe it should be in nginx)
+- [x] add limiter (maybe it should be in nginx)
 - check if everything works
   - [x] templating (this has tests)
   - [x] search, artworks, users

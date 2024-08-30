@@ -61,9 +61,6 @@ May be painful to implement.
 Required to fully replace Pixiv, if user actions won't work universally.
 https://codeberg.org/VnPower/PixivFE/issues/7
 
-- Testing  
-Do we really need testing? What to test?
-
 - User discovery  
 For discovery page.  
 Pretty useless if user actions (following) doesn't work.
