@@ -1,3 +1,6 @@
+// fly check templates
+// by no means comprehensive
+
 package template_test
 
 import (
