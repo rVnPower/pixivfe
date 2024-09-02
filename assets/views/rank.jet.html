@@ -5,9 +5,10 @@
 <div class="container">
   <h1>{{ .Title }}</h1>
 
+
   <div class="switcher">
-    {{- Mode := isset(.Queries.mode) ? .Queries.mode : "daily" }}
-    {{- Content := isset(.Queries.content) ? .Queries.content : "all" }}
+    {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+    {{- Content := isset(Queries.content) ? Queries.content : "all" }}
 
     {{- url := "" }}
     {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
@@ -17,7 +18,7 @@
     {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
     {{- end }}
     <div class="switch-title">Content</div>
-    {{- path := slice("all",     "illust",        "manga",  "ugoira") }}
+    {{- path := slice("all", "illust", "manga", "ugoira") }}
     {{- name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
     {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Content)}}
   </div>
@@ -58,13 +59,9 @@
     "&page=1" }}
     <div class="switch-title">Date (current: {{ .Data.CurrentDate }})</div>
     {{- if .Data.PrevDate != "false" }}
-    <a href="{{ url }}&date={{.Data.PrevDate}}" class="switch-button"
-      >Yesterday</a
-    >
+    <a href="{{ url }}&date={{.Data.PrevDate}}" class="switch-button">Yesterday</a>
     {{- end }} {{ if .Data.NextDate != "false" }}
-    <a href="{{ url }}&date={{.Data.NextDate}}" class="switch-button"
-      >Next day</a
-    >
+    <a href="{{ url }}&date={{.Data.NextDate}}" class="switch-button">Next day</a>
     {{- end }}
     <a href="{{ url }}" class="switch-button">Latest</a>
     <span class="switch-seperator"></span>

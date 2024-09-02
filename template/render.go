@@ -70,10 +70,16 @@ func GetTemplatingVariables(r *http.Request) jet.VarMap {
 		cookies[string(name)] = value
 	}
 
+	queries := make(map[string]string)
+
+	for k, v := range r.URL.Query() {
+		queries[k] = v[0]
+	}
+
 	return jet.VarMap{}.
 		Set("BaseURL", baseURL).
 		Set("PageURL", pageURL).
 		Set("LoggedIn", token != "").
-		Set("Queries", r.URL.Query().Encode()).
+		Set("Queries", queries).
 		Set("CookieList", cookies)
 }
