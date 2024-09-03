@@ -928,10 +928,13 @@ nav {
     align-items: center;
     flex-direction: column;
     width: 100%;
+    min-height: 500px;
+    background: repeating-linear-gradient(52.5deg, rgba(32, 32, 32, 0.9), rgba(32, 32, 32, 0.9) 14px, rgba(240, 248, 255, 0) 14px, rgba(240, 248, 255, 0) 28px);
 
     img,
     video {
       margin-top: 15px;
+      min-height: calc(100vw - 300px);
       max-height: 1000px;
       width: auto;
       max-width: 100%;
