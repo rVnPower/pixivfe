@@ -3,7 +3,7 @@ module codeberg.org/vnpower/pixivfe/v2
 go 1.22.5
 
 require (
-	codeberg.org/vnpower/pixivision v0.1.1
+	codeberg.org/vnpower/pixivision v0.2.0
 	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/andybalholm/cascadia v1.3.2
 	github.com/go-faker/faker/v4 v4.5.0

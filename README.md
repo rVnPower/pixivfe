@@ -77,7 +77,3 @@ This information is duplicated at https://pixivfe-docs.pages.dev/public-instance
 
 PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe-docs.pages.dev/public-image-proxies/).
 See [hosting a Pixiv image proxy](https://pixivfe-docs.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.
-
-### Public Instances
-
-[See the current list of image proxy servers](./docs/image-proxies.yml)
