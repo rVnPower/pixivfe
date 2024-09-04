@@ -1,14 +1,14 @@
 package routes
 
 import (
+	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/session"
-	"codeberg.org/vnpower/pixivision"
 
 	"net/http"
 )
 
 func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
-	data, err := pixivision.GetHomepage()
+	data, err := core.PixivisionGetHomepage("en")
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
 
 func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
-	data, err := pixivision.GetArticle(id)
+	data, err := core.PixivisionGetArticle(id, "en")
 	if err != nil {
 		return err
 	}

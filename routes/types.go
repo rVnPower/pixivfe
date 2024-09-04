@@ -5,7 +5,6 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/template"
-	"codeberg.org/vnpower/pixivision"
 )
 
 func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
@@ -78,11 +77,11 @@ type Data_novelDiscovery struct {
 	Title  string
 }
 type Data_pixivision_index struct {
-	Data []pixivision.Article
+	Data []core.PixivisionArticle
 }
 
 type Data_pixivision_article struct {
-	Article pixivision.Article
+	Article core.PixivisionArticle
 }
 type Data_rank struct {
 	Title     string

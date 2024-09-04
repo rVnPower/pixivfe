@@ -8,7 +8,7 @@
 /pixivfe
 # custom dev script
 dev.sh
-# not sure what this is for
+# not sure what this is for (VnPower: https://github.com/air-verse/air)
 /tmp
 # exclude changes to pixivfe_token.txt
 docker/pixivfe_token.txt
