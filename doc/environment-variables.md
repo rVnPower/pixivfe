@@ -29,8 +29,8 @@ This document is based on [`doc/Environment Variables.go`](https://codeberg.org/
 
 **Required**: Yes (one of the two)
 
-- `PIXIVFE_PORT`: Port to run on, e.g., `PIXIVFE_PORT=8282`.
-- `PIXIVFE_UNIXSOCKET`: [UNIX socket](https://en.wikipedia.org/wiki/Unix_domain_socket) to run on, e.g., `PIXIVFE_UNIXSOCKET=/srv/http/pages/pixivfe`.
+- `PIXIVFE_PORT`: Port to listen on, e.g., `PIXIVFE_PORT=8282`.
+- `PIXIVFE_UNIXSOCKET`: [UNIX socket](https://en.wikipedia.org/wiki/Unix_domain_socket) to listen on, e.g., `PIXIVFE_UNIXSOCKET=/srv/http/pages/pixivfe`.
 
 ### `PIXIVFE_TOKEN`
 

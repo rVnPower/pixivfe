@@ -3,135 +3,83 @@
 package config
 
 import (
+	"context"
 	"errors"
 	"log"
 	"math/rand"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sethvargo/go-envconfig"
 )
 
 var GlobalConfig ServerConfig
 
 type ServerConfig struct {
-	// Required
-	Token []string
+	Version      string
+	StartingTime string // used in /about page
 
-	ProxyServer url.URL // proxy server, may contain prefix as well
+	Host string `env:"PIXIVFE_HOST"`
 
-	// can be left empty
-	Host string
+	// One of the two is required
+	Port       string `env:"PIXIVFE_PORT"`
+	UnixSocket string `env:"PIXIVFE_UNIXSOCKET"`
 
-	// One of two is required
-	Port       string
-	UnixSocket string
+	Token          []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','    maybe add some testing?
+	InDevelopment  bool     `env:"PIXIVFE_DEV"`
+	UserAgent      string   `env:"PIXIVFE_USERAGENT,overwrite"`
+	AcceptLanguage string   `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
+	RequestLimit   int      `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
-	UserAgent      string
-	AcceptLanguage string
-	RequestLimit   int // if 0, request limit is disabled
+	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
+	ProxyServer         url.URL // proxy server, may contain prefix as well
 
-	StartingTime  string
-	Version       string
-	InDevelopment bool
-
-	ProxyCheckInterval time.Duration // Proxy check interval
+	ProxyCheckInterval_staging int           `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
+	ProxyCheckInterval         time.Duration // Proxy check interval
 }
 
 func (s *ServerConfig) LoadConfig() error {
-	s.setVersion()
+	s.Version = "v2.8"
+	log.Printf("PixivFE %s\n", s.Version)
 
-	CollectAllEnv()
+	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")
 
-	token, hasToken := LookupEnv("PIXIVFE_TOKEN")
-	if !hasToken {
-		log.Fatalln("PIXIVFE_TOKEN is required, but was not set.")
-		return errors.New("PIXIVFE_TOKEN is required, but was not set.\n")
+	// set default values with env:"...,overwrite"
+	s.UserAgent = "Mozilla/5.0 (Windows NT 10.0; rv:123.0) Gecko/20100101 Firefox/123.0"
+	s.AcceptLanguage = "en-US,en;q=0.5"
+	s.ProxyServer_staging = BuiltinProxyUrl
+	s.ProxyCheckInterval_staging = 480
+
+	// load config from from env vars
+	if err := envconfig.Process(context.Background(), s); err != nil {
+		return err
 	}
-	// TODO Maybe add some testing?
-	s.Token = strings.Split(token, ",")
 
-	port, hasPort := LookupEnv("PIXIVFE_PORT")
-	socket, hasSocket := LookupEnv("PIXIVFE_UNIXSOCKET")
-	if !hasPort && !hasSocket {
+	if s.Port == "" && s.UnixSocket == "" {
 		log.Fatalln("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
 		return errors.New("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
 	}
-	s.Port = port
-	s.UnixSocket = socket
 
-	_, hasDev := LookupEnv("PIXIVFE_DEV")
-	s.InDevelopment = hasDev
-
-	s.Host = GetEnv("PIXIVFE_HOST")
-
-	s.UserAgent = GetEnv("PIXIVFE_USERAGENT")
-
-	s.AcceptLanguage = GetEnv("PIXIVFE_ACCEPTLANGUAGE")
-
-	s.SetRequestLimit(GetEnv("PIXIVFE_REQUESTLIMIT"))
-
-	s.SetProxyServer(GetEnv("PIXIVFE_IMAGEPROXY"))
-
-	s.SetProxyCheckInterval(GetEnv("PIXIVFE_PROXY_CHECK_INTERVAL"))
-
-	AnnounceAllEnv()
-
-	s.setStartingTime()
-
-	return nil
-}
-
-func (s *ServerConfig) SetProxyServer(v string) {
-	proxyUrl, err := url.Parse(v)
-	if err != nil {
-		panic(err)
-	}
-	s.ProxyServer = *proxyUrl
-	if (proxyUrl.Scheme == "") != (proxyUrl.Host == "") {
-		log.Panicf("proxy server url is weird: %s\nPlease specify e.g. https://example.com", proxyUrl.String())
-	}
-	if strings.HasSuffix(proxyUrl.Path, "/") {
-		log.Panicf("proxy server path (%s) has cannot end in /: %s\nPixivFE does not support this now, sorry", proxyUrl.Path, proxyUrl.String())
-	}
-}
-
-func (s *ServerConfig) SetRequestLimit(v string) {
-	if v == "" {
-		s.RequestLimit = 0
-	} else {
-		t, err := strconv.Atoi(v)
+	{ // validate proxy server
+		proxyUrl, err := url.Parse(s.ProxyServer_staging)
 		if err != nil {
 			panic(err)
 		}
-		s.RequestLimit = t
-	}
-}
-
-func (s *ServerConfig) SetProxyCheckInterval(v string) {
-	const defaultInterval = 480
-	if v == "" {
-		s.ProxyCheckInterval = defaultInterval * time.Minute
-	} else {
-		minutes, err := strconv.Atoi(v)
-		if err != nil {
-			log.Printf("Invalid PIXIVFE_PROXY_CHECK_INTERVAL value: %s. Using default of %d minutes.\n", v, defaultInterval)
-			s.ProxyCheckInterval = defaultInterval * time.Minute
-		} else {
-			s.ProxyCheckInterval = time.Duration(minutes) * time.Minute
+		s.ProxyServer = *proxyUrl
+		if (proxyUrl.Scheme == "") != (proxyUrl.Host == "") {
+			log.Panicf("proxy server url is weird: %s\nPlease specify e.g. https://example.com", proxyUrl.String())
+		}
+		if strings.HasSuffix(proxyUrl.Path, "/") {
+			log.Panicf("proxy server path (%s) has cannot end in /: %s\nPixivFE does not support this now, sorry", proxyUrl.Path, proxyUrl.String())
 		}
 	}
+	log.Printf("Set %s to: %s\n", "proxy server", &s.ProxyServer)
+
+	s.ProxyCheckInterval = time.Duration(s.ProxyCheckInterval_staging) * time.Minute
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
-}
 
-func (s *ServerConfig) setStartingTime() {
-	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")
-	log.Printf("Set starting time to: %s\n", s.StartingTime)
-}
-
-func (s *ServerConfig) setVersion() {
-	s.Version = "v2.8"
-	log.Printf("PixivFE %s\n", s.Version)
+	return nil
 }
 
 func GetRandomDefaultToken() string {

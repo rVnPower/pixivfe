@@ -1,3 +1,5 @@
+// this file is used by http handlers. no need to refactor when not adding new features.
+
 package session
 
 import (
@@ -55,7 +57,7 @@ func GetImageProxyPrefix(r *http.Request) string {
 	// note: not sure if url.EscapedPath() is useful here. go's standard library is trash at handling URL (:// should be part of the scheme)
 }
 
-// note: still cannot believe Go doesn't have this function built-in
+// note: still cannot believe Go doesn't have this function built-in. if stability is their goal, they really don't have the incentive to add useful, crucial features
 func urlAuthority(url url.URL) string {
 	r := ""
 	if (url.Scheme != "") != (url.Host != "") {

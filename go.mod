@@ -11,6 +11,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/playwright-community/playwright-go v0.4501.1
+	github.com/sethvargo/go-envconfig v1.1.0
 	github.com/soluble-ai/go-jnode v0.1.11
 	github.com/tidwall/gjson v1.17.3
 	golang.org/x/net v0.28.0
