@@ -11,9 +11,12 @@
     {{- if .IllustType == 2 }}
     <div class="artwork-page-count"><span>&#9654;</span></div>
     {{- end }}
-
   </div>
   <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
+    {{- if .XRestrict == 0 }}
     <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
+    {{- else }}
+    <img src="/img/404.png" alt="{{ .Title }}" loading="lazy" />
+    {{- end }}
   </a>
 </div>
