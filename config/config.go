@@ -33,10 +33,9 @@ type ServerConfig struct {
 	RequestLimit   int      `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
 	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
-	ProxyServer         url.URL // proxy server, may contain prefix as well
+	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
 
-	ProxyCheckInterval_staging int           `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
-	ProxyCheckInterval         time.Duration // Proxy check interval
+	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
 }
 
 func (s *ServerConfig) LoadConfig() error {
@@ -49,7 +48,7 @@ func (s *ServerConfig) LoadConfig() error {
 	s.UserAgent = "Mozilla/5.0 (Windows NT 10.0; rv:123.0) Gecko/20100101 Firefox/123.0"
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
-	s.ProxyCheckInterval_staging = 480
+	s.ProxyCheckInterval = 8 * time.Hour
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
@@ -74,9 +73,7 @@ func (s *ServerConfig) LoadConfig() error {
 			log.Panicf("proxy server path (%s) has cannot end in /: %s\nPixivFE does not support this now, sorry", proxyUrl.Path, proxyUrl.String())
 		}
 	}
-	log.Printf("Set %s to: %s\n", "proxy server", &s.ProxyServer)
-
-	s.ProxyCheckInterval = time.Duration(s.ProxyCheckInterval_staging) * time.Minute
+	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
 
 	return nil

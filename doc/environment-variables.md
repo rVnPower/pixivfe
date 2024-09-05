@@ -90,9 +90,10 @@ The value of the `Accept-Language` header used for requests to Pixiv's API. Chan
 
 **Required**: No
 
-**Default:** `480`
+**Default:** `8h`
 
-The interval in minutes between proxy checks. Defaults to 480 minutes (8 hours) if not set.
+The interval in minutes between proxy checks. Defaults to 8 hours if not set.
+Please specify this value in Go's `time.Duration` notation, e.g. `2h3m5s`.
 You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
 
 ### `PIXIVFE_DEV`
