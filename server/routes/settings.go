@@ -10,6 +10,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
@@ -144,7 +145,7 @@ func resetAll(w http.ResponseWriter, _ *http.Request) error {
 }
 
 func SettingsPage(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, Data_settings{WorkingProxyList: config.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
+	return Render(w, r, Data_settings{WorkingProxyList: proxy_checker.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
 func SettingsPost(w http.ResponseWriter, r *http.Request) error {

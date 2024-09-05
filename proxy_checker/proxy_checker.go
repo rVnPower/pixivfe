@@ -1,4 +1,4 @@
-package config
+package proxy_checker
 
 import (
 	"context"
@@ -8,25 +8,22 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 const (
-	proxyCheckTimeout = 10 * time.Second
 	testImagePath     = "/img-original/img/2024/01/21/20/50/51/115365120_p0.jpg"
 )
 
 var (
 	workingProxies      []string
 	workingProxiesMutex sync.RWMutex
-	stopChan            chan struct{}
+	stopChan            chan struct{} = make(chan struct{})
 )
 
 func InitializeProxyChecker(r context.Context) {
-	stopChan = make(chan struct{})
-	StartProxyChecker(r)
-}
-
-func StartProxyChecker(r context.Context) {
 	go func() {
 		for {
 			select {
@@ -35,7 +32,7 @@ func StartProxyChecker(r context.Context) {
 				return
 			default:
 				checkProxies(r)
-				if t := GlobalConfig.ProxyCheckInterval; t > 0 {
+				if t := config.GlobalConfig.ProxyCheckInterval; t > 0 {
 					time.Sleep(t)
 				} else {
 					log.Print("Proxy check interval set to 0, disabling auto-check from now on.")
@@ -56,9 +53,9 @@ func checkProxies(r context.Context) {
 	var mutex sync.Mutex
 	var newWorkingProxies []string
 
-	logf("Total proxies to check: %d", len(BuiltinProxyList))
+	logf("Total proxies to check: %d", len(config.BuiltinProxyList))
 
-	for _, proxy := range BuiltinProxyList {
+	for _, proxy := range config.BuiltinProxyList {
 		wg.Add(1)
 		go func(proxyURL string) {
 			defer wg.Done()
@@ -84,8 +81,6 @@ func checkProxies(r context.Context) {
 }
 
 func testProxy(r context.Context, proxyBaseURL string) (bool, *http.Response) {
-	client := &http.Client{Timeout: proxyCheckTimeout}
-
 	fullURL := fmt.Sprintf("%s%s", strings.TrimRight(proxyBaseURL, "/"), testImagePath)
 	logf("Testing proxy %s with full URL: %s", proxyBaseURL, fullURL)
 
@@ -95,7 +90,7 @@ func testProxy(r context.Context, proxyBaseURL string) (bool, *http.Response) {
 		return false, nil
 	}
 
-	resp, err := client.Do(req)
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		logf("Error testing proxy %s: %v", proxyBaseURL, err)
 		return false, nil
