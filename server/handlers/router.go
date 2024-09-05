@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"codeberg.org/vnpower/pixivfe/v2/routes"
+	"codeberg.org/vnpower/pixivfe/v2/server/routes"
 	"github.com/gorilla/mux"
 )
 

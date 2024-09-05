@@ -6,8 +6,8 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/soluble-ai/go-jnode"
 
-	"codeberg.org/vnpower/pixivfe/v2/audit"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/server/audit"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 func Diagnostics(w http.ResponseWriter, r *http.Request) error {

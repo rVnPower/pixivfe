@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 
-	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
 	"github.com/tidwall/gjson"
 	"net/http"

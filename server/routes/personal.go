@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/request_context"
-	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
 func PromptUserToLoginPage(w http.ResponseWriter, r *http.Request) error {

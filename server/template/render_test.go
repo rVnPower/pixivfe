@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	. "codeberg.org/vnpower/pixivfe/v2/routes"
-	"codeberg.org/vnpower/pixivfe/v2/template"
+	. "codeberg.org/vnpower/pixivfe/v2/server/routes"
+	"codeberg.org/vnpower/pixivfe/v2/server/template"
 
 	"github.com/CloudyKit/jet/v6"
 	"github.com/go-faker/faker/v4"

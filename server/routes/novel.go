@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"net/http"
 )
 

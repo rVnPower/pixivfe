@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/session"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {

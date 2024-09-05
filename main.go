@@ -11,10 +11,10 @@ import (
 	"runtime"
 	"syscall"
 
-	"codeberg.org/vnpower/pixivfe/v2/audit"
+	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/handlers"
-	"codeberg.org/vnpower/pixivfe/v2/template"
+	"codeberg.org/vnpower/pixivfe/v2/server/handlers"
+	"codeberg.org/vnpower/pixivfe/v2/server/template"
 )
 
 func main() {

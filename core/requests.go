@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"time"
 
-	"codeberg.org/vnpower/pixivfe/v2/audit"
+	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	config "codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/request_context"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 	"github.com/tidwall/gjson"
 )
 

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/template"
+	"codeberg.org/vnpower/pixivfe/v2/server/template"
 )
 
 func DiscoveryPage(w http.ResponseWriter, r *http.Request) error {

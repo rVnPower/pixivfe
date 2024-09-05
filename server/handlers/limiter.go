@@ -11,7 +11,7 @@ import (
 	"golang.org/x/time/rate"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/routes"
+	"codeberg.org/vnpower/pixivfe/v2/server/routes"
 )
 
 func CanRequestSkipLimiter(r *http.Request) bool {

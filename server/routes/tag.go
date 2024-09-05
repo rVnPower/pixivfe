@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/template"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/server/template"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 func TagPage(w http.ResponseWriter, r *http.Request) error {

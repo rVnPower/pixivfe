@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"codeberg.org/vnpower/pixivfe/v2/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
 func SetPrivacyHeaders(h http.Handler) http.Handler {

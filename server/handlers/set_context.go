@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"codeberg.org/vnpower/pixivfe/v2/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 )
 
 func ProvideUserContext(h http.Handler) http.Handler {

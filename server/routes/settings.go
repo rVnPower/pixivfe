@@ -10,8 +10,8 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/session"
-	"codeberg.org/vnpower/pixivfe/v2/utils"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 func setToken(w http.ResponseWriter, r *http.Request) error {
