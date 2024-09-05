@@ -71,7 +71,7 @@ If you are hosting your own instance, you can create a pull request to add it he
 
 For more information on instance uptime, see the [PixivFE instance status page](https://stats.uptimerobot.com/FbEGewWlbX).
 
-This information is duplicated at https://pixivfe-docs.pages.dev/public-instances/.
+This information is duplicated at https://pixivfe-docs.pages.dev/instance-list/.
 
 ## Hosting Image Proxy Server
 
