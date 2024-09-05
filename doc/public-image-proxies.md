@@ -11,8 +11,8 @@ PixivFE can work with or without an external image proxy server. This page lists
 - Name: exozyme (Official)
   URL: https://pximg.exozy.me
   Country: US
-
   Cloudflare proxy: No
+
 - Name: ducks.party
   URL: https://pixiv.ducks.party
   Country: DE
@@ -22,18 +22,38 @@ PixivFE can work with or without an external image proxy server. This page lists
   URL: https://pximg.cocomi.eu.org
   Country: ?
   Cloudflare proxy: Yes
-  
-- Name: mima.localghost.org
-  URL: https://mima.localghost.org/proxy/pximg
-  Country: PH
-  Cloudflare proxy: No
-  
-- Name: pixiv.re
-  URL: https://i.pixiv.re
+
+- Name: suimoe.com
+  URL: https://i.suimoe.com
   Country: ?
   Cloudflare proxy: Yes
-  
+
+- Name: yuki.sh
+  URL: https://i.yuki.sh
+  Country: ?
+  Cloudflare proxy: Yes
+
+- Name: obfs.dev
+  URL: https://pximg.obfs.dev
+  Country: ?
+  Cloudflare proxy: Yes
+
 - Name: darkness.services
   URL: https://pixiv.darkness.services
   Country: US
+  Cloudflare proxy: Yes
+
+- Name: tatakai.top
+  URL: https://pixiv.tatakai.top
+  Country: US
+  Cloudflare proxy: No
+
+- Name: 169889.xyz
+  URL: https://pi.169889.xyz
+  Country: ?
+  Cloudflare proxy: Yes
+
+- Name: pixiv.re
+  URL: https://i.pixiv.re
+  Country: ?
   Cloudflare proxy: Yes -->
