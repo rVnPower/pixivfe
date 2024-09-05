@@ -1,4 +1,5 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
+{{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
 <div class="artwork-image">
   <div class="artwork-additional">
     {{- if .XRestrict != 0 }}
@@ -13,10 +14,10 @@
     {{- end }}
   </div>
   <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
-    {{- if .XRestrict == 0 }}
-    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
-    {{- else }}
+    {{- if .XRestrict != 0 && hideR18 != "" }}
     <img src="/img/404.png" alt="{{ .Title }}" loading="lazy" />
+    {{- else }}
+    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />
     {{- end }}
   </a>
 </div>

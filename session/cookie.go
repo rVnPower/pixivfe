@@ -18,9 +18,9 @@ const ( // the __Host thing force it to be secure and same-origin (no subdomain)
 	Cookie_NovelViewMode     CookieName = "pixivfe-NovelViewMode"
 	Cookie_ThumbnailToNewTab CookieName = "pixivfe-ThumbnailToNewTab"
 	Cookie_ArtworkPreview    CookieName = "pixivfe-ArtworkPreview"
-	Cookie_ShowArtR18        CookieName = "pixivfe-ShowArtR18"
-	Cookie_ShowArtR18G       CookieName = "pixivfe-ShowArtR18G"
-	Cookie_ShowArtAI         CookieName = "pixivfe-ShowArtAI"
+	Cookie_HideArtR18        CookieName = "pixivfe-HideArtR18"
+	Cookie_HideArtR18G       CookieName = "pixivfe-HideArtR18G"
+	Cookie_HideArtAI         CookieName = "pixivfe-HideArtAI"
 )
 
 // Go can't make this a const...
@@ -32,9 +32,9 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_NovelViewMode,
 	Cookie_ThumbnailToNewTab,
 	Cookie_ArtworkPreview,
-	Cookie_ShowArtR18,
-	Cookie_ShowArtR18G,
-	Cookie_ShowArtAI,
+	Cookie_HideArtR18,
+	Cookie_HideArtR18G,
+	Cookie_HideArtAI,
 }
 
 func GetCookie(r *http.Request, name CookieName) string {
