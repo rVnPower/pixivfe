@@ -15,7 +15,7 @@ var BuiltinProxyList = []string{
 	"https://pixiv.tatakai.top",
 	"https://pi.169889.xyz",
 	"https://i.pixiv.re",
-	// "https://mima.localghost.org/proxy/pximg", // doesn't support HTTP/1.1. only support HTTP/2. need proxy code to use a http client (not http.Client) that supports HTTP/2.
+	// "https://mima.localghost.org/proxy/pximg", // only supports HTTP/0.9 and HTTP/1.x when using TLS.
 	// "https://pximg.chaotic.ninja", // incompatible
 
 	// VnPower: Please comment non-working sites instead of deleting them.
