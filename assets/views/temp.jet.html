@@ -1,5 +1,4 @@
-{{- extends "layout/default" }}
-{{- block body() }}
+{* this is scratch area to put code snippets *}
 
   {{- if Token }}
   <div class="switcher">
@@ -12,17 +11,17 @@
     <a href="/self/following_works">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{- include "components/small-tn" .Artworks.Following }}
+    {{- include "fragments/small-tn" .Artworks.Following }}
   </div>
   <br />
   <h2>Recently completed commissions</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Artworks.Commissions }}
+    {{- include "fragments/small-tn" .Artworks.Commissions }}
   </div>
   <br />
   <h2>Recommended works</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Artworks.Recommended }}
+    {{- include "fragments/small-tn" .Artworks.Recommended }}
   </div>
   <br />
 
@@ -84,13 +83,13 @@
 
   <h2>Works by recommended users</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Artworks.Users }}
+    {{- include "fragments/small-tn" .Artworks.Users }}
   </div>
   <br />
   {{- range .Artworks.RecommendByTags }}
   <h2>Recommended illustrations tagged #{{.Name}}</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Artworks }}
+    {{- include "fragments/small-tn" .Artworks }}
   </div>
   <br />
   {{- end }}
@@ -98,7 +97,7 @@
   <p>Please check out the sidebar for more features. There used to be a small ranking container here...</p>
   {* <h2>Newest works</h2>
        <div class="artwork-container-scroll">
-       {{- include "components/small-tn" .Artworks.Newest }}
+       {{- include "fragments/small-tn" .Artworks.Newest }}
        </div>
        {{- else }}
        <p><a href="/login">Login</a> to access more features!</p>
@@ -164,4 +163,3 @@
   <br /> *}
 
   {{- end }}
-{{- end }}

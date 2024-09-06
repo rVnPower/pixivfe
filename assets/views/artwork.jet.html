@@ -1,7 +1,7 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="container illust" id="checkpoint">
-  {{- include "components/artwork" .Illust }}
+  {{- include "fragments/artwork" .Illust }}
   <div class="illust-other-works">
     <div class="artwork-container-header">
       <a class="illust-other-works-author" href="/users/{{ .Illust.User.ID }}"><img src="{{ .Illust.User.Avatar }}"
@@ -14,7 +14,7 @@
     <div class="artwork-container-scroll">
       {{- range .Illust.RecentWorks }}
       <div class="artwork-small artwork">
-        {{- include "components/thumbnail-dt" . }}
+        {{- include "fragments/thumbnail-dt" . }}
       </div>
       {{- end }}
     </div>
@@ -51,7 +51,7 @@
 <div class="container">
   <h2>Related works</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Illust.RelatedWorks }}
+    {{- include "fragments/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>
 {{- end }}

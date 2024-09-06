@@ -1,5 +1,5 @@
 {{- extends "layout/default" }}
-{{- import "components/switcher" }}
+{{- import "blocks/switcher" }}
 {{- block body() }}
 
 <div class="container">
@@ -97,18 +97,18 @@
   <h2>Popular artworks</h2>
   <h3>Recent</h3>
   <div class="artwork-container-scroll">
-    {{- include "components/small-tn" .Data.Popular.Recent }}
+    {{- include "fragments/small-tn" .Data.Popular.Recent }}
   </div>
   <h3>All Time</h3>
   <div class="artwork-container-scroll">
-    {{- include "components/small-tn" .Data.Popular.Permanent }}
+    {{- include "fragments/small-tn" .Data.Popular.Permanent }}
   </div>
   {{- end }}
   {* Switchers here *}
   <br />
   <h2>Works</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Data.Artworks.Artworks }}
+    {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
   </div>
 
   <div class="pagination">

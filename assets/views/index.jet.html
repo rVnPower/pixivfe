@@ -9,7 +9,7 @@
     <a href="/ranking?content=all">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{- include "components/ranking-tn" .NoTokenData.Contents }}
+    {{- include "fragments/ranking-tn" .NoTokenData.Contents }}
   </div>
 
   {{- else }}
@@ -23,18 +23,18 @@
     <a href="/self/followingWorks">See more</a>
   </div>
   <div class="artwork-container-scroll">
-    {{- include "components/small-tn" .Data.Following }}
+    {{- include "fragments/small-tn" .Data.Following }}
   </div>
   <br />
   <h2>Recommended works</h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Data.Recommended }}
+    {{- include "fragments/small-tn" .Data.Recommended }}
   </div>
   <br />
   {{- range .Data.RecommendByTags }}
   <h2>Recommended illustrations tagged <a href="/tags/{{.Name}}">#{{.Name}}</a></h2>
   <div class="artwork-container">
-    {{- include "components/small-tn" .Artworks }}
+    {{- include "fragments/small-tn" .Artworks }}
   </div>
   <br />
   {{- end }}

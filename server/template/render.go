@@ -17,15 +17,15 @@ import (
 // global variable, yes.
 var views *jet.Set
 
-func Init(DisableCache bool) {
+func Init(DisableCache bool, assetsLocation string) {
 	if DisableCache {
 		views = jet.NewSet(
-			jet.NewOSFileSystemLoader("assets/views"),
+			jet.NewOSFileSystemLoader(assetsLocation),
 			jet.InDevelopmentMode(), // disable cache
 		)
 	} else {
 		views = jet.NewSet(
-			jet.NewOSFileSystemLoader("assets/views"),
+			jet.NewOSFileSystemLoader(assetsLocation),
 		)
 	}
 	for fn_name, fn := range GetTemplateFunctions() {

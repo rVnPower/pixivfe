@@ -1,5 +1,5 @@
 {{- extends "layout/default" }}
-{{- import "components/switcher" }}
+{{- import "blocks/switcher" }}
 {{- block body() }}
 
 <div class="container">
@@ -70,7 +70,7 @@
   <br />
 
   <div class="artwork-container">
-    {{- include "components/ranking-tn" .Data.Contents }}
+    {{- include "fragments/ranking-tn" .Data.Contents }}
   </div>
 
   <div class="pagination">

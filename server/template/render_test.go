@@ -6,7 +6,6 @@ package template_test
 import (
 	"io"
 	"log"
-	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -19,12 +18,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	err := os.Chdir("..")
-	if err != nil {
-		panic(err)
-	}
-	template.Init(false)
-
+	template.Init(false, "../../assets/views")
 	m.Run()
 }
 

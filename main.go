@@ -22,7 +22,7 @@ import (
 func main() {
 	config.GlobalConfig.LoadConfig()
 	audit.Init(config.GlobalConfig.InDevelopment)
-	template.Init(config.GlobalConfig.InDevelopment)
+	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
 	// Initialize and start the proxy checker
 	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
