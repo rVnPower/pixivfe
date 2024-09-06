@@ -12,7 +12,7 @@ import (
 type Ranking struct {
 	Contents []struct {
 		Title        string `json:"title"`
-		Image        string `json:"url"`
+		Thumbnail    string `json:"url"`
 		Pages        int    `json:"illust_page_count,string"`
 		ArtistName   string `json:"user_name"`
 		ArtistAvatar string `json:"profile_img"`
@@ -20,6 +20,7 @@ type Ranking struct {
 		ArtistID     int    `json:"user_id"`
 		Rank         int    `json:"rank"`
 		IllustType   int    `json:"illust_type,string"`
+		XRestrict    int    // zero field for template
 	} `json:"contents"`
 
 	Mode        string          `json:"mode"`
