@@ -24,11 +24,7 @@ Clone the PixivFE repository and navigate to the directory:
 git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
 ```
 
-#### 2. Set token
-
-Copy the `PHPSESSID` cookie value into `docker/pixivfe_token.txt`. This file will be used as a [Docker secret](https://docs.docker.com/compose/use-secrets/).
-
-#### 3. Configure environment variables
+#### 2. Configure environment variables
 
 Copy `.env.example` to `.env` and configure the variables as needed. Refer to the [Environment variables](environment-variables.md) page for more information.
 
@@ -36,6 +32,10 @@ Copy `.env.example` to `.env` and configure the variables as needed. Refer to th
     Ensure you set `PIXIVFE_HOST=0.0.0.0` in the `.env` file.
     
     This allows PixivFE to bind to all network interfaces inside the container, which is necessary for Docker's network management to function correctly. The network access restrictions will be handled by Docker itself, not within PixivFE.
+
+#### 3. Set token
+
+Set the `PIXIVFE_TOKEN` environment variable in your `.env` file. This should be the value of the `PHPSESSID` cookie from your Pixiv account. For detailed instructions on obtaining this token, refer to the [Obtaining the `PIXIVFE_TOKEN` cookie](obtaining-pixivfe-token.md) guide.
 
 #### 4. Compose!
 

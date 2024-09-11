@@ -1,0 +1,21 @@
+services:
+  pixivfe:
+    container_name: pixivfe
+    hostname: pixivfe
+    # image: vnpower/pixivfe:latest
+    # Uncomment to build image from local repository
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    ports:
+      # Specify `8282:8282` only if you are not using a reverse proxy
+      - 127.0.0.1:8282:8282
+    env_file: .env
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    read_only: true
+    user: 10001:10001
+    security_opt:
+      - no-new-privileges:true
