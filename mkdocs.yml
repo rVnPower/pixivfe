@@ -124,6 +124,13 @@ plugins:
        effect: fade
        auto_caption: true
        caption_position: bottom
+  # -- mkdocs-redirects plugin to create page redirects
+  - redirects:
+      redirect_maps:
+        'environment-variables.md': 'hosting/environment-variables.md'
+        'hosting-pixivfe.md': 'hosting/hosting-pixivfe.md'
+        'hosting-image-proxy-server.md': 'hosting/hosting-image-proxy-server.md'
+        'obtaining-pixivfe-token.md': 'hosting/obtaining-pixivfe-token.md'
 
 markdown_extensions:
   - admonition
