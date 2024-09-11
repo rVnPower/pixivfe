@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Known quirks
 
 ## User styles not working

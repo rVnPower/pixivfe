@@ -1,3 +1,9 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
 # Public image proxies
 
 PixivFE can work with or without an external image proxy server. This page lists all known public image proxies. See the [Hosting an image proxy server for Pixiv](hosting/image-proxy-server.md) guide if you want to host one yourself.

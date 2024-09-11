@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Instance list
 
 This page lists all currently running instances of PixivFE that are available for use. They are ordered from oldest to newest based on when they were added. **Please scroll horizontally to see all columns.**
