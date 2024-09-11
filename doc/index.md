@@ -1,19 +1,36 @@
-# PixivFE
+---
+hide:
+  - navigation
+  - toc
+---
 
-A privacy-respecting alternative front-end for Pixiv that doesn't suck.
+This is the documentation for PixivFE, a privacy-respecting alternative front-end for Pixiv that doesn't suck.
 
-Ready-to-use running instances are available at the [instance list](instance-list.md).
+[Use PixivFE](instance-list.md){: .md-button .md-button--primary }
+[Host PixivFE](hosting/index.md){: .md-button }
+
+## Features
+
+- Privacy-oriented: Server-side handling of Pixiv interactions
+- Lightweight interface
+- Open source codebase
+- No account required for browsing
+- Minimal JavaScript usage
+
+## Support
+
+For support:
+
+- Report issues or request features on [Codeberg](https://codeberg.org/VnPower/PixivFE/issues).
+- Workarounds for common issues are covered on [Known Quirks](known-quirks.md).
+
+## Contributing
+
+Contributions to PixivFE are welcome, including code and documentation. For more information on how to contribute, please refer to the [developer documentation](dev/index.md).
 
 [![Get it on Codeberg](https://get-it-on.codeberg.org/get-it-on-blue-on-white.png){ width="200" }](https://codeberg.org/VnPower/PixivFE)
 
 [![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
-
-## Features
-
-- **Lightweight** - both the interface and the code
-- **Privacy-first** - the server will do the work for you
-- **No bloat** - we only serve HTML, CSS and minimal JS code
-- **Open source** - you can trust me!
 
 ## License
 
