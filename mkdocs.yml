@@ -11,7 +11,7 @@ nav:
     - "Index": "hosting/index.md"
     - "Environment variables": "hosting/environment-variables.md"
     - "Hosting PixivFE": "hosting/hosting-pixivfe.md"
-    - "Hosting an image proxy server for Pixiv": "hosting/hosting-image-proxy-server.md"
+    - "Hosting an image proxy server for Pixiv": "hosting/image-proxy-server.md"
     - "Obtaining the PIXIVFE_TOKEN cookie": "hosting/obtaining-pixivfe-token.md"
   - "Development":
     - "Index": "dev/index.md"
@@ -129,7 +129,7 @@ plugins:
       redirect_maps:
         'environment-variables.md': 'hosting/environment-variables.md'
         'hosting-pixivfe.md': 'hosting/hosting-pixivfe.md'
-        'hosting-image-proxy-server.md': 'hosting/hosting-image-proxy-server.md'
+        'hosting-image-proxy-server.md': 'hosting/image-proxy-server.md'
         'obtaining-pixivfe-token.md': 'hosting/obtaining-pixivfe-token.md'
 
 markdown_extensions:
