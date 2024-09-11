@@ -20,10 +20,11 @@ nav:
     - dev/feature-ideas.md
     - dev/helpful-resources.md
     - dev/roadmap.md
+    - dev/testing.md
     - "Features":
       - dev/features/caching.md
       - dev/features/novels.md
-      - dev/features/tracing.md
+      - dev/features/tracing-flamegraph.md
       - dev/features/user-customization.md
 repo_name: VnPower/PixivFE
 repo_url: https://codeberg.org/VnPower/PixivFE
