@@ -1,37 +1,39 @@
-# ------ Builder stage ------
-FROM golang:1.22 AS builder
+# Use the official Alpine-based golang image as a parent image
+FROM golang:1.23.1-alpine3.20 AS builder
+
 WORKDIR /app
 
-COPY go.* ./
-RUN go mod download
-COPY . ./
+# Copy the current directory contents into the container
+COPY . .
 
-# Build the application binary with optimisations for a smaller, static binary
-RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -ldflags="-s -w" -o pixivfe
+# Build the application
+RUN go mod download && \
+    CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -a -o pixivfe
 
-# ------ Final image ------
-FROM alpine:3.19
-WORKDIR /app
+# Stage for creating the non-privileged user
+FROM alpine:3.20 AS user-stage
 
-# Create a non-root user `pixivfe` for security purposes and set ownership
-RUN addgroup -g 1000 -S pixivfe && \
-    adduser -u 1000 -S pixivfe -G pixivfe && \
-    chown -R pixivfe:pixivfe /app
+RUN adduser -u 10001 -S pixivfe
 
-# Copy the compiled application and other necessary files from the builder stage
+# Stage for a smaller final image
+FROM scratch
+
+# Copy necessary files from the builder stage
 COPY --from=builder /app/pixivfe /app/pixivfe
 COPY --from=builder /app/assets /app/assets
-COPY ./docker/entrypoint.sh /entrypoint.sh
-# Include entrypoint script and ensure it's executable
-RUN chmod +x /entrypoint.sh && \
-    chown pixivfe:pixivfe /entrypoint.sh
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# Use the non-root user to run the application
-USER pixivfe
+# Copy passwd file for the non-privileged user from the user-stage
+COPY --from=user-stage /etc/passwd /etc/passwd
 
+# Set the working directory
+WORKDIR /app
+
+# Expose port 8282
 EXPOSE 8282
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Switch to non-privileged user
+USER pixivfe
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --start-interval=5s --retries=3 \
- CMD wget --spider -q --tries=1 http://127.0.0.1:8282/about || exit 1
+# Set the entrypoint to the binary name
+ENTRYPOINT ["/app/pixivfe"]

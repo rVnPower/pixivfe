@@ -47,7 +47,7 @@ Locate the cookie with the key `PHPSESSID`. The value next to this key is your a
 
 ## 4. Set the environment variable
 
-Copy the token value obtained in the previous step. If deploying with Docker Compose, paste it into the `docker/pixivfe_token.txt` file. Otherwise, set it as the `PIXIVFE_TOKEN` environment variable in your configuration.
+Copy the token value obtained in the previous step. If deploying with Docker, set it as the `PIXIVFE_TOKEN` environment variable in your configuration.
 
 ## Additional notes
 
