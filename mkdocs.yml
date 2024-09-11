@@ -72,6 +72,11 @@ theme:
     # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#anchor-tracking
     - navigation.tracking
 
+    # Sticky navigation tabs
+    # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#sticky-navigation-tabs
+    - navigation.tabs
+    - navigation.tabs.sticky
+
     # Navigation sections
     # src: https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-sections
     - navigation.sections
