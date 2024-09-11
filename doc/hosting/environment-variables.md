@@ -68,7 +68,7 @@ It's recommended to enable rate limiting in the reverse proxy in front of PixivF
 
 The URL of the image proxy server. Pixiv requires `Referer: https://www.pixiv.net/` in the HTTP request headers to fetch images directly. Set this variable if you wish to use an external image proxy or are unable to get images directly from Pixiv.
 
-See [hosting an image proxy server](hosting-image-proxy-server.md) or the [list of public image proxies](public-image-proxies.md).
+See [hosting an image proxy server](hosting-image-proxy-server.md) or the [list of public image proxies](../public-image-proxies.md).
 
 ### `PIXIVFE_USERAGENT`
 
