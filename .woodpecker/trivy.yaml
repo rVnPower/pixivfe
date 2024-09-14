@@ -1,6 +1,6 @@
 # -- Plugin to find vulnerabilities, misconfigurations, secrets, SBOM and more.
 # ref: https://woodpecker-ci.org/plugins/Trivy
-pipeline:
+steps:
   trivy:
     image: aquasec/trivy:latest
     commands:
