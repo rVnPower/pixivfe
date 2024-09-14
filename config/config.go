@@ -80,7 +80,7 @@ func (s *ServerConfig) LoadConfig() error {
 	}
 	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
-	log.Printf("Load balancing method: %s\n", s.LoadBalancing)
+	log.Printf("Token load balancing method: %s\n", s.LoadBalancing)
 
 	return nil
 }
