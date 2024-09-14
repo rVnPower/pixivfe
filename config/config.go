@@ -87,10 +87,10 @@ func (s *ServerConfig) LoadConfig() error {
 
 func (s *ServerConfig) GetToken() string {
 	switch s.LoadBalancing {
-	case "round-robin":
-		return s.getRoundRobinToken()
-	default:
+	case "random":
 		return s.getRandomToken()
+	default:
+		return s.getRoundRobinToken()
 	}
 }
 
