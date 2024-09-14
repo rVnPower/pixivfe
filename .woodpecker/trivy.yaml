@@ -6,4 +6,9 @@ steps:
     commands:
       # use any trivy command, if exit code is 0 woodpecker marks it as passed, else it assumes it failed
       - trivy fs --exit-code 1 --skip-dirs doc/ --severity MEDIUM,HIGH,CRITICAL .
-
+    when:
+      - event: [ push ]
+        path:
+          exclude: ['doc/**', 'mkdocs.yml']
+        branch: [ v2 ]
+      - event: [ tag, release, manual ]
