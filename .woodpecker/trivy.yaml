@@ -1,0 +1,9 @@
+# -- Plugin to find vulnerabilities, misconfigurations, secrets, SBOM and more.
+# ref: https://woodpecker-ci.org/plugins/Trivy
+pipeline:
+  trivy:
+    image: aquasec/trivy:latest
+    commands:
+      # use any trivy command, if exit code is 0 woodpecker marks it as passed, else it assumes it failed
+      - trivy fs --exit-code 1 --skip-dirs doc/ --severity MEDIUM,HIGH,CRITICAL .
+
