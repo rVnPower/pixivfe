@@ -49,7 +49,7 @@ func _API_GET(context context.Context, url string, token string) (SimpleHTTPResp
 	if token == "" {
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",
-			Value: config.GetRandomDefaultToken(),
+			Value: config.GlobalConfig.GetToken(),
 		})
 	} else {
 		req.AddCookie(&http.Cookie{

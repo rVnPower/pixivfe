@@ -102,8 +102,3 @@ func (s *ServerConfig) getRoundRobinToken() string {
 	index := atomic.AddUint32(&s.tokenIndex, 1) % uint32(len(s.Token))
 	return s.Token[index]
 }
-
-// Kept for backward compatibility, but it now uses the configured load balancing method
-func GetRandomDefaultToken() string {
-	return GlobalConfig.GetToken()
-}
