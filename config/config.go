@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/url"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/sethvargo/go-envconfig"
@@ -26,7 +27,8 @@ type ServerConfig struct {
 	Port       string `env:"PIXIVFE_PORT"`
 	UnixSocket string `env:"PIXIVFE_UNIXSOCKET"`
 
-	Token          []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','    maybe add some testing?
+	Token          []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
+	LoadBalancing  string   `env:"PIXIVFE_LOAD_BALANCING,overwrite"` // 'round-robin' or 'random' 
 	InDevelopment  bool     `env:"PIXIVFE_DEV"`
 	UserAgent      string   `env:"PIXIVFE_USERAGENT,overwrite"`
 	AcceptLanguage string   `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
@@ -36,6 +38,8 @@ type ServerConfig struct {
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
 
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
+
+	tokenIndex uint32 // Used for round-robin token selection
 }
 
 func (s *ServerConfig) LoadConfig() error {
@@ -49,6 +53,7 @@ func (s *ServerConfig) LoadConfig() error {
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
 	s.ProxyCheckInterval = 8 * time.Hour
+	s.LoadBalancing = "round-robin"
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
@@ -75,12 +80,30 @@ func (s *ServerConfig) LoadConfig() error {
 	}
 	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
+	log.Printf("Load balancing method: %s\n", s.LoadBalancing)
 
 	return nil
 }
 
-func GetRandomDefaultToken() string {
-	defaultToken := GlobalConfig.Token[rand.Intn(len(GlobalConfig.Token))]
+func (s *ServerConfig) GetToken() string {
+	switch s.LoadBalancing {
+	case "round-robin":
+		return s.getRoundRobinToken()
+	default:
+		return s.getRandomToken()
+	}
+}
 
-	return defaultToken
+func (s *ServerConfig) getRandomToken() string {
+	return s.Token[rand.Intn(len(s.Token))]
+}
+
+func (s *ServerConfig) getRoundRobinToken() string {
+	index := atomic.AddUint32(&s.tokenIndex, 1) % uint32(len(s.Token))
+	return s.Token[index]
+}
+
+// Kept for backward compatibility, but it now uses the configured load balancing method
+func GetRandomDefaultToken() string {
+	return GlobalConfig.GetToken()
 }
