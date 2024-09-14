@@ -21,12 +21,10 @@
     </div>
   </div>
 
-  <div class="artwork-container-scroll">
+  <div class="tag-list">
     {{- range .Data.RelatedTags }}
     <a href="/tags/{{ . }}">
-      <div class="tag-container">
-        <div class="main">#{{ . }}</div>
-      </div>
+      #{{ . }}
     </a>
     {{- end }}
   </div>
@@ -75,21 +73,21 @@
       <h2>Advanced settings</h2>
     </summary>
     {{- URL := unfinishedQuery(.QueriesC, "") }}
-    <form action="{{ URL }}&name={{ .QueriesC.Query["Name"] }}" method="post">
+    <form action="{{ URL }}&name={{ .QueriesC.Query[" Name"] }}" method="post">
       <label for="wlt">Minimum image width</label>
-      <input type="text" name="wlt" value="{{ .QueriesC.Query["Wlt"] }}" />
+      <input type="text" name="wlt" value="{{ .QueriesC.Query[" Wlt"] }}" />
       <label for="wgt">Maximum image width</label>
-      <input type="text" name="wgt" value="{{ .QueriesC.Query["Wgt"] }}" />
+      <input type="text" name="wgt" value="{{ .QueriesC.Query[" Wgt"] }}" />
       <label for="hlt">Minimum image height</label>
-      <input type="text" name="hlt" value="{{ .QueriesC.Query["Hlt"] }}" />
+      <input type="text" name="hlt" value="{{ .QueriesC.Query[" Hlt"] }}" />
       <label for="hgt">Maximum image height</label>
-      <input type="text" name="hgt" value="{{ .QueriesC.Query["Hgt"] }}" />
+      <input type="text" name="hgt" value="{{ .QueriesC.Query[" Hgt"] }}" />
       <label for="scd">Posted after (format: yyyy-mm-dd)</label>
-      <input type="text" name="scd" value="{{ .QueriesC.Query["Scd"] }}" />
+      <input type="text" name="scd" value="{{ .QueriesC.Query[" Scd"] }}" />
       <label for="ecd">Posted before (format: yyyy-mm-dd)</label>
-      <input type="text" name="ecd" value="{{ .QueriesC.Query["Ecd"] }}" />
+      <input type="text" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
       <label for="tool">Tool</label>
-      <input type="text" name="tool" value="{{ .QueriesC.Query["Tool"] }}" />
+      <input type="text" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
       <input type="submit" value="Set" />
     </form>
   </details>
