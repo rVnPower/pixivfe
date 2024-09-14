@@ -96,6 +96,20 @@ The interval in minutes between proxy checks. Defaults to 8 hours if not set.
 Please specify this value in Go's `time.Duration` notation, e.g. `2h3m5s`.
 You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
 
+### `PIXIVFE_TOKEN_LOAD_BALANCING`
+
+**Required**: No
+
+**Default:** `round-robin`
+
+Specifies the method for selecting tokens when multiple tokens are provided in `PIXIVFE_TOKEN`. 
+
+Valid options:
+- `round-robin`: Tokens are used in a circular order.
+- `random`: A random token is selected for each request.
+
+This option is useful when you have multiple Pixiv accounts and want to distribute the load across them.
+
 ### `PIXIVFE_DEV`
 
 **Required**: No
