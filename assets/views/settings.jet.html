@@ -119,6 +119,19 @@
         <br />
         <input type="submit" value="Submit" />
       </form>
+      <h2>Filter artworks</h2>
+      <p>When submitted, unchecked options will be disabled and vice-versa.</p>
+      <form action="/settings/filter" method="post">
+        {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
+        {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
+        <input id="filter-r18" type="checkbox" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }} />
+        <label for="filter-r18">Hide R18</label>
+        <br />
+        <input id="filter-r18g" type="checkbox" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }} />
+        <label for="filter-r18g">Hide R18G</label>
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
     </div>
     <!--  -->
     <input id="novels" class="hidden" type="radio" name="tabsSG">

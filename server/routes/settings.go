@@ -99,6 +99,16 @@ func setArtworkPreview(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func setFilter(w http.ResponseWriter, r *http.Request) error {
+	r18 := r.FormValue("filter-r18")
+	r18g := r.FormValue("filter-r18g")
+
+	session.SetCookie(w, session.Cookie_HideArtR18, r18)
+	session.SetCookie(w, session.Cookie_HideArtR18G, r18g)
+
+	return nil
+}
+
 func setLogout(w http.ResponseWriter, _ *http.Request) error {
 	session.ClearCookie(w, session.Cookie_Token)
 	session.ClearCookie(w, session.Cookie_CSRF)
@@ -169,6 +179,8 @@ func SettingsPost(w http.ResponseWriter, r *http.Request) error {
 		err = setNovelViewMode(w, r)
 	case "artworkPreview":
 		err = setArtworkPreview(w, r)
+	case "filter":
+		err = setFilter(w, r)
 	case "set-cookie":
 		err = setCookie(w, r)
 	case "raw":
