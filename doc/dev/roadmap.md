@@ -13,11 +13,12 @@ Want to recommend a feature? Create an issue [here](https://codeberg.org/VnPower
 
 | Features                                                  | Release |
 |-----------------------------------------------------------|---------|
+| AI/R15/R18/R18-G filtering                                | 2.9 🔁  |
+| Pixivision (articles, tags, categories, RSS)              | 2.9 🔁  |
+| Full landing page (recommended users, trending tags, ...) | 2.9 🔁  |
 | Manga series                                              | N/A     |
 | Novel series                                              | N/A     |
 | Complete novel content support (furigana, pages, ...)     | N/A     |
-| Pixivision (articles, tags, categories, RSS)              | N/A     |
-| Full landing page (recommended users, trending tags, ...) | N/A     |
 | Pixiv Sketch                                              | N/A     |
 | Pixiv Idea (pixiv.net/idea)                               | N/A     |
 | Pixiv Request (pixiv.net/request)                         | N/A     |
@@ -30,7 +31,6 @@ Want to recommend a feature? Create an issue [here](https://codeberg.org/VnPower
 | Dynamic image gallery                                     | N/A     |
 | CSS reorganization / Theming                              | N/A     |
 | Git version display                                       | N/A     |
-| AI/R15/R18/R18-G filtering                                | N/A     |
 
 ## To implement
 
