@@ -1,5 +1,6 @@
 variables:
-  - &alpine_image 'alpine:3.19'
+  - &git_image 'woodpeckerci/plugin-git:latest'
+  - &mkdocs_image 'woodpeckerci/plugin-mkdocs:latest'
   - path: &docs_path
       include: ['doc/**', 'mkdocs.yml']
 
@@ -11,14 +12,14 @@ when:
 
 clone:
   - name: git
-    image: woodpeckerci/plugin-git
+    image: *git_image
     settings:
       partial: false
       depth: 0
 
 steps:
   generate-docs:
-    image: woodpeckerci/plugin-mkdocs:latest
+    image: *mkdocs_image
     settings:
       verbose: true
       pip_install_file: doc/requirements.txt
