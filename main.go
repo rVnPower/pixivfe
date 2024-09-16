@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
@@ -10,7 +9,6 @@ import (
 	"os/exec"
 	"runtime"
 	"syscall"
-	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
@@ -28,9 +26,10 @@ func main() {
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
 	// Initialize and start the proxy checker
-	ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
-	defer cancel()
-	proxy_checker.InitializeProxyChecker(ctx_timeout)
+	// VnPower: This part needs more explanation
+	// ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+	defer proxy_checker.StopProxyChecker()
+	proxy_checker.InitializeProxyChecker()
 	handlers.InitializeRateLimiter()
 
 	router := handlers.DefineRoutes()
