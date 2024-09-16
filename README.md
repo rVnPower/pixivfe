@@ -49,30 +49,6 @@ make build
 PIXIVFE_DEV=1 <other_environment_variables> make run
 ```
 
-### Docker Build Environment
-
-We provide a `Dockerfile.build` to create a reproducible build environment. This Docker image is designed to run the project's Makefile consistently across different environments.
-
-#### Usage
-
-1. Build the Docker image:
-
-   ```bash 
-   docker build -t pixivfe-build -f Dockerfile.build .
-   ```
-
-2. Run the container to execute the default 'make all' target:
-
-   ```bash
-   docker run --rm -it -e PIXIVFE_PORT=8282 -e PIXIVFE_TOKEN=changeme -p 127.0.0.1:8282:8282 pixivfe-build  
-   ```
-
-3. Run the container with a specific make target, such as 'make run':
-
-   ```bash
-   docker run --rm -it -e PIXIVFE_PORT=8282 -e PIXIVFE_TOKEN=changeme -p 127.0.0.1:8282:8282 pixivfe-build run
-   ```
-
 ## Using the Makefile
 
 The project includes a Makefile to simplify common development tasks. Run `make help` to view the available commands.
