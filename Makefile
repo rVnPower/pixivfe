@@ -20,7 +20,6 @@ fmt:
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@go mod download
-	@go get codeberg.org/vnpower/pixivfe/v2/...
 	@CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
 
 test:
