@@ -1,4 +1,5 @@
 variables:
+  - &alpine_image 'alpine:3.19'
   - &git_image 'woodpeckerci/plugin-git:latest'
   - &mkdocs_image 'woodpeckerci/plugin-mkdocs:latest'
   - path: &docs_path
