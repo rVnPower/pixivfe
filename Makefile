@@ -34,7 +34,8 @@ clean:
 # Additional target to install test script as pre-commit hook
 install-pre-commit:
 	@echo "Installing pre-commit hook..."
-	cp test.sh .git/hooks/pre-commit
+	echo '#!/bin/sh' > .git/hooks/pre-commit
+	echo 'go test ./server/template' >> .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
 
 # Help target
@@ -46,5 +47,5 @@ help:
 	@echo "  test               - Run tests"
 	@echo "  run                - Build and run the binary"
 	@echo "  clean              - Remove the binary"
-	@echo "  install-pre-commit - Install test script as pre-commit hook"
+	@echo "  install-pre-commit - Install testing pre-commit hook"
 	@echo "  help               - Show this help message"
