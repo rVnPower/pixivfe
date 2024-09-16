@@ -15,7 +15,7 @@ all: fmt build test
 
 fmt:
 	@echo "Formatting Go code..."
-	@go fmt ./$(shell find . -type d)
+	@go fmt ./...
 
 build:
 	@echo "Building $(BINARY_NAME)..."
