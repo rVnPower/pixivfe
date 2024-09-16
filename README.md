@@ -28,6 +28,7 @@ Prerequisites:
 
 - [Go](https://go.dev/doc/install) (to build PixivFE from source)
 - [Sass](https://github.com/sass/dart-sass/) (will be run by PixivFE in development mode)
+- [Make](https://www.gnu.org/software/make/) (to use the Makefile)
 
 To install Dart Sass, you can choose any of the following methods.
 
@@ -41,13 +42,31 @@ Then, run the project:
 # Clone the PixivFE repository
 git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
 
-# Run in PixivFE in development mode (styles and templates reload automatically)
-PIXIVFE_DEV=1 <other_environment_variables> go run .
+# Build the project
+make build
+
+# Run PixivFE in development mode (styles and templates reload automatically)
+PIXIVFE_DEV=1 <other_environment_variables> make run
 ```
+
+## Using the Makefile
+
+The project includes a Makefile to simplify common development tasks. Here are the available commands:
+
+- `make all`: Run fmt, build, and test
+- `make fmt`: Format Go code
+- `make build`: Build the binary
+- `make test`: Run tests
+- `make run`: Build and run the binary
+- `make clean`: Remove the built binary
+- `make install-pre-commit`: Install test script as pre-commit hook
+- `make help`: Show all available targets and their descriptions
+
+You can use these commands to streamline your development workflow.
 
 ## Hosting PixivFE
 
-You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, modify the `run.sh` file, and profit!
+You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, and use the Makefile to build and run the project.
 I recommend self-hosting your own instance for personal use, instead of relying entirely on official instances.
 
 To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe-docs.pages.dev/hosting-pixivfe/).
