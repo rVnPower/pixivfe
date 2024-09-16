@@ -2,8 +2,7 @@ services:
   pixivfe:
     container_name: pixivfe
     hostname: pixivfe
-    # image: vnpower/pixivfe:latest
-    # Uncomment to build image from local repository
+    image: vnpower/pixivfe:latest
     build:
       context: .
       dockerfile: Dockerfile
