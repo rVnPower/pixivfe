@@ -62,6 +62,43 @@ To test if R-18G content is now visible:
 2. Search for any appearances of "R-18G" in the results.
 3. If you disable the R-18G option and search again, you shouldn't see any R-18G artworks in the results.
 
+## Using multiple tokens
+
+!!! warning
+    If you maintain a public PixivFE instance, it is highly recommended to use multiple tokens (from different Pixiv accounts) due to Pixiv's server load restrictions and potential account suspension risks.
+
+Pixiv enforces limitations on server load to prevent excessive usage, and using a single account for a high volume of requests can lead to account suspension or termination.
+
+To mitigate this risk:
+
+1. Create multiple Pixiv accounts, each with its own `PIXIVFE_TOKEN`.
+2. Specify multiple tokens in the `PIXIVFE_TOKEN` environment variable, separating them with commas.
+3. Use the `PIXIVFE_TOKEN_LOAD_BALANCING` environment variable to set the load balancing method for token usage.
+
+Spreading requests across multiple accounts reduces the load on any single account, decreasing the risk of triggering Pixiv's anti-abuse measures and allowing for a higher overall request volume.
+
+If one account is temporarily restricted or suspended, your instance can continue using the other accounts.
+
+### Implementation
+
+To use multiple tokens:
+
+1. Set the `PIXIVFE_TOKEN` environment variable with multiple tokens, separated by commas:
+   ```
+   PIXIVFE_TOKEN=token1,token2,token3
+   ```
+
+2. Optionally, set the `PIXIVFE_TOKEN_LOAD_BALANCING` environment variable to choose the load balancing method (defaults to `round-robin`):
+   ```
+   PIXIVFE_TOKEN_LOAD_BALANCING=round-robin
+   ```
+   or
+   ```
+   PIXIVFE_TOKEN_LOAD_BALANCING=random
+   ```
+
+For detailed information on the `PIXIVFE_TOKEN_LOAD_BALANCING` option and its valid values, please refer to the [environment variables documentation](environment-variables.md#pixivfe_token_load_balancing).
+
 ## Additional notes
 
 - The token format resembles: `123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP`
