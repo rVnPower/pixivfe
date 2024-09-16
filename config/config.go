@@ -65,6 +65,12 @@ func (s *ServerConfig) LoadConfig() error {
 		return errors.New("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
 	}
 
+	// a check for tokens
+	if len(s.Token) < 1 {
+		log.Fatalln("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details.")
+		return errors.New("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details.")
+	}
+
 	{ // validate proxy server
 		proxyUrl, err := url.Parse(s.ProxyServer_staging)
 		if err != nil {
