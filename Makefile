@@ -9,7 +9,7 @@ export PIXIVFE_TOKEN=token_123456
 export PIXIVFE_IMAGEPROXY=pximg.cocomi.cf
 export PIXIVFE_PORT=8282
 
-.PHONY: all fmt build test run clean
+.PHONY: all fmt build test run clean install-pre-commit help
 
 all: fmt build test
 
