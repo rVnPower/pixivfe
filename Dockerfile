@@ -1,5 +1,5 @@
-# Use the official Alpine-based golang image as a parent image
-FROM  --platform=$BUILDPLATFORM golang:1.23.1-alpine3.20 AS builder
+# Use the official golang image as a parent image
+FROM --platform=$BUILDPLATFORM golang:1.23.1 AS builder
 
 WORKDIR /app
 
@@ -7,8 +7,9 @@ WORKDIR /app
 COPY . .
 
 # Build the application
-RUN go mod download && \
-    CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -a -o pixivfe
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    --mount=type=cache,target=/go/pkg \
+    make build
 
 # Stage for creating the non-privileged user
 FROM alpine:3.20 AS user-stage
