@@ -40,11 +40,11 @@ install-pre-commit:
 # Help target
 help:
 	@echo "Available targets:"
-	@echo "  all              - Run fmt, build, and test"
-	@echo "  fmt              - Format Go code"
-	@echo "  build            - Build the binary"
-	@echo "  test             - Run tests"
-	@echo "  run              - Build and run the binary"
-	@echo "  clean            - Remove the binary"
+	@echo "  all                - Run fmt, build, and test"
+	@echo "  fmt                - Format Go code"
+	@echo "  build              - Build the binary"
+	@echo "  test               - Run tests"
+	@echo "  run                - Build and run the binary"
+	@echo "  clean              - Remove the binary"
 	@echo "  install-pre-commit - Install test script as pre-commit hook"
-	@echo "  help             - Show this help message"
+	@echo "  help               - Show this help message"
