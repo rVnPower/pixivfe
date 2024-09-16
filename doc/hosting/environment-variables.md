@@ -4,8 +4,6 @@ PixivFE's behavior is controlled by environment variables. Currently, you can on
 
 An example configuration is provided in [`.env.example`](https://codeberg.org/VnPower/PixivFE/src/branch/v2/.env.example).
 
-This document is based on [`doc/Environment Variables.go`](https://codeberg.org/VnPower/PixivFE/src/branch/v2/doc/Environment%20Variables.go).
-
 !!! tip
     To quickly set up PixivFE, you need to define two required environment variables:
 
@@ -105,6 +103,7 @@ You can disable this by setting the value to 0. Then, proxies will only be check
 Specifies the method for selecting tokens when multiple tokens are provided in `PIXIVFE_TOKEN`. 
 
 Valid options:
+
 - `round-robin`: Tokens are used in a circular order.
 - `random`: A random token is selected for each request.
 
