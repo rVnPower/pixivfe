@@ -1,5 +1,5 @@
 # Use the official Alpine-based golang image as a parent image
-FROM golang:1.23.1-alpine3.20 AS builder
+FROM  --platform=$BUILDPLATFORM golang:1.23.1-alpine3.20 AS builder
 
 WORKDIR /app
 

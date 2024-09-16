@@ -2,6 +2,8 @@
 
 # Variables
 BINARY_NAME=pixivfe
+TARGETOS ?= $(shell go env GOOS)
+TARGETARCH ?= $(shell go env GOARCH)
 
 # Include environment variables from .env if it exists
 -include .env
@@ -17,7 +19,7 @@ fmt:
 build:
 	@echo "Building $(BINARY_NAME)..."
 	go mod download
-	CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
+	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
 
 test:
 	@echo "Running tests..."
