@@ -2,7 +2,6 @@
 
 # Variables
 BINARY_NAME=pixivfe
-GOFILES=$(shell find . -type f -name '*.go')
 
 # Include environment variables from .env if it exists
 -include .env
