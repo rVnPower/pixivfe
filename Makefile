@@ -12,30 +12,30 @@ all: fmt build test
 
 fmt:
 	@echo "Formatting Go code..."
-	@go fmt ./...
+	go fmt ./...
 
 build:
 	@echo "Building $(BINARY_NAME)..."
-	@go mod download
-	@CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
+	go mod download
+	CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
 
 test:
 	@echo "Running tests..."
-	@go test ./server/template
+	go test ./server/template
 
 run: build
 	@echo "Running $(BINARY_NAME)..."
-	@./$(BINARY_NAME)
+	./$(BINARY_NAME)
 
 clean:
 	@echo "Cleaning up..."
-	@rm -f $(BINARY_NAME)
+	rm -f $(BINARY_NAME)
 
 # Additional target to install test script as pre-commit hook
 install-pre-commit:
 	@echo "Installing pre-commit hook..."
-	@cp test.sh .git/hooks/pre-commit
-	@chmod +x .git/hooks/pre-commit
+	cp test.sh .git/hooks/pre-commit
+	chmod +x .git/hooks/pre-commit
 
 # Help target
 help:
