@@ -4,8 +4,8 @@
 BINARY_NAME=pixivfe
 GOFILES=$(shell find . -type f -name '*.go')
 
-# Include environment variables from .env
-include .env
+# Include environment variables from .env if it exists
+-include .env
 
 .PHONY: all fmt build test run clean install-pre-commit help
 
