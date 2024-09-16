@@ -1,12 +1,18 @@
 variables:
   - &buildx_plugin 'woodpeckerci/plugin-docker-buildx:latest'
-
-when:
-  - event: [ tag, release, manual ]
-    branch: [ v2 ]
+  - path: &when_path
+      # web source code
+      - 'assets/**'
+      # go source code
+      - '**/*.go'
+      - 'go.*'
+      # Dockerfile changes
+      - 'Dockerfile'
+      # pipeline config changes
+      - '.woodpecker/docker.yaml'
 
 steps:
-  docker-build-image:
+  release:
     image: *buildx_plugin
     settings:
       dockerfile: Dockerfile
@@ -15,4 +21,22 @@ steps:
         from_secret: DOCKER_USERNAME
       password:
         from_secret: DOCKER_PASSWORD
-      auto_tag: true
+      tag: [latest, '${CI_COMMIT_TAG}']
+    when:
+      - event: [ tag, release ]
+        branch: [ v2 ]
+
+  next:
+    image: *buildx_plugin
+    settings:
+      dockerfile: Dockerfile
+      repo: vnpower/pixivfe
+      username:
+        from_secret: DOCKER_USERNAME
+      password:
+        from_secret: DOCKER_PASSWORD
+      tag: [next, 'next-${CI_COMMIT_SHA:0:10}']
+    when:
+      - event: [ push ]
+        branch: [ v2 ]
+        path: *when_path
