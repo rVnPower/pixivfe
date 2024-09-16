@@ -10,7 +10,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"codeberg.org/vnpower/pixivfe/v2/proxy_checker"
+	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
