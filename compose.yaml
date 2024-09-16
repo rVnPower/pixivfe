@@ -8,9 +8,16 @@ services:
       dockerfile: Dockerfile
     init: true
     ports:
-      # Specify `8282:8282` only if you are not using a reverse proxy
-      - 127.0.0.1:8282:8282
-    env_file: .env
+      # Only specify 0.0.0.0 for host_ip if you are **not** using a reverse proxy
+      - name: http
+        target: 8282
+        host_ip: 127.0.0.1
+        published: 8282
+        protocol: tcp
+        app_protocol: http
+    env_file:
+      - path: .env
+        required: true
     restart: unless-stopped
     cap_drop:
       - ALL
