@@ -86,20 +86,28 @@ This setup uses [Caddy](https://caddyserver.com/) as the reverse proxy. Caddy is
 
 ### 1. Setting up the repository
 
-Clone the PixivFE repository, navigate to the directory, and install the dependencies:
+Clone the PixivFE repository and navigate to the directory:
 
 ```bash
 git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
-go install
 ```
 
 ### 2. Configure environment variables
 
 Copy `.env.example` to `.env` and configure the variables as needed. Refer to the [Environment variables](environment-variables.md) page for more information.
 
-### 3. Deploying PixivFE
+### 3. Building and running PixivFE
 
-Run `env $(cat .env | xargs) go run main.go` to start PixivFE. It will be accessible at `localhost:8282`.
+PixivFE uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction) to simplify the build and run process.
+
+To build and run PixivFE, use the following commands:
+
+```bash
+make build
+make run
+```
+
+This will build the PixivFE binary and start it. It will be accessible at `localhost:8282`.
 
 ### 4. Deploying Caddy
 
@@ -152,7 +160,7 @@ To update PixivFE to the latest version, follow the steps below that are relevan
    docker run -d --name pixivfe -p 8282:8282 --env-file .env vnpower/pixivfe:latest
    ```
 
-## Binary
+### Binary
 
 1. Pull the latest changes from the repository:
    ```bash
@@ -161,8 +169,8 @@ To update PixivFE to the latest version, follow the steps below that are relevan
 
 2. Rebuild and start PixivFE:
    ```bash
-   go install
-   env $(cat .env | xargs) go run main.go
+   make build
+   make run
    ```
 
 ## Acknowledgements
