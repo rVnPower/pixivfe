@@ -129,9 +129,9 @@ Run `caddy run` to start Caddy.
 
 To update PixivFE to the latest version, follow the steps below that are relevant to your deployment method.
 
-## Docker
+### Docker
 
-### Docker Compose
+#### Docker Compose
 
 1. Pull the latest Docker image and repository changes:
    ```bash
@@ -143,7 +143,7 @@ To update PixivFE to the latest version, follow the steps below that are relevan
    docker compose up -d
    ```
 
-### Docker CLI
+#### Docker CLI
 
 1. Pull the latest Docker image and repository changes:
    ```bash
