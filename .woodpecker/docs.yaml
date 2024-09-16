@@ -1,5 +1,5 @@
 variables:
-  - &alpine_image 'docker.io/alpine:3.19'
+  - &alpine_image 'alpine:3.19'
   - path: &docs_path
       include: ['doc/**', 'mkdocs.yml']
 
@@ -11,20 +11,6 @@ clone:
       depth: 0
 
 steps:
-  docker-build-image:
-    image: woodpeckerci/plugin-docker-buildx:latest
-    settings:
-      dockerfile: Dockerfile
-      repo: vnpower/pixivfe
-      username:
-        from_secret: DOCKER_USERNAME
-      password:
-        from_secret: DOCKER_PASSWORD
-      auto_tag: true
-    when:
-      branch: [ v2 ]
-      event: [ tag, release, manual ]
-
   generate-docs:
     image: woodpeckerci/plugin-mkdocs:latest
     settings:
