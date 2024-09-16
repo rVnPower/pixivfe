@@ -1,0 +1,12 @@
+# Git-related files
+.git
+.gitignore
+
+# Docker-related files
+.dockerignore
+Dockerfile
+compose.yaml
+
+# Documentation directory
+doc
+
