@@ -34,7 +34,10 @@ steps:
     settings:
       dockerfile: Dockerfile
       repo: vnpower/pixivfe
-      logins: *publish_logins
+      username:
+        from_secret: DOCKER_USERNAME
+      password:
+        from_secret: DOCKER_PASSWORD
       tag: [next, 'next-${CI_COMMIT_SHA:0:10}']
     when:
       - event: [ push ]
