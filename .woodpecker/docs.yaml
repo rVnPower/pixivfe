@@ -3,6 +3,12 @@ variables:
   - path: &docs_path
       include: ['doc/**', 'mkdocs.yml']
 
+when:
+  - event: push
+    path: *docs_path
+    branch: [ v2 ]
+  - event: [ tag, release, manual ]
+
 clone:
   - name: git
     image: woodpeckerci/plugin-git
@@ -16,11 +22,6 @@ steps:
     settings:
       verbose: true
       pip_install_file: doc/requirements.txt
-    when:
-      - event: push
-        path: *docs_path
-        branch: [ v2 ]
-      - event: [ tag, release, manual ]
 
   deploy-docs-cloudflare:
     image: *alpine_image
@@ -32,10 +33,5 @@ steps:
     commands:
       - apk add npm --repository https://dl-cdn.alpinelinux.org/alpine/edge/community/
       - npx wrangler pages deploy site --project-name=pixivfe-docs
-    when:
-      - event: push
-        path: *docs_path
-        branch: [ v2 ]
-      - event: [ tag, release, manual ]
     depends_on:
       - generate-docs
