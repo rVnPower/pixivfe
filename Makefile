@@ -4,10 +4,8 @@
 BINARY_NAME=pixivfe
 GOFILES=$(shell find . -type f -name '*.go')
 
-# Environment variables (customize as needed)
-export PIXIVFE_TOKEN=token_123456
-export PIXIVFE_IMAGEPROXY=pximg.cocomi.cf
-export PIXIVFE_PORT=8282
+# Include environment variables from .env
+include .env
 
 .PHONY: all fmt build test run clean install-pre-commit help
 
@@ -28,7 +26,7 @@ test:
 
 run: build
 	@echo "Running $(BINARY_NAME)..."
-	./$(BINARY_NAME)
+	@./$(BINARY_NAME)
 
 clean:
 	@echo "Cleaning up..."
