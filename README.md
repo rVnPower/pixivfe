@@ -51,18 +51,7 @@ PIXIVFE_DEV=1 <other_environment_variables> make run
 
 ## Using the Makefile
 
-The project includes a Makefile to simplify common development tasks. Here are the available commands:
-
-- `make all`: Run fmt, build, and test
-- `make fmt`: Format Go code
-- `make build`: Build the binary
-- `make test`: Run tests
-- `make run`: Build and run the binary
-- `make clean`: Remove the built binary
-- `make install-pre-commit`: Install test script as pre-commit hook
-- `make help`: Show all available targets and their descriptions
-
-You can use these commands to streamline your development workflow.
+The project includes a Makefile to simplify common development tasks. Run `make help` to view the available commands.
 
 ## Hosting PixivFE
 
