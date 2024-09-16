@@ -1,6 +1,6 @@
 variables:
   - &buildx_plugin 'woodpeckerci/plugin-docker-buildx:latest'
-  - &platforms 'linux/arm/v7,linux/arm64/v8,linux/amd64'
+  - &platforms 'linux/arm64/v8,linux/amd64' # linux/arm/v7 causes weird buildkit_qemu_emulator issues
   - publish_logins: &publish_logins # Default DockerHub login
       - registry: https://index.docker.io/v1/
         username:
