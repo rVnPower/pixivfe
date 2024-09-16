@@ -49,6 +49,19 @@ Locate the cookie with the key `PHPSESSID`. The value next to this key is your a
 
 Copy the token value obtained in the previous step. If deploying with Docker, set it as the `PIXIVFE_TOKEN` environment variable in your configuration.
 
+## 5. Enabling R-18G Artworks (Optional)
+
+For PixivFE to show R-18G artworks, the account used by PixivFE has to enable the "Show ero-guro content (R-18G)" option on Pixiv. Here's how to do it:
+
+1. Go to Pixiv's [display settings page](https://www.pixiv.net/settings/viewing).
+2. Enable the "Show ero-guro content (R-18G)" option.
+
+To test if R-18G content is now visible:
+
+1. Go to this [search endpoint](https://www.pixiv.net/ajax/search/artworks/gore).
+2. Search for any appearances of "R-18G" in the results.
+3. If you disable the R-18G option and search again, you shouldn't see any R-18G artworks in the results.
+
 ## Additional notes
 
 - The token format resembles: `123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP`
