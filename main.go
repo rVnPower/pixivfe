@@ -20,7 +20,10 @@ import (
 )
 
 func main() {
-	config.GlobalConfig.LoadConfig()
+	if err := config.GlobalConfig.LoadConfig(); err != nil {
+		log.Fatalln(err)
+	}
+
 	audit.Init(config.GlobalConfig.InDevelopment)
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
