@@ -160,7 +160,7 @@ To update PixivFE to the latest version, follow the steps below that are relevan
    docker run -d --name pixivfe -p 8282:8282 --env-file .env vnpower/pixivfe:latest
    ```
 
-## Binary
+### Binary
 
 1. Pull the latest changes from the repository:
    ```bash
