@@ -1,5 +1,5 @@
 # Git-related files
-.git
+.git/
 .gitignore
 
 # Docker-related files
@@ -7,6 +7,15 @@
 Dockerfile
 compose.yaml
 
-# Documentation directory
-doc
+# Environment and configuration files
+.env.example
+Pipfile
+staticcheck.conf
+semgrep.yml
+mkdocs.yml
+
+# Documentation files
+LICENSE
+README.md
+doc/
 
