@@ -4,18 +4,52 @@ hide:
   - toc
 ---
 
-This is the documentation for PixivFE, a privacy-respecting alternative front-end for Pixiv that doesn't suck.
+**PixivFE**, a privacy-respecting alternative front-end for Pixiv that doesn't suck.
 
 [Use PixivFE](instance-list.md){: .md-button .md-button--primary }
 [Host PixivFE](hosting/index.md){: .md-button }
 
 ## Features
 
-- Privacy-oriented: Server-side handling of Pixiv interactions
-- Lightweight interface
-- Open source codebase
-- No account required for browsing
-- Minimal JavaScript usage
+<div class="grid cards" markdown>
+
+-   :material-eye-off:{ .lg .middle } __Privacy-oriented__
+
+    ---
+
+    Server-side handling of Pixiv interactions
+
+-   :material-feather:{ .lg .middle } __Lightweight interface__
+
+    ---
+
+    Clean and efficient user experience
+
+-   :material-code-tags:{ .lg .middle } __Open source codebase__
+
+    ---
+
+    Transparent and community-driven development
+
+-   :material-account-off:{ .lg .middle } __No account required__
+
+    ---
+
+    Browse content without signing up
+
+-   :material-lightning-bolt:{ .lg .middle } __Minimal JavaScript usage__
+
+    ---
+
+    Faster loading and improved privacy
+
+-   :material-language-go:{ .lg .middle } __Written in Go__
+
+    ---
+
+    Fast, efficient, and modern backend
+
+</div>
 
 ## Support
 
