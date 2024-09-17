@@ -4,7 +4,7 @@ This guide covers how to obtain the `PIXIVFE_TOKEN` cookie from your Pixiv accou
 
 !!! warning
     You should create an entirely new account for this to avoid account theft. And also, PixivFE will get contents **from your account.** You might not want people to know what kind of illustrations you like :P
-    
+
     For now, the only page that may contain contents that is relevant to you is the discovery page. Be careful if you are using your main account.
 
 ## 1. Log in to Pixiv
@@ -101,7 +101,7 @@ For detailed information on the `PIXIVFE_TOKEN_LOAD_BALANCING` option and its va
 
 ## Additional notes
 
-- The token format resembles: `123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP`
+- The token looks like this: `123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP`
     - The underscore separates your **member ID (left side)** from a **random string (right side)**
 - Logging out of Pixiv will reset the token. Always verify your token is current before reporting issues.
-- Some Chrome-related content was sourced from [Nandaka's guide](https://github.com/Nandaka/PixivUtil2/wiki#pixiv-login-using-cookie).
+- Guides for Chrome was taken from [Nandaka's guide on logging in with cookies](https://github.com/Nandaka/PixivUtil2/wiki#pixiv-login-using-cookie).

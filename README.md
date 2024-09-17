@@ -1,6 +1,6 @@
 # PixivFE
 
-A privacy-respecting alternative front-end for Pixiv that doesn't suck.
+A open source alternative frontend for Pixiv.
 
 <p>
 <a href="https://codeberg.org/vnpower/pixivfe">
@@ -84,7 +84,7 @@ For more information on instance uptime, see the [PixivFE instance status page](
 
 This information is duplicated at https://pixivfe-docs.pages.dev/instance-list/.
 
-## Hosting Image Proxy Server
+### Hosting Image Proxy Server
 
 PixivFE can work with or without an external image proxy server. Here is the [list of public image proxies](https://pixivfe-docs.pages.dev/public-image-proxies/).
 See [hosting a Pixiv image proxy](https://pixivfe-docs.pages.dev/hosting-image-proxy-server/) if you want to host one yourself.

@@ -14,6 +14,7 @@ func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	for i := range data {
+		println(data[i].Thumbnail)
 		data[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data[i].Thumbnail)
 	}
 

@@ -100,7 +100,7 @@ You can disable this by setting the value to 0. Then, proxies will only be check
 
 **Default:** `round-robin`
 
-Specifies the method for selecting tokens when multiple tokens are provided in `PIXIVFE_TOKEN`. 
+Specifies the method for selecting tokens when multiple tokens are provided in `PIXIVFE_TOKEN`.
 
 Valid options:
 
@@ -113,4 +113,4 @@ This option is useful when you have multiple Pixiv accounts and want to distribu
 
 **Required**: No
 
-Set to any value to enable development mode, in which the server will live-reload HTML templates and disable caching, e.g., `PIXIVFE_DEV=true`.
+Set to any value to enable development mode, in which the server will live-reload HTML templates + SCSS files and disable caching, e.g., `PIXIVFE_DEV=true`.
