@@ -8,7 +8,7 @@ A privacy-respecting alternative front-end for Pixiv that doesn't suck.
 </a>
 </p>
 
-![CI badge](https://ci.codeberg.org/api/badges/12556/status.svg)
+[![CI badge](https://ci.codeberg.org/api/badges/12556/status.svg)](https://ci.codeberg.org/repos/12556)
 [![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
 
 Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:eientei.org) on Matrix! You can also see the [Known quirks](https://pixivfe-docs.pages.dev/known-quirks/) page to check if your issue has a known solution.
