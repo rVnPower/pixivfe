@@ -19,6 +19,7 @@ nav:
     - "Coding tips": "dev/coding-tips.md"
     - "Design flaws": "dev/design-flaws.md"
     - "Feature ideas": "dev/feature-ideas.md"
+    - "Guidelines": "dev/guidelines.md"
     - "Helpful resources": "dev/helpful-resources.md"
     - "Roadmap": "dev/roadmap.md"
     - "Testing": "dev/testing.md"

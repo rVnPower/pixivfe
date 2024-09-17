@@ -1,6 +1,8 @@
+# Guidelines
+
 This file contains guidelines for code development.
 
-# File structure
+## Repository structure
 
 - `assets/`: Static files (images, CSS, JS) and site templates.
 - `config/`: Handle configurations for the server.

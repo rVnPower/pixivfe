@@ -19,11 +19,13 @@ The developer documentation is comprised of the following files:
 
 4. [Framework Migration](framework-migration.md): Documentation of the migration from gofiber to net/http. This migration was completed in [release v2.8](https://codeberg.org/VnPower/PixivFE/src/tag/v2.8) (commit [1ac6f40b57](https://codeberg.org/VnPower/PixivFE/src/commit/1ac6f40b57608b1576d9e812698e95958c91c626)).
 
-5. [Helpful Resources](helpful-resources.md): External links to materials and resources that can aid in PixivFE development, including other Pixiv-related projects and tools.
+5. [Guidelines](guidelines.md): Guidelines for code development, including the repository file structure.
 
-6. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
+6. [Helpful Resources](helpful-resources.md): External links to materials and resources that can aid in PixivFE development, including other Pixiv-related projects and tools.
 
-7. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
+7. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
+
+8. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
 
 ## Features in Development
 
