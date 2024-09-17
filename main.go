@@ -11,9 +11,9 @@ import (
 	"syscall"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/handlers"
+	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	// Initialize and start the proxy checker
 	defer proxy_checker.StopProxyChecker()
 	firstCheckDone := proxy_checker.InitializeProxyChecker()
-	
+
 	// Wait for the first proxy check to complete
 	log.Println("Waiting for initial proxy check to complete...")
 	<-firstCheckDone

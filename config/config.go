@@ -27,8 +27,8 @@ type ServerConfig struct {
 	Port       string `env:"PIXIVFE_PORT"`
 	UnixSocket string `env:"PIXIVFE_UNIXSOCKET"`
 
-	Token          []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
-	LoadBalancing  string   `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"` // 'round-robin' or 'random' 
+	Token          []string `env:"PIXIVFE_TOKEN,required"`                 // may be multiple tokens. delimiter is ','
+	LoadBalancing  string   `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"` // 'round-robin' or 'random'
 	InDevelopment  bool     `env:"PIXIVFE_DEV"`
 	UserAgent      string   `env:"PIXIVFE_USERAGENT,overwrite"`
 	AcceptLanguage string   `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
