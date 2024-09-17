@@ -43,7 +43,7 @@ type ServerConfig struct {
 }
 
 func (s *ServerConfig) LoadConfig() error {
-	s.Version = "v2.8"
+	s.Version = "v2.9"
 	log.Printf("PixivFE %s\n", s.Version)
 
 	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")

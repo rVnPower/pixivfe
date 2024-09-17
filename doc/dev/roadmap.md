@@ -17,9 +17,9 @@ A release version will be published when all features assigned with that version
 
 | Features                                                  | Release |
 |-----------------------------------------------------------|---------|
-| AI/R15/R18/R18-G filtering                                | 2.9 🔁  |
-| Pixivision (articles, tags, categories, RSS)              | 2.9 🔁  |
-| Full landing page (recommended users, trending tags, ...) | 2.9 🔁  |
+| AI/R15/R18/R18-G filtering                                | 2.9 ✅  |
+| Pixivision (articles, tags, categories, RSS)              | 2.10 🔁  |
+| Full landing page (recommended users, trending tags, ...) | 2.10 🔁  |
 | Manga series                                              | N/A     |
 | Novel series                                              | N/A     |
 | Complete novel content support (furigana, pages, ...)     | N/A     |
