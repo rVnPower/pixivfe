@@ -6,6 +6,12 @@ hide:
 
 **PixivFE**, a privacy-respecting alternative front-end for Pixiv that doesn't suck.
 
+[![CI badge](https://ci.codeberg.org/api/badges/12556/status.svg)](https://ci.codeberg.org/repos/12556)
+[![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
+[![Docker Stars](https://img.shields.io/docker/stars/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
+
 [Use PixivFE](instance-list.md){: .md-button .md-button--primary }
 [Host PixivFE](hosting/index.md){: .md-button }
 
@@ -63,8 +69,6 @@ For support:
 Contributions to PixivFE are welcome, including code and documentation. For more information on how to contribute, please refer to the [developer documentation](dev/index.md).
 
 [![Get it on Codeberg](https://get-it-on.codeberg.org/get-it-on-blue-on-white.png){ width="200" }](https://codeberg.org/VnPower/PixivFE)
-
-[![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
 
 ## License
 
