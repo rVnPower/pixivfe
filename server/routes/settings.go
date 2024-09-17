@@ -102,9 +102,11 @@ func setArtworkPreview(w http.ResponseWriter, r *http.Request) error {
 func setFilter(w http.ResponseWriter, r *http.Request) error {
 	r18 := r.FormValue("filter-r18")
 	r18g := r.FormValue("filter-r18g")
+	ai := r.FormValue("filter-ai")
 
 	session.SetCookie(w, session.Cookie_HideArtR18, r18)
 	session.SetCookie(w, session.Cookie_HideArtR18G, r18g)
+	session.SetCookie(w, session.Cookie_HideArtAI, ai)
 
 	return nil
 }

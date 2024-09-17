@@ -124,11 +124,15 @@
       <form action="/settings/filter" method="post">
         {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
         {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
+        {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
         <input id="filter-r18" type="checkbox" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }} />
         <label for="filter-r18">Hide R18</label>
         <br />
         <input id="filter-r18g" type="checkbox" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }} />
         <label for="filter-r18g">Hide R18G</label>
+        <br />
+        <input id="filter-ai" type="checkbox" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }} />
+        <label for="filter-ai">Hide AI-generated artworks</label>
         <br />
         <input type="submit" value="Submit" />
       </form>
