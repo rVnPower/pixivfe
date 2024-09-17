@@ -26,10 +26,14 @@ func main() {
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
 	// Initialize and start the proxy checker
-	// VnPower: This part needs more explanation
-	// ctx_timeout, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
 	defer proxy_checker.StopProxyChecker()
-	proxy_checker.InitializeProxyChecker()
+	firstCheckDone := proxy_checker.InitializeProxyChecker()
+	
+	// Wait for the first proxy check to complete
+	log.Println("Waiting for initial proxy check to complete...")
+	<-firstCheckDone
+	log.Println("Initial proxy check completed. Starting server...")
+
 	handlers.InitializeRateLimiter()
 
 	router := handlers.DefineRoutes()

@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	testImagePath     = "/img-original/img/2024/01/21/20/50/51/115365120_p0.jpg"
+	testImagePath = "/img-original/img/2024/01/21/20/50/51/115365120_p0.jpg"
 )
 
 var (
@@ -22,7 +22,8 @@ var (
 	stopChan            chan struct{} = make(chan struct{})
 )
 
-func InitializeProxyChecker() {
+func InitializeProxyChecker() chan struct{} {
+	firstCheckDone := make(chan struct{})
 	go func() {
 		for {
 			select {
@@ -31,6 +32,12 @@ func InitializeProxyChecker() {
 				return
 			default:
 				checkProxies()
+				select {
+				case <-firstCheckDone:
+					// First check already done, do nothing
+				default:
+					close(firstCheckDone) // Signal that the first check is done
+				}
 				if t := config.GlobalConfig.ProxyCheckInterval; t > 0 {
 					time.Sleep(t)
 				} else {
@@ -40,6 +47,7 @@ func InitializeProxyChecker() {
 			}
 		}
 	}()
+	return firstCheckDone
 }
 
 func StopProxyChecker() {
