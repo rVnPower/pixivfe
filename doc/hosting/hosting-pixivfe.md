@@ -15,14 +15,14 @@ Several Docker image tags are available to suit different needs:
 
 - `latest`: The most recent stable release.
 - `next`: The latest development build from the `v2` branch.
-- Tagged releases (e.g., `2.8.3`): Specific version releases for production use.
+- Tagged releases (e.g., `v2.9`): Specific version releases for production use.
 
 When using Docker commands, you can specify the desired tag. For example:
 
 ```bash
 docker pull vnpower/pixivfe:latest
 docker pull vnpower/pixivfe:next
-docker pull vnpower/pixivfe:2.8.3
+docker pull vnpower/pixivfe:v2.9
 ```
 
 ### Docker Compose
