@@ -19,10 +19,11 @@
     <div class="artwork-page-count"><span>&#9654;</span></div>
     {{- end }}
   </div>
+  {{- AiType := isset(.AiType) ? .AiType : 0}}
   <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint">
     {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
     <img src="/img/nsfw.png" alt="{{ .Title }}" loading="lazy" />
-    {{- else if .AiType == 2 && hideAi }}
+    {{- else if AiType == 2 && hideAi }}
     <img src="/img/ai.png" alt="{{ .Title }}" loading="lazy" />
     {{- else }}
     <img src="{{ .Thumbnail }}" alt="{{ .Title }}" loading="lazy" />

@@ -1,0 +1,9 @@
+# File structure
+
+- `assets/`: Static files (images, CSS, JS) and site templates.
+- `config/`: Handle configurations for the server.
+	- `config.go`: Parses for environment variables and pass down the configurations.
+	- `proxy_list.go`: Contains the built-in third party image proxy list.
+- `core/`: Make requests to Pixiv's server and parses information into structured data.
+- `doc/`: Contains documentations for the general user and developers.
+- `server/`: 
