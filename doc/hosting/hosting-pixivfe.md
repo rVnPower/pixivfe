@@ -9,7 +9,21 @@ PixivFE can be installed using various methods. This guide covers installation u
 
 [Docker](https://www.docker.com/) lets you run containerized applications. Containers are loosely isolated environments that are lightweight and contain everything needed to run the application, so there's no need to rely on what's installed on the host.
 
-Docker images for PixivFE are available at [Docker Hub](https://hub.docker.com/r/vnpower/pixivfe), with support for the amd64 platform.
+Docker images for PixivFE are available at [Docker Hub](https://hub.docker.com/r/vnpower/pixivfe), with support for multiple platforms: `linux/arm/v7`, `linux/arm64/v8`, and `linux/amd64`.
+
+Several Docker image tags are available to suit different needs:
+
+- `latest`: The most recent stable release.
+- `next`: The latest development build from the `v2` branch.
+- Tagged releases (e.g., `2.8.3`): Specific version releases for production use.
+
+When using Docker commands, you can specify the desired tag. For example:
+
+```bash
+docker pull vnpower/pixivfe:latest
+docker pull vnpower/pixivfe:next
+docker pull vnpower/pixivfe:2.8.3
+```
 
 ### Docker Compose
 
