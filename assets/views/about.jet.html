@@ -10,6 +10,13 @@
       <b>Version:</b> {{ .Version }}<br />PixivFE's version this server is
       running
     </li>
+    {{- if .Revision != "" }}
+    <li>
+      <b>Revision:</b>
+      <a href="https://codeberg.org/VnPower/PixivFE/commit/{{ .Revision }}">{{ .Revision }}</a><br />
+      PixivFE's source code revision
+    </li>
+    {{- end }}
     <li>
       <b>Started PixivFE (UTC)</b>: {{ .Time }} <br />The date when PixivFE
       started on this server

@@ -16,9 +16,11 @@ import (
 )
 
 var GlobalConfig ServerConfig
+var REVISION string = ""
 
 type ServerConfig struct {
 	Version      string
+	Revision     string
 	StartingTime string // used in /about page
 
 	Host string `env:"PIXIVFE_HOST"`
@@ -44,7 +46,8 @@ type ServerConfig struct {
 
 func (s *ServerConfig) LoadConfig() error {
 	s.Version = "v2.9"
-	log.Printf("PixivFE %s\n", s.Version)
+	s.Revision = REVISION
+	log.Printf("PixivFE %s %s\n", s.Version, s.Revision)
 
 	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")
 
