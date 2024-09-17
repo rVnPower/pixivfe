@@ -9,7 +9,7 @@ This section contains documentation related to the development of PixivFE. While
 
 ## Overview
 
-The developer documentation is comprised of the following files:
+The main developer documentation is comprised of the following files:
 
 1. [Coding Tips](coding-tips.md): Useful tricks and best practices for PixivFE development, including handling of cookies and Jet template specifics.
 
@@ -17,17 +17,15 @@ The developer documentation is comprised of the following files:
 
 3. [Feature Ideas](feature-ideas.md): Proposals for potential features or redesigns that can be implemented into PixivFE, including Pixivision integration, Sketch support, and UI improvements.
 
-4. [Framework Migration](framework-migration.md): Documentation of the migration from gofiber to net/http. This migration was completed in [release v2.8](https://codeberg.org/VnPower/PixivFE/src/tag/v2.8) (commit [1ac6f40b57](https://codeberg.org/VnPower/PixivFE/src/commit/1ac6f40b57608b1576d9e812698e95958c91c626)).
+4. [Guidelines](guidelines.md): Guidelines for code development, including the repository file structure.
 
-5. [Guidelines](guidelines.md): Guidelines for code development, including the repository file structure.
+5. [Helpful Resources](helpful-resources.md): External links to materials and resources that can aid in PixivFE development, including other Pixiv-related projects and tools.
 
-6. [Helpful Resources](helpful-resources.md): External links to materials and resources that can aid in PixivFE development, including other Pixiv-related projects and tools.
+6. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
 
-7. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
+7. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
 
-8. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
-
-## Features in Development
+## Features in development
 
 The Features section contains detailed information about specific features that are currently in development or planned for future implementation:
 
@@ -38,6 +36,12 @@ The Features section contains detailed information about specific features that 
 3. [Tracing and Flamegraphs](features/tracing-flamegraph.md): Explains the tracing implemented in PixivFE for both Pixiv website requests and server requests, and how to view flamegraphs for performance analysis.
 
 4. [User Customization](features/user-customization.md): Details potential per-user customization options for various aspects of PixivFE, including site-wide settings, novel reading preferences, artwork filtering, and search options.
+
+## Archive
+
+The Archive section contains archived documentation that may no longer be actively maintained or may contain outdated information. These documents are kept for historical reference and to maintain a record of past development processes and decisions:
+
+1. [Framework Migration](archive/framework-migration.md): Documentation of the migration from gofiber to net/http. This migration was completed in [release v2.8](https://codeberg.org/VnPower/PixivFE/src/tag/v2.8) (commit [1ac6f40b57](https://codeberg.org/VnPower/PixivFE/src/commit/1ac6f40b57608b1576d9e812698e95958c91c626)).
 
 ## Contributing
 

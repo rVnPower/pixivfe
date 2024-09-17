@@ -15,7 +15,6 @@ nav:
     - "Obtaining the PIXIVFE_TOKEN cookie": "hosting/obtaining-pixivfe-token.md"
   - "Development":
     - "dev/index.md" # Leave without title
-    - "Framework migration": "dev/framework-migration.md"
     - "Coding tips": "dev/coding-tips.md"
     - "Design flaws": "dev/design-flaws.md"
     - "Feature ideas": "dev/feature-ideas.md"
@@ -28,6 +27,8 @@ nav:
       - "Novels": "dev/features/novels.md"
       - "Tracing flamegraph": "dev/features/tracing-flamegraph.md"
       - "User customization": "dev/features/user-customization.md"
+    - "Archive":
+      - "Framework migration": "dev/archive/framework-migration.md"
 repo_name: VnPower/PixivFE
 repo_url: https://codeberg.org/VnPower/PixivFE
 edit_uri: _edit/v2/doc/
@@ -132,6 +133,8 @@ plugins:
         'hosting-pixivfe.md': 'hosting/hosting-pixivfe.md'
         'hosting-image-proxy-server.md': 'hosting/image-proxy-server.md'
         'obtaining-pixivfe-token.md': 'hosting/obtaining-pixivfe-token.md'
+        # Archived documents
+        'dev/framework-migration.md': 'dev/archive/framework-migration.md'
 
 markdown_extensions:
   - admonition

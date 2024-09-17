@@ -1,5 +1,8 @@
 # Migrating from gofiber to net/http -- the plan
 
+!!! warning "Archived Content"
+    This document has been archived and may contain outdated information. Please refer to the main documentation for up-to-date information.
+
 ## Tips
 
 - To access `/:abc`, use `r.PathValue("abc")`.
@@ -12,7 +15,7 @@
 
 ## todo
 
-- [x] [add caching](features/caching.md)
+- [x] [add caching](../features/caching.md)
 - [x] add limiter (maybe it should be in nginx)
 - check if everything works
   - [x] templating (this has tests)
