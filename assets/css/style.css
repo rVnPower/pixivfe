@@ -1048,6 +1048,11 @@ edit style.scss
   .novel .novel-settings .dropdown-toggler:checked ~ .dropdown-content {
     display: block;
   }
+  @media screen and (max-width: 950px) {
+    .novel .novel-content .novel-content-text {
+      padding: 6.4rem 1rem;
+    }
+  }
   .background-cover {
     background: repeating-linear-gradient(52.5deg, rgba(32, 32, 32, 0.8), rgba(32, 32, 32, 0.8) 14px, rgba(240, 248, 255, 0) 14px, rgba(240, 248, 255, 0) 28px);
     height: 10vw;
