@@ -1,0 +1,69 @@
+{{- extends "layout/default" }}
+{{- block body() }}
+<div class="container novel" id="checkpoint">
+  <div class="novel-detail">
+    <div class="novel-cover">
+      <a href="/novel/series/{{ .NovelSeries.ID }}">
+        <img src="{{ .NovelSeries.Cover.Urls.Four80Mw }}" alt="{{ .NovelSeries.Title }}" />
+      </a>
+    </div>
+    <div class="novel-metadata">
+      <div class="novel-title">{{ .NovelSeries.Title }}</div>
+      <p class="novel-description">{{ raw: .NovelSeries.Caption }}</p>
+      <small><span>{{ .NovelSeries.Total }} Episode(s)</span>&nbsp;&nbsp;
+        <span>Updated on {{parseTime: .NovelSeries.UpdateDate }}</span></span>&nbsp;&nbsp;
+        <span>{{ .NovelSeries.PublishedTotalCharacterCount }} character(s)</span>&nbsp;&nbsp;
+        <span>{{ floor: .NovelSeries.PublishedReadingTime / 60 }} mins</span>
+      </small>
+      <div class="illust-tags">
+        {{- if .NovelSeries.XRestrict != 0 }}
+        <span class="illust-tag">
+          <span class="illust-tag-name" id="highlight">
+            {{ if .NovelSeries.XRestrict == 1 }} R-18 {{ else }} R-18G {{ end }}</span>
+        </span>
+        {{- end }}
+        {{- if .NovelSeries.AiType == 2 }}
+        <span class="illust-tag">
+          <span class="illust-tag-name" id="highlight">AI-generated</span>
+        </span>
+        {{- end }}
+        {{- if .NovelSeries.GenreID != "0" }}
+        <span class="illust-tag">
+          <span class="illust-tag-name">{{ novelGenre: .NovelSeries.GenreID }}</span>
+        </span>
+        {{- end }}
+        {{- if .NovelSeries.IsOriginal }}
+        <span class="illust-tag">
+          <span class="illust-tag-name">Original</span>
+        </span>
+        {{- end }}
+      </div>
+      <a href="/novel/{{ .NovelSeries.FirstNovelID }}">Read first episode</a>
+    </div>
+  </div>
+  <div class="novel-attr">
+    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
+    </a>
+    <div class="attr-wrap">
+      <div class="novel-title">
+        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+      </div>
+    </div>
+  </div>
+  <!-- ----------- -->
+  <div class="artwork-container-header">
+    <h2 id="checkpoint">Works</h2>
+  </div>
+  <div class="novel-container">
+    {{- range .NovelSeriesContents }}
+    {{- include "fragments/novelseriescontents-tn" . }}
+    {{- end }}
+  </div>
+  <div class="pagination">
+    {{- url := "/novel/series/" + .NovelSeries.ID + "?p="}}
+    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
+    <br />
+    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
+  </div>
+</div>
+{{- end }}

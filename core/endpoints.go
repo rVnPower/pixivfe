@@ -141,6 +141,24 @@ func GetNovelRelatedURL(id string, limit int) string {
 	return fmt.Sprintf(base, id, limit)
 }
 
+func GetNovelSeriesURL(id string) string {
+	base := "https://www.pixiv.net/ajax/novel/series/%s"
+
+	return fmt.Sprintf(base, id)
+}
+
+func GetNovelSeriesContentURL(id string, page int, perPage int) string {
+	base := "https://www.pixiv.net/ajax/novel/series_content/%s?limit=%d&last_order=%d&order_by=asc"
+
+	return fmt.Sprintf(base, id, perPage, perPage*(page-1))
+}
+
+func GetNovelSeriesContentTitlesURL(id int) string {
+	base := "https://www.pixiv.net/ajax/novel/series/%d/content_titles"
+
+	return fmt.Sprintf(base, id)
+}
+
 func GetInsertIllustURL(novelid, id string) string {
 	base := "https://www.pixiv.net/ajax/novel/%s/insert_illusts?id[]=%s"
 

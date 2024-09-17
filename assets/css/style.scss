@@ -1372,6 +1372,14 @@ $font-fallback-sans: YuGothic,
         }
       }
     }
+
+    @media screen and (max-width: 950px) {
+      .novel-content {
+        .novel-content-text {
+          padding: 6.4rem 1rem;
+        }
+      }
+    }
   }
 
 

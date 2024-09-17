@@ -1,0 +1,55 @@
+<div class="novel-card">
+  <div class="novel-detail">
+    <div class="novel-cover">
+      <a href="/novel/{{ .ID }}">
+        <img src="{{ .CoverURL }}" alt="{{ .Title }}" />
+      </a>
+    </div>
+    <div class="novel-metadata">
+      <a href="/novel/{{ .ID }}">
+        <div class="novel-title">
+          #{{ .Series.ContentOrder }}&nbsp;{{- .Title }}
+        </div>
+      </a>
+      <small><span>{{ .CharacterCount }} character(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }}
+          mins</span></small>
+      <div class="illust-tags">
+        {{- if .AiType == 2 }}
+        <span class="illust-tag">
+          <span class="illust-tag-name" id="highlight">AI-generated</span>
+        </span>
+        {{- end }}
+        {{- if .IsOriginal }}
+        <span class="illust-tag">
+          <span class="illust-tag-name">Original</span>
+        </span>
+        {{- end }}
+        {{- if .Brief.Genre != "0" }}
+        <span class="illust-tag">
+          <span class="illust-tag-name">{{ novelGenre: .Brief.Genre }}</span>
+        </span>
+        {{- end }}
+        {{- range .Tags }} {{ if isEmphasize(.) }}
+        <span class="illust-tag">
+          <span class="illust-tag-name" id="highlight">{{ . }}</span>
+        </span>
+        {{- else }}
+        <span class="illust-tag">
+          <span class="illust-tag-translation"><a href="/tags/{{ escapeString(.) }}">#{{ . }}</a></span>
+        </span>
+        {{- end }} {{ end }}
+      </div>
+
+      <div class="illust-tags">
+        <span class="illust-tag-attr">
+          <img src="/img/heart-solid.png" alt="Bookmarks" />
+          {{- .Bookmarks }}
+        </span>
+        <span class="illust-tag-attr">
+          <img src="/img/calendar.png" alt="Date" />
+          {{- parseTime: .Brief.CreateDate }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
