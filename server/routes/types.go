@@ -72,6 +72,14 @@ type Data_novel struct {
 	ViewMode     string
 	Language     string
 }
+type Data_novelSeries struct {
+	NovelSeries         core.NovelSeries
+	NovelSeriesContents []core.NovelSeriesContent
+	User                core.UserBrief
+	Title               string
+	Page                int
+	PageLimit           int
+}
 type Data_novelDiscovery struct {
 	Novels []core.NovelBrief
 	Title  string
