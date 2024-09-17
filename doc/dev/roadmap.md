@@ -1,13 +1,17 @@
+<!-- The indentation on this page is delicate; avoid auto-formatting it with tools that might break it -->
+
 # Roadmap
 
-Planned features.
+This roadmap outlines the upcoming features and improvements for PixivFE. It provides an overview of what users can expect in future releases and what developers are currently working on or considering for implementation.
+
+!!! tip
+
+    Want to recommend a feature? [Create an issue on the PixivFE repository](https://codeberg.org/VnPower/PixivFE/issues/new).
 
 ## Table
 
-Upcoming features will be assigned with a release version. 
+Upcoming features will be assigned with a release version.
 A release version will be published when all features assigned with that version have been implemented.
-
-Want to recommend a feature? Create an issue [here](https://codeberg.org/VnPower/PixivFE/issues/new?).
 
 **Developers note:** Sort features by their release number. Only core developers should be allowed to assign release versions to features.
 
@@ -34,77 +38,103 @@ Want to recommend a feature? Create an issue [here](https://codeberg.org/VnPower
 
 ## To implement
 
-/settings/
+### `/settings/`
 
 - [x] Merge login page with settings page
 - [x] Persistence (http-only secure cookies)
-- [User Settings](features/user-customization.md)
+- [ ] [User Settings](features/user-customization.md)
 
-/novel/
+### `/novel/`
 
-- [Novel support](features/novels.md)  
-Might need some ideas for the reader's UI.  
-Allow options for font size and family?  
-Black and white backgrounds?  
-Theme support?  
+- [ ] [Novel support](features/novels.md)
 
-/series/
-- [ ] Manga series  
-Serialized web comics. Example: https://www.pixiv.net/user/13651304/series/171013
-- [ ] Novel series  
+    Might need some ideas for the reader's UI.
+    Allow options for font size and family?
+    Black and white backgrounds?
+    Theme support?
 
-Independent features
+### `/series/`
 
-- [x] Multiple tokens support
-Now you can do PIXIVFE_TOKEN=TOKEN_A,TOKEN_B
+- [ ] **Manga series**
 
-- [ ] Pixivision  
-https://www.pixivision.net/en/  
-Pretty good to discover new artworks n stuff.  
-Implement by parsing the webpage.
+    Serialized web comics.
+    
+    Example: [Pixiv Manga Series](https://www.pixiv.net/user/13651304/series/171013)
 
-  - [ ] RSS support for Pixivision  
+- [ ] **Novel series**
 
-- [ ] Search page  
-A page to do more extensive searching.  
-Might require JavaScript for search recommendation, if wanted.
+### Independent features
 
+- [x] **Multiple tokens support**
 
-- [ ] Full landing page  
-There are a lot of sections for the landing page. https://www.pixiv.net/ajax/top/illust  
-The artwork parsing part has already been implemented flawlessly.  
-We only have to write the frontend code for those sections.
+    Now you can do `PIXIVFE_TOKEN=TOKEN_A,TOKEN_B`
 
-- [ ] Various interesting pages from Pixiv.net  
-  - https://www.pixiv.net/idea/
-  - https://www.pixiv.net/request
-  - https://www.pixiv.net/contest/ (no AJAX endpoints)
+- [ ] **Pixivision**
+
+    [Pixivision](https://www.pixivision.net/en)
+
+    Pretty good to discover new artworks n stuff.
+
+    Implement by parsing the webpage.
+
+- [ ] **RSS support for Pixivision**
+
+- [ ] **Search page**
+
+    A page to do more extensive searching.
+
+    Might require JavaScript for search recommendation, if wanted.
+
+- [ ] **Full landing page**
+
+    There are a lot of sections for the landing page. [Pixiv Landing](https://www.pixiv.net/ajax/top/illust)
+
+    The artwork parsing part has already been implemented flawlessly.
+    
+    We only have to write the frontend code for those sections.
+
+- [ ] **Various interesting pages from Pixiv.net:**
+
+    - [Pixiv Idea](https://www.pixiv.net/idea/)
+    - [Pixiv Request](https://www.pixiv.net/request)
+    - [Pixiv Contest](https://www.pixiv.net/contest/) (no AJAX endpoints)
 
 ## To consider
 
-- Speculative Fetching
-Fetch images from pixiv and cache them while we send the response page to users. When they ask for those images, we already have those.
+- **Speculative Fetching**
 
-- App API support  
-May be painful to implement.
-Required to fully replace Pixiv, if user actions won't work universally.
-https://codeberg.org/VnPower/PixivFE/issues/7
+    Fetch images from pixiv and cache them while we send the response page to users. When they ask for those images, we already have those.
 
-- User discovery  
-For discovery page.  
-Pretty useless if user actions (following) doesn't work.
+    **Reference:** [Caching](features/caching.md)
 
-- "Popular" artworks  
-Check the README of this:  
-https://github.com/kokseen1/Mashiro
+- **App API support**
 
-- i18n  
-The last thing to work on, probably.
+    May be painful to implement.
+    Required to fully replace Pixiv, if user actions won't work universally.
+
+    **Reference:** [#7](https://codeberg.org/VnPower/PixivFE/issues/7)
+
+- **User discovery**
+
+    For discovery page.
+    Pretty useless if user actions (following) don't work.
+
+- **"Popular" artworks**
+
+    Check the README of this repository:
+
+    [Mashiro GitHub Repository](https://github.com/kokseen1/Mashiro)
+
+- **i18n**
+
+    The last thing to work on, probably.
 
 ## Misc
 
-- [x] Ranking page  
-A lot of options weren't implemented.
+- [x] **Ranking page**
 
-- [x] Revisit ranking calendar  
-There should be a way to display R18 thumbnails now?
+    A lot of options weren't implemented.
+
+- [x] **Revisit ranking calendar**
+
+    There should be a way to display R18 thumbnails now?
