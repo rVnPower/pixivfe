@@ -6,12 +6,11 @@ import (
 	"context"
 	"errors"
 	"log"
-	"math/rand"
 	"net/url"
 	"strings"
-	"sync/atomic"
 	"time"
 
+	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
 	"github.com/sethvargo/go-envconfig"
 )
 
@@ -27,19 +26,21 @@ type ServerConfig struct {
 	Port       string `env:"PIXIVFE_PORT"`
 	UnixSocket string `env:"PIXIVFE_UNIXSOCKET"`
 
-	Token          []string `env:"PIXIVFE_TOKEN,required"`                 // may be multiple tokens. delimiter is ','
-	LoadBalancing  string   `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"` // 'round-robin' or 'random'
-	InDevelopment  bool     `env:"PIXIVFE_DEV"`
-	UserAgent      string   `env:"PIXIVFE_USERAGENT,overwrite"`
-	AcceptLanguage string   `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
-	RequestLimit   int      `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
+	Token              []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
+	TokenManager       *token_manager.TokenManager
+	TokenLoadBalancing string        `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"`
+	MaxRetries         int           `env:"PIXIVFE_TOKEN_MAX_RETRIES,overwrite"`
+	BaseTimeout        time.Duration `env:"PIXIVFE_TOKEN_BASE_TIMEOUT,overwrite"`
+	MaxBackoffTime     time.Duration `env:"PIXIVFE_TOKEN_MAX_BACKOFF_TIME,overwrite"`
+	InDevelopment      bool          `env:"PIXIVFE_DEV"`
+	UserAgent          string        `env:"PIXIVFE_USERAGENT,overwrite"`
+	AcceptLanguage     string        `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
+	RequestLimit       int           `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
 	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
 
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
-
-	tokenIndex uint32 // Used for round-robin token selection
 }
 
 func (s *ServerConfig) LoadConfig() error {
@@ -53,7 +54,10 @@ func (s *ServerConfig) LoadConfig() error {
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
 	s.ProxyCheckInterval = 8 * time.Hour
-	s.LoadBalancing = "round-robin"
+	s.TokenLoadBalancing = "round-robin"
+	s.MaxRetries = 5
+	s.BaseTimeout = 1 * time.Second
+	s.MaxBackoffTime = 32 * time.Second
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
@@ -86,25 +90,30 @@ func (s *ServerConfig) LoadConfig() error {
 	}
 	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
-	log.Printf("Token load balancing method: %s\n", s.LoadBalancing)
+
+	// Validate TokenLoadBalancing
+	switch s.TokenLoadBalancing {
+	case "round-robin", "random", "least-recently-used":
+		// Valid options
+	default:
+		log.Printf("Invalid PIXIVFE_TOKEN_LOAD_BALANCING value: %s. Defaulting to 'round-robin'.\n", s.TokenLoadBalancing)
+		s.TokenLoadBalancing = "round-robin"
+	}
+
+	// Initialize TokenManager
+	s.TokenManager = token_manager.NewTokenManager(s.Token, s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime, s.TokenLoadBalancing)
+	log.Printf("Token manager initialized with %d tokens\n", len(s.Token))
+	log.Printf("Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime)
+	log.Printf("Token load balancing method: %s\n", s.TokenLoadBalancing)
 
 	return nil
 }
 
 func (s *ServerConfig) GetToken() string {
-	switch s.LoadBalancing {
-	case "random":
-		return s.getRandomToken()
-	default:
-		return s.getRoundRobinToken()
+	token := s.TokenManager.GetToken()
+	if token == nil {
+		log.Println("[WARNING] All tokens are timed out. Using the first available token.")
+		return s.Token[0]
 	}
-}
-
-func (s *ServerConfig) getRandomToken() string {
-	return s.Token[rand.Intn(len(s.Token))]
-}
-
-func (s *ServerConfig) getRoundRobinToken() string {
-	index := atomic.AddUint32(&s.tokenIndex, 1) % uint32(len(s.Token))
-	return s.Token[index]
+	return token.Value
 }

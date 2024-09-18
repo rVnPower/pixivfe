@@ -12,6 +12,7 @@ import (
 	config "codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 	"github.com/tidwall/gjson"
 )
@@ -21,24 +22,66 @@ type SimpleHTTPResponse struct {
 	Body       string
 }
 
-// send GET
-func API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, error) {
-	start_time := time.Now()
-	res, resp, err := _API_GET(context, url, token)
-	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIRequestSpan{
-		RequestId: request_context.GetFromContext(context).RequestId,
-		Response:  resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
-	if err != nil {
-		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (SimpleHTTPResponse, *http.Response, error)) (SimpleHTTPResponse, error) {
+	var lastErr error
+	tokenManager := config.GlobalConfig.TokenManager
+
+	for i := 0; i < tokenManager.GetMaxRetries(); i++ {
+		token := tokenManager.GetToken()
+		if token == nil {
+			return SimpleHTTPResponse{}, errors.New("All tokens are timed out")
+		}
+
+		res, resp, err := reqFunc(ctx, token.Value)
+		if err == nil && res.StatusCode == http.StatusOK {
+			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			return res, nil
+		}
+
+		lastErr = err
+		if err == nil {
+			lastErr = fmt.Errorf("HTTP status code: %d", res.StatusCode)
+		}
+
+		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+
+		backoffDuration := tokenManager.GetBaseTimeout() * time.Duration(1<<uint(i))
+		if backoffDuration > tokenManager.GetMaxBackoffTime() {
+			backoffDuration = tokenManager.GetMaxBackoffTime()
+		}
+
+		select {
+		case <-ctx.Done():
+			return SimpleHTTPResponse{}, ctx.Err()
+		case <-time.After(backoffDuration):
+		}
+
+		audit.LogAPIRoundTrip(audit.APIRequestSpan{
+			RequestId: request_context.GetFromContext(ctx).RequestId,
+			Response:  resp,
+			Error:     err,
+			Method:    "GET",
+			Token:     token.Value,
+			Body:      res.Body,
+			StartTime: time.Now(),
+			EndTime:   time.Now().Add(backoffDuration),
+		})
 	}
-	return res, nil
+
+	return SimpleHTTPResponse{}, fmt.Errorf("Max retries reached. Last error: %v", lastErr)
 }
 
-func _API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, *http.Response, error) {
+// send GET
+func API_GET(ctx context.Context, url string, _ string) (SimpleHTTPResponse, error) {
+	return retryRequest(ctx, func(ctx context.Context, token string) (SimpleHTTPResponse, *http.Response, error) {
+		return _API_GET(ctx, url, token)
+	})
+}
+
+func _API_GET(ctx context.Context, url string, token string) (SimpleHTTPResponse, *http.Response, error) {
 	var res SimpleHTTPResponse
 
-	req, err := http.NewRequestWithContext(context, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return res, nil, err
 	}
@@ -46,17 +89,10 @@ func _API_GET(context context.Context, url string, token string) (SimpleHTTPResp
 	req.Header.Add("User-Agent", config.GlobalConfig.UserAgent)
 	req.Header.Add("Accept-Language", config.GlobalConfig.AcceptLanguage)
 
-	if token == "" {
-		req.AddCookie(&http.Cookie{
-			Name:  "PHPSESSID",
-			Value: config.GlobalConfig.GetToken(),
-		})
-	} else {
-		req.AddCookie(&http.Cookie{
-			Name:  "PHPSESSID",
-			Value: token,
-		})
-	}
+	req.AddCookie(&http.Cookie{
+		Name:  "PHPSESSID",
+		Value: token,
+	})
 
 	// Make the request
 	resp, err := utils.HttpClient.Do(req)
@@ -77,8 +113,8 @@ func _API_GET(context context.Context, url string, token string) (SimpleHTTPResp
 	return res, resp, nil
 }
 
-func API_GET_UnwrapJson(context context.Context, url string, token string) (string, error) {
-	resp, err := API_GET(context, url, token)
+func API_GET_UnwrapJson(ctx context.Context, url string, _ string) (string, error) {
+	resp, err := API_GET(ctx, url, "")
 	if err != nil {
 		return "", err
 	}
@@ -101,23 +137,63 @@ func API_GET_UnwrapJson(context context.Context, url string, token string) (stri
 }
 
 // send POST
-func API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) error {
-	start_time := time.Now()
-	resp, err := _API_POST(context, url, payload, token, csrf, isJSON)
-	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIRequestSpan{
-		RequestId: request_context.GetFromContext(context).RequestId,
-		Response:  resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
-	if err != nil {
-		return fmt.Errorf("While POST %s: %w", url, err)
+func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) error {
+	tokenManager := config.GlobalConfig.TokenManager
+
+	var lastErr error
+	for i := 0; i < tokenManager.GetMaxRetries(); i++ {
+		token := tokenManager.GetToken()
+		if token == nil {
+			return errors.New("All tokens are timed out")
+		}
+
+		start_time := time.Now()
+		resp, err := _API_POST(ctx, url, payload, token.Value, csrf, isJSON)
+		end_time := time.Now()
+
+		audit.LogAPIRoundTrip(audit.APIRequestSpan{
+			RequestId: request_context.GetFromContext(ctx).RequestId,
+			Response:  resp,
+			Error:     err,
+			Method:    "POST",
+			Url:       url,
+			Token:     token.Value,
+			Body:      "",
+			StartTime: start_time,
+			EndTime:   end_time,
+		})
+
+		if err == nil && resp.StatusCode == http.StatusOK {
+			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			return nil
+		}
+
+		lastErr = err
+		if err == nil {
+			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
+		}
+
+		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+
+		backoffDuration := tokenManager.GetBaseTimeout() * time.Duration(1<<uint(i))
+		if backoffDuration > tokenManager.GetMaxBackoffTime() {
+			backoffDuration = tokenManager.GetMaxBackoffTime()
+		}
+
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(backoffDuration):
+		}
 	}
-	return err
+
+	return fmt.Errorf("Max retries reached. Last error: %v", lastErr)
 }
 
-func _API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
+func _API_POST(ctx context.Context, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
 	requestBody := []byte(payload)
 
-	req, err := http.NewRequestWithContext(context, "POST", url, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return nil, err
 	}
