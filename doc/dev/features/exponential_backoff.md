@@ -9,14 +9,6 @@ Exponential backoff is a technique used to gradually increase the wait time betw
 1. API request level
 2. Token management level
 
-### Key aspects
-
-1. Both implementations use a base timeout value that doubles with each retry or failure.
-2. Both have a maximum backoff time to prevent excessively long waits.
-3. The token manager's implementation is per-token, allowing for fine-grained control over individual token usage.
-4. The request retry mechanism applies to all requests, providing a general-purpose backoff strategy.
-5. Backoff settings for both levels can be configured separately via environment variables.
-
 ## Configuration
 
 The backoff settings for both API request level and token management level can be configured using environment variables. If not set, default values are used.
@@ -37,23 +29,27 @@ The backoff settings for both API request level and token management level can b
 
 **Location: `core/requests.go`**
 
-The `retryRequest` function implements exponential backoff for API requests:
+PixivFE uses the `retryablehttp` package to implement exponential backoff for API requests. The implementation is as follows:
 
-- It attempts to make a request up to `config.GlobalConfig.APIMaxRetries` times.
-- If a request fails, it calculates the backoff duration using the formula:
-  ```go
-  backoffDuration := time.Duration(float64(config.GlobalConfig.APIBaseTimeout) * float64(1<<uint(i)))
-  ```
-  This effectively doubles the backoff duration with each retry attempt.
-- The backoff duration is capped at a maximum value:
-  ```go
-  if backoffDuration > config.GlobalConfig.APIMaxBackoffTime {
-      backoffDuration = config.GlobalConfig.APIMaxBackoffTime
-  }
-  ```
-- The function then waits for the calculated backoff duration before making the next attempt.
+1. A `retryablehttp.Client` is initialized in the `init` function:
 
-This approach helps to avoid overwhelming the Pixiv API with rapid subsequent requests after a failure, giving it time to recover.
+```go
+func init() {
+    retryClient = retryablehttp.NewClient()
+    retryClient.RetryMax = config.GlobalConfig.APIMaxRetries
+    retryClient.RetryWaitMin = config.GlobalConfig.APIBaseTimeout
+    retryClient.RetryWaitMax = config.GlobalConfig.APIMaxBackoffTime
+    retryClient.HTTPClient = utils.HttpClient
+}
+```
+
+2. The `retryRequest` function uses this client to perform requests with automatic retries:
+
+```go
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error)) (SimpleHTTPResponse, error) {
+    // ... (function implementation)
+}
+```
 
 ## Token management level backoff
 
