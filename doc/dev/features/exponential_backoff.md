@@ -9,22 +9,6 @@ Exponential backoff is a technique used to gradually increase the wait time betw
 1. API request level
 2. Token management level
 
-## Configuration
-
-The backoff settings for both API request level and token management level can be configured using environment variables. If not set, default values are used.
-
-### API request level backoff
-
-- `PIXIVFE_API_MAX_RETRIES`: Maximum number of retries for API requests
-- `PIXIVFE_API_BASE_TIMEOUT`: Base timeout duration for API requests
-- `PIXIVFE_API_MAX_BACKOFF_TIME`: Maximum backoff time for API requests
-
-### Token management level backoff
-
-- `PIXIVFE_MAX_RETRIES`: Maximum number of retries for token management
-- `PIXIVFE_BASE_TIMEOUT`: Base timeout duration for token management
-- `PIXIVFE_MAX_BACKOFF_TIME`: Maximum backoff time for token management
-
 ## API request level backoff
 
 **Location: `core/requests.go`**
