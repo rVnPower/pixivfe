@@ -153,7 +153,7 @@ Base timeout duration for API requests.
 
 **Required**: No
 
-**Default:** `8s`
+**Default:** `8000ms`
 
 Maximum backoff time for API requests.
 
@@ -173,7 +173,7 @@ Maximum number of retries for token management.
 
 **Required**: No
 
-**Default:** `1s`
+**Default:** `1000ms`
 
 Base timeout duration for token management.
 
@@ -181,6 +181,6 @@ Base timeout duration for token management.
 
 **Required**: No
 
-**Default:** `32s`
+**Default:** `32000ms`
 
 Maximum backoff time for token management.

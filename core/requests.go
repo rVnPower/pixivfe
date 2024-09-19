@@ -51,7 +51,8 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (Si
 		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 
 		// Calculate backoff duration for exponential backoff
-		backoffDuration := time.Duration(float64(config.GlobalConfig.APIBaseTimeout) * float64(1<<uint(i)))
+		backoffMilliseconds := config.GlobalConfig.APIBaseTimeout.Milliseconds() * (1 << uint(i))
+		backoffDuration := time.Duration(backoffMilliseconds) * time.Millisecond
 		if backoffDuration > config.GlobalConfig.APIMaxBackoffTime {
 			backoffDuration = config.GlobalConfig.APIMaxBackoffTime
 		}
@@ -197,7 +198,8 @@ func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) er
 		config.GlobalConfig.TokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 
 		// Calculate backoff duration for exponential backoff
-		backoffDuration := time.Duration(float64(config.GlobalConfig.APIBaseTimeout) * float64(1<<uint(i)))
+		backoffMilliseconds := config.GlobalConfig.APIBaseTimeout.Milliseconds() * (1 << uint(i))
+		backoffDuration := time.Duration(backoffMilliseconds) * time.Millisecond
 		if backoffDuration > config.GlobalConfig.APIMaxBackoffTime {
 			backoffDuration = config.GlobalConfig.APIMaxBackoffTime
 		}

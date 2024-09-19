@@ -62,13 +62,13 @@ func (s *ServerConfig) LoadConfig() error {
 	s.ProxyCheckInterval = 8 * time.Hour
 	s.TokenLoadBalancing = "round-robin"
 	s.MaxRetries = 5
-	s.BaseTimeout = 1 * time.Second
-	s.MaxBackoffTime = 32 * time.Second
+	s.BaseTimeout = 1000 * time.Millisecond
+	s.MaxBackoffTime = 32000 * time.Millisecond
 
 	// Set default values for API request level backoff
 	s.APIMaxRetries = 3
 	s.APIBaseTimeout = 500 * time.Millisecond
-	s.APIMaxBackoffTime = 8 * time.Second
+	s.APIMaxBackoffTime = 8000 * time.Millisecond
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
