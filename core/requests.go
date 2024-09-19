@@ -28,7 +28,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (Si
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
-	for i := 0; i < tokenManager.GetMaxRetries(); i++ {
+	for i := 0; i < config.GlobalConfig.APIMaxRetries; i++ {
 		// Get a token from the token manager
 		token := tokenManager.GetToken()
 		if token == nil {
@@ -51,9 +51,9 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (Si
 		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 
 		// Calculate backoff duration for exponential backoff
-		backoffDuration := tokenManager.GetBaseTimeout() * time.Duration(1<<uint(i))
-		if backoffDuration > tokenManager.GetMaxBackoffTime() {
-			backoffDuration = tokenManager.GetMaxBackoffTime()
+		backoffDuration := time.Duration(float64(config.GlobalConfig.APIBaseTimeout) * float64(1<<uint(i)))
+		if backoffDuration > config.GlobalConfig.APIMaxBackoffTime {
+			backoffDuration = config.GlobalConfig.APIMaxBackoffTime
 		}
 
 		// Wait for backoff duration or context cancellation
@@ -156,12 +156,10 @@ func API_GET_UnwrapJson(ctx context.Context, url string, _ string) (string, erro
 
 // API_POST performs a POST request to the Pixiv API with automatic retries
 func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) error {
-	tokenManager := config.GlobalConfig.TokenManager
-
 	var lastErr error
-	for i := 0; i < tokenManager.GetMaxRetries(); i++ {
+	for i := 0; i < config.GlobalConfig.APIMaxRetries; i++ {
 		// Get a token from the token manager
-		token := tokenManager.GetToken()
+		token := config.GlobalConfig.TokenManager.GetToken()
 		if token == nil {
 			return errors.New("All tokens are timed out")
 		}
@@ -186,7 +184,7 @@ func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) er
 
 		// Check for successful response
 		if err == nil && resp.StatusCode == http.StatusOK {
-			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			config.GlobalConfig.TokenManager.MarkTokenStatus(token, token_manager.Good)
 			return nil
 		}
 
@@ -196,12 +194,12 @@ func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) er
 			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
 		}
 
-		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+		config.GlobalConfig.TokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 
 		// Calculate backoff duration for exponential backoff
-		backoffDuration := tokenManager.GetBaseTimeout() * time.Duration(1<<uint(i))
-		if backoffDuration > tokenManager.GetMaxBackoffTime() {
-			backoffDuration = tokenManager.GetMaxBackoffTime()
+		backoffDuration := time.Duration(float64(config.GlobalConfig.APIBaseTimeout) * float64(1<<uint(i)))
+		if backoffDuration > config.GlobalConfig.APIMaxBackoffTime {
+			backoffDuration = config.GlobalConfig.APIMaxBackoffTime
 		}
 
 		// Wait for backoff duration or context cancellation

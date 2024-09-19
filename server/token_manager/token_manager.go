@@ -46,7 +46,7 @@ func NewTokenManager(tokenValues []string, maxRetries int, baseTimeout, maxBacko
 		tokens[i] = &Token{
 			Value:               value,
 			Status:              Good,
-			BaseTimeoutDuration: time.Second,
+			BaseTimeoutDuration: baseTimeout,
 		}
 	}
 	return &TokenManager{
@@ -149,14 +149,13 @@ func (tm *TokenManager) MarkTokenStatus(token *Token, status TokenStatus) {
 		token.FailureCount++
 		// Calculate timeout duration using exponential backoff with a maximum limit
 		timeoutDuration := time.Duration(math.Min(
-			float64(token.BaseTimeoutDuration)*math.Pow(2, float64(token.FailureCount-1)),
+			float64(tm.baseTimeout)*math.Pow(2, float64(token.FailureCount-1)),
 			float64(tm.maxBackoffTime),
 		))
 		token.TimeoutUntil = time.Now().Add(timeoutDuration)
 	} else {
-		// Reset failure count and base timeout duration when marked as Good
+		// Reset failure count when marked as Good
 		token.FailureCount = 0
-		token.BaseTimeoutDuration = time.Second
 	}
 }
 
@@ -168,7 +167,6 @@ func (tm *TokenManager) ResetAllTokens() {
 	for _, token := range tm.tokens {
 		token.Status = Good
 		token.FailureCount = 0
-		token.BaseTimeoutDuration = time.Second
 	}
 }
 

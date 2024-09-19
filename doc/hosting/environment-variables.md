@@ -34,7 +34,12 @@ An example configuration is provided in [`.env.example`](https://codeberg.org/Vn
 
 **Required**: Yes
 
-Your Pixiv account cookie, used by PixivFE for authorization to fully access Pixiv's Ajax API.
+Your Pixiv account cookie, used by PixivFE for authorization to fully access Pixiv's Ajax API. This variable can contain multiple tokens separated by commas, which is useful for load balancing across multiple Pixiv accounts.
+
+Example:
+```
+PIXIVFE_TOKEN=123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP,789012_QqRrSsTtUuVvWwXxYyZz
+```
 
 See the [Obtaining the `PIXIVFE_TOKEN` cookie](obtaining-pixivfe-token.md) guide for detailed instructions.
 
@@ -106,11 +111,80 @@ Valid options:
 
 - `round-robin`: Tokens are used in a circular order.
 - `random`: A random token is selected for each request.
+- `least-recently-used`: The token that hasn't been used for the longest time is selected.
 
-This option is useful when you have multiple Pixiv accounts and want to distribute the load across them.
+This option is useful when you have multiple Pixiv accounts and want to distribute the load across them, reducing the risk of rate limiting by the Pixiv API for individual accounts.
 
 ### `PIXIVFE_DEV`
 
 **Required**: No
 
-Set to any value to enable development mode, in which the server will live-reload HTML templates + SCSS files and disable caching, e.g., `PIXIVFE_DEV=true`.
+Set to any value to enable development mode, e.g., `PIXIVFE_DEV=true`. In development mode:
+
+1. The server will live-reload HTML templates and SCSS files.
+2. Caching is disabled.
+3. Additional debug information is logged.
+
+This setting is particularly useful for developers working on PixivFE itself or for troubleshooting issues in a development environment.
+
+### Exponential backoff configuration
+
+PixivFE implements exponential backoff for API requests and token management to handle failures gracefully and manage rate limiting. The following environment variables can be used to configure this behavior, fine-tuning the exponential backoff behavior for both API requests and token management. If not set, the default values will be used.
+
+For more detailed information about the implementation of exponential backoff in PixivFE, please refer to the [Exponential Backoff documentation](../dev/features/exponential_backoff.md).
+
+#### API request level backoff
+
+These settings control how PixivFE handles retries for individual API requests. The backoff time starts at the base timeout and doubles with each retry, up to the maximum backoff time.
+
+##### `PIXIVFE_API_MAX_RETRIES`
+
+**Required**: No
+
+**Default:** `3`
+
+Maximum number of retries for API requests.
+
+##### `PIXIVFE_API_BASE_TIMEOUT`
+
+**Required**: No
+
+**Default:** `500ms`
+
+Base timeout duration for API requests.
+
+##### `PIXIVFE_API_MAX_BACKOFF_TIME`
+
+**Required**: No
+
+**Default:** `8s`
+
+Maximum backoff time for API requests.
+
+#### Token management level backoff
+
+These settings control how PixivFE manages token timeouts when a token encounters repeated failures. The backoff time for a token starts at the base timeout and doubles with each failure, up to the maximum backoff time.
+
+##### `PIXIVFE_MAX_RETRIES`
+
+**Required**: No
+
+**Default:** `5`
+
+Maximum number of retries for token management.
+
+##### `PIXIVFE_BASE_TIMEOUT`
+
+**Required**: No
+
+**Default:** `1s`
+
+Base timeout duration for token management.
+
+##### `PIXIVFE_MAX_BACKOFF_TIME`
+
+**Required**: No
+
+**Default:** `32s`
+
+Maximum backoff time for token management.

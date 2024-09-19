@@ -29,13 +29,19 @@ type ServerConfig struct {
 	Token              []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
 	TokenManager       *token_manager.TokenManager
 	TokenLoadBalancing string        `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"`
-	MaxRetries         int           `env:"PIXIVFE_TOKEN_MAX_RETRIES,overwrite"`
-	BaseTimeout        time.Duration `env:"PIXIVFE_TOKEN_BASE_TIMEOUT,overwrite"`
-	MaxBackoffTime     time.Duration `env:"PIXIVFE_TOKEN_MAX_BACKOFF_TIME,overwrite"`
-	InDevelopment      bool          `env:"PIXIVFE_DEV"`
-	UserAgent          string        `env:"PIXIVFE_USERAGENT,overwrite"`
-	AcceptLanguage     string        `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
-	RequestLimit       int           `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
+	MaxRetries         int           `env:"PIXIVFE_MAX_RETRIES,overwrite"`
+	BaseTimeout        time.Duration `env:"PIXIVFE_BASE_TIMEOUT,overwrite"`
+	MaxBackoffTime     time.Duration `env:"PIXIVFE_MAX_BACKOFF_TIME,overwrite"`
+
+	// New API request level backoff settings
+	APIMaxRetries     int           `env:"PIXIVFE_API_MAX_RETRIES,overwrite"`
+	APIBaseTimeout    time.Duration `env:"PIXIVFE_API_BASE_TIMEOUT,overwrite"`
+	APIMaxBackoffTime time.Duration `env:"PIXIVFE_API_MAX_BACKOFF_TIME,overwrite"`
+
+	InDevelopment  bool   `env:"PIXIVFE_DEV"`
+	UserAgent      string `env:"PIXIVFE_USERAGENT,overwrite"`
+	AcceptLanguage string `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
+	RequestLimit   int    `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
 	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
@@ -58,6 +64,11 @@ func (s *ServerConfig) LoadConfig() error {
 	s.MaxRetries = 5
 	s.BaseTimeout = 1 * time.Second
 	s.MaxBackoffTime = 32 * time.Second
+
+	// Set default values for API request level backoff
+	s.APIMaxRetries = 3
+	s.APIBaseTimeout = 500 * time.Millisecond
+	s.APIMaxBackoffTime = 8 * time.Second
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
@@ -103,8 +114,10 @@ func (s *ServerConfig) LoadConfig() error {
 	// Initialize TokenManager
 	s.TokenManager = token_manager.NewTokenManager(s.Token, s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime, s.TokenLoadBalancing)
 	log.Printf("Token manager initialized with %d tokens\n", len(s.Token))
-	log.Printf("Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime)
+	log.Printf("Token manager settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime)
 	log.Printf("Token load balancing method: %s\n", s.TokenLoadBalancing)
+
+	log.Printf("API request backoff settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.APIMaxRetries, s.APIBaseTimeout, s.APIMaxBackoffTime)
 
 	return nil
 }
