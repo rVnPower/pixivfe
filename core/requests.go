@@ -12,73 +12,111 @@ import (
 	config "codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
+	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
+	"github.com/hashicorp/go-retryablehttp"
 	"github.com/tidwall/gjson"
 )
 
+// SimpleHTTPResponse represents a simplified HTTP response
 type SimpleHTTPResponse struct {
 	StatusCode int
 	Body       string
 }
 
-// send GET
-func API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, error) {
-	start_time := time.Now()
-	res, resp, err := _API_GET(context, url, token)
-	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIRequestSpan{
-		RequestId: request_context.GetFromContext(context).RequestId,
-		Response:  resp, Error: err, Method: "GET", Url: url, Token: token, Body: res.Body, StartTime: start_time, EndTime: end_time})
-	if err != nil {
-		return SimpleHTTPResponse{}, fmt.Errorf("While GET %s: %w", url, err)
-	}
-	return res, nil
+var retryClient *retryablehttp.Client
+
+func init() {
+	retryClient = retryablehttp.NewClient()
+	retryClient.RetryMax = config.GlobalConfig.APIMaxRetries
+	retryClient.RetryWaitMin = config.GlobalConfig.APIBaseTimeout
+	retryClient.RetryWaitMax = config.GlobalConfig.APIMaxBackoffTime
+	retryClient.HTTPClient = utils.HttpClient
 }
 
-func _API_GET(context context.Context, url string, token string) (SimpleHTTPResponse, *http.Response, error) {
-	var res SimpleHTTPResponse
+// retryRequest performs a request with automatic retries and token management
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error)) (SimpleHTTPResponse, error) {
+	var lastErr error
+	tokenManager := config.GlobalConfig.TokenManager
 
-	req, err := http.NewRequestWithContext(context, "GET", url, nil)
-	if err != nil {
-		return res, nil, err
+	for i := 0; i < config.GlobalConfig.APIMaxRetries; i++ {
+		token := tokenManager.GetToken()
+		if token == nil {
+			return SimpleHTTPResponse{}, errors.New("All tokens are timed out")
+		}
+
+		req, err := reqFunc(ctx, token.Value)
+		if err != nil {
+			return SimpleHTTPResponse{}, err
+		}
+
+		start := time.Now()
+		resp, err := retryClient.Do(req)
+		end := time.Now()
+
+		if err == nil && resp.StatusCode == http.StatusOK {
+			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			defer resp.Body.Close()
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return SimpleHTTPResponse{}, err
+			}
+			return SimpleHTTPResponse{
+				StatusCode: resp.StatusCode,
+				Body:       string(body),
+			}, nil
+		}
+
+		lastErr = err
+		if err == nil {
+			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
+		}
+
+		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+
+		audit.LogAPIRoundTrip(audit.APIRequestSpan{
+			RequestId: request_context.GetFromContext(ctx).RequestId,
+			Response:  resp,
+			Error:     err,
+			Method:    req.Method,
+			Token:     token.Value,
+			Body:      "",
+			StartTime: start,
+			EndTime:   end,
+		})
+
+		select {
+		case <-ctx.Done():
+			return SimpleHTTPResponse{}, ctx.Err()
+		default:
+			// Continue to next iteration
+		}
 	}
 
-	req.Header.Add("User-Agent", config.GlobalConfig.UserAgent)
-	req.Header.Add("Accept-Language", config.GlobalConfig.AcceptLanguage)
+	return SimpleHTTPResponse{}, fmt.Errorf("Max retries reached. Last error: %v", lastErr)
+}
 
-	if token == "" {
-		req.AddCookie(&http.Cookie{
-			Name:  "PHPSESSID",
-			Value: config.GlobalConfig.GetToken(),
-		})
-	} else {
+// API_GET performs a GET request to the Pixiv API with automatic retries
+func API_GET(ctx context.Context, url string, _ string) (SimpleHTTPResponse, error) {
+	return retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
+		req, err := retryablehttp.NewRequest("GET", url, nil)
+		if err != nil {
+			return nil, err
+		}
+		req = req.WithContext(ctx)
+		req.Header.Add("User-Agent", config.GlobalConfig.UserAgent)
+		req.Header.Add("Accept-Language", config.GlobalConfig.AcceptLanguage)
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",
 			Value: token,
 		})
-	}
-
-	// Make the request
-	resp, err := utils.HttpClient.Do(req)
-	if err != nil {
-		return res, nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return res, resp, err
-	}
-
-	res = SimpleHTTPResponse{
-		StatusCode: resp.StatusCode,
-		Body:       string(body),
-	}
-	return res, resp, nil
+		return req, nil
+	})
 }
 
-func API_GET_UnwrapJson(context context.Context, url string, token string) (string, error) {
-	resp, err := API_GET(context, url, token)
+// API_GET_UnwrapJson performs a GET request and unwraps the JSON response
+func API_GET_UnwrapJson(ctx context.Context, url string, _ string) (string, error) {
+	resp, err := API_GET(ctx, url, "")
 	if err != nil {
 		return "", err
 	}
@@ -100,82 +138,45 @@ func API_GET_UnwrapJson(context context.Context, url string, token string) (stri
 	return gjson.Get(resp.Body, "body").String(), nil
 }
 
-// send POST
-func API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) error {
-	start_time := time.Now()
-	resp, err := _API_POST(context, url, payload, token, csrf, isJSON)
-	end_time := time.Now()
-	audit.LogAPIRoundTrip(audit.APIRequestSpan{
-		RequestId: request_context.GetFromContext(context).RequestId,
-		Response:  resp, Error: err, Method: "POST", Url: url, Token: token, Body: "", StartTime: start_time, EndTime: end_time})
-	if err != nil {
-		return fmt.Errorf("While POST %s: %w", url, err)
-	}
+// API_POST performs a POST request to the Pixiv API with automatic retries
+func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) error {
+	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
+		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
+		if err != nil {
+			return nil, err
+		}
+		req = req.WithContext(ctx)
+		req.Header.Add("User-Agent", "Mozilla/5.0")
+		req.Header.Add("Accept", "application/json")
+		req.Header.Add("x-csrf-token", csrf)
+		req.AddCookie(&http.Cookie{
+			Name:  "PHPSESSID",
+			Value: token,
+		})
+		if isJSON {
+			req.Header.Add("Content-Type", "application/json; charset=utf-8")
+		} else {
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
+		}
+		return req, nil
+	})
+
 	return err
 }
 
-func _API_POST(context context.Context, url, payload, token, csrf string, isJSON bool) (*http.Response, error) {
-	requestBody := []byte(payload)
-
-	req, err := http.NewRequestWithContext(context, "POST", url, bytes.NewBuffer(requestBody))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("User-Agent", "Mozilla/5.0")
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("x-csrf-token", csrf)
-	req.AddCookie(&http.Cookie{
-		Name:  "PHPSESSID",
-		Value: token,
-	})
-
-	if isJSON {
-		req.Header.Add("Content-Type", "application/json; charset=utf-8")
-	} else {
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-	}
-
-	resp, err := utils.HttpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return resp, err
-	}
-	body_s := string(body)
-	if !gjson.Valid(body_s) {
-		return resp, fmt.Errorf("Invalid JSON: %v", body_s)
-	}
-	err2 := gjson.Get(body_s, "error")
-
-	if !err2.Exists() {
-		return resp, fmt.Errorf("Incompatible request body.")
-	}
-
-	if err2.Bool() {
-		return resp, fmt.Errorf("Pixiv: Invalid request.")
-	}
-	return resp, nil
-}
-
+// ProxyRequest forwards an HTTP request to the target server and copies the response back
 func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
-	// Make the request
 	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
-	// copy headers
 	header := w.Header()
 	for k, v := range resp.Header {
 		header[k] = v
 	}
 
-	// copy body
 	_, err = io.Copy(w, resp.Body)
 	return err
 }

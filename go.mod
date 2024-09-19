@@ -9,6 +9,7 @@ require (
 	github.com/go-faker/faker/v4 v4.5.0
 	github.com/goccy/go-json v0.10.3
 	github.com/gorilla/mux v1.8.1
+	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/playwright-community/playwright-go v0.4501.1
 	github.com/sethvargo/go-envconfig v1.1.0
@@ -23,6 +24,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.6.0 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.3 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
+	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
