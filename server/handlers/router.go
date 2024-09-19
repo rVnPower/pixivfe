@@ -71,6 +71,7 @@ func DefineRoutes() *mux.Router {
 
 	router.HandleFunc("/pixivision", CatchError(routes.PixivisionHomePage)).Methods("GET")
 	router.HandleFunc("/pixivision/a/{id}", CatchError(routes.PixivisionArticlePage)).Methods("GET")
+	router.HandleFunc("/pixivision/c/{id}", CatchError(routes.PixivisionCategoryPage)).Methods("GET")
 
 	router.HandleFunc("/settings", CatchError(routes.SettingsPage)).Methods("GET")
 	router.HandleFunc("/settings/{type}", CatchError(routes.SettingsPost)).Methods("POST")

@@ -8,17 +8,16 @@ import (
 )
 
 func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
-	data, err := core.PixivisionGetHomepage("en")
+	data, err := core.PixivisionGetHomepage("1", "en")
 	if err != nil {
 		return err
 	}
 
 	for i := range data {
-		println(data[i].Thumbnail)
 		data[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data[i].Thumbnail)
 	}
 
-	return Render(w, r, Data_pixivision_index{Data: data})
+	return Render(w, r, Data_pixivisionIndex{Data: data})
 }
 
 func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
@@ -34,5 +33,19 @@ func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
 		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(r, data.Items[i].Avatar)
 	}
 
-	return Render(w, r, Data_pixivision_article{Article: data})
+	return Render(w, r, Data_pixivisionArticle{Article: data})
+}
+
+func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
+	id := GetPathVar(r, "id")
+	data, err := core.PixivisionGetCategory(id, "1", "en")
+	if err != nil {
+		return err
+	}
+
+	for i := range data.Articles {
+		data.Articles[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data.Articles[i].Thumbnail)
+	}
+
+	return Render(w, r, Data_pixivisionCategory{Category: data})
 }

@@ -84,13 +84,18 @@ type Data_novelDiscovery struct {
 	Novels []core.NovelBrief
 	Title  string
 }
-type Data_pixivision_index struct {
+type Data_pixivisionIndex struct {
 	Data []core.PixivisionArticle
 }
 
-type Data_pixivision_article struct {
+type Data_pixivisionArticle struct {
 	Article core.PixivisionArticle
 }
+
+type Data_pixivisionCategory struct {
+	Category core.PixivisionCategory
+}
+
 type Data_rank struct {
 	Title     string
 	Page      int

@@ -32,13 +32,17 @@ func generateRequest(link, method string, body io.Reader) *http.Request {
 	return req
 }
 
-func executeRequest(req *http.Request) *http.Response {
-	resp, err := http.DefaultClient.Do(req)
+func executeRequest(req *http.Request) (*http.Response, error) {
+	client := http.Client{Timeout: 60 * time.Second}
+	resp, err := client.Do(req)
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Pixivision: Page not found")
+	}
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return resp
+	return resp, nil
 }
 
 type PixivisionArticle struct {
@@ -113,7 +117,10 @@ func PixivisionGetHomepage(page string, lang ...string) ([]PixivisionArticle, er
 
 	URL := generatePixivisionURL(fmt.Sprintf("?p=%s", page), lang)
 	req := generateRequest(URL, "GET", nil)
-	resp := executeRequest(req)
+	resp, err := executeRequest(req)
+	if err != nil {
+		return articles, err
+	}
 
 	if resp.StatusCode == 404 {
 		return articles, errors.New("We couldn't find the page you're looking for")
@@ -155,7 +162,10 @@ func PixivisionGetTag(id string, page string, lang ...string) (PixivisionTag, er
 
 	URL := generatePixivisionURL(fmt.Sprintf("t/%s/?p=%s", id, page), lang)
 	req := generateRequest(URL, "GET", nil)
-	resp := executeRequest(req)
+	resp, err := executeRequest(req)
+	if err != nil {
+		return tag, err
+	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
@@ -187,7 +197,10 @@ func PixivisionGetArticle(id string, lang ...string) (PixivisionArticle, error) 
 
 	URL := generatePixivisionURL(fmt.Sprintf("a/%s", id), lang)
 	req := generateRequest(URL, "GET", nil)
-	resp := executeRequest(req)
+	resp, err := executeRequest(req)
+	if err != nil {
+		return article, err
+	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
@@ -246,7 +259,10 @@ func PixivisionGetCategory(id string, page string, lang ...string) (PixivisionCa
 
 	URL := generatePixivisionURL(fmt.Sprintf("c/%s/?p=%s", id, page), lang)
 	req := generateRequest(URL, "GET", nil)
-	resp := executeRequest(req)
+	resp, err := executeRequest(req)
+	if err != nil {
+		return category, err
+	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
@@ -266,6 +282,9 @@ func PixivisionGetCategory(id string, page string, lang ...string) (PixivisionCa
 		article.Title = s.Find(`a[data-gtm-action="ClickTitle"]`).Text()
 		article.Category = s.Find(".arc__thumbnail-label").Text()
 		article.Thumbnail = parseBackgroundImage(s.Find("._thumbnail").AttrOr("style", ""))
+
+		date := s.Find("time._date").AttrOr("datetime", "")
+		article.Date, _ = time.Parse(PixivDatetimeLayout, date)
 
 		category.Articles = append(category.Articles, article)
 	})
