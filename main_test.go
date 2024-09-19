@@ -14,7 +14,7 @@ func setup() {
 	var err error
 
 	if err = playwright.Install(); err != nil {
-		log.Fatalf("could not install playwright dependencies")
+		log.Fatalf("could not install playwright dependencies. %s", err)
 	}
 
 	pw, err = playwright.Run()

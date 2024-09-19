@@ -18,10 +18,11 @@ A release version will be published when all features assigned with that version
 | Features                                                  | Release |
 |-----------------------------------------------------------|---------|
 | AI/R15/R18/R18-G filtering                                | 2.9 ✅  |
-| Pixivision (articles, tags, categories, RSS)              | 2.10 🔁  |
-| Full landing page (recommended users, trending tags, ...) | 2.10 🔁  |
+| Novel series                                              | 2.9 ✅  |
+| Testing                                                   | 2.10 🔁 |
+| Pixivision (articles, tags, categories, RSS)              | 2.10 🔁 |
+| Full landing page (recommended users, trending tags, ...) | 2.10 🔁 |
 | Manga series                                              | N/A     |
-| Novel series                                              | N/A     |
 | Complete novel content support (furigana, pages, ...)     | N/A     |
 | Pixiv Sketch                                              | N/A     |
 | Pixiv Idea (pixiv.net/idea)                               | N/A     |
@@ -58,7 +59,7 @@ A release version will be published when all features assigned with that version
 - [ ] **Manga series**
 
     Serialized web comics.
-    
+
     Example: [Pixiv Manga Series](https://www.pixiv.net/user/13651304/series/171013)
 
 - [ ] **Novel series**
@@ -90,7 +91,7 @@ A release version will be published when all features assigned with that version
     There are a lot of sections for the landing page. [Pixiv Landing](https://www.pixiv.net/ajax/top/illust)
 
     The artwork parsing part has already been implemented flawlessly.
-    
+
     We only have to write the frontend code for those sections.
 
 - [ ] **Various interesting pages from Pixiv.net:**
