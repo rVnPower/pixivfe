@@ -10,9 +10,9 @@ import (
 // a TokenManager with the provided configuration.
 func TestNewTokenManager(t *testing.T) {
 	tokenValues := []string{"token1", "token2", "token3"}
-	maxRetries := 3
-	baseTimeout := 5 * time.Second
-	maxBackoffTime := 30 * time.Second
+	maxRetries := 5
+	baseTimeout := 1000 * time.Millisecond
+	maxBackoffTime := 32000 * time.Millisecond
 	loadBalancingMethod := "round-robin"
 
 	tm := NewTokenManager(tokenValues, maxRetries, baseTimeout, maxBackoffTime, loadBalancingMethod)
@@ -98,7 +98,7 @@ func TestGetTokenAllMethods(t *testing.T) {
 	// Run tests for each load balancing method
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tm := NewTokenManager([]string{"token1", "token2", "token3"}, 3, 5*time.Second, 30*time.Second, tt.loadBalancingMethod)
+			tm := NewTokenManager([]string{"token1", "token2", "token3"}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, tt.loadBalancingMethod)
 			tt.expectedBehavior(t, tm)
 		})
 	}
@@ -107,7 +107,7 @@ func TestGetTokenAllMethods(t *testing.T) {
 // TestMarkTokenStatus verifies that the MarkTokenStatus method correctly
 // updates a token's status and handles failure counts.
 func TestMarkTokenStatus(t *testing.T) {
-	tm := NewTokenManager([]string{"token1"}, 3, 5*time.Second, 30*time.Second, "round-robin")
+	tm := NewTokenManager([]string{"token1"}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, "round-robin")
 	token := tm.GetToken()
 
 	// Test marking a token as TimedOut
@@ -134,7 +134,7 @@ func TestMarkTokenStatus(t *testing.T) {
 // TestResetAllTokens checks if the ResetAllTokens method correctly
 // resets all tokens to their initial good state.
 func TestResetAllTokens(t *testing.T) {
-	tm := NewTokenManager([]string{"token1", "token2"}, 3, 5*time.Second, 30*time.Second, "round-robin")
+	tm := NewTokenManager([]string{"token1", "token2"}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, "round-robin")
 
 	// Mark all tokens as TimedOut
 	for _, token := range tm.tokens {
@@ -158,9 +158,9 @@ func TestResetAllTokens(t *testing.T) {
 // TestGetterMethods ensures that the getter methods return the correct values
 // that were set during TokenManager initialization.
 func TestGetterMethods(t *testing.T) {
-	maxRetries := 3
-	baseTimeout := 5 * time.Second
-	maxBackoffTime := 30 * time.Second
+	maxRetries := 5
+	baseTimeout := 1000 * time.Millisecond
+	maxBackoffTime := 32000 * time.Millisecond
 	tm := NewTokenManager([]string{"token1"}, maxRetries, baseTimeout, maxBackoffTime, "round-robin")
 
 	if tm.GetMaxRetries() != maxRetries {
@@ -179,12 +179,12 @@ func TestGetterMethods(t *testing.T) {
 // TestGetFallbackToken verifies that when all tokens are timed out,
 // the TokenManager correctly selects and resets a fallback token.
 func TestGetFallbackToken(t *testing.T) {
-	tm := NewTokenManager([]string{"token1", "token2"}, 3, 5*time.Second, 30*time.Second, "round-robin")
+	tm := NewTokenManager([]string{"token1", "token2"}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, "round-robin")
 
 	// Mark all tokens as timed out
 	for _, token := range tm.tokens {
 		tm.MarkTokenStatus(token, TimedOut)
-		token.TimeoutUntil = time.Now().Add(-1 * time.Second) // Set timeout in the past
+		token.TimeoutUntil = time.Now().Add(-1000 * time.Millisecond) // Set timeout in the past
 	}
 
 	// Get a token, which should reset and return a previously timed-out token
@@ -200,23 +200,23 @@ func TestGetFallbackToken(t *testing.T) {
 // TestExponentialBackoff checks if the exponential backoff mechanism
 // correctly increases the timeout duration for consecutive failures.
 func TestExponentialBackoff(t *testing.T) {
-	tm := NewTokenManager([]string{"token1"}, 3, 1*time.Second, 8*time.Second, "round-robin")
+	tm := NewTokenManager([]string{"token1"}, 5, 1000*time.Millisecond, 8000*time.Millisecond, "round-robin")
 	token := tm.GetToken()
 
-	expectedTimeouts := []time.Duration{1 * time.Second, 2 * time.Second, 4 * time.Second, 8 * time.Second, 8 * time.Second}
+	expectedTimeouts := []time.Duration{1000 * time.Millisecond, 2000 * time.Millisecond, 4000 * time.Millisecond, 8000 * time.Millisecond, 8000 * time.Millisecond}
 
 	for i, expected := range expectedTimeouts {
-		tm.MarkTokenStatus(token, TimedOut)
-		if token.TimeoutUntil.Sub(time.Now()).Round(time.Second) != expected {
-			t.Errorf("Iteration %d: Expected timeout duration %v, got %v", i, expected, token.TimeoutUntil.Sub(time.Now()).Round(time.Second))
-		}
+			tm.MarkTokenStatus(token, TimedOut)
+			if token.TimeoutUntil.Sub(time.Now()).Round(time.Millisecond) != expected {
+					t.Errorf("Iteration %d: Expected timeout duration %v, got %v", i, expected, token.TimeoutUntil.Sub(time.Now()).Round(time.Millisecond))
+			}
 	}
 }
 
 // TestConcurrentAccess verifies that the TokenManager can handle
 // concurrent access from multiple goroutines without race conditions.
 func TestConcurrentAccess(t *testing.T) {
-	tm := NewTokenManager([]string{"token1", "token2", "token3"}, 3, 5*time.Second, 30*time.Second, "round-robin")
+	tm := NewTokenManager([]string{"token1", "token2", "token3"}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, "round-robin")
 
 	var wg sync.WaitGroup
 	for i := 0; i < 100; i++ {
@@ -233,7 +233,7 @@ func TestConcurrentAccess(t *testing.T) {
 // TestEmptyTokenList checks if the TokenManager correctly handles
 // the case when initialized with an empty list of tokens.
 func TestEmptyTokenList(t *testing.T) {
-	tm := NewTokenManager([]string{}, 3, 5*time.Second, 30*time.Second, "round-robin")
+	tm := NewTokenManager([]string{}, 5, 1000 * time.Millisecond, 32000 * time.Millisecond, "round-robin")
 
 	token := tm.GetToken()
 	if token != nil {
