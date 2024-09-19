@@ -23,6 +23,7 @@ nav:
     - "Roadmap": "dev/roadmap.md"
     - "Testing": "dev/testing.md"
     - "Features":
+      - "Exponential Backoff in PixivFE": "dev/features/exponential_backoff.md"
       - "Caching": "dev/features/caching.md"
       - "Novels": "dev/features/novels.md"
       - "Tracing flamegraph": "dev/features/tracing-flamegraph.md"
