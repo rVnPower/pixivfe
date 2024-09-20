@@ -7,7 +7,6 @@ import (
 )
 
 var optionSaveResponse bool
-var responseSaveLocation string
 var MaxRecordedCount = 0
 
 // Init initializes the audit package and sets up response saving if enabled.
@@ -15,11 +14,10 @@ var MaxRecordedCount = 0
 // The response save location is taken from the global configuration.
 func Init(saveResponse bool) error {
 	optionSaveResponse = saveResponse
-	responseSaveLocation = config.GlobalConfig.ResponseSaveLocation
 
 	if optionSaveResponse {
 		MaxRecordedCount = 128
-		err := os.MkdirAll(responseSaveLocation, 0o700)
+		err := os.MkdirAll(config.GlobalConfig.ResponseSaveLocation, 0o700)
 		if err != nil {
 			return err
 		}

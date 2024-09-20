@@ -48,7 +48,7 @@ type ServerConfig struct {
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
 
 	// Development options
-	InDevelopment  bool   `env:"PIXIVFE_DEV"`
+	InDevelopment        bool   `env:"PIXIVFE_DEV"`
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
 }
 

@@ -69,11 +69,10 @@ func LogAPIRoundTrip(perf APIRequestSpan) {
 // writeResponseBodyToFile saves the given response body to a file in the ResponseSaveLocation directory.
 // It generates a unique filename using ULID and returns the filename and any error encountered.
 func writeResponseBodyToFile(body string) (string, error) {
-	ResponseSaveLocation := config.GlobalConfig.ResponseSaveLocation
 	// Generate a unique ID using ULID
 	id := ulid.Make().String()
 	// Create a filename using the last 6 characters of the ID
-	filename := path.Join(ResponseSaveLocation, id[len(id)-6:])
+	filename := path.Join(config.GlobalConfig.ResponseSaveLocation, id[len(id)-6:])
 	// Write the body to the file with read/write permissions for the owner only
 	err := os.WriteFile(filename, []byte(body), 0o600)
 	if err != nil {
