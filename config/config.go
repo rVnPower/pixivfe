@@ -33,12 +33,11 @@ type ServerConfig struct {
 	BaseTimeout        time.Duration `env:"PIXIVFE_BASE_TIMEOUT,overwrite"`
 	MaxBackoffTime     time.Duration `env:"PIXIVFE_MAX_BACKOFF_TIME,overwrite"`
 
-	// New API request level backoff settings
+	// API request level backoff settings
 	APIMaxRetries     int           `env:"PIXIVFE_API_MAX_RETRIES,overwrite"`
 	APIBaseTimeout    time.Duration `env:"PIXIVFE_API_BASE_TIMEOUT,overwrite"`
 	APIMaxBackoffTime time.Duration `env:"PIXIVFE_API_MAX_BACKOFF_TIME,overwrite"`
 
-	InDevelopment  bool   `env:"PIXIVFE_DEV"`
 	UserAgent      string `env:"PIXIVFE_USERAGENT,overwrite"`
 	AcceptLanguage string `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
 	RequestLimit   int    `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
@@ -47,6 +46,10 @@ type ServerConfig struct {
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
 
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
+
+	// Development options
+	InDevelopment  bool   `env:"PIXIVFE_DEV"`
+	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
 }
 
 func (s *ServerConfig) LoadConfig() error {
@@ -65,10 +68,11 @@ func (s *ServerConfig) LoadConfig() error {
 	s.BaseTimeout = 1000 * time.Millisecond
 	s.MaxBackoffTime = 32000 * time.Millisecond
 
-	// Set default values for API request level backoff
 	s.APIMaxRetries = 3
 	s.APIBaseTimeout = 500 * time.Millisecond
 	s.APIMaxBackoffTime = 8000 * time.Millisecond
+
+	s.ResponseSaveLocation = "/tmp/pixivfe/responses"
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
@@ -118,6 +122,11 @@ func (s *ServerConfig) LoadConfig() error {
 	log.Printf("Token load balancing method: %s\n", s.TokenLoadBalancing)
 
 	log.Printf("API request backoff settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.APIMaxRetries, s.APIBaseTimeout, s.APIMaxBackoffTime)
+
+	// Only print ResponseSaveLocation if InDevelopment is set
+	if s.InDevelopment {
+		log.Printf("Response save location: %s\n", s.ResponseSaveLocation)
+	}
 
 	return nil
 }
