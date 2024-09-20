@@ -3,6 +3,7 @@
 package audit
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -76,7 +77,8 @@ func writeResponseBodyToFile(body string) (string, error) {
 	// Write the body to the file with read/write permissions for the owner only
 	err := os.WriteFile(filename, []byte(body), 0o600)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to write response body to file %s: %w", filename, err)
 	}
+	log.Printf("Successfully wrote response body to file: %s", filename)
 	return filename, nil
 }
