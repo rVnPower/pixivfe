@@ -17,14 +17,16 @@ var MaxRecordedCount = 0
 func Init(saveResponse bool) error {
 	optionSaveResponse = saveResponse
 
-	if optionSaveResponse {
-		MaxRecordedCount = 128
-		savePath := config.GlobalConfig.ResponseSaveLocation
+	if !optionSaveResponse {
+		return nil
+	}
 
-		if err := os.MkdirAll(savePath, 0o700); err != nil {
-			log.Printf("Error creating response save directory: %v", err)
-			return fmt.Errorf("failed to create response save directory: %w", err)
-		}
+	MaxRecordedCount = 128
+	savePath := config.GlobalConfig.ResponseSaveLocation
+
+	if err := os.MkdirAll(savePath, 0o700); err != nil {
+		log.Printf("Error creating response save directory: %v", err)
+		return fmt.Errorf("failed to create response save directory: %w", err)
 	}
 
 	return nil
