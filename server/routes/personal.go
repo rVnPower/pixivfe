@@ -20,7 +20,7 @@ func PromptUserToLoginPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LoginUserPage(w http.ResponseWriter, r *http.Request) error {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 
 	if token == "" {
 		return PromptUserToLoginPage(w, r)
@@ -34,7 +34,7 @@ func LoginUserPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LoginBookmarkPage(w http.ResponseWriter, r *http.Request) error {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	if token == "" {
 		return PromptUserToLoginPage(w, r)
 	}
@@ -47,7 +47,7 @@ func LoginBookmarkPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func FollowingWorksPage(w http.ResponseWriter, r *http.Request) error {
-	if token := session.GetPixivToken(r); token == "" {
+	if token := session.GetUserToken(r); token == "" {
 		return PromptUserToLoginPage(w, r)
 	}
 

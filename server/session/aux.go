@@ -11,7 +11,9 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/config"
 )
 
-func GetPixivToken(r *http.Request) string {
+// GetUserToken retrieves the authentication token for the Pixiv API from the 'pixivfe-Token' cookie.
+// This token takes precedence over the default one provided by tokenManager.
+func GetUserToken(r *http.Request) string {
 	return GetCookie(r, Cookie_Token)
 }
 

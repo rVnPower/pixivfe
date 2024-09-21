@@ -10,7 +10,7 @@ import (
 )
 
 func GetDiscoveryArtwork(r *http.Request, mode string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 
 	URL := GetDiscoveryURL(mode, 100)
 
@@ -35,7 +35,7 @@ func GetDiscoveryArtwork(r *http.Request, mode string) ([]ArtworkBrief, error) {
 }
 
 func GetDiscoveryNovels(r *http.Request, mode string) ([]NovelBrief, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 
 	URL := GetDiscoveryNovelURL(mode, 100)
 

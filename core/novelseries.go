@@ -116,7 +116,7 @@ func GetNovelSeriesByID(r *http.Request, id string) (NovelSeries, error) {
 func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int, useToken bool) ([]NovelSeriesContent, error) {
 	var token string
 	if useToken {
-		token = session.GetPixivToken(r)
+		token = session.GetUserToken(r)
 	} else {
 		token = ""
 	}
@@ -163,7 +163,7 @@ func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int
 func GetNovelSeriesContentTitlesByID(r *http.Request, id int, useToken bool) ([]NovelSeriesContentTitle, error) {
 	var token string
 	if useToken {
-		token = session.GetPixivToken(r)
+		token = session.GetUserToken(r)
 	} else {
 		token = ""
 	}

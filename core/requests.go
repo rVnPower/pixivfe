@@ -35,12 +35,17 @@ func init() {
 }
 
 // retryRequest performs a request with automatic retries and token management
-func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error)) (SimpleHTTPResponse, error) {
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string) (SimpleHTTPResponse, error) {
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
 	for i := 0; i < config.GlobalConfig.APIMaxRetries; i++ {
-		token := tokenManager.GetToken()
+		var token *token_manager.Token
+		if userToken != "" {
+			token = &token_manager.Token{Value: userToken}
+		} else {
+			token = tokenManager.GetToken()
+		}
 		if token == nil {
 			return SimpleHTTPResponse{}, errors.New("All tokens are timed out")
 		}
@@ -55,7 +60,9 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		end := time.Now()
 
 		if err == nil && resp.StatusCode == http.StatusOK {
-			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			if userToken == "" {
+				tokenManager.MarkTokenStatus(token, token_manager.Good)
+			}
 			defer resp.Body.Close()
 			body, err := io.ReadAll(resp.Body)
 			if err != nil {
@@ -72,7 +79,9 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
 		}
 
-		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+		if userToken == "" {
+			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
+		}
 
 		audit.LogAPIRoundTrip(audit.APIRequestSpan{
 			RequestId: request_context.GetFromContext(ctx).RequestId,
@@ -97,7 +106,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 }
 
 // API_GET performs a GET request to the Pixiv API with automatic retries
-func API_GET(ctx context.Context, url string, _ string) (SimpleHTTPResponse, error) {
+func API_GET(ctx context.Context, url string, userToken string) (SimpleHTTPResponse, error) {
 	return retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
 		req, err := retryablehttp.NewRequest("GET", url, nil)
 		if err != nil {
@@ -111,12 +120,12 @@ func API_GET(ctx context.Context, url string, _ string) (SimpleHTTPResponse, err
 			Value: token,
 		})
 		return req, nil
-	})
+	}, userToken)
 }
 
 // API_GET_UnwrapJson performs a GET request and unwraps the JSON response
-func API_GET_UnwrapJson(ctx context.Context, url string, _ string) (string, error) {
-	resp, err := API_GET(ctx, url, "")
+func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (string, error) {
+	resp, err := API_GET(ctx, url, userToken)
 	if err != nil {
 		return "", err
 	}
@@ -139,7 +148,7 @@ func API_GET_UnwrapJson(ctx context.Context, url string, _ string) (string, erro
 }
 
 // API_POST performs a POST request to the Pixiv API with automatic retries
-func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) error {
+func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) error {
 	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
 		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
 		if err != nil {
@@ -159,7 +168,7 @@ func API_POST(ctx context.Context, url, payload, _, csrf string, isJSON bool) er
 			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 		}
 		return req, nil
-	})
+	}, userToken)
 
 	return err
 }

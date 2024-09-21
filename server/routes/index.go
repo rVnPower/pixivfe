@@ -10,7 +10,7 @@ import (
 
 func IndexPage(w http.ResponseWriter, r *http.Request) error {
 	// If token is set, do the landing request...
-	if token := session.GetPixivToken(r); token != "" {
+	if token := session.GetUserToken(r); token != "" {
 		mode := GetQueryParam(r, "mode", "all")
 
 		works, err := core.GetLanding(r, mode)

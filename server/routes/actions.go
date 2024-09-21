@@ -11,7 +11,7 @@ import (
 )
 
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
@@ -39,7 +39,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {
@@ -63,7 +63,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LikeRoute(w http.ResponseWriter, r *http.Request) error {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
 	if token == "" || csrf == "" {

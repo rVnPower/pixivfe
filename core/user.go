@@ -250,7 +250,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
 
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 
 	URL := GetUserInformationURL(id)
 

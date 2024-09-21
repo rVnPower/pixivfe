@@ -60,7 +60,7 @@ func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
 
 func GetTemplatingVariables(r *http.Request) jet.VarMap {
 	// Pass in values that we want to be available to all pages here
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	baseURL := utils.Origin(r)
 	pageURL := r.URL.String()
 
