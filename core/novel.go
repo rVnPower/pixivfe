@@ -60,6 +60,7 @@ type Novel struct {
 		ViewMode int `json:"viewMode"`
 		// ...
 	} `json:"suggestedSettings"`
+	CommentsList []Comment
 }
 
 type NovelBrief struct {
@@ -149,4 +150,25 @@ func GetNovelRelated(r *http.Request, id string) ([]NovelBrief, error) {
 	}
 
 	return novels.List, nil
+}
+
+func GetNovelComments(r *http.Request, id string) ([]Comment, error) {
+	var body struct {
+		Comments []Comment `json:"comments"`
+	}
+
+	URL := GetNovelCommentsURL(id)
+
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
+	if err != nil {
+		return nil, err
+	}
+	response = session.ProxyImageUrl(r, response)
+
+	err = json.Unmarshal([]byte(response), &body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body.Comments, nil
 }

@@ -832,36 +832,6 @@ edit style.scss
   .illust .illust-description {
     font-size: 0.85em;
   }
-  .illust .comment {
-    display: flex;
-    margin-bottom: 10px;
-  }
-  .illust .comment p {
-    margin: 0;
-    font-size: 0.8em;
-  }
-  .illust .comment .comment-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  .illust .comment .comment-author {
-    color: #fff;
-    font-size: medium;
-    font-weight: bold;
-  }
-  .illust .comment .stamp {
-    width: 96px;
-    height: 96px;
-    border-radius: 4px;
-  }
-  .illust .comment .emoji {
-    width: 24px;
-    height: 24px;
-    margin-left: 3px;
-    margin-right: 3px;
-  }
   .illust .illust-other-works a.illust-other-works-author {
     display: inline-flex;
     align-items: center;
@@ -876,6 +846,36 @@ edit style.scss
     margin-right: 5px;
     object-fit: cover;
     object-position: center top;
+  }
+  .comment {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .comment p {
+    margin: 0;
+    font-size: 0.8em;
+  }
+  .comment .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .comment .comment-author {
+    color: #fff;
+    font-size: medium;
+    font-weight: bold;
+  }
+  .comment .stamp {
+    width: 96px;
+    height: 96px;
+    border-radius: 4px;
+  }
+  .comment .emoji {
+    width: 24px;
+    height: 24px;
+    margin-left: 3px;
+    margin-right: 3px;
   }
   .novel-container {
     display: grid;

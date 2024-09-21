@@ -122,6 +122,37 @@
       </div>
     </div>
   </div>
+  <hr />
+  <details>
+    <summary>Comments</summary>
+    {{- if .Novel.CommentOff == 1 }}
+    <p>The creator turned comments off</p>
+    {{- else if .Novel.CommentCount == 0 }}
+    <p>There are no comments yet</p>
+    {{- else }} {{ range .Novel.CommentsList }}
+    <div class="comment">
+      <a href="/users/{{ .AuthorID }}" class="comment-author">
+        <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
+      </a>
+      <div class="comment-context">
+        <a href="/users/{{ .AuthorID }}" class="comment-author">
+          {{- .AuthorName }}
+        </a>
+        <p>
+          {{- if .Stamp }}
+          <img class="stamp" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
+            alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" />
+          {{- else }} {{ raw: parseEmojis(.Context) }} {{ end }}
+        </p>
+
+        <small>{{ .Date }}</small>
+      </div>
+    </div>
+    {{- end }} {{ end }}
+  </details>
+</div>
+<div class="container">
+  <h2>Related works</h2>
   <div class="novel-container">
     {{- range .NovelRelated }}
     {{- include "fragments/novel-tn" . }}
