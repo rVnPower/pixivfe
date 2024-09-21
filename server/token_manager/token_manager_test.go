@@ -191,8 +191,7 @@ func TestGetFallbackToken(t *testing.T) {
 	token := tm.GetToken()
 	if token == nil {
 		t.Error("Expected a fallback token, got nil")
-	}
-	if token.Status != Good {
+	} else if token.Status != Good {
 		t.Errorf("Expected fallback token status to be Good, got %v", token.Status)
 	}
 }
@@ -207,8 +206,8 @@ func TestExponentialBackoff(t *testing.T) {
 
 	for i, expected := range expectedTimeouts {
 		tm.MarkTokenStatus(token, TimedOut)
-		if token.TimeoutUntil.Sub(time.Now()).Round(time.Millisecond) != expected {
-			t.Errorf("Iteration %d: Expected timeout duration %v, got %v", i, expected, token.TimeoutUntil.Sub(time.Now()).Round(time.Millisecond))
+		if time.Until(token.TimeoutUntil).Round(time.Millisecond) != expected {
+			t.Errorf("Iteration %d: Expected timeout duration %v, got %v", i, expected, time.Until(token.TimeoutUntil).Round(time.Millisecond))
 		}
 	}
 }
