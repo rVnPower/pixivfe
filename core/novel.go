@@ -5,9 +5,10 @@ import (
 	"regexp"
 	"time"
 
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 type Novel struct {
@@ -106,8 +107,8 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	}
 
 	// Novel embedded illusts
-	re_r := regexp.MustCompile("\\[pixivimage:(\\d+.\\d+)\\]")
-	re_d := regexp.MustCompile("\\d+.\\d+")
+	re_r := regexp.MustCompile(`\[pixivimage:(\d+\.\d+)\]`)
+	re_d := regexp.MustCompile(`\d+\.\d+`)
 	re_t := regexp.MustCompile(`\"original\":\"(.+?)\"`)
 
 	novel.Content = re_r.ReplaceAllStringFunc(novel.Content, func(s string) string {
