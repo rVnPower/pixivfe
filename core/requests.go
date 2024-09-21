@@ -35,7 +35,7 @@ func init() {
 }
 
 // retryRequest performs a request with automatic retries and token management
-func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string) (SimpleHTTPResponse, error) {
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string, isPost bool) (SimpleHTTPResponse, error) {
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
@@ -43,14 +43,20 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		var token *token_manager.Token
 		if userToken != "" {
 			token = &token_manager.Token{Value: userToken}
-		} else {
+		} else if !isPost {
 			token = tokenManager.GetToken()
 		}
-		if token == nil {
+
+		if token == nil && !isPost {
 			return SimpleHTTPResponse{}, errors.New("All tokens are timed out")
 		}
 
-		req, err := reqFunc(ctx, token.Value)
+		tokenValue := ""
+		if token != nil {
+			tokenValue = token.Value
+		}
+
+		req, err := reqFunc(ctx, tokenValue)
 		if err != nil {
 			return SimpleHTTPResponse{}, err
 		}
@@ -60,7 +66,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		end := time.Now()
 
 		if err == nil && resp.StatusCode == http.StatusOK {
-			if userToken == "" {
+			if userToken == "" && !isPost {
 				tokenManager.MarkTokenStatus(token, token_manager.Good)
 			}
 			defer resp.Body.Close()
@@ -79,7 +85,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
 		}
 
-		if userToken == "" {
+		if userToken == "" && !isPost {
 			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 		}
 
@@ -88,7 +94,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			Response:  resp,
 			Error:     err,
 			Method:    req.Method,
-			Token:     token.Value,
+			Token:     tokenValue,
 			Body:      "",
 			StartTime: start,
 			EndTime:   end,
@@ -120,7 +126,7 @@ func API_GET(ctx context.Context, url string, userToken string) (SimpleHTTPRespo
 			Value: token,
 		})
 		return req, nil
-	}, userToken)
+	}, userToken, false)
 }
 
 // API_GET_UnwrapJson performs a GET request and unwraps the JSON response
@@ -158,17 +164,19 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 		req.Header.Add("User-Agent", "Mozilla/5.0")
 		req.Header.Add("Accept", "application/json")
 		req.Header.Add("x-csrf-token", csrf)
-		req.AddCookie(&http.Cookie{
-			Name:  "PHPSESSID",
-			Value: token,
-		})
+		if userToken != "" {
+			req.AddCookie(&http.Cookie{
+				Name:  "PHPSESSID",
+				Value: userToken,
+			})
+		}
 		if isJSON {
 			req.Header.Add("Content-Type", "application/json; charset=utf-8")
 		} else {
 			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 		}
 		return req, nil
-	}, userToken)
+	}, userToken, true)
 
 	return err
 }
