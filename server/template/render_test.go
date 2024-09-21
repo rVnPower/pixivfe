@@ -34,8 +34,8 @@ func TestAutoRender(t *testing.T) {
 	test[Data_newest](t)
 	test[Data_novel](t)
 	test[Data_novelDiscovery](t)
-	test[Data_pixivision_article](t)
-	test[Data_pixivision_index](t)
+	test[Data_pixivisionArticle](t)
+	test[Data_pixivisionIndex](t)
 	test[Data_rank](t)
 	test[Data_rankingCalendar](t)
 	test[Data_settings](t)
@@ -43,6 +43,7 @@ func TestAutoRender(t *testing.T) {
 	test[Data_unauthorized](t)
 	test[Data_user](t)
 	test[Data_userAtom](t)
+	test[Data_novelSeries](t)
 }
 
 func fakeData[T any]() T {
