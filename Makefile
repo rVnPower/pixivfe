@@ -19,7 +19,7 @@ fmt:
 build:
 	@echo "Building $(BINARY_NAME)..."
 	go mod download
-	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static" -tags netgo -o $(BINARY_NAME)
+	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=`git describe --always 2>/dev/null`" -tags netgo -o $(BINARY_NAME)
 
 test:
 	@echo "Running tests..."
