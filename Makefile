@@ -4,6 +4,7 @@
 BINARY_NAME=pixivfe
 TARGETOS ?= $(shell go env GOOS)
 TARGETARCH ?= $(shell go env GOARCH)
+GIT_COMMIT := $(shell git describe --always 2>/dev/null)
 
 # Include environment variables from .env if it exists
 -include .env
@@ -19,7 +20,7 @@ fmt:
 build:
 	@echo "Building $(BINARY_NAME)..."
 	go mod download
-	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=`git describe --always 2>/dev/null`" -tags netgo -o $(BINARY_NAME)
+	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=$(GIT_COMMIT)" -tags netgo -o $(BINARY_NAME)
 
 test:
 	@echo "Running tests..."

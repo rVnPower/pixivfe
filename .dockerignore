@@ -1,6 +1,8 @@
 # Git-related files
-.git/
-.gitignore
+# Required for commit hash
+# ref: https://codeberg.org/VnPower/PixivFE/pulls/104
+# .git/
+# .gitignore
 
 # Docker-related files
 .dockerignore
@@ -18,4 +20,3 @@ mkdocs.yml
 LICENSE
 README.md
 doc/
-
