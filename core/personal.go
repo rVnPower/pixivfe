@@ -8,7 +8,7 @@ import (
 )
 
 func GetNewestFromFollowing(r *http.Request, mode, page string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	URL := GetNewestFromFollowingURL(mode, page)
 
 	var body struct {

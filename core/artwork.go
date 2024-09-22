@@ -232,7 +232,7 @@ func GetRelatedArtworks(r *http.Request, id string) ([]ArtworkBrief, error) {
 }
 
 func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 
 	var illust struct {
 		Illust

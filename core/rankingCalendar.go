@@ -38,7 +38,7 @@ var selector_img = cascadia.MustCompile("img")
 // so the funny thing about Pixiv is that they will return this month's data for a request of a future date
 // is it a bug or a feature?
 func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
 
 	resp, err := API_GET(r.Context(), URL, token)

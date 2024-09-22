@@ -7,7 +7,7 @@ import (
 )
 
 func GetNewestArtworks(r *http.Request, worktype string, r18 string) ([]ArtworkBrief, error) {
-	token := session.GetPixivToken(r)
+	token := session.GetUserToken(r)
 	URL := GetNewestArtworksURL(worktype, r18, "0")
 
 	var body struct {
