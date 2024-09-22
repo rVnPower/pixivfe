@@ -120,8 +120,8 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	}
 
 	// Novel embedded illusts
-	re_r := regexp.MustCompile(`\[pixivimage:(\d+\.\d+)\]`)
-	re_d := regexp.MustCompile(`\d+\.\d+`)
+	re_r := regexp.MustCompile(`\[pixivimage:(\d+)\]`)
+	re_d := regexp.MustCompile(`\d+`)
 	re_t := regexp.MustCompile(`\"original\":\"(.+?)\"`)
 
 	novel.Content = re_r.ReplaceAllStringFunc(novel.Content, func(s string) string {
