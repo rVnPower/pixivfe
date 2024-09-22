@@ -1,12 +1,12 @@
 {{- if !.IsUgoira }}
 <div class="illust-images">
   {{- range index := .Images }}
-  <a href="{{ .Original }}" target="_blank">
+  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}">
     {{- if .Width != 0 && .Height != 0 }}
     {* todo: do not reflow the page because of loading image *}
-    <img src="{{ .Large }}" alt="Page {{ index }}" data-width="{{.Width}}" data-height="{{.Height}}" />
+    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" data-width="{{.Width}}" data-height="{{.Height}}" />
     {{- else }}
-    <img src="{{ .Large }}" alt="Page {{ index }}" />
+    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" />
     {{- end }}
   </a>
   {{- end }}

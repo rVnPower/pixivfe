@@ -141,6 +141,12 @@ func GetNovelRelatedURL(id string, limit int) string {
 	return fmt.Sprintf(base, id, limit)
 }
 
+func GetNovelCommentsURL(id string) string {
+	base := "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=%s&offset=0&limit=100"
+
+	return fmt.Sprintf(base, id)
+}
+
 func GetNovelSeriesURL(id string) string {
 	base := "https://www.pixiv.net/ajax/novel/series/%s"
 

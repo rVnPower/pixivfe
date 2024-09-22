@@ -26,6 +26,14 @@ func NovelPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	if novel.CommentOff == 0 {
+		// TODO should use token only if R-18/R-18G
+		comments, err := core.GetNovelComments(r, id)
+		if err == nil {
+			novel.CommentsList = comments
+		}
+	}
+
 	user, err := core.GetUserBasicInformation(r, novel.UserID)
 	if err != nil {
 		return err
