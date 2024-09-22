@@ -10,6 +10,7 @@ func AboutPage(w http.ResponseWriter, r *http.Request) error {
 		Time:           config.GlobalConfig.StartingTime,
 		Version:        config.GlobalConfig.Version,
 		Revision:       config.GlobalConfig.Revision,
+		RevisionHash:   config.GlobalConfig.RevisionHash,
 		ImageProxy:     config.GlobalConfig.ProxyServer.String(),
 		AcceptLanguage: config.GlobalConfig.AcceptLanguage,
 	})

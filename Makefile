@@ -4,7 +4,9 @@
 BINARY_NAME=pixivfe
 TARGETOS ?= $(shell go env GOOS)
 TARGETARCH ?= $(shell go env GOARCH)
-GIT_COMMIT := $(shell git describe --always 2>/dev/null)
+GIT_COMMIT_DATE := $(shell git show -s --format=%cd --date=format:"%Y.%m.%d")
+GIT_COMMIT_HASH := $(shell git rev-parse --short HEAD)
+REVISION := $(GIT_COMMIT_DATE)-$(GIT_COMMIT_HASH)
 
 # Include environment variables from .env if it exists
 -include .env
@@ -20,7 +22,7 @@ fmt:
 build:
 	@echo "Building $(BINARY_NAME)..."
 	go mod download
-	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=$(GIT_COMMIT)" -tags netgo -o $(BINARY_NAME)
+	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=$(REVISION)" -tags netgo -o $(BINARY_NAME)
 
 test:
 	@echo "Running tests..."

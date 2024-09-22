@@ -22,6 +22,7 @@ type Data_about struct {
 	Time           string
 	Version        string
 	Revision       string
+	RevisionHash   string
 	ImageProxy     string
 	AcceptLanguage string
 }

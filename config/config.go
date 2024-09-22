@@ -15,11 +15,20 @@ import (
 )
 
 var GlobalConfig ServerConfig
+
+// REVISION stores the current version's revision information
 var REVISION string = ""
+
+const (
+	unknownRevision = "unknown"
+	revisionFormat  = "date-hash"
+)
 
 type ServerConfig struct {
 	Version      string
 	Revision     string
+	RevisionDate string
+	RevisionHash string
 	StartingTime string // used in /about page
 
 	Host string `env:"PIXIVFE_HOST"`
@@ -54,10 +63,31 @@ type ServerConfig struct {
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
 }
 
+// parseRevision extracts date and hash from the revision string
+func parseRevision(revision string) (date, hash string) {
+	if revision == "" {
+		return unknownRevision, unknownRevision
+	}
+	parts := strings.Split(revision, "-")
+	if len(parts) == 2 {
+		return parts[0], parts[1]
+	}
+	return unknownRevision, revision
+}
+
 func (s *ServerConfig) LoadConfig() error {
 	s.Version = "v2.9"
 	s.Revision = REVISION
-	log.Printf("PixivFE %s %s\n", s.Version, s.Revision)
+
+	s.RevisionDate, s.RevisionHash = parseRevision(REVISION)
+
+	if REVISION == "" {
+		log.Printf("[WARNING] REVISION is not set. Continuing with unknown revision information.\n")
+	} else if s.RevisionDate == unknownRevision {
+		log.Printf("[WARNING] REVISION format is invalid: %s. Expected format '%s'. Continuing with full revision as hash.\n", REVISION, revisionFormat)
+	}
+
+	log.Printf("PixivFE %s, revision %s\n", s.Version, s.Revision)
 
 	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")
 
