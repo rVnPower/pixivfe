@@ -21,7 +21,7 @@ var REVISION string = ""
 
 const (
 	unknownRevision = "unknown"
-	revisionFormat  = "date-hash"
+	revisionFormat  = "date-hash[+dirty]"
 )
 
 type ServerConfig struct {
@@ -29,6 +29,7 @@ type ServerConfig struct {
 	Revision     string
 	RevisionDate string
 	RevisionHash string
+	IsDirty      bool
 	StartingTime string // used in /about page
 
 	Host string `env:"PIXIVFE_HOST"`
@@ -65,16 +66,22 @@ type ServerConfig struct {
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
 }
 
-// parseRevision extracts date and hash from the revision string
-func parseRevision(revision string) (date, hash string) {
+// parseRevision extracts date, hash, and dirty status from the revision string
+func parseRevision(revision string) (date, hash string, isDirty bool) {
 	if revision == "" {
-		return unknownRevision, unknownRevision
+		return unknownRevision, unknownRevision, false
 	}
+
+	isDirty = strings.HasSuffix(revision, "+dirty")
+	if isDirty {
+		revision = strings.TrimSuffix(revision, "+dirty")
+	}
+
 	parts := strings.Split(revision, "-")
 	if len(parts) == 2 {
-		return parts[0], parts[1]
+		return parts[0], parts[1], isDirty
 	}
-	return unknownRevision, revision
+	return unknownRevision, revision, isDirty
 }
 
 // validateURL checks if the given URL is valid
@@ -96,7 +103,7 @@ func (s *ServerConfig) LoadConfig() error {
 	s.Version = "v2.9"
 	s.Revision = REVISION
 
-	s.RevisionDate, s.RevisionHash = parseRevision(REVISION)
+	s.RevisionDate, s.RevisionHash, s.IsDirty = parseRevision(REVISION)
 
 	if REVISION == "" {
 		log.Printf("[WARNING] REVISION is not set. Continuing with unknown revision information.\n")

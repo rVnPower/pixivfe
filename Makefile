@@ -7,6 +7,10 @@ TARGETARCH ?= $(shell go env GOARCH)
 GIT_COMMIT_DATE := $(shell git show -s --format=%cd --date=format:"%Y.%m.%d")
 GIT_COMMIT_HASH := $(shell git rev-parse --short HEAD)
 REVISION := $(GIT_COMMIT_DATE)-$(GIT_COMMIT_HASH)
+UNCOMMITTED_CHANGES := $(shell git status --porcelain)
+ifneq ($(UNCOMMITTED_CHANGES),)
+    REVISION := $(REVISION)+dirty
+endif
 
 # Include environment variables from .env if it exists
 -include .env
