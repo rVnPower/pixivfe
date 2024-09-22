@@ -989,6 +989,10 @@ edit style.scss
     max-height: 100%;
     margin: 0 0.5rem;
   }
+  .novel .novel-content .novel-content-text a {
+    text-decoration: underline;
+    color: black;
+  }
   .novel .novel-attr {
     display: flex;
     align-items: center;

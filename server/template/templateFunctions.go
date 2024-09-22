@@ -305,8 +305,35 @@ func GetTemplateFunctions() map[string]any {
 			return s[:len(s)-6]
 		},
 		"renderNovel": func(s string) HTML {
+			furiganaTemplate := `<ruby>$1<rp>(</rp><rt>$2</rt><rp>)</rp></ruby>`
+			furiganaPattern := regexp.MustCompile(`\[\[rb:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+			s = furiganaPattern.ReplaceAllString(s, furiganaTemplate)
+
+			chapterTemplate := `<h2>$1</h2>`
+			chapterPattern := regexp.MustCompile(`\[chapter:\s*(.+?)\s*\]`)
+			s = chapterPattern.ReplaceAllString(s, chapterTemplate)
+
+			jumpUriTemplate := `<a href="$2" target="_blank">$1</a>`
+			jumpUriPattern := regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+			s = jumpUriPattern.ReplaceAllString(s, jumpUriTemplate)
+
+			jumpPageTemplate := `<a href="#$1">To page $1</a>`
+			jumpPagePattern := regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
+			s = jumpPagePattern.ReplaceAllString(s, jumpPageTemplate)
+
+			if strings.Contains(s, "[newpage]") {
+				// if [newpage] in content , then prepend <hr id="1"/> to the page
+				s = `<hr id="1"/>` + s
+				pageIdx := 1
+
+				// Should run before replace `\n` -> `<br />`
+				newPagePattern := regexp.MustCompile(`\s*\[newpage\]\s*`)
+				s = newPagePattern.ReplaceAllStringFunc(s, func(_ string) string {
+					pageIdx += 1
+					return fmt.Sprintf(`<br /><hr id="%d"/>`, pageIdx)
+				})
+			}
 			s = strings.ReplaceAll(s, "\n", "<br />")
-			s = strings.ReplaceAll(s, "[newpage]", "Insert page separator here.")
 			return HTML(s)
 		},
 		"novelGenre": GetNovelGenre,

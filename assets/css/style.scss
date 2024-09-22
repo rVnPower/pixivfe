@@ -1297,6 +1297,11 @@ $font-fallback-sans: YuGothic,
           max-height: 100%;
           margin: 0 0.5rem;
         }
+
+        a {
+          text-decoration: underline;
+          color: black;
+        }
       }
     }
 
