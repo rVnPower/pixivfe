@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"net/http"
@@ -124,7 +125,9 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 		url := re_t.FindString(response)
 		url = session.ProxyImageUrl(r, url[11:]) // truncate the "original":
 
-		return fmt.Sprintf(`<img src=%s alt="%s"/>`, url, s)
+		// make [pixivimage:illustid-index] jump to anchor
+		link := fmt.Sprintf("/artworks/%s", strings.ReplaceAll(illustid, "-", "#"))
+		return fmt.Sprintf(`<a href="%s" target="_blank"><img src=%s alt="%s"/></a>`, link, url, s)
 	})
 
 	return novel, nil
