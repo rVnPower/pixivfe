@@ -61,6 +61,17 @@ type Novel struct {
 		ViewMode int `json:"viewMode"`
 		// ...
 	} `json:"suggestedSettings"`
+	TextEmbeddedImages map[string]struct {
+		NovelImageId string `json:"novelImageId"`
+		SanityLevel  string `json:"sl"`
+		Urls         struct {
+			Two40Mw     string `json:"240mw"`
+			Four80Mw    string `json:"480mw"`
+			One200X1200 string `json:"1200x1200"`
+			One28X128   string `json:"128x128"`
+			Original    string `json:"original"`
+		} `json:"urls"`
+	} `json:"textEmbeddedImages"`
 	CommentsList []Comment
 }
 
@@ -128,6 +139,16 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 		// make [pixivimage:illustid-index] jump to anchor
 		link := fmt.Sprintf("/artworks/%s", strings.ReplaceAll(illustid, "-", "#"))
 		return fmt.Sprintf(`<a href="%s" target="_blank"><img src=%s alt="%s"/></a>`, link, url, s)
+	})
+
+	re_u := regexp.MustCompile(`\[uploadedimage:(\d+)\]`)
+	re_id := regexp.MustCompile(`\d+`)
+	novel.Content = re_u.ReplaceAllStringFunc(novel.Content, func(s string) string {
+		imageId := re_id.FindString(s)
+		if val, ok := novel.TextEmbeddedImages[imageId]; ok {
+			return fmt.Sprintf(`<img src=%s alt="%s"/>`, val.Urls.Original, s)
+		}
+		return s
 	})
 
 	return novel, nil
