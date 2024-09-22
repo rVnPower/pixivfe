@@ -1,8 +1,10 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="container">
+	<h2>{{.Tag.Title}}</h2>
+	<p>{{.Tag.Description}}</p>
 	<div class="vision-container">
-		{{- range _, article := .Data }}
+		{{- range _, article := .Tag.Articles }}
 		<div class="vision-preview vision-preview-large">
 			<div class="vision-thumbnail">
 				<img src="{{article.Thumbnail}}" alt="{{article.Title}}" />

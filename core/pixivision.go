@@ -186,6 +186,17 @@ func PixivisionGetTag(id string, page string, lang ...string) (PixivisionTag, er
 		article.Category = s.Find(".arc__thumbnail-label").Text()
 		article.Thumbnail = parseBackgroundImage(s.Find("._thumbnail").AttrOr("style", ""))
 
+		date := s.Find("time._date").AttrOr("datetime", "")
+		article.Date, _ = time.Parse(PixivDatetimeLayout, date)
+
+		s.Find("._tag-list a").Each(func(i int, t *goquery.Selection) {
+			var tag PixivisionEmbedTag
+			tag.ID = parseIDFromPixivLink(t.AttrOr("href", ""))
+			tag.Name = t.AttrOr("data-gtm-label", "")
+
+			article.Tags = append(article.Tags, tag)
+		})
+
 		tag.Articles = append(tag.Articles, article)
 	})
 

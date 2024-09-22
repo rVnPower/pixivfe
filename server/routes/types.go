@@ -99,6 +99,10 @@ type Data_pixivisionCategory struct {
 	Category core.PixivisionCategory
 }
 
+type Data_pixivisionTag struct {
+	Tag core.PixivisionTag
+}
+
 type Data_rank struct {
 	Title     string
 	Page      int

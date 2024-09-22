@@ -49,3 +49,17 @@ func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
 
 	return Render(w, r, Data_pixivisionCategory{Category: data})
 }
+
+func PixivisionTagPage(w http.ResponseWriter, r *http.Request) error {
+	id := GetPathVar(r, "id")
+	data, err := core.PixivisionGetTag(id, "1", "en")
+	if err != nil {
+		return err
+	}
+
+	for i := range data.Articles {
+		data.Articles[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data.Articles[i].Thumbnail)
+	}
+
+	return Render(w, r, Data_pixivisionTag{Tag: data})
+}
