@@ -155,6 +155,10 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 
 // API_POST performs a POST request to the Pixiv API with automatic retries
 func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) error {
+	if userToken == "" {
+		return errors.New("userToken is required for POST requests")
+	}
+
 	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
 		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
 		if err != nil {
@@ -164,12 +168,10 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 		req.Header.Add("User-Agent", "Mozilla/5.0")
 		req.Header.Add("Accept", "application/json")
 		req.Header.Add("x-csrf-token", csrf)
-		if userToken != "" {
-			req.AddCookie(&http.Cookie{
-				Name:  "PHPSESSID",
-				Value: userToken,
-			})
-		}
+		req.AddCookie(&http.Cookie{
+			Name:  "PHPSESSID",
+			Value: token,
+		})
 		if isJSON {
 			req.Header.Add("Content-Type", "application/json; charset=utf-8")
 		} else {
