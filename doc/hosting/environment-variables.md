@@ -50,6 +50,14 @@ See the [Obtaining the `PIXIVFE_TOKEN` cookie](obtaining-pixivfe-token.md) guide
 
 This setting specifies the hostname or IP address that PixivFE should listen on and accept incoming connections from. For example, if you want PixivFE to only accept connections from the same machine (your local computer), you can set `PIXIVFE_HOST=localhost`.
 
+## `PIXIVFE_REPO_URL`
+
+**Required**: No
+
+**Default**: `https://codeberg.org/VnPower/PixivFE`
+
+The URL of the PixivFE source code repository. This is used in the about page to provide links to the project's source code and specific commit information. You can change this if you're running a fork of PixivFE and want to link to your own repository instead.
+
 ## `PIXIVFE_REQUESTLIMIT`
 
 **Required**: No
@@ -110,18 +118,6 @@ Valid options:
 - `least-recently-used`: The token that hasn't been used for the longest time is selected.
 
 This option is useful when you have multiple Pixiv accounts and want to distribute the load across them, reducing the risk of rate limiting for individual accounts by the Pixiv API.
-
-## `PIXIVFE_DEV`
-
-**Required**: No
-
-Set to any value to enable development mode, e.g., `PIXIVFE_DEV=true`. In development mode:
-
-1. The server will live-reload HTML templates and SCSS files.
-2. Caching is disabled.
-3. Additional debug information is logged.
-
-This setting is particularly useful for developers working on PixivFE itself or for troubleshooting issues in a development environment.
 
 ## Exponential backoff configuration
 
@@ -184,3 +180,26 @@ Base timeout duration for token management.
 **Default:** `32000ms`
 
 Maximum backoff time for token management.
+
+## Development options
+
+### `PIXIVFE_DEV`
+
+**Required**: No
+
+Set to any value to enable development mode, e.g., `PIXIVFE_DEV=true`. In development mode:
+
+1. The server will live-reload HTML templates and SCSS files.
+2. Caching is disabled.
+3. Additional debug information is logged.
+4. Responses are saved to `PIXIVFE_RESPONSE_SAVE_LOCATION`.
+
+This setting is useful for developers working on PixivFE itself or for troubleshooting issues in a development environment.
+
+### `PIXIVFE_RESPONSE_SAVE_LOCATION`
+
+**Required**: No
+
+**Default**: `/tmp/pixivfe/responses`
+
+Defines where responses from the Pixiv API are saved when in development mode.

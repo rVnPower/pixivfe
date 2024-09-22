@@ -21,7 +21,9 @@ func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
 type Data_about struct {
 	Time           string
 	Version        string
+	RepoURL        string
 	Revision       string
+	RevisionHash   string
 	ImageProxy     string
 	AcceptLanguage string
 }
