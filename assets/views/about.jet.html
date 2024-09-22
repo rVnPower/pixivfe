@@ -3,7 +3,7 @@
 <div class="container">
   <h1>About PixivFE</h1>
   <p>PixivFE is a Pixiv frontend. It lets you enjoy art on Pixiv without needless interruption.</p>
-  <p>The instance you are looking at is provided by the owner of this domain. If you want to host PixivFE yourself, check out <a href="https://codeberg.org/vnpower/pixivfe">the source repository</a>.</p>
+  <p>The instance you are looking at is provided by the owner of this domain. If you want to host PixivFE yourself, check out <a href="{{ .RepoURL }}">the source repository</a>.</p>
   <h2>Server information</h2>
   <ul>
     <li>
@@ -13,7 +13,7 @@
     {{- if .Revision != "" }}
     <li>
       <b>Revision:</b>
-      <a href="https://codeberg.org/VnPower/PixivFE/commit/{{ .RevisionHash }}">{{ .Revision }}</a><br />
+      <a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}">{{ .Revision }}</a><br />
       PixivFE's source code revision
     </li>
     {{- end }}

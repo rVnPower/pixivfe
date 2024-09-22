@@ -1,10 +1,10 @@
-// Global (Server-Wide) Settings
-
+// Package config provides global server-wide settings.
 package config
 
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/url"
 	"strings"
@@ -36,6 +36,8 @@ type ServerConfig struct {
 	// One of the two is required
 	Port       string `env:"PIXIVFE_PORT"`
 	UnixSocket string `env:"PIXIVFE_UNIXSOCKET"`
+
+	RepoURL string `env:"PIXIVFE_REPO_URL,overwrite"` // used in /about page
 
 	Token              []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
 	TokenManager       *token_manager.TokenManager
@@ -75,6 +77,21 @@ func parseRevision(revision string) (date, hash string) {
 	return unknownRevision, revision
 }
 
+// validateURL checks if the given URL is valid
+func validateURL(urlString string, urlType string) (*url.URL, error) {
+	parsedURL, err := url.Parse(urlString)
+	if err != nil {
+		return nil, err
+	}
+	if (parsedURL.Scheme == "") != (parsedURL.Host == "") {
+		log.Panicf("%s URL is weird: %s\nPlease specify e.g. https://example.com", urlType, urlString)
+	}
+	if strings.HasSuffix(parsedURL.Path, "/") {
+		log.Panicf("%s URL path (%s) cannot end in /: %s\nPixivFE does not support this now, sorry", urlType, parsedURL.Path, urlString)
+	}
+	return parsedURL, nil
+}
+
 func (s *ServerConfig) LoadConfig() error {
 	s.Version = "v2.9"
 	s.Revision = REVISION
@@ -92,6 +109,8 @@ func (s *ServerConfig) LoadConfig() error {
 	s.StartingTime = time.Now().UTC().Format("2006-01-02 15:04")
 
 	// set default values with env:"...,overwrite"
+	s.RepoURL = "https://codeberg.org/VnPower/PixivFE"
+
 	s.UserAgent = "Mozilla/5.0 (Windows NT 10.0; rv:123.0) Gecko/20100101 Firefox/123.0"
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
@@ -114,30 +133,31 @@ func (s *ServerConfig) LoadConfig() error {
 
 	if s.Port == "" && s.UnixSocket == "" {
 		log.Fatalln("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
-		return errors.New("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
+		return errors.New("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set")
 	}
 
 	// a check for tokens
 	if len(s.Token) < 1 {
 		log.Fatalln("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details.")
-		return errors.New("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details.")
+		return errors.New("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details")
 	}
 
-	{ // validate proxy server
-		proxyUrl, err := url.Parse(s.ProxyServer_staging)
-		if err != nil {
-			panic(err)
-		}
-		s.ProxyServer = *proxyUrl
-		if (proxyUrl.Scheme == "") != (proxyUrl.Host == "") {
-			log.Panicf("proxy server url is weird: %s\nPlease specify e.g. https://example.com", proxyUrl.String())
-		}
-		if strings.HasSuffix(proxyUrl.Path, "/") {
-			log.Panicf("proxy server path (%s) has cannot end in /: %s\nPixivFE does not support this now, sorry", proxyUrl.Path, proxyUrl.String())
-		}
+	// Validate proxy server URL
+	proxyURL, err := validateURL(s.ProxyServer_staging, "Proxy server")
+	if err != nil {
+		return fmt.Errorf("Invalid proxy server URL: %v", err)
 	}
+	s.ProxyServer = *proxyURL
 	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
+
+	// Validate repo URL
+	repoURL, err := validateURL(s.RepoURL, "Repo")
+	if err != nil {
+		return fmt.Errorf("Invalid repo URL: %v", err)
+	}
+	s.RepoURL = repoURL.String()
+	log.Printf("Repo URL set to: %s\n", s.RepoURL)
 
 	// Validate TokenLoadBalancing
 	switch s.TokenLoadBalancing {
