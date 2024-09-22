@@ -84,10 +84,10 @@ func validateURL(urlString string, urlType string) (*url.URL, error) {
 		return nil, err
 	}
 	if (parsedURL.Scheme == "") != (parsedURL.Host == "") {
-		log.Panicf("%s URL is weird: %s\nPlease specify e.g. https://example.com", urlType, urlString)
+		return nil, fmt.Errorf("%s URL is invalid: %s. Please specify e.g. https://example.com", urlType, urlString)
 	}
 	if strings.HasSuffix(parsedURL.Path, "/") {
-		log.Panicf("%s URL path (%s) cannot end in /: %s\nPixivFE does not support this now, sorry", urlType, parsedURL.Path, urlString)
+		return nil, fmt.Errorf("%s URL path (%s) cannot end in /: %s. PixivFE does not support this now", urlType, parsedURL.Path, urlString)
 	}
 	return parsedURL, nil
 }
@@ -145,7 +145,10 @@ func (s *ServerConfig) LoadConfig() error {
 	// Validate proxy server URL
 	proxyURL, err := validateURL(s.ProxyServer_staging, "Proxy server")
 	if err != nil {
-		return fmt.Errorf("Invalid proxy server URL: %v", err)
+		log.Printf("[WARNING] Invalid proxy server URL: %v. Falling back to built-in proxy URL.", err)
+		proxyURL, _ = url.Parse(BuiltinProxyUrl) // We know this is valid
+	} else {
+		log.Printf("Proxy server set to: %s\n", proxyURL.String())
 	}
 	s.ProxyServer = *proxyURL
 	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
@@ -154,17 +157,19 @@ func (s *ServerConfig) LoadConfig() error {
 	// Validate repo URL
 	repoURL, err := validateURL(s.RepoURL, "Repo")
 	if err != nil {
-		return fmt.Errorf("Invalid repo URL: %v", err)
+		log.Printf("[WARNING] Invalid repo URL: %v. Using default repo URL.", err)
+		s.RepoURL = "https://codeberg.org/VnPower/PixivFE" // Use a default value
+	} else {
+		s.RepoURL = repoURL.String()
+		log.Printf("Repo URL set to: %s\n", s.RepoURL)
 	}
-	s.RepoURL = repoURL.String()
-	log.Printf("Repo URL set to: %s\n", s.RepoURL)
 
 	// Validate TokenLoadBalancing
 	switch s.TokenLoadBalancing {
 	case "round-robin", "random", "least-recently-used":
 		// Valid options
 	default:
-		log.Printf("Invalid PIXIVFE_TOKEN_LOAD_BALANCING value: %s. Defaulting to 'round-robin'.\n", s.TokenLoadBalancing)
+		log.Printf("[WARNING] Invalid PIXIVFE_TOKEN_LOAD_BALANCING value: %s. Defaulting to 'round-robin'.\n", s.TokenLoadBalancing)
 		s.TokenLoadBalancing = "round-robin"
 	}
 
