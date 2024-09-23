@@ -48,7 +48,13 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		}
 
 		if token == nil && !isPost {
-			return SimpleHTTPResponse{}, errors.New("All tokens are timed out")
+			tokenManager.ResetAllTokens()
+			return SimpleHTTPResponse{}, fmt.Errorf("All tokens (%d) are timed out, resetting all tokens to their initial good state.\n"+
+				"Consider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\n"+
+				"Please refer the following documentation for additional information:\n"+
+				"- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n"+
+				"- https://pixivfe-docs.pages.dev/hosting/environment-variables/#exponential-backoff-configuration",
+				len(config.GlobalConfig.Token))
 		}
 
 		tokenValue := ""
