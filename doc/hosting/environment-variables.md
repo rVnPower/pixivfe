@@ -68,7 +68,9 @@ It's recommended to enable rate limiting in the reverse proxy in front of PixivF
 
 ## `PIXIVFE_IMAGEPROXY`
 
-**Required**: No, defaults to using the built-in proxy
+**Required**: No
+
+**Default:** Uses the built-in proxy.
 
 !!! note
     The protocol **must** be included in the URL, e.g., `https://piximg.example.com`, where `https://` is the protocol used.
@@ -76,14 +78,6 @@ It's recommended to enable rate limiting in the reverse proxy in front of PixivF
 The URL of the image proxy server. Pixiv requires `Referer: https://www.pixiv.net/` in the HTTP request headers to fetch images directly. Set this variable if you wish to use an external image proxy or are unable to get images directly from Pixiv.
 
 See [hosting an image proxy server](image-proxy-server.md) or the [list of public image proxies](../public-image-proxies.md).
-
-## `PIXIVFE_USERAGENT`
-
-**Required**: No
-
-**Default:** `Mozilla/5.0 (Windows NT 10.0; rv:123.0) Gecko/20100101 Firefox/123.0`
-
-The value of the `User-Agent` header used for requests to Pixiv's API.
 
 ## `PIXIVFE_ACCEPTLANGUAGE`
 

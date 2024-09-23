@@ -119,7 +119,7 @@ func API_GET(ctx context.Context, url string, userToken string) (SimpleHTTPRespo
 			return nil, err
 		}
 		req = req.WithContext(ctx)
-		req.Header.Add("User-Agent", config.GlobalConfig.UserAgent)
+		req.Header.Add("User-Agent", config.GetRandomUserAgent())
 		req.Header.Add("Accept-Language", config.GlobalConfig.AcceptLanguage)
 		req.AddCookie(&http.Cookie{
 			Name:  "PHPSESSID",
@@ -165,7 +165,7 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 			return nil, err
 		}
 		req = req.WithContext(ctx)
-		req.Header.Add("User-Agent", "Mozilla/5.0")
+		req.Header.Add("User-Agent", config.GetRandomUserAgent())
 		req.Header.Add("Accept", "application/json")
 		req.Header.Add("x-csrf-token", csrf)
 		req.AddCookie(&http.Cookie{

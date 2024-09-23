@@ -52,7 +52,6 @@ type ServerConfig struct {
 	APIBaseTimeout    time.Duration `env:"PIXIVFE_API_BASE_TIMEOUT,overwrite"`
 	APIMaxBackoffTime time.Duration `env:"PIXIVFE_API_MAX_BACKOFF_TIME,overwrite"`
 
-	UserAgent      string `env:"PIXIVFE_USERAGENT,overwrite"`
 	AcceptLanguage string `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
 	RequestLimit   int    `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
@@ -118,7 +117,6 @@ func (s *ServerConfig) LoadConfig() error {
 	// set default values with env:"...,overwrite"
 	s.RepoURL = "https://codeberg.org/VnPower/PixivFE"
 
-	s.UserAgent = "Mozilla/5.0 (Windows NT 10.0; rv:123.0) Gecko/20100101 Firefox/123.0"
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
 	s.ProxyCheckInterval = 8 * time.Hour
