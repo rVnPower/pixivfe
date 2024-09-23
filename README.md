@@ -45,12 +45,12 @@ Then, run the project:
 git clone https://codeberg.org/VnPower/PixivFE.git && cd PixivFE
 
 # Run PixivFE in development mode (styles and templates reload automatically)
-PIXIVFE_DEV=1 <other_environment_variables> ./manage.sh run
+PIXIVFE_DEV=1 <other_environment_variables> ./build.sh run
 ```
 
 ## Hosting PixivFE
 
-You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, and use the `manage.sh` shell script to build and run the project.
+You can use PixivFE for personal use! Assuming that you use an operating system that can run POSIX shell scripts, install `go`, clone this repository, and use the `build.sh` shell script to build and run the project.
 I recommend self-hosting your own instance for personal use, instead of relying entirely on official instances.
 
 To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](https://pixivfe-docs.pages.dev/hosting-pixivfe/).

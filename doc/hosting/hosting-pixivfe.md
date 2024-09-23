@@ -112,12 +112,12 @@ Copy `.env.example` to `.env` and configure the variables as needed. Refer to th
 
 ### 3. Building and running PixivFE
 
-PixivFE provides a shell script named `manage.sh` to simplify the build and run process.
+PixivFE provides a shell script named `build.sh` to simplify the build and run process.
 
 To build and run PixivFE, use the following commands:
 
 ```bash
-./manage.sh run
+./build.sh run
 ```
 
 This will build the PixivFE binary and start it. It will be accessible at `localhost:8282`.

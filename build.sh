@@ -102,7 +102,7 @@ execute_command() {
 
 # Main execution
 if [ $# -eq 0 ]; then
-    help
+    build
 else
     execute_command "$@"
 fi

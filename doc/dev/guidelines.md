@@ -29,7 +29,7 @@ This file contains guidelines for code development.
 
 ## Adding features
 
-- Edit the `manage.sh` if you want to create scripts that help with the process of developing and/or using PixivFE.
+- Edit the `build.sh` if you want to create scripts that help with the process of developing and/or using PixivFE.
 - Don't create or add any shell files or configuration files of external programs in the root directory unless necessary.
 - Add comments where necessary to explain complex logic or non-obvious code behavior.
 
