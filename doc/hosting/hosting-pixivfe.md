@@ -44,7 +44,7 @@ Copy `.env.example` to `.env` and configure the variables as needed. Refer to th
 
 !!! note
     Ensure you set `PIXIVFE_HOST=0.0.0.0` in the `.env` file.
-    
+
     This allows PixivFE to bind to all network interfaces inside the container, which is necessary for Docker's network management to function correctly. The network access restrictions will be handled by Docker itself, not within PixivFE.
 
 #### 3. Set token
@@ -73,7 +73,7 @@ Copy `.env.example` to `.env` and configure the variables as needed. Refer to th
 
 !!! note
     Ensure you set `PIXIVFE_HOST=0.0.0.0` in the `.env` file.
-    
+
     This allows PixivFE to bind to all network interfaces inside the container, which is necessary for Docker's network management to function correctly. The network access restrictions will be handled by Docker itself, not within PixivFE.
 
 #### 3. Deploying PixivFE
@@ -112,13 +112,12 @@ Copy `.env.example` to `.env` and configure the variables as needed. Refer to th
 
 ### 3. Building and running PixivFE
 
-PixivFE uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction) to simplify the build and run process.
+PixivFE provides a shell script named `manage.sh` to simplify the build and run process.
 
 To build and run PixivFE, use the following commands:
 
 ```bash
-make build
-make run
+./manage.sh run
 ```
 
 This will build the PixivFE binary and start it. It will be accessible at `localhost:8282`.
