@@ -45,9 +45,30 @@ type Novel struct {
 		} `json:"tags"`
 		Writable bool `json:"writable"`
 	} `json:"tags"`
-	SeriesNavData any  `json:"seriesNavData"`
-	HasGlossary   bool `json:"hasGlossary"`
-	IsUnlisted    bool `json:"isUnlisted"`
+	SeriesNavData struct {
+		SeriesType    string `json:"seriesType"`
+		SeriesID      int    `json:"seriesId"`
+		Title         string `json:"title"`
+		IsConcluded   bool   `json:"isConcluded"`
+		IsReplaceable bool   `json:"isReplaceable"`
+		IsWatched     bool   `json:"isWatched"`
+		IsNotifying   bool   `json:"isNotifying"`
+		Order         int    `json:"order"`
+		Next          struct {
+			Title     string `json:"title"`
+			Order     int    `json:"order"`
+			ID        string `json:"id"`
+			Available bool   `json:"available"`
+		} `json:"next"`
+		Prev struct {
+			Title     string `json:"title"`
+			Order     int    `json:"order"`
+			ID        string `json:"id"`
+			Available bool   `json:"available"`
+		} `json:"prev"`
+	} `json:"seriesNavData"`
+	HasGlossary bool `json:"hasGlossary"`
+	IsUnlisted  bool `json:"isUnlisted"`
 	// seen values: zh-cn, ja
 	Language       string `json:"language"`
 	CommentOff     int    `json:"commentOff"`

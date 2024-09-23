@@ -67,13 +67,14 @@ type Data_newest struct {
 	Title string
 }
 type Data_novel struct {
-	Novel        core.Novel
-	NovelRelated []core.NovelBrief
-	User         core.UserBrief
-	Title        string
-	FontType     string
-	ViewMode     string
-	Language     string
+	Novel                    core.Novel
+	NovelRelated             []core.NovelBrief
+	NovelSeriesContentTitles []core.NovelSeriesContentTitle
+	User                     core.UserBrief
+	Title                    string
+	FontType                 string
+	ViewMode                 string
+	Language                 string
 }
 type Data_novelSeries struct {
 	NovelSeries         core.NovelSeries

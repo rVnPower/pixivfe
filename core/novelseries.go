@@ -113,14 +113,7 @@ func GetNovelSeriesByID(r *http.Request, id string) (NovelSeries, error) {
 	return series, nil
 }
 
-func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int, useToken bool) ([]NovelSeriesContent, error) {
-	var token string
-	if useToken {
-		token = session.GetUserToken(r)
-	} else {
-		token = ""
-	}
-
+func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int) ([]NovelSeriesContent, error) {
 	var novels struct {
 		Thumbnails struct {
 			List []NovelBrief `json:"novel"`
@@ -132,7 +125,7 @@ func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int
 
 	URL := GetNovelSeriesContentURL(id, page, perPage)
 
-	response, err := API_GET_UnwrapJson(r.Context(), URL, token)
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return novels.Page.SeriesContents, err
 	}
@@ -160,19 +153,12 @@ func GetNovelSeriesContentByID(r *http.Request, id string, page int, perPage int
 	return series_content, nil
 }
 
-func GetNovelSeriesContentTitlesByID(r *http.Request, id int, useToken bool) ([]NovelSeriesContentTitle, error) {
-	var token string
-	if useToken {
-		token = session.GetUserToken(r)
-	} else {
-		token = ""
-	}
-
+func GetNovelSeriesContentTitlesByID(r *http.Request, id int) ([]NovelSeriesContentTitle, error) {
 	var contentTitles []NovelSeriesContentTitle
 
 	URL := GetNovelSeriesContentTitlesURL(id)
 
-	response, err := API_GET_UnwrapJson(r.Context(), URL, token)
+	response, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
 		return contentTitles, err
 	}

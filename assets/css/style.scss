@@ -1218,6 +1218,20 @@ $font-fallback-sans: YuGothic,
           -webkit-box-orient: vertical;
         }
 
+        .novel-series-title {
+          color: $fg-secondary;
+          font-size: 1em;
+          font-weight: bold;
+          overflow: hidden;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          text-overflow: ellipsis;
+          width: 100%;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
         .novel-description {
           font-size: 0.85em;
           overflow: hidden;
@@ -1265,12 +1279,32 @@ $font-fallback-sans: YuGothic,
           font-weight: bold;
         }
 
+        .novel-series-title {
+          color: $fg-secondary;
+          font-size: 1em;
+          font-weight: bold;
+        }
+
         .novel-description {
           font-size: 0.85em;
         }
       }
     }
 
+    .content-title-list {
+      list-style: none;
+      font-size: 0.9em;
+      font-weight: bold;
+      padding: 0px;
+      overflow-y: auto;
+      max-height: 10.5em;
+      margin-top:0;
+      color: $fg-secondary;
+      .current {
+        background: rgba(0, 0, 0, 0.04);
+      }
+    }
+  
     .novel-cover img {
       /* warning: hard-coded values */
       width: 136px;
@@ -1378,11 +1412,40 @@ $font-fallback-sans: YuGothic,
       }
     }
 
+    .novel-series-nav {
+      text-align: center;
+      padding: 20px;
+
+      .novel-series-title {
+        color: $fg-secondary;
+        font-size: 1em;
+        font-weight: bold;
+      }
+      
+      .prev, .next {
+        margin-top: 10px;
+      }
+
+      .novel-title {
+        color: $fg;
+        font-weight: bold;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+    }
+
     @media screen and (max-width: 950px) {
       .novel-content {
         .novel-content-text {
           padding: 6.4rem 1rem;
         }
+      }
+
+      .content-title-nav {
+        display: none;
       }
     }
   }

@@ -5,9 +5,10 @@ import (
 	"strconv"
 	"strings"
 
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
-	"net/http"
 )
 
 func NovelPage(w http.ResponseWriter, r *http.Request) error {
@@ -24,6 +25,13 @@ func NovelPage(w http.ResponseWriter, r *http.Request) error {
 	related, err := core.GetNovelRelated(r, id)
 	if err != nil {
 		return err
+	}
+
+	var contentTitles []core.NovelSeriesContentTitle
+	if novel.SeriesNavData.SeriesID != 0 {
+		// Must use token, because we can't determine Series' XRestrict via Novel API here
+		// and All-age post could also appears in R-18 series.
+		contentTitles, _ = core.GetNovelSeriesContentTitlesByID(r, novel.SeriesNavData.SeriesID)
 	}
 
 	if novel.CommentOff == 0 {
@@ -50,5 +58,10 @@ func NovelPage(w http.ResponseWriter, r *http.Request) error {
 
 	// println("fontType", fontType)
 
-	return Render(w, r, Data_novel{Novel: novel, NovelRelated: related, User: user, Title: novel.Title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
+	title := novel.Title
+	if novel.SeriesNavData.SeriesID != 0 {
+		title = fmt.Sprintf("#%d %s | %s", novel.SeriesNavData.Order, novel.Title, novel.SeriesNavData.Title)
+	}
+
+	return Render(w, r, Data_novel{Novel: novel, NovelRelated: related, User: user, NovelSeriesContentTitles: contentTitles, Title: title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
 }

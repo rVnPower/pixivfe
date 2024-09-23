@@ -5,8 +5,9 @@ import (
 	"math"
 	"strconv"
 
-	"codeberg.org/vnpower/pixivfe/v2/core"
 	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/core"
 )
 
 func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
@@ -30,8 +31,8 @@ func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
 		return fmt.Errorf("Invalid Page")
 	}
 
-	// Use token only if R-18/R-18G
-	seriesContents, err := core.GetNovelSeriesContentByID(r, id, pageNum, perPage, series.XRestrict > 0)
+	// TODO should use token only if R-18/R-18G
+	seriesContents, err := core.GetNovelSeriesContentByID(r, id, pageNum, perPage)
 	if err != nil {
 		return err
 	}
