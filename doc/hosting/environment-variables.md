@@ -187,13 +187,13 @@ Used to set the [proxy server](https://en.wikipedia.org/wiki/Proxy_server) that 
 
 Requests use the proxy specified in the environment variable that matches the scheme of the request (`HTTP_PROXY` or `HTTPS_PROXY`). This selection is based on the scheme of the **request being made**, not on the protocol used by the proxy server itself.
 
-#### `HTTPS_PROXY`
+### `HTTPS_PROXY`
 
 **Required**: No
 
 Proxy server used for requests made over HTTPS.
 
-#### `HTTP_PROXY`
+### `HTTP_PROXY`
 
 **Required**: No
 
