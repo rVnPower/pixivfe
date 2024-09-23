@@ -169,18 +169,3 @@ func (tm *TokenManager) ResetAllTokens() {
 		token.FailureCount = 0
 	}
 }
-
-// GetMaxRetries returns the maximum number of retries configured for the TokenManager
-func (tm *TokenManager) GetMaxRetries() int {
-	return tm.maxRetries
-}
-
-// GetBaseTimeout returns the base timeout duration configured for the TokenManager
-func (tm *TokenManager) GetBaseTimeout() time.Duration {
-	return tm.baseTimeout
-}
-
-// GetMaxBackoffTime returns the maximum backoff time configured for the TokenManager
-func (tm *TokenManager) GetMaxBackoffTime() time.Duration {
-	return tm.maxBackoffTime
-}
