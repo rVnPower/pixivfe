@@ -8,6 +8,13 @@
       </a>
     </div>
     <div class="novel-metadata">
+      {{- if .Novel.SeriesNavData }}
+        <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
+          <div class="novel-series-title">
+              {{- .Novel.SeriesNavData.Title }}#{{- .Novel.SeriesNavData.Order}}
+          </div>
+        </a>
+      {{- end}}
       <div class="novel-title">{{ .Novel.Title }}</div>
       <small><span>{{ .Novel.WordCount }} word(s)</span>&nbsp;<span>{{ floor: .Novel.ReadingTime / 60 }}
           mins</span></small>
@@ -59,6 +66,23 @@
         </span>
       </div>
     </div>
+    {{- if .Novel.SeriesNavData }}
+    <div class="content-title-nav">
+      <div>Series</div>
+      <ol class="content-title-list">
+        {{- range i,v := .NovelSeriesContentTitles }}
+        <li>
+          {*TODO how to scroll the current one into the center and middle of the div ?*}
+          {{- if v.ID == .Novel.ID  }}
+          # {{ i + 1 }}&nbsp;{{ v.Title }}
+          {{- else }}
+          <a href="/novel/{{ v.ID }}" ># {{ i + 1 }}&nbsp;{{ v.Title }}</a>
+          {{- end }}
+        </li>
+        {{- end }}
+      </ol>
+    </div>
+    {{- end }}
   </div>
   <!-- ----------- -->
   <div class="novel-settings">
@@ -113,6 +137,27 @@
       {{- raw: renderNovel(.Novel.Content) }}
     </div>
   </div>
+  {{- if .Novel.SeriesNavData }}
+  <div class="novel-series-nav">
+    <div>
+      Series: <a class="novel-series-title" href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
+        {{- .Novel.SeriesNavData.Title }}
+      </a>
+    </div>
+    {{- if .Novel.SeriesNavData.Next }}
+    <div class="prev">
+      Next:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Next.ID}}">
+        #{{- .Novel.SeriesNavData.Next.Order }}&nbsp;{{ .Novel.SeriesNavData.Next.Title }}</a>
+    </div>
+    {{- end}}
+    {{- if .Novel.SeriesNavData.Prev }}
+    <div class="next">
+      Prev:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Prev.ID}}">
+        #{{- .Novel.SeriesNavData.Prev.Order }}&nbsp;{{ .Novel.SeriesNavData.Prev.Title }}</a>
+    </div>
+    {{- end}}
+  </div>
+  {{- end}}
   <div class="novel-attr">
     <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
     </a>

@@ -7,6 +7,13 @@
                 </a>
             </div>
             <div class="novel-metadata">
+                {{- if .SeriesID }}
+                <a href="/novel/series/{{ .SeriesID }}">
+                    <div class="novel-series-title">
+                        {{- .SeriesTitle }}
+                    </div>
+                </a>
+                {{- end }}
                 <a href="/novel/{{ .ID }}">
                     <div class="novel-title">
                         {{- .Title }}
