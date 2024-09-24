@@ -8,6 +8,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
+// SetPrivacyHeaders is a middleware that adds security headers to HTTP responses.
 func SetPrivacyHeaders(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		header := w.Header()
