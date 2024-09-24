@@ -169,7 +169,7 @@ Maximum backoff time for API requests.
 
 These settings control how PixivFE manages token timeouts when a token encounters repeated failures. The backoff time for a token starts at the base timeout and doubles with each failure, up to the maximum backoff time.
 
-#### `PIXIVFE_MAX_RETRIES`
+#### `PIXIVFE_TOKEN_MAX_RETRIES`
 
 **Required**: No
 
@@ -177,7 +177,7 @@ These settings control how PixivFE manages token timeouts when a token encounter
 
 Maximum number of retries for token management.
 
-#### `PIXIVFE_BASE_TIMEOUT`
+#### `PIXIVFE_TOKEN_BASE_TIMEOUT`
 
 **Required**: No
 
@@ -185,7 +185,7 @@ Maximum number of retries for token management.
 
 Base timeout duration for token management.
 
-#### `PIXIVFE_MAX_BACKOFF_TIME`
+#### `PIXIVFE_TOKEN_MAX_BACKOFF_TIME`
 
 **Required**: No
 

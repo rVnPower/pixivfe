@@ -40,12 +40,12 @@ type ServerConfig struct {
 
 	RepoURL string `env:"PIXIVFE_REPO_URL,overwrite"` // used in /about page
 
-	Token              []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
-	TokenManager       *token_manager.TokenManager
-	TokenLoadBalancing string        `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"`
-	MaxRetries         int           `env:"PIXIVFE_MAX_RETRIES,overwrite"`
-	BaseTimeout        time.Duration `env:"PIXIVFE_BASE_TIMEOUT,overwrite"`
-	MaxBackoffTime     time.Duration `env:"PIXIVFE_MAX_BACKOFF_TIME,overwrite"`
+	Token               []string `env:"PIXIVFE_TOKEN,required"` // may be multiple tokens. delimiter is ','
+	TokenManager        *token_manager.TokenManager
+	TokenLoadBalancing  string        `env:"PIXIVFE_TOKEN_LOAD_BALANCING,overwrite"`
+	TokenMaxRetries     int           `env:"PIXIVFE_TOKEN_MAX_RETRIES,overwrite"`
+	TokenBaseTimeout    time.Duration `env:"PIXIVFE_TOKEN_BASE_TIMEOUT,overwrite"`
+	TokenMaxBackoffTime time.Duration `env:"PIXIVFE_TOKEN_MAX_BACKOFF_TIME,overwrite"`
 
 	// API request level backoff settings
 	APIMaxRetries     int           `env:"PIXIVFE_API_MAX_RETRIES,overwrite"`
@@ -123,9 +123,9 @@ func (s *ServerConfig) LoadConfig() error {
 	s.ProxyCheckEnabled = true
 	s.ProxyCheckInterval = 8 * time.Hour
 	s.TokenLoadBalancing = "round-robin"
-	s.MaxRetries = 5
-	s.BaseTimeout = 1000 * time.Millisecond
-	s.MaxBackoffTime = 32000 * time.Millisecond
+	s.TokenMaxRetries = 5
+	s.TokenBaseTimeout = 1000 * time.Millisecond
+	s.TokenMaxBackoffTime = 32000 * time.Millisecond
 
 	s.APIMaxRetries = 3
 	s.APIBaseTimeout = 500 * time.Millisecond
@@ -181,9 +181,9 @@ func (s *ServerConfig) LoadConfig() error {
 	}
 
 	// Initialize TokenManager
-	s.TokenManager = token_manager.NewTokenManager(s.Token, s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime, s.TokenLoadBalancing)
+	s.TokenManager = token_manager.NewTokenManager(s.Token, s.TokenMaxRetries, s.TokenBaseTimeout, s.TokenMaxBackoffTime, s.TokenLoadBalancing)
 	log.Printf("Token manager initialized with %d tokens\n", len(s.Token))
-	log.Printf("Token manager settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.MaxRetries, s.BaseTimeout, s.MaxBackoffTime)
+	log.Printf("Token manager settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.TokenMaxRetries, s.TokenBaseTimeout, s.TokenMaxBackoffTime)
 	log.Printf("Token load balancing method: %s\n", s.TokenLoadBalancing)
 
 	log.Printf("API request backoff settings: Max retries: %d, Base timeout: %v, Max backoff time: %v\n", s.APIMaxRetries, s.APIBaseTimeout, s.APIMaxBackoffTime)

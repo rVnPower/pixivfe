@@ -9,6 +9,12 @@ Exponential backoff is a technique used to gradually increase the wait time betw
 1. API request level
 2. Token management level
 
+### Configuration
+
+The `ServerConfig` struct in [`config/config.go`](https://codeberg.org/VnPower/PixivFE/src/branch/v2/config/config.go) includes fields for both API request level and token management level backoff settings.
+
+The `LoadConfig` method sets default values for these settings if they are not provided through environment variables.
+
 ## API request level backoff
 
 **Location: `core/requests.go`**
@@ -53,39 +59,3 @@ The `TokenManager` implements exponential backoff for individual tokens:
 - The token's `TimeoutUntil` is set to the current time plus this calculated duration.
 
 This approach allows tokens that repeatedly fail increasingly longer "cool-down" periods before being used again, helping to manage rate limiting of individual tokens by the Pixiv API.
-
-## Implementation details
-
-### Configuration (`config/config.go`)
-
-The `ServerConfig` struct in `config/config.go` includes fields for both API request level and token management level backoff settings:
-
-```go
-type ServerConfig struct {
-    // ... other fields ...
-    MaxRetries     int           `env:"PIXIVFE_MAX_RETRIES,overwrite"`
-    BaseTimeout    time.Duration `env:"PIXIVFE_BASE_TIMEOUT,overwrite"`
-    MaxBackoffTime time.Duration `env:"PIXIVFE_MAX_BACKOFF_TIME,overwrite"`
-
-    APIMaxRetries     int           `env:"PIXIVFE_API_MAX_RETRIES,overwrite"`
-    APIBaseTimeout    time.Duration `env:"PIXIVFE_API_BASE_TIMEOUT,overwrite"`
-    APIMaxBackoffTime time.Duration `env:"PIXIVFE_API_MAX_BACKOFF_TIME,overwrite"`
-    // ... other fields ...
-}
-```
-
-The `LoadConfig` method sets default values for these settings if they are not provided through environment variables:
-
-```go
-func (s *ServerConfig) LoadConfig() error {
-    // ... other initializations ...
-    s.MaxRetries = 5
-    s.BaseTimeout = 1 * time.Second
-    s.MaxBackoffTime = 32 * time.Second
-
-    s.APIMaxRetries = 3
-    s.APIBaseTimeout = 500 * time.Millisecond
-    s.APIMaxBackoffTime = 8 * time.Second
-    // ... rest of the method ...
-}
-```
