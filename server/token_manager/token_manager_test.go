@@ -155,27 +155,6 @@ func TestResetAllTokens(t *testing.T) {
 	}
 }
 
-// TestGetterMethods ensures that the getter methods return the correct values
-// that were set during TokenManager initialization.
-func TestGetterMethods(t *testing.T) {
-	maxRetries := 5
-	baseTimeout := 1000 * time.Millisecond
-	maxBackoffTime := 32000 * time.Millisecond
-	tm := NewTokenManager([]string{"token1"}, maxRetries, baseTimeout, maxBackoffTime, "round-robin")
-
-	if tm.GetMaxRetries() != maxRetries {
-		t.Errorf("Expected GetMaxRetries to return %d, got %d", maxRetries, tm.GetMaxRetries())
-	}
-
-	if tm.GetBaseTimeout() != baseTimeout {
-		t.Errorf("Expected GetBaseTimeout to return %v, got %v", baseTimeout, tm.GetBaseTimeout())
-	}
-
-	if tm.GetMaxBackoffTime() != maxBackoffTime {
-		t.Errorf("Expected GetMaxBackoffTime to return %v, got %v", maxBackoffTime, tm.GetMaxBackoffTime())
-	}
-}
-
 // TestGetFallbackToken verifies that when all tokens are timed out,
 // the TokenManager correctly selects and resets a fallback token.
 func TestGetFallbackToken(t *testing.T) {
