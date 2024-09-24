@@ -16,7 +16,7 @@ A open source alternative frontend for Pixiv.
 
 Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:eientei.org) on Matrix! You can also see the [Known quirks](https://pixivfe-docs.pages.dev/known-quirks/) page to check if your issue has a known solution.
 
-You can keep track of this project's development using the [roadmap](doc/dev/general.md).
+You can keep track of this project's development using the [Roadmap](https://pixivfe-docs.pages.dev/dev/roadmap/).
 
 ## Features
 
