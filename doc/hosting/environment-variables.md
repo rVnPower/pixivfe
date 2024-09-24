@@ -87,16 +87,6 @@ See [hosting an image proxy server](image-proxy-server.md) or the [list of publi
 
 The value of the `Accept-Language` header used for requests to Pixiv's API. Change this to modify the response language.
 
-## `PIXIVFE_PROXY_CHECK_INTERVAL`
-
-**Required**: No
-
-**Default:** `8h`
-
-The interval in minutes between proxy checks. Defaults to 8 hours if not set.
-Please specify this value in Go's `time.Duration` notation, e.g. `2h3m5s`.
-You can disable this by setting the value to 0. Then, proxies will only be checked once at server initialization.
-
 ## `PIXIVFE_TOKEN_LOAD_BALANCING`
 
 **Required**: No
@@ -112,6 +102,34 @@ Valid options:
 - `least-recently-used`: The token that hasn't been used for the longest time is selected.
 
 This option is useful when you have multiple Pixiv accounts and want to distribute the load across them, reducing the risk of rate limiting for individual accounts by the Pixiv API.
+
+## Image proxy checker configuration
+
+PixivFE includes a [image proxy checker](https://codeberg.org/VnPower/PixivFE/src/branch/v2/server/proxy_checker/proxy_checker.go) that periodically tests the pre-defined list of image proxy servers to determine which ones are working. It maintains an updated list of functional proxies that can be used to make image requests to Pixiv.
+
+The following variables control the behavior of the proxy checker.
+
+### `PIXIVFE_PROXY_CHECK_ENABLED`
+
+**Required**: No
+
+**Default:** `true`
+
+Controls whether the image proxy checker is enabled. Set to `false` to completely disable proxy checking.
+
+When disabled, PixivFE will not perform any checks on the image proxy servers, which can be useful in environments where this behavior is not needed or causes issues.
+
+### `PIXIVFE_PROXY_CHECK_INTERVAL`
+
+**Required**: No
+
+**Default:** `8h`
+
+The interval between proxy checks. Defaults to 8 hours if not set.
+
+Please specify this value in Go's [`time.Duration`](https://pkg.go.dev/time#ParseDuration) notation, e.g. `2h3m5s`.
+
+You can disable periodic checks by setting the value to `0`. Then, proxies will only be checked once at server initialization.
 
 ## Exponential backoff configuration
 

@@ -58,6 +58,7 @@ type ServerConfig struct {
 	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL
 
+	ProxyCheckEnabled  bool          `env:"PIXIVFE_PROXY_CHECK_ENABLED,overwrite"`
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
 
 	// Development options
@@ -119,6 +120,7 @@ func (s *ServerConfig) LoadConfig() error {
 
 	s.AcceptLanguage = "en-US,en;q=0.5"
 	s.ProxyServer_staging = BuiltinProxyUrl
+	s.ProxyCheckEnabled = true
 	s.ProxyCheckInterval = 8 * time.Hour
 	s.TokenLoadBalancing = "round-robin"
 	s.MaxRetries = 5

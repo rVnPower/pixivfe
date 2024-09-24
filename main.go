@@ -25,14 +25,20 @@ func main() {
 	audit.Init(config.GlobalConfig.InDevelopment)
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
-	// Initialize and start the proxy checker
-	defer proxy_checker.StopProxyChecker()
-	firstCheckDone := proxy_checker.InitializeProxyChecker()
+	// Conditionally initialize and start the proxy checker
+	if config.GlobalConfig.ProxyCheckEnabled {
+		defer proxy_checker.StopProxyChecker()
+		firstCheckDone := proxy_checker.InitializeProxyChecker()
 
-	// Wait for the first proxy check to complete
-	log.Println("Waiting for initial proxy check to complete...")
-	<-firstCheckDone
-	log.Println("Initial proxy check completed. Starting server...")
+		// Wait for the first proxy check to complete
+		log.Println("Waiting for initial proxy check to complete...")
+		<-firstCheckDone
+		log.Println("Initial proxy check completed.")
+	} else {
+		log.Println("Skipping proxy checker initialization.")
+	}
+
+	log.Println("Starting server...")
 
 	handlers.InitializeRateLimiter()
 
