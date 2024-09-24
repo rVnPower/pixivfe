@@ -71,6 +71,17 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		resp, err := retryClient.Do(req)
 		end := time.Now()
 
+		audit.LogAPIRoundTrip(audit.APIRequestSpan{
+			RequestId: request_context.GetFromContext(ctx).RequestId,
+			Response:  resp,
+			Error:     err,
+			Method:    req.Method,
+			Token:     tokenValue,
+			Body:      "",
+			StartTime: start,
+			EndTime:   end,
+		})
+
 		if err == nil && resp.StatusCode == http.StatusOK {
 			if userToken == "" && !isPost {
 				tokenManager.MarkTokenStatus(token, token_manager.Good)
@@ -94,17 +105,6 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		if userToken == "" && !isPost {
 			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 		}
-
-		audit.LogAPIRoundTrip(audit.APIRequestSpan{
-			RequestId: request_context.GetFromContext(ctx).RequestId,
-			Response:  resp,
-			Error:     err,
-			Method:    req.Method,
-			Token:     tokenValue,
-			Body:      "",
-			StartTime: start,
-			EndTime:   end,
-		})
 
 		select {
 		case <-ctx.Done():
