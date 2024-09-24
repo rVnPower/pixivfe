@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// RecoverFromPanic wraps an http.Handler and recovers from any panics that occur during its execution.
+// If a panic occurs, it sends an HTTP 500 Internal Server Error response with the panic message.
 func RecoverFromPanic(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var err error
