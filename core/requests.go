@@ -35,7 +35,7 @@ func init() {
 }
 
 // retryRequest performs a request with automatic retries and token management
-func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string, isPost bool) (SimpleHTTPResponse, error) {
+func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string, isPost bool) (*SimpleHTTPResponse, error) {
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
@@ -49,7 +49,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 
 		if token == nil && !isPost {
 			tokenManager.ResetAllTokens()
-			return SimpleHTTPResponse{}, fmt.Errorf("All tokens (%d) are timed out, resetting all tokens to their initial good state.\n"+
+			return nil, fmt.Errorf("All tokens (%d) are timed out, resetting all tokens to their initial good state.\n"+
 				"Consider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\n"+
 				"Please refer the following documentation for additional information:\n"+
 				"- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n"+
@@ -64,7 +64,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 
 		req, err := reqFunc(ctx, tokenValue)
 		if err != nil {
-			return SimpleHTTPResponse{}, err
+			return nil, err
 		}
 
 		start := time.Now()
@@ -89,9 +89,9 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			defer resp.Body.Close()
 			body, err := io.ReadAll(resp.Body)
 			if err != nil {
-				return SimpleHTTPResponse{}, err
+				return nil, err
 			}
-			return SimpleHTTPResponse{
+			return &SimpleHTTPResponse{
 				StatusCode: resp.StatusCode,
 				Body:       string(body),
 			}, nil
@@ -108,17 +108,17 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 
 		select {
 		case <-ctx.Done():
-			return SimpleHTTPResponse{}, ctx.Err()
+			return nil, ctx.Err()
 		default:
 			// Continue to next iteration
 		}
 	}
 
-	return SimpleHTTPResponse{}, fmt.Errorf("Max retries reached. Last error: %v", lastErr)
+	return nil, fmt.Errorf("Max retries reached. Last error: %v", lastErr)
 }
 
 // API_GET performs a GET request to the Pixiv API with automatic retries
-func API_GET(ctx context.Context, url string, userToken string) (SimpleHTTPResponse, error) {
+func API_GET(ctx context.Context, url string, userToken string) (*SimpleHTTPResponse, error) {
 	return retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
 		req, err := retryablehttp.NewRequest("GET", url, nil)
 		if err != nil {
