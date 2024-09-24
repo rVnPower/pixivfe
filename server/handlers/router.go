@@ -28,6 +28,16 @@ func serveFile(filename string) http.HandlerFunc {
 func DefineRoutes() *mux.Router {
 	router := mux.NewRouter()
 
+	// Tutorial: Adding new routes
+	// 1. Use router.HandleFunc to define the path and handler
+	// 2. Wrap the handler function, defined in package routes, with CatchError for error handling
+	// 3. Specify the HTTP method(s) using .Methods()
+	// 4. For URL parameters, use curly braces in the path, e.g., "/users/{id}"
+	// 5. Group similar routes together for better organization
+	//
+	// Example:
+	// router.HandleFunc("/new/route/{param}", CatchError(routes.NewHandler)).Methods("GET", "POST")
+
 	// Redirect handler: strip trailing / to make router behave consistently
 	// This ensures that URLs with and without trailing slashes are treated the same
 	router.MatcherFunc(func(r *http.Request, rm *mux.RouteMatch) bool {
