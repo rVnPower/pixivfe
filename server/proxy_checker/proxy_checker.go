@@ -19,39 +19,43 @@ const (
 var (
 	workingProxies      []string
 	workingProxiesMutex sync.RWMutex
-	stopChan            chan struct{} = make(chan struct{})
+	stopChan            chan struct{}
 )
 
 func InitializeProxyChecker() chan struct{} {
+	stopChan = make(chan struct{})
 	firstCheckDone := make(chan struct{})
+
 	go func() {
-		for {
-			select {
-			case <-stopChan:
-				log.Print("Stopping proxy checker...")
-				return
-			default:
-				checkProxies()
+		checkProxies()
+		close(firstCheckDone) // Signal that the first check is done
+
+		if t := config.GlobalConfig.ProxyCheckInterval; t > 0 {
+			ticker := time.NewTicker(t)
+			defer ticker.Stop()
+
+			for {
 				select {
-				case <-firstCheckDone:
-					// First check already done, do nothing
-				default:
-					close(firstCheckDone) // Signal that the first check is done
-				}
-				if t := config.GlobalConfig.ProxyCheckInterval; t > 0 {
-					time.Sleep(t)
-				} else {
-					log.Print("Proxy check interval set to 0, disabling auto-check from now on.")
-					select {} // Sweet dreams!
+				case <-stopChan:
+					log.Print("Stop signal received. Stopping proxy checker...")
+					return
+				case <-ticker.C:
+					checkProxies()
 				}
 			}
+		} else {
+			log.Print("Proxy check interval set to 0, no further checks will be performed.")
+			<-stopChan // Wait for stop signal
 		}
 	}()
+
 	return firstCheckDone
 }
 
 func StopProxyChecker() {
-	close(stopChan)
+	if stopChan != nil {
+		close(stopChan)
+	}
 }
 
 func checkProxies() {
