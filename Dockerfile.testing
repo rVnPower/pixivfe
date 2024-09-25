@@ -23,20 +23,10 @@ RUN go mod download
 RUN PWGO_VER=$(grep -oE "playwright-go v\S+" ./go.mod | sed 's/playwright-go //g') \
     && go install github.com/playwright-community/playwright-go/cmd/playwright@${PWGO_VER}
 
-### Stage 2: Build application binary
-FROM golang:1.22.5-bookworm AS builder
-COPY --from=modules /go/pkg /go/pkg
-COPY . /app
-WORKDIR /app
-RUN go build -o /app/pixivfe
-
-### Stage 3a: Final without Playwright
+### Stage 2a: Final without Playwright
 FROM ubuntu:noble AS no-playwright
 
 WORKDIR /app
-
-# Copy built binary from builder stage
-COPY --from=builder /app/pixivfe /app/pixivfe
 
 # Install correct Go version
 ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local
@@ -48,10 +38,12 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 # Copy the project directory
 COPY . /app
 
+RUN go build -o /app/pixivfe
+
 # Set the entrypoint to the binary name
 ENTRYPOINT ["/app/pixivfe"]
 
-### Stage 3b: Final with Playwright (default)
+### Stage 2b: Final with Playwright (default)
 FROM ubuntu:noble
 
 WORKDIR /app
@@ -59,9 +51,6 @@ WORKDIR /app
 # Copy resources from modules stage
 COPY --from=modules /go/pkg /go/pkg
 COPY --from=modules /go/bin/playwright /go/bin/playwright
-
-# Copy built binary from builder stage
-COPY --from=builder /app/pixivfe /app/pixivfe
 
 # Install correct Go version
 ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local
@@ -78,6 +67,8 @@ RUN apt-get update && apt-get install -y ca-certificates tzdata \
 
 # Copy the project directory last to avoid invalidating the cache for the Playwright installation
 COPY . /app
+
+RUN go build -o /app/pixivfe
 
 # Set the entrypoint to the binary name
 ENTRYPOINT ["/app/pixivfe"]
