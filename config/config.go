@@ -66,21 +66,26 @@ type ServerConfig struct {
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
 }
 
-// parseRevision extracts date, hash, and dirty status from the revision string
+// parseRevision extracts RevisionDate, RevisionHash, and IsDirty status from the Revision string
 func parseRevision(revision string) (date, hash string, isDirty bool) {
+	// Check if Revision is empty
 	if revision == "" {
 		return unknownRevision, unknownRevision, false
 	}
 
+	// Check if Revision is marked as dirty (has uncommitted changes)
 	isDirty = strings.HasSuffix(revision, "+dirty")
 	if isDirty {
 		revision = strings.TrimSuffix(revision, "+dirty")
 	}
 
+	// Split Revision into two parts, RevisionDate and RevisionHash
 	parts := strings.Split(revision, "-")
 	if len(parts) == 2 {
 		return parts[0], parts[1], isDirty
 	}
+
+	// Return unknown date, full string as hash if format doesn't match date-hash
 	return unknownRevision, revision, isDirty
 }
 

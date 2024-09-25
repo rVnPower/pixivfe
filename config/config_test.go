@@ -4,6 +4,41 @@ import (
 	"testing"
 )
 
+// TestParseRevision is a test function that verifies the behavior of the parseRevision function.
+func TestParseRevision(t *testing.T) {
+	tests := []struct {
+		name          string // Description of the test case
+		revision      string // Input revision string
+		expectedDate  string // Expected date output
+		expectedHash  string // Expected hash output
+		expectedDirty bool   // Expected isDirty output
+	}{
+		{"Valid revision", "2024.09.24-18d6874", "2024.09.24", "18d6874", false},
+		{"Dirty revision", "2024.09.24-18d6874+dirty", "2024.09.24", "18d6874", true},
+		{"Empty revision", "", "unknown", "unknown", false},
+		{"Only hash", "18d6874", "unknown", "18d6874", false},
+		{"Only hash dirty", "18d6874+dirty", "unknown", "18d6874", true},
+		{"Invalid format", "2024.09.24-18d6874-extra", "unknown", "2024.09.24-18d6874-extra", false},
+		{"Invalid format dirty", "2024.09.24-18d6874-extra+dirty", "unknown", "2024.09.24-18d6874-extra", true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotDate, gotHash, gotDirty := parseRevision(tt.revision)
+
+			if gotDate != tt.expectedDate {
+				t.Errorf("parseRevision() gotDate = %v, want %v", gotDate, tt.expectedDate)
+			}
+			if gotHash != tt.expectedHash {
+				t.Errorf("parseRevision() gotHash = %v, want %v", gotHash, tt.expectedHash)
+			}
+			if gotDirty != tt.expectedDirty {
+				t.Errorf("parseRevision() gotDirty = %v, want %v", gotDirty, tt.expectedDirty)
+			}
+		})
+	}
+}
+
 // TestValidateURL is a test function that verifies the behavior of the validateURL function.
 func TestValidateURL(t *testing.T) {
 	tests := []struct {
@@ -24,18 +59,14 @@ func TestValidateURL(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		// Run each test case as a subtest
 		t.Run(tt.name, func(t *testing.T) {
-			// Call the validateURL function with test input
 			got, err := validateURL(tt.urlStr, tt.urlType)
 
-			// Check if the error result matches the expected error state
 			if (err != nil) != tt.wantErr {
 				t.Errorf("validateURL() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
-			// If no error is expected, compare the output URL string with the expected result
 			if !tt.wantErr {
 				if got.String() != tt.expected {
 					t.Errorf("validateURL() got = %v, want %v", got, tt.expected)
