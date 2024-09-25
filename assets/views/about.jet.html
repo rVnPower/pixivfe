@@ -1,48 +1,51 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container">
-<h1>About PixivFE</h1>
+<div class="container py-4 px-3 mx-auto border border-secondary rounded-3">
+    <h1 class="mb-4">About PixivFE</h1>
 
-<div class="card">
-<div class="card-body">
-    <p class="card-text">PixivFE is an open-source alternative frontend for Pixiv, allowing you to enjoy artwork without unnecessary distractions.</p>
-    <p class="card-text">This instance is hosted by the owner of <strong>{{ .DomainName }}</strong>. If you're interested in hosting PixivFE yourself, please visit <a href="{{ .RepoURL }}" class="link-primary">the source repository</a> for more information.</p>
-</div>
-</div>
+    <p class="lead mb-4">PixivFE is an open-source alternative frontend for Pixiv, allowing you to enjoy artwork without unnecessary distractions.</p>
 
-<h2 class="mt-4">Server Information</h2>
-<div class="list-group">
-<div class="list-group-item">
-    <h5>Version</h5>
-    <p>{{ .Version }}</p>
-    <small class="text-muted">The current version of PixivFE running on this server</small>
-</div>
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-body">
+            <p class="card-text">This instance is hosted by the owner of <strong>{{ .DomainName }}</strong>. If you're interested in hosting PixivFE yourself, please visit <a href="{{ .RepoURL }}" class="link-info">the source repository</a> for more information.</p>
+        </div>
+    </div>
 
-{{- if .Revision != "" }}
-<div class="list-group-item">
-    <h5>Revision</h5>
-    <p><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="link-primary">{{ .Revision }}</a></p>
-    <small class="text-muted">The specific revision of PixivFE source code in use</small>
-</div>
-{{- end }}
+    <h2 class="mb-3">Server Information</h2>
+    <div class="card bg-dark">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-dark text-light">
+                <h5 class="mb-1"><i class="bi bi-info-circle me-2"></i>Version</h5>
+                <small class="text-muted d-block mb-2">Current PixivFE version</small>
+                <p class="mb-1">{{ .Version }}</p>
+            </li>
 
-<div class="list-group-item">
-    <h5>Server start time (UTC)</h5>
-    <p>{{ .Time }}</p>
-    <small class="text-muted">The date and time when PixivFE was last started on this server</small>
-</div>
+            {{- if .Revision != "" }}
+            <li class="list-group-item bg-dark text-light">
+                <h5 class="mb-1"><i class="bi bi-code-square me-2"></i>Revision</h5>
+                <small class="text-muted d-block mb-2">Specific revision in use</small>
+                <p class="mb-1"><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="link-info">{{ .Revision }}</a></p>
+            </li>
+            {{- end }}
 
-<div class="list-group-item">
-    <h5>Default image proxy server</h5>
-    <p>{{ .ImageProxy }}</p>
-    <small class="text-muted">The image proxy server used to retrieve images from i.pximg.net</small>
-</div>
+            <li class="list-group-item bg-dark text-light">
+                <h5 class="mb-1"><i class="bi bi-clock me-2"></i>Server Start Time (UTC)</h5>
+                <small class="text-muted d-block mb-2">Last server start</small>
+                <p class="mb-1">{{ .Time }}</p>
+            </li>
 
-<div class="list-group-item">
-    <h5>Accept-Language header</h5>
-    <p>{{ .AcceptLanguage }}</p>
-    <small class="text-muted">The preferred natural language and locale when making requests to the Pixiv API</small>
-</div>
-</div>
+            <li class="list-group-item bg-dark text-light">
+                <h5 class="mb-1"><i class="bi bi-image me-2"></i>Default Image Proxy Server</h5>
+                <small class="text-muted d-block mb-2">Used for i.pximg.net images</small>
+                <p class="mb-1">{{ .ImageProxy }}</p>
+            </li>
+
+            <li class="list-group-item bg-dark text-light">
+                <h5 class="mb-1"><i class="bi bi-translate me-2"></i>Accept-Language Header</h5>
+                <small class="text-muted d-block mb-2">Preferred language for Pixiv API</small>
+                <p class="mb-1">{{ .AcceptLanguage }}</p>
+            </li>
+        </ul>
+    </div>
 </div>
 {{- end }}
