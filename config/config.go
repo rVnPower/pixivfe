@@ -53,7 +53,7 @@ type ServerConfig struct {
 	APIMaxBackoffTime time.Duration `env:"PIXIVFE_API_MAX_BACKOFF_TIME,overwrite"`
 
 	AcceptLanguage string `env:"PIXIVFE_ACCEPTLANGUAGE,overwrite"`
-	RequestLimit   int    `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
+	RequestLimit   uint64 `env:"PIXIVFE_REQUESTLIMIT"` // if 0, request limit is disabled
 
 	ProxyServer_staging string  `env:"PIXIVFE_IMAGEPROXY,overwrite"`
 	ProxyServer         url.URL // proxy server URL, may or may not contain authority part of the URL

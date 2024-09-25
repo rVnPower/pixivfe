@@ -1,5 +1,5 @@
 /*
-Package handlers provides HTTP request handling functionality for PixivFE.
+Package middleware provides HTTP request handling functionality for PixivFE.
 It defines various middleware functions, request handlers, and routing logic to manage
 incoming HTTP requests and produce appropriate responses.
 
@@ -11,4 +11,4 @@ middlewares can be applied to routes to add cross-cutting functionality across m
 Route definitions are centralized in the DefineRoutes function, which sets up all paths
 and their corresponding handlers using the gorilla/mux router.
 */
-package handlers
+package middleware

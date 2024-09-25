@@ -62,6 +62,8 @@ The URL of the PixivFE source code repository. This is used in the about page to
 
 **Required**: No
 
+Request limit per half-minute.
+
 Set to a number to enable the built-in rate limiter, e.g., `PIXIVFE_REQUESTLIMIT=15`.
 
 It's recommended to enable rate limiting in the reverse proxy in front of PixivFE rather than using this.

@@ -1,4 +1,4 @@
-package handlers
+package middleware
 
 import (
 	"errors"
@@ -45,6 +45,7 @@ func DefineRoutes() *mux.Router {
 	}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := r.URL
 		url.Path = url.Path[0 : len(url.Path)-1]
+		// @iacore: i think this won't have open redirect vuln
 		http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 	})
 

@@ -12,7 +12,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
-	"codeberg.org/vnpower/pixivfe/v2/server/handlers"
+	"codeberg.org/vnpower/pixivfe/v2/server/middleware"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
 )
@@ -40,15 +40,13 @@ func main() {
 
 	log.Println("Starting server...")
 
-	handlers.InitializeRateLimiter()
-
-	router := handlers.DefineRoutes()
+	router := middleware.DefineRoutes()
 	// the first middleware is the most outer / first executed one
-	router.Use(handlers.ProvideUserContext) // needed for everything else
-	router.Use(handlers.LogRequest)         // all pages need this
-	router.Use(handlers.SetPrivacyHeaders)  // all pages need this
-	router.Use(handlers.HandleError)        // if the inner handler fails, this shows the error page instead
-	router.Use(handlers.RateLimitRequest)
+	router.Use(middleware.ProvideUserContext) // needed for everything else
+	router.Use(middleware.LogRequest)         // all pages need this
+	router.Use(middleware.SetPrivacyHeaders)  // all pages need this
+	router.Use(middleware.HandleError)        // if the inner handler fails, this shows the error page instead
+	router.Use(middleware.InitializeRateLimiter())
 
 	// watch and compile sass when in development mode
 	if config.GlobalConfig.InDevelopment {
