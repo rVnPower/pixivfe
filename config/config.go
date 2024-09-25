@@ -154,11 +154,11 @@ func (s *ServerConfig) LoadConfig() error {
 	if err != nil {
 		log.Printf("[WARNING] Invalid proxy server URL: %v. Falling back to built-in proxy URL.", err)
 		proxyURL, _ = url.Parse(BuiltinProxyUrl) // We know this is valid
+		log.Printf("Proxy server set to: %s\n", BuiltinProxyUrl)
 	} else {
 		log.Printf("Proxy server set to: %s\n", proxyURL.String())
 	}
 	s.ProxyServer = *proxyURL
-	log.Printf("Proxy server set to: %s\n", s.ProxyServer.String())
 	log.Printf("Proxy check interval set to: %v\n", s.ProxyCheckInterval)
 
 	// Validate repo URL
