@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,7 +13,8 @@
   <title>{{ title }}</title>
 
   <link href="/img/favicon.png" rel="icon" />
-  <link href="/css/style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
   <script src="/js/htmx@1.9.10.min.js"
@@ -44,71 +45,67 @@
   {{- end }}
 </head>
 
-<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
-  data-hx-indicator="#loading-indicator">
-  <div id="loading-indicator"></div>
-  <nav>
-    <div class="navigation-wrapper">
-      <span class="navbar-entry">
-        <span class="sidebar-container">
-          <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
-          <label for="sidebar-toggler" class="sidebar-label">
-            <img src="/img/menu-thin.png" alt="Menu" width="30" height="30" />
-          </label>
-          <div class="sidebar">
-            <ul class="sidebar-list">
-              <a class="sidebar-item" href="/discovery">
-                <img src="/img/compass.png" alt="compass" />Discovery</a>
-              <a class="sidebar-item" href="/ranking">
-                <img src="/img/crown.png" alt="crown" />Ranking</a>
-              <a class="sidebar-item" href="/rankingCalendar">
-                <img src="/img/calendar.png" alt="calendar" />Ranking history</a>
-              <a class="sidebar-item" href="/newest">
-                <img src="/img/sparkling.png" alt="sparkling" />Newest</a>
-              <br />
-              <a class="sidebar-item" href="/self/followingWorks">
-                <img src="/img/users.png" alt="users" />Latest by followed</a>
-              <a class="sidebar-item" href="/self/bookmarks">
-                <img src="/img/heart.png" alt="heart" />Your bookmarks</a>
-              <a class="sidebar-item" href="/self">
-                <img src="/img/user.png" alt="user" />Your profile</a>
-              <br />
-              <a class="sidebar-item" href="/settings">
-                <img src="/img/settings.png" alt="settings" />Settings</a>
-              <a class="sidebar-item" href="/about">
-                <img src="/img/about.svg" alt="about" />About</a>
-              <br />
-              <a class="sidebar-item" href="https://codeberg.org/vnpower/pixivfe">
-                <img src="/img/globe.png" alt="globe" />Source code</a>
-            </ul>
-          </div>
-        </span>
-        <a class="navbar-brand" href="/">
-          <img src="/img/favicon.png" alt="PixivFE icon" />
-          <span>PixivFE</span>
-        </a>
-      </span>
-
-      <span class="navbar-entry">
-        <form action="/tags" method="post" class="search-form" autocomplete="off">
-          <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
-          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit" hidden /></label>
-        </form>
-      </span>
-
-      <a class="navbar-entry" href="/settings">
-        <img src="/img/cog.svg" alt="Settings" />
+<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="/img/favicon.png" alt="PixivFE icon" width="30" height="30" class="d-inline-block align-top">
+        PixivFE
       </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/discovery"><i class="bi bi-compass" title="compass"></i> Discovery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ranking"><i class="bi bi-trophy" title="crown"></i> Ranking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/rankingCalendar"><i class="bi bi-calendar" title="calendar"></i> Ranking history</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/newest"><i class="bi bi-stars" title="sparkling"></i> Newest</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/self/followingWorks"><i class="bi bi-people" title="users"></i> Latest by followed</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/self/bookmarks"><i class="bi bi-heart" title="heart"></i> Your bookmarks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/self"><i class="bi bi-person" title="user"></i> Your profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/settings"><i class="bi bi-gear" title="settings"></i> Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about"><i class="bi bi-info-circle" title="about"></i> About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://codeberg.org/vnpower/pixivfe"><i class="bi bi-globe" title="globe"></i> Source code</a>
+          </li>
+        </ul>
+        <form class="d-flex" action="/tags" method="post" autocomplete="off">
+          <input class="form-control me-2" type="search" name="name" required placeholder="⌕ Search artworks..." aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">
+            <i class="bi bi-search" title="Search"></i>
+          </button>
+        </form>
+      </div>
     </div>
-    <div class="navbar-shadow"></div>
   </nav>
   <script src="/js/on-page-load.js"></script>
-  <main>
+  <main class="container mt-4">
     {{- yield body() }}
   </main>
-  <div id="site-config">
+  <div id="site-config" class="d-none">
     <span id="artworkPreview">{{CookieList["pixivfe-ArtworkPreview"]}}</span>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>
