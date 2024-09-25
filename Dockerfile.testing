@@ -14,7 +14,6 @@
 
 ### Notes:
 ## Likely can be made more DRY, but this works well enough
-## Stage 2 which builds the application binary is probably unnecessary
 
 ### Stage 1: Modules caching with correct Playwright CLI version
 FROM golang:1.22.5-bookworm AS modules
@@ -49,7 +48,8 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 # Copy the project directory
 COPY . /app
 
-CMD ["/bin/bash"]
+# Set the entrypoint to the binary name
+ENTRYPOINT ["/app/pixivfe"]
 
 ### Stage 3b: Final with Playwright (default)
 FROM ubuntu:noble
@@ -79,4 +79,5 @@ RUN apt-get update && apt-get install -y ca-certificates tzdata \
 # Copy the project directory last to avoid invalidating the cache for the Playwright installation
 COPY . /app
 
-CMD ["/bin/bash"]
+# Set the entrypoint to the binary name
+ENTRYPOINT ["/app/pixivfe"]

@@ -1,0 +1,33 @@
+### compose.testing.yaml
+## Intended to provide a reproducible testing environment for PixivFE
+## Not for production use; please use the regular compose.yaml instead if you want to host PixivFE
+
+### Instructions:
+## To run using a fresh build (this is probably what you want):
+# docker compose -f compose.testing.yaml up --build
+
+## To run using a cached build:
+# docker compose -f compose.testing.yaml up
+
+## Then, to open a shell inside the container
+# docker exec -it pixivfe-testing bash
+
+services:
+  pixivfe-testing:
+    container_name: pixivfe-testing
+    hostname: pixivfe-testing
+    command: ["/app/pixivfe"]
+    build:
+      context: .
+      dockerfile: Dockerfile.testing
+    ports:
+      - name: http
+        target: 8282
+        host_ip: 127.0.0.1
+        published: 8282
+        protocol: tcp
+        app_protocol: http
+    env_file:
+      - path: .env
+        required: false
+    restart: unless-stopped
