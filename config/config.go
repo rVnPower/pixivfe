@@ -90,8 +90,9 @@ func validateURL(urlString string, urlType string) (*url.URL, error) {
 	if err != nil {
 		return nil, err
 	}
-	if (parsedURL.Scheme == "") != (parsedURL.Host == "") {
-		return nil, fmt.Errorf("%s URL is invalid: %s. Please specify e.g. https://example.com", urlType, urlString)
+	// Ensure both scheme and host are present in the URL
+	if parsedURL.Scheme == "" || parsedURL.Host == "" {
+		return nil, fmt.Errorf("%s URL is invalid: %s. Please specify a complete URL with scheme and host, e.g. https://example.com", urlType, urlString)
 	}
 	if strings.HasSuffix(parsedURL.Path, "/") {
 		return nil, fmt.Errorf("%s URL path (%s) cannot end in /: %s. PixivFE does not support this now", urlType, parsedURL.Path, urlString)
