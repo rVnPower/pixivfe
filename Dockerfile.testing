@@ -1,15 +1,20 @@
-### Intended for testing PixivFE itself
-### Not for production use
-### Adapted from: https://github.com/playwright-community/playwright-go/blob/6b672dbd24505206feca7c2b660da8d616c6393f/Dockerfile.example
+### Dockerfile.testing
+## Intended to provide a reproducible testing environment for PixivFE
+## Not for production use; please use the regular Dockerfile instead if you want to host PixivFE
+## Adapted from: https://github.com/playwright-community/playwright-go/blob/6b672dbd24505206feca7c2b660da8d616c6393f/Dockerfile.example
 
 ### Instructions:
-# To build and run with Playwright:
-# docker buildx build -t pixivfe-testing-playwright -f ./Dockerfile.testing --target with-playwright . --load
-# docker run --rm -it --name pixivfe-testing-playwrightpixivfe-testing-playwright
+## To build and run with Playwright:
+# docker buildx build -t pixivfe-testing -f ./Dockerfile.testing --target with-playwright . --load
+# docker run --rm -it --name pixivfe-testing pixivfe-testing
 
-# To build and run without Playwright:
+## To build and run without Playwright:
 # docker buildx build -t pixivfe-testing-no-playwright -f ./Dockerfile.testing --target without-playwright . --load
 # docker run --rm -it --name pixivfe-testing-no-playwright pixivfe-testing-no-playwright
+
+### Notes:
+## Likely can be made more DRY, but this works well enough
+## Stage 2 which builds the application binary is probably unnecessary
 
 ### Stage 1: Modules caching with correct Playwright CLI version
 FROM golang:1.23.1-bookworm AS modules
@@ -41,7 +46,8 @@ COPY --from=modules /go/bin/playwright /go/bin/playwright
 COPY --from=builder /app/pixivfe /app/pixivfe
 
 # Install correct Go version
-ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local/go
+ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local
+RUN tar -C /usr/local -xzf /usr/local/go1.22.5.linux-amd64.tar.gz && rm /usr/local/go1.22.5.linux-amd64.tar.gz
 
 # Update PATH definition for Go binary and Playwright
 ENV PATH="/usr/local/go/bin:/go/bin:${PATH}"
@@ -66,7 +72,8 @@ COPY . /app
 COPY --from=builder /app/pixivfe /app/pixivfe
 
 # Install correct Go version
-ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local/go
+ADD https://golang.org/dl/go1.22.5.linux-amd64.tar.gz /usr/local
+RUN tar -C /usr/local -xzf /usr/local/go1.22.5.linux-amd64.tar.gz && rm /usr/local/go1.22.5.linux-amd64.tar.gz
 
 # Update PATH definition for Go binary
 ENV PATH="/usr/local/go/bin:${PATH}"
