@@ -7,7 +7,8 @@
     preferences, which you can change on this page to customize your experience on this instance.
   </p>
 
-  <ul class="nav nav-tabs mt-4" id="settingsTabs" role="tablist">
+  <h2 class="mt-4">Main settings</h2>
+  <ul class="nav nav-pills mt-3" id="settingsTabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">Account</button>
     </li>
@@ -19,223 +20,227 @@
     </li>
   </ul>
 
-  <div class="tab-content mt-4" id="settingsTabsContent">
-    <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title">Login</h2>
-          <p class="mt-3">Supported features (for now):</p>
-          <ul class="mt-2">
-            <li>Discovery page</li>
-            <li>Landing page</li>
-            <li>Like/Bookmark</li>
-          </ul>
-          <p class="mt-3">
-            Log in with your Pixiv account's cookie to access features above.
-            To learn how to obtain your cookie, please see
-            <a href="https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
-          </p>
-          <p class="mt-3">
-            Cookies will be saved on your browser, and will expire after a fixed period of time.
-          </p>
-          <form action="/settings/token" method="post" class="mt-3">
-            <div>
-              <input type="text" class="form-control" name="token" autocomplete="off" />
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Log in</button>
-          </form>
-        </div>
-      </div>
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">Logout</h2>
-          <p class="mt-3">
-            To securely end your session, click the 'Logout!' button. This will
-            immediately remove your session token.
-          </p>
-          <form action="/settings/logout" method="post" class="mt-3">
-            <button type="submit" class="btn btn-danger">Logout!</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title">Image proxy server</h2>
-          <p class="mt-3">
-            Choose how images are loaded in PixivFE by selecting either the built-in
-            proxy or one of the provided external proxy servers. If you prefer, you can
-            also specify a custom proxy server by entering its URL and clicking 'Use
-            Custom Proxy'.
-          </p>
-          <form action="/settings/imageServer" method="post" class="mt-3">
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="image-proxy" id="no-proxy" value="" required>
-                <label class="form-check-label" for="no-proxy">
-                  No (use built-in proxy)
-                </label>
-              </div>
-              {{- range .WorkingProxyList }}
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="image-proxy" id="proxy-{{.}}" value="{{.}}" required>
-                <label class="form-check-label" for="proxy-{{.}}">
-                  {{.}}
-                </label>
-              </div>
-              {{- end }}
-              <details class="mt-2">
-                <summary>See all built-in proxies</summary>
-                {{- range .ProxyList }}
-                <div class="form-check mt-2">
-                  <input class="form-check-input" type="radio" name="image-proxy" id="proxy-all-{{.}}" value="{{.}}" required>
-                  <label class="form-check-label" for="proxy-all-{{.}}">
-                    {{.}}
-                  </label>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="tab-content" id="settingsTabsContent">
+        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Login</h2>
+              <p class="mt-3">Supported features (for now):</p>
+              <ul class="mt-2">
+                <li>Discovery page</li>
+                <li>Landing page</li>
+                <li>Like/Bookmark</li>
+              </ul>
+              <p class="mt-3">
+                Log in with your Pixiv account's cookie to access features above.
+                To learn how to obtain your cookie, please see
+                <a href="https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
+              </p>
+              <p class="mt-3">
+                Cookies will be saved on your browser, and will expire after a fixed period of time.
+              </p>
+              <form action="/settings/token" method="post" class="mt-3">
+                <div>
+                  <input type="text" class="form-control" name="token" autocomplete="off" />
                 </div>
-                {{- end }}
-              </details>
+                <button type="submit" class="btn btn-primary mt-3">Log in</button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Use selected proxy</button>
-          </form>
-          <form action="/settings/imageServer" method="post" class="mt-4">
-            <div>
-              <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
-              <input type="text" class="form-control mt-2" id="custom-image-proxy" name="image-proxy" required placeholder="https://example.com" autocomplete="off">
+          </div>
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">Logout</h2>
+              <p class="mt-3">
+                To securely end your session, click the 'Logout!' button. This will
+                immediately remove your session token.
+              </p>
+              <form action="/settings/logout" method="post" class="mt-3">
+                <button type="submit" class="btn btn-danger">Logout!</button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Use custom proxy</button>
-          </form>
+          </div>
         </div>
-      </div>
 
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">Open artworks in new tab</h2>
-          <form action="/settings/thumbnailToNewTab" method="post" class="mt-3">
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="ttnt" id="ttnt-y" value="_blank">
-                <label class="form-check-label" for="ttnt-y">Yes</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="ttnt" id="ttnt-n" value="_self">
-                <label class="form-check-label" for="ttnt-n">No</label>
-              </div>
+        <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Image proxy server</h2>
+              <p class="mt-3">
+                Choose how images are loaded in PixivFE by selecting either the built-in
+                proxy or one of the provided external proxy servers. If you prefer, you can
+                also specify a custom proxy server by entering its URL and clicking 'Use
+                Custom Proxy'.
+              </p>
+              <form action="/settings/imageServer" method="post" class="mt-3">
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="image-proxy" id="no-proxy" value="" required>
+                    <label class="form-check-label" for="no-proxy">
+                      No (use built-in proxy)
+                    </label>
+                  </div>
+                  {{- range .WorkingProxyList }}
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="image-proxy" id="proxy-{{.}}" value="{{.}}" required>
+                    <label class="form-check-label" for="proxy-{{.}}">
+                      {{.}}
+                    </label>
+                  </div>
+                  {{- end }}
+                  <details class="mt-2">
+                    <summary>See all built-in proxies</summary>
+                    {{- range .ProxyList }}
+                    <div class="form-check mt-2">
+                      <input class="form-check-input" type="radio" name="image-proxy" id="proxy-all-{{.}}" value="{{.}}" required>
+                      <label class="form-check-label" for="proxy-all-{{.}}">
+                        {{.}}
+                      </label>
+                    </div>
+                    {{- end }}
+                  </details>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Use selected proxy</button>
+              </form>
+              <form action="/settings/imageServer" method="post" class="mt-4">
+                <div>
+                  <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
+                  <input type="text" class="form-control mt-2" id="custom-image-proxy" name="image-proxy" required placeholder="https://example.com" autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Use custom proxy</button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">Open artworks in new tab</h2>
+              <form action="/settings/thumbnailToNewTab" method="post" class="mt-3">
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="ttnt" id="ttnt-y" value="_blank">
+                    <label class="form-check-label" for="ttnt-y">Yes</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="ttnt" id="ttnt-n" value="_self">
+                    <label class="form-check-label" for="ttnt-n">No</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">Artwork preview pop-ups</h2>
+              <p class="mt-3"><strong>Require Javascript.</strong></p>
+              <form action="/settings/artworkPreview" method="post" class="mt-3">
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="app" id="app-c" value="cover">
+                    <label class="form-check-label" for="app-c">
+                      Cover
+                      <small class="text-muted">Open the previewer when you click into the thumbnails</small>
+                    </label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="app" id="app-b" value="button">
+                    <label class="form-check-label" for="app-b">
+                      Button
+                      <small class="text-muted">Add a button at the bottom-right of the thumbnails and open the previewer when you click into it</small>
+                    </label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="app" id="app-d" value="disable">
+                    <label class="form-check-label" for="app-d">
+                      Disable
+                      <small class="text-muted">No previewing</small>
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">Filter artworks</h2>
+              <p class="mt-3">When submitted, unchecked options will be disabled and vice-versa.</p>
+              <form action="/settings/filter" method="post" class="mt-3">
+                <div>
+                  {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
+                  {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
+                  {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
+                    <label class="form-check-label" for="filter-r18">Hide R18</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
+                    <label class="form-check-label" for="filter-r18g">Hide R18G</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
+                    <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">Artwork preview pop-ups</h2>
-          <p class="mt-3"><strong>Require Javascript.</strong></p>
-          <form action="/settings/artworkPreview" method="post" class="mt-3">
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="app" id="app-c" value="cover">
-                <label class="form-check-label" for="app-c">
-                  Cover
-                  <small class="text-muted">Open the previewer when you click into the thumbnails</small>
-                </label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="app" id="app-b" value="button">
-                <label class="form-check-label" for="app-b">
-                  Button
-                  <small class="text-muted">Add a button at the bottom-right of the thumbnails and open the previewer when you click into it</small>
-                </label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="app" id="app-d" value="disable">
-                <label class="form-check-label" for="app-d">
-                  Disable
-                  <small class="text-muted">No previewing</small>
-                </label>
-              </div>
+        <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Font family</h2>
+              <form action="/settings/novelFontType" method="post" class="mt-3">
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho">
+                    <label class="form-check-label" for="font-type-mincho">Mincho</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic">
+                    <label class="form-check-label" for="font-type-gothic">Gothic</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
-        </div>
-      </div>
+          </div>
 
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">Filter artworks</h2>
-          <p class="mt-3">When submitted, unchecked options will be disabled and vice-versa.</p>
-          <form action="/settings/filter" method="post" class="mt-3">
-            <div>
-              {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
-              {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
-              {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
-                <label class="form-check-label" for="filter-r18">Hide R18</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
-                <label class="form-check-label" for="filter-r18g">Hide R18G</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
-                <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
-              </div>
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">Force text orientation</h2>
+              <form action="/settings/novelViewMode" method="post" class="mt-3">
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1">
+                    <label class="form-check-label" for="tx-ori-h">Horizontal</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2">
+                    <label class="form-check-label" for="tx-ori-v">Vertical</label>
+                  </div>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="">
+                    <label class="form-check-label" for="tx-ori-n">Don't force (default from Pixiv)</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title">Font family</h2>
-          <form action="/settings/novelFontType" method="post" class="mt-3">
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho">
-                <label class="form-check-label" for="font-type-mincho">Mincho</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic">
-                <label class="form-check-label" for="font-type-gothic">Gothic</label>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
-        </div>
-      </div>
-
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">Force text orientation</h2>
-          <form action="/settings/novelViewMode" method="post" class="mt-3">
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1">
-                <label class="form-check-label" for="tx-ori-h">Horizontal</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2">
-                <label class="form-check-label" for="tx-ori-v">Vertical</label>
-              </div>
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="">
-                <label class="form-check-label" for="tx-ori-n">Don't force (default from Pixiv)</label>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card mt-3">
+  <div class="card mt-4">
     <div class="card-body">
       <h2 class="card-title">Cookie list</h2>
       <p class="card-text mt-3">Please note that some cookies here such as ShowArtR18, ShowArtR18G, and ShowArtAI are for features still under development.</p>
@@ -285,11 +290,11 @@
         </div>
         <button type="submit" class="btn btn-primary mt-3">Set raw settings</button>
       </form>
+      <form action="/settings/reset-all" method="post" class="mt-4">
+        <button type="submit" class="btn btn-danger">Reset all cookies/preferences</button>
+      </form>
+    </div>
     </div>
   </div>
 
-  <form action="/settings/reset-all" method="post" class="mt-4">
-    <button type="submit" class="btn btn-danger">Reset all cookies/preferences</button>
-  </form>
-</div>
 {{- end }}
