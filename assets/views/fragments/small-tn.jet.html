@@ -1,17 +1,26 @@
-{{- range . }} {{ if .ID == "#" }}
-<div class="artwork-small artwork">
-  <img src="/img/deleted.png" alt="{{ .Title }}" loading="lazy" />
-  <div class="artwork-title">
-    <a>{{ .Title }}</a>
+{{- range . }}
+<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+  {{- if .ID == "#" }}
+  <div class="card h-100">
+    <img src="/img/deleted.png" class="card-img-top" alt="{{ .Title }}" loading="lazy">
+    <div class="card-body">
+      <h5 class="card-title text-truncate">{{ .Title }}</h5>
+      <div class="d-flex align-items-center mt-2">
+        <img src="/img/deleted.png" class="rounded-circle me-2" alt="{{ .ArtistName }}" width="32" height="32" loading="lazy">
+        <span class="text-muted text-truncate">{{ .ArtistName }}</span>
+      </div>
+    </div>
   </div>
-  <div class="artwork-author">
-    <a><img src="/img/deleted.png" alt="{{ .ArtistName }}" loading="lazy" />
-      <span>{{ .ArtistName }}</span></a>
+  {{- else if .ID }}
+  <div class="card h-100">
+    <div class="position-relative">
+      {{ include "thumbnail-dt" . }}
+    </div>
+    <div class="card-body">
+      {{ include "thumbnail-tt" . }}
+      {{ include "thumbnail-at" . }}
+    </div>
   </div>
+  {{- end }}
 </div>
-{{- else if .ID }}
-<div class="artwork-small artwork">
-  {{ include "thumbnail-dt" . }} {{ include "thumbnail-tt" . }} {{ include
-  "thumbnail-at" . }}
-</div>
-{{- end }} {{ end }}
+{{- end }}
