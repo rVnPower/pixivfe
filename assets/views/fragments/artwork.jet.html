@@ -47,21 +47,21 @@
         <div>
           {{- if isset(.BookmarkData) && LoggedIn }}
           <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger">
-            <img src="/img/heart-red.png" alt="Bookmarked" width="30" height="30" />
+            <i class="bi bi-heart-fill" style="font-size: 30px;"></i>
           </a>
           {{- else }}
           <a href="/self/addBookmark/{{ .ID }}" class="btn btn-outline-primary">
-            <img src="/img/heart-outline.png" alt="Bookmark" width="30" height="30" />
+            <i class="bi bi-heart" style="font-size: 30px;"></i>
           </a>
           {{- end }}
 
           {{- if .Liked && LoggedIn}}
           <button class="btn btn-outline-primary" disabled>
-            <img src="/img/like-blue.png" alt="Liked" width="30" height="30" />
+            <i class="bi bi-hand-thumbs-up-fill" style="font-size: 30px;"></i>
           </button>
           {{- else }}
           <a href="/self/like/{{ .ID }}" class="btn btn-outline-primary">
-            <img src="/img/like-outline.png" alt="Like" width="30" height="30" />
+            <i class="bi bi-hand-thumbs-up" style="font-size: 30px;"></i>
           </a>
           {{- end }}
         </div>
@@ -75,10 +75,10 @@
   <div class="card mt-4">
     <div class="card-body">
       <ul class="list-group list-group-horizontal">
-        <li class="list-group-item flex-fill"><img src="/img/eye.png" alt="Views" class="me-2" /> {{- .Views }}</li>
-        <li class="list-group-item flex-fill"><img src="/img/heart-solid.png" alt="Bookmarks" class="me-2" /> {{- .Bookmarks }}</li>
-        <li class="list-group-item flex-fill"><img src="/img/like.png" alt="Likes" class="me-2" /> {{- .Likes }}</li>
-        <li class="list-group-item flex-fill"><img src="/img/calendar.png" alt="Date" class="me-2" /> {{- parseTime: .Date }}</li>
+        <li class="list-group-item flex-fill"><i class="bi bi-eye me-2"></i> {{- .Views }}</li>
+        <li class="list-group-item flex-fill"><i class="bi bi-heart-fill me-2"></i> {{- .Bookmarks }}</li>
+        <li class="list-group-item flex-fill"><i class="bi bi-hand-thumbs-up me-2"></i> {{- .Likes }}</li>
+        <li class="list-group-item flex-fill"><i class="bi bi-calendar me-2"></i> {{- parseTime: .Date }}</li>
       </ul>
     </div>
   </div>
