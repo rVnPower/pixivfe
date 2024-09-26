@@ -1,7 +1,8 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="container mt-4" id="checkpoint">
-  <div class="card mb-4">
+  <!-- Card containing the Artwork fragment -->
+  <div class="card">
     <div class="card-body">
       {{- include "fragments/artwork" .Illust }}
     </div>
@@ -10,7 +11,7 @@
   <div class="card mt-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <a class="text-decoration-none text-dark d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
+        <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
           <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
           <span>Other works by {{ .Illust.User.Name }}</span>
           <span class="ms-2">&raquo;</span>
@@ -18,10 +19,10 @@
         {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
         <a href="{{combinedUrl}}" class="btn btn-outline-primary btn-sm">View all</a>
       </div>
-      <div class="overflow-auto">
-        <div class="d-flex">
+      <div class="overflow-auto" id="horizontal-scroll">
+        <div class="d-flex flex-nowrap">
           {{- range .Illust.RecentWorks }}
-          <div class="me-3">
+          <div class="me-3" style="min-width: 200px;">
             {{- include "fragments/thumbnail-dt" . }}
           </div>
           {{- end }}
