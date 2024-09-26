@@ -2,86 +2,90 @@
 {{- import "blocks/switcher" }}
 {{- block body() }}
 
-<div class="container-fluid">
-  <div class="card mt-4">
+<div class="container">
+  <!-- Tag header -->
+  <div class="card">
     <div class="card-body">
       <div class="row">
         {{- if .Tag.Metadata.ID }}
         <div class="col-md-3">
           <a href="/artworks/{{ .Tag.Metadata.ID }}">
-            <img class="img-fluid rounded" src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" />
+            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid rounded" />
           </a>
         </div>
         {{- end }}
-        <div class="col-md-9">
-          <h1 class="card-title">#{{ .Tag.Name }}</h1>
-          <h4 class="card-subtitle mb-2 text-muted">{{ .Tag.Metadata.Name }}</h4>
-          <p class="card-text"><strong>{{ .Data.Artworks.Total }}</strong> works</p>
-          <p class="card-text">{{ .Tag.Metadata.Detail }}</p>
+        <!-- mt-3 for the text to add space when it wraps around on small screens -->
+        <div class="col-md-9 mt-3">
+          <h1 class="display-5">#{{ .Tag.Name }}</h1>
+          <h2 class="h4 text-muted">{{ .Tag.Metadata.Name }}</h2>
+          <p class="lead"><strong>{{ .Data.Artworks.Total }}</strong> works</p>
+          <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
+          <p class="lead mb-0">{{ .Tag.Metadata.Detail }}</p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Related tags -->
   <div class="mt-4">
-    <h5>Related Tags</h5>
-      <div class="d-flex flex-wrap mt-2">
+    <h3>Related Tags</h3>
+    <div class="d-flex flex-wrap">
       {{- range .Data.RelatedTags }}
-        <span class="badge text-muted me-2 mt-2">
-          <a href="/tags/{{ . }}" class="text-white text-decoration-none">#{{ . }}</a>
-        </span>
-        {{- end }}
-      </div>
+      <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
+      {{- end }}
+    </div>
   </div>
 
+  <!-- Switchers -->
   {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
   {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
   {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
   {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
   {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
 
-  <div class="mt-4">
-    <h5>Filters</h5>
-    <ul class="nav nav-pills">
-      <li class="nav-item">
-        <span class="nav-link">Category</span>
-        {{- URL := unfinishedQuery(.QueriesC, "category") }}
-        {{- path := slice("artworks", "illustrations", "manga")}}
-        {{- name := slice("Artworks", "Illustrations", "Manga")}}
-        {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
-      </li>
-      <li class="nav-item">
-        <span class="nav-link">Order</span>
-        {{- URL := unfinishedQuery(.QueriesC, "order") }}
-        {{- path := slice("date_d", "date")}}
-        {{- name := slice("Newest", "Oldest")}}
-        {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
-      </li>
-      <li class="nav-item">
-        <span class="nav-link">Filter</span>
-        {{- URL := unfinishedQuery(.QueriesC, "mode") }}
-        {{- path := slice("all", "safe", "r18")}}
-        {{- name := slice("All", "Safe", "R-18")}}
-        {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
-      </li>
-      <li class="nav-item">
-        <span class="nav-link">Ratio</span>
-        {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
-        {{- path := slice("", "-0.5", "0", "0.5")}}
-        {{- name := slice("All", "Portrait", "Square", "Landscape")}}
-        {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
-      </li>
-      <li class="nav-item">
-        <span class="nav-link">Search mode</span>
-        {{- URL := unfinishedQuery(.QueriesC, "smode") }}
-        {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-        {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-        {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
-      </li>
-    </ul>
+  <div class="row mt-4">
+    <div class="col-md-4 mb-3">
+      <h4>Category</h4>
+      {{- URL := unfinishedQuery(.QueriesC, "category") }}
+      {{- path := slice("artworks", "illustrations", "manga")}}
+      {{- name := slice("Artworks", "Illustrations", "Manga")}}
+      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
+    </div>
+    <div class="col-md-4 mb-3">
+      <h4>Order</h4>
+      {{- URL := unfinishedQuery(.QueriesC, "order") }}
+      {{- path := slice("date_d", "date")}}
+      {{- name := slice("Newest", "Oldest")}}
+      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
+    </div>
+    <div class="col-md-4 mb-3">
+      <h4>Filter</h4>
+      {{- URL := unfinishedQuery(.QueriesC, "mode") }}
+      {{- path := slice("all", "safe", "r18")}}
+      {{- name := slice("All", "Safe", "R-18")}}
+      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
+    </div>
   </div>
 
-  <div class="accordion mt-4" id="advancedSettings">
+  <div class="row mt-2">
+    <div class="col-md-6 mb-3">
+      <h4>Ratio</h4>
+      {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
+      {{- path := slice("", "-0.5", "0", "0.5")}}
+      {{- name := slice("All", "Portrait", "Square", "Landscape")}}
+      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
+    </div>
+    <div class="col-md-6 mb-3">
+      <h4>Search mode</h4>
+      {{- URL := unfinishedQuery(.QueriesC, "smode") }}
+      {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
+      {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
+    </div>
+  </div>
+
+  <!-- Advanced Settings -->
+  <div class="accordion mb-4" id="advancedSettings">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingAdvanced">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
@@ -116,7 +120,7 @@
               <label for="ecd" class="form-label">Posted before (format: yyyy-mm-dd)</label>
               <input type="text" class="form-control" id="ecd" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
             </div>
-            <div class="col-md-6">
+            <div class="col-12">
               <label for="tool" class="form-label">Tool</label>
               <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
             </div>
@@ -129,24 +133,27 @@
     </div>
   </div>
 
+  <!-- Popular Artworks -->
   {{- if .Data.Popular.Recent }}
-  <h2 class="mt-4">Popular artworks</h2>
-  <h3 class="mt-3">Recent</h3>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
+  <h2 class="mb-3">Popular artworks</h2>
+  <h3 class="h5 mb-3">Recent</h3>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Popular.Recent }}
   </div>
-  <h3 class="mt-3">All Time</h3>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
+  <h3 class="h5 mb-3">All Time</h3>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Popular.Permanent }}
   </div>
   {{- end }}
 
-  <h2 class="mt-4">Works</h2>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
+  <!-- Main Works -->
+  <h2 class="mb-3">Works</h2>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
   </div>
 
-  <nav class="mt-4" aria-label="Page navigation">
+  <!-- Pagination -->
+  <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
       {{- url := unfinishedQuery(.QueriesC, "page") }}
       <li class="page-item disabled">

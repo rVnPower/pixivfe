@@ -74,24 +74,28 @@
         </div>
       </div>
       <a href="https://pixiv.net/i/{{ .ID }}" class="btn btn-secondary btn-sm mt-3"><i class="bi bi-box-arrow-up-right me-2"></i>View original on Pixiv</a>
+
       <!-- Description -->
       <p class="card-text text-muted mt-4">{{- raw: parsePixivRedirect(.Description) }}</p>
+
       <!-- Tag information -->
+      <!-- text-start ensures that the content within non-emphasized tags is left-aligned while still maintaining proper wrapping behavior -->
       <div class="d-flex flex-wrap mt-2">
         {{- if .AiType == 2 }}
         <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
         {{- end }}
         {{- range .Tags }}
-        {{- if isEmphasize(.Name) }}
-        <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
-        {{- else }}
-        <span class="badge text-muted me-2 mb-2">
-          <a href="/tags/{{ escapeString(.Name) }}" class="text-white text-decoration-none">#{{ .Name }}</a>
-          {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
-        </span>
-        {{- end }}
+          {{- if isEmphasize(.Name) }}
+          <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
+          {{- else }}
+          <span class="badge text-muted me-2 mb-2 text-wrap text-break text-start">
+            <a href="/tags/{{ escapeString(.Name) }}" class="text-white text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+            {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
+          </span>
+          {{- end }}
         {{- end }}
       </div>
+
       <!-- Other work information -->
       <div class="d-flex flex-wrap text-muted small mt-3">
         <div class="me-4 mb-2">

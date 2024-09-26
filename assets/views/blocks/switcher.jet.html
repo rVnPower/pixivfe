@@ -1,7 +1,7 @@
 {{- block Switcher(baseURL, paths, names, currentPath="artworks") }}
     {{- range i, k := paths }}
-        <a href="{{ baseURL }}{{k}}" class="switch-button" selected="{{ currentPath == k ? 1 : 0}}">
+        <button href="{{ baseURL }}{{k}}" class="btn btn-primary" selected="{{ currentPath == k ? 1 : 0}}">
         {{- names[i] }}
-        </a>
+        </button>
     {{- end }}
 {{- end }}
