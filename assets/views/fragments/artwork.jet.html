@@ -1,94 +1,113 @@
-<div class="card mb-4">
-  <div class="card-body">
-    {{- if !.IsUgoira }}
-    <div class="mb-3">
-      {{- range index := .Images }}
-      <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block mb-3">
-        {{- if .Width != 0 && .Height != 0 }}
-        <img src="{{ .Large }}" alt="Page {{ index + 1 }}" data-width="{{.Width}}" data-height="{{.Height}}" class="img-fluid" />
-        {{- else }}
-        <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" />
+<div class="container-fluid mt-4">
+  {{- if !.IsUgoira }}
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        {{- range index := .Images }}
+        <div class="col-12 mb-3">
+          <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+            {{- if .Width != 0 && .Height != 0 }}
+            <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" data-width="{{.Width}}" data-height="{{.Height}}" />
+            {{- else }}
+            <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" />
+            {{- end }}
+          </a>
+        </div>
         {{- end }}
-      </a>
-      {{- end }}
+      </div>
     </div>
-    {{- else }}
-    <div class="mb-3">
+  </div>
+  {{- else }}
+  <div class="card mb-4">
+    <div class="card-body">
       <video class="w-100" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
         src="/proxy/ugoira.com/{{ .ID }}">
         Unable to load ugoira.
       </video>
+      <div class="mt-3">
+        <a href="/proxy/ugoira.com/{{ .ID }}" class="btn btn-primary">Download</a>
+        <a href="https://ugoira.com/i/{{ .ID }}" class="btn btn-secondary">Go to ugoira.com for more options</a>
+      </div>
     </div>
-    <div class="mb-3">
-      <a href="/proxy/ugoira.com/{{ .ID }}" class="btn btn-primary btn-sm me-2">Download</a>
-      <a href="https://ugoira.com/i/{{ .ID }}" class="btn btn-secondary btn-sm">Go to ugoira.com for more options</a>
-    </div>
-    {{- end }}
+  </div>
+  {{- end }}
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div class="d-flex align-items-center">
-        <a href="/users/{{ .User.ID }}" class="me-3">
-          <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 50px; height: 50px;" />
-        </a>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <a href="/users/{{ .User.ID }}" class="me-3">
+            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 62px; height: 62px; object-fit: cover;" />
+          </a>
+          <div>
+            <h5 class="card-title mb-0">{{ .Title }}</h5>
+            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted">{{ .User.Name }}</a></p>
+          </div>
+        </div>
         <div>
-          <h5 class="card-title mb-0">{{ .Title }}</h5>
-          <a href="/users/{{ .User.ID }}" class="text-muted">{{ .User.Name }}</a>
+          {{- if isset(.BookmarkData) && LoggedIn }}
+          <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger">
+            <img src="/img/heart-red.png" alt="Bookmarked" width="30" height="30" />
+          </a>
+          {{- else }}
+          <a href="/self/addBookmark/{{ .ID }}" class="btn btn-outline-primary">
+            <img src="/img/heart-outline.png" alt="Bookmark" width="30" height="30" />
+          </a>
+          {{- end }}
+
+          {{- if .Liked && LoggedIn}}
+          <button class="btn btn-outline-primary" disabled>
+            <img src="/img/like-blue.png" alt="Liked" width="30" height="30" />
+          </button>
+          {{- else }}
+          <a href="/self/like/{{ .ID }}" class="btn btn-outline-primary">
+            <img src="/img/like-outline.png" alt="Like" width="30" height="30" />
+          </a>
+          {{- end }}
         </div>
       </div>
-      <div>
-        {{- if isset(.BookmarkData) && LoggedIn }}
-        <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger btn-sm me-2">
-          <i class="bi bi-heart-fill"></i> Bookmarked
-        </a>
-        {{- else }}
-        <a href="/self/addBookmark/{{ .ID }}" class="btn btn-outline-primary btn-sm me-2">
-          <i class="bi bi-heart"></i> Bookmark
-        </a>
-        {{- end }}
+      <p class="card-text mt-3">
+        <a href="https://pixiv.net/i/{{ .ID }}" class="text-muted">pixiv.net/i/{{ .ID }}</a>
+      </p>
+    </div>
+  </div>
 
-        {{- if .Liked && LoggedIn}}
-        <button class="btn btn-outline-primary btn-sm" disabled>
-          <i class="bi bi-hand-thumbs-up-fill"></i> Liked
-        </button>
+  <div class="card mb-4">
+    <div class="card-body">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item flex-fill"><img src="/img/eye.png" alt="Views" class="me-2" /> {{- .Views }}</li>
+        <li class="list-group-item flex-fill"><img src="/img/heart-solid.png" alt="Bookmarks" class="me-2" /> {{- .Bookmarks }}</li>
+        <li class="list-group-item flex-fill"><img src="/img/like.png" alt="Likes" class="me-2" /> {{- .Likes }}</li>
+        <li class="list-group-item flex-fill"><img src="/img/calendar.png" alt="Date" class="me-2" /> {{- parseTime: .Date }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-muted">Tags</h6>
+      <div class="d-flex flex-wrap">
+        {{- if .AiType == 2 }}
+        <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
+        {{- end }}
+        {{- range .Tags }}
+        {{- if isEmphasize(.Name) }}
+        <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
         {{- else }}
-        <a href="/self/like/{{ .ID }}" class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-hand-thumbs-up"></i> Like
-        </a>
+        <span class="badge bg-secondary me-2 mb-2">
+          <a href="/tags/{{ escapeString(.Name) }}" class="text-white text-decoration-none">#{{ .Name }}</a>
+          {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
+        </span>
+        {{- end }}
         {{- end }}
       </div>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <a href="https://pixiv.net/i/{{ .ID }}" class="text-muted">pixiv.net/i/{{ .ID }}</a>
-    </div>
-
-    <div class="d-flex flex-wrap mb-3">
-      <span class="me-3"><i class="bi bi-eye"></i> {{- .Views }}</span>
-      <span class="me-3"><i class="bi bi-heart"></i> {{- .Bookmarks }}</span>
-      <span class="me-3"><i class="bi bi-hand-thumbs-up"></i> {{- .Likes }}</span>
-      <span><i class="bi bi-calendar"></i> {{- parseTime: .Date }}</span>
-    </div>
-
-    <div class="mb-3">
-      {{- if .AiType == 2 }}
-      <span class="badge bg-warning text-dark me-2">AI-generated</span>
-      {{- end }}
-      {{- range .Tags }}
-        {{- if isEmphasize(.Name) }}
-        <span class="badge bg-primary me-2">{{ .Name }}</span>
-        {{- else }}
-        <a href="/tags/{{ escapeString(.Name) }}" class="badge bg-secondary text-decoration-none me-2">
-          #{{ .Name }}
-          {{- if .TranslatedName }}
-          <span class="text-light">({{ .TranslatedName }})</span>
-          {{- end }}
-        </a>
-        {{- end }}
-      {{- end }}
-    </div>
-
-    <div class="mb-3">
-      {{- raw: parsePixivRedirect(.Description) }}
+  <div class="card mb-4">
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-muted">Description</h6>
+      <p class="card-text">{{- raw: parsePixivRedirect(.Description) }}</p>
     </div>
   </div>
 </div>
