@@ -453,7 +453,7 @@ edit style.scss
     isolation: isolate;
     background-color: #131516;
     position: absolute;
-    padding-top: 6px;
+    margin-top: 8px;
     left: 0;
     width: 220px;
     transform: translateX(-220px);
