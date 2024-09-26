@@ -1,37 +1,28 @@
 <div class="container-fluid">
   {{- if !.IsUgoira }}
-  <div class="card mt-4">
-    <div class="card-body">
-      <div class="row">
-        {{- range index := .Images }}
-        <div>
-          <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
-            {{- if .Width != 0 && .Height != 0 }}
+  <!-- The actual work itself, if not a ugoira -->
+    {{- range index := .Images }}
+      <div class="mt-3 mb-4">
+        <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+          {{- if .Width != 0 && .Height != 0 }}
             <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" data-width="{{.Width}}" data-height="{{.Height}}" />
-            {{- else }}
+          {{- else }}
             <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" />
-            {{- end }}
-          </a>
-        </div>
-        {{- end }}
+          {{- end }}
+        </a>
       </div>
-    </div>
-  </div>
+    {{- end }}
   {{- else }}
-  <div class="card mt-4">
-    <div class="card-body">
+  <!-- The actual work itself, if a ugoira -->
+    <div class="mt-3">
       <video class="w-100" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
         src="/proxy/ugoira.com/{{ .ID }}">
         Unable to load ugoira.
       </video>
-      <div class="mt-3">
-        <a href="/proxy/ugoira.com/{{ .ID }}" class="btn btn-primary">Download</a>
-        <a href="https://ugoira.com/i/{{ .ID }}" class="btn btn-secondary">Go to ugoira.com for more options</a>
-      </div>
     </div>
-  </div>
   {{- end }}
 
+  <!-- Work title and user information -->
   <div class="card mt-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
@@ -41,52 +32,36 @@
           </a>
           <div>
             <h5 class="card-title mb-0">{{ .Title }}</h5>
-            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted">{{ .User.Name }}</a></p>
+            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none"">{{ .User.Name }}</a></p>
           </div>
         </div>
         <div>
           {{- if isset(.BookmarkData) && LoggedIn }}
           <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger">
-            <i class="bi bi-heart-fill" style="font-size: 30px;"></i>
+            <i class="bi bi-heart-fill"></i>
           </a>
           {{- else }}
           <a href="/self/addBookmark/{{ .ID }}" class="btn btn-outline-primary">
-            <i class="bi bi-heart" style="font-size: 30px;"></i>
+            <i class="bi bi-heart"></i>
           </a>
           {{- end }}
 
           {{- if .Liked && LoggedIn}}
           <button class="btn btn-outline-primary" disabled>
-            <i class="bi bi-hand-thumbs-up-fill" style="font-size: 30px;"></i>
+            <i class="bi bi-hand-thumbs-up-fill"></i>
           </button>
           {{- else }}
           <a href="/self/like/{{ .ID }}" class="btn btn-outline-primary">
-            <i class="bi bi-hand-thumbs-up" style="font-size: 30px;"></i>
+            <i class="bi bi-hand-thumbs-up"></i>
           </a>
           {{- end }}
         </div>
       </div>
-      <p class="card-text mt-3">
-        <a href="https://pixiv.net/i/{{ .ID }}" class="text-muted">pixiv.net/i/{{ .ID }}</a>
-      </p>
-    </div>
-  </div>
-
-  <div class="card mt-4">
-    <div class="card-body">
-      <ul class="list-group list-group-horizontal">
-        <li class="list-group-item flex-fill"><i class="bi bi-eye me-2"></i> {{- .Views }}</li>
-        <li class="list-group-item flex-fill"><i class="bi bi-heart-fill me-2"></i> {{- .Bookmarks }}</li>
-        <li class="list-group-item flex-fill"><i class="bi bi-hand-thumbs-up me-2"></i> {{- .Likes }}</li>
-        <li class="list-group-item flex-fill"><i class="bi bi-calendar me-2"></i> {{- parseTime: .Date }}</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card mt-4">
-    <div class="card-body">
-      <h6 class="card-subtitle mb-2 text-muted">Tags</h6>
-      <div class="d-flex flex-wrap">
+      <a href="https://pixiv.net/i/{{ .ID }}" class="btn btn-secondary btn-sm mt-3"><i class="bi bi-box-arrow-up-right me-2"></i>View original on Pixiv</a>
+      <!-- Description -->
+      <p class="card-text text-muted mt-4">{{- raw: parsePixivRedirect(.Description) }}</p>
+      <!-- Tag information -->
+      <div class="d-flex flex-wrap mt-2">
         {{- if .AiType == 2 }}
         <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
         {{- end }}
@@ -94,20 +69,33 @@
         {{- if isEmphasize(.Name) }}
         <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
         {{- else }}
-        <span class="badge bg-secondary me-2 mb-2">
+        <span class="badge text-muted me-2 mb-2">
           <a href="/tags/{{ escapeString(.Name) }}" class="text-white text-decoration-none">#{{ .Name }}</a>
           {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
         </span>
         {{- end }}
         {{- end }}
       </div>
+      <!-- Other work information -->
+      <div class="d-flex flex-wrap text-muted small mt-3">
+        <div class="me-4 mb-2">
+            <i class="bi bi-eye me-1"></i>
+            <span>{{- .Views }}</span>
+        </div>
+        <div class="me-4 mb-2">
+            <i class="bi bi-heart-fill me-1"></i>
+            <span>{{- .Bookmarks }}</span>
+        </div>
+        <div class="me-4 mb-2">
+            <i class="bi bi-hand-thumbs-up me-1"></i>
+            <span>{{- .Likes }}</span>
+        </div>
+        <div class="mb-2">
+            <i class="bi bi-calendar me-1"></i>
+            <span>{{- parseTime: .Date }}</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="card mt-4">
-    <div class="card-body">
-      <h6 class="card-subtitle mb-2 text-muted">Description</h6>
-      <p class="card-text">{{- raw: parsePixivRedirect(.Description) }}</p>
-    </div>
-  </div>
 </div>
