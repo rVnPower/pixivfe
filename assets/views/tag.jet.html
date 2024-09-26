@@ -25,11 +25,13 @@
 
   <div class="mt-4">
     <h5>Related Tags</h5>
-    <div class="list-group list-group-horizontal flex-wrap">
+      <div class="d-flex flex-wrap mt-2">
       {{- range .Data.RelatedTags }}
-      <a href="/tags/{{ . }}" class="list-group-item list-group-item-action">#{{ . }}</a>
-      {{- end }}
-    </div>
+        <span class="badge text-muted me-2 mt-2">
+          <a href="/tags/{{ . }}" class="text-white text-decoration-none">#{{ . }}</a>
+        </span>
+        {{- end }}
+      </div>
   </div>
 
   {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}

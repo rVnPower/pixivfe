@@ -1,13 +1,8 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="container">
-  <!-- Card containing the Artwork fragment -->
-  <div class="card">
-    <div class="card-body">
-      {{- include "fragments/artwork" .Illust }}
-    </div>
-  </div>
-
+  <!-- The Artwork fragment; left outside a card -->
+  {{- include "fragments/artwork" .Illust }}
   <!-- Recent works by artist -->
   <div class="card mt-4">
     <div class="card-body">
@@ -77,10 +72,11 @@
   </div>
 </div>
 
-<!-- mb-5 for padding at the bottom of the page -->
-<div class="container mt-4 mb-5">
-  <h2>Related works</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4">
+<!-- mt-5 for spacing between the Related works heading and the main card -->
+<!-- mb-5 for spacing at the bottom of the page -->
+<div class="container mt-5 mb-5">
+  <h4 class="fw-bold mb-0">Related works</h4>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mt-1">
     {{- include "fragments/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>

@@ -1,5 +1,5 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
-<!-- This fragment templates in the work title -->
-<p class="card-title text-truncate">
-  <a target="{{ target }}" href="/artworks/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
+<!-- The thumbnail-tt.jet.html fragment templates in the work title -->
+<p class="card-title text-truncate mb-0">
+  <a target="{{ target }}" href="/artworks/{{ .ID }}" class="fw-bold text-body text-decoration-none">{{ .Title }}</a>
 </p>
