@@ -1,6 +1,7 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
+<!-- This fragment templates in the artist's avatar and name -->
 <div class="d-flex align-items-center mt-2">
-  <a href="/users/{{ .ArtistID }}" class="align-items-center text-decoration-none">
+  <a href="/users/{{ .ArtistID }}" class="align-items-center text-decoration-none text-truncate">
     <img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" class="rounded-circle me-2" style="width: 24px; height: 24px;" />
     <span class="text-muted">{{ .ArtistName }}</span>
   </a>

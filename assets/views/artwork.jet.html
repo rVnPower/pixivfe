@@ -1,6 +1,6 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container mt-4" id="checkpoint">
+<div class="container">
   <!-- Card containing the Artwork fragment -->
   <div class="card">
     <div class="card-body">
@@ -8,6 +8,7 @@
     </div>
   </div>
 
+  <!-- Recent works by artist -->
   <div class="card mt-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -22,7 +23,8 @@
       <div class="overflow-auto" id="horizontal-scroll">
         <div class="d-flex flex-nowrap">
           {{- range .Illust.RecentWorks }}
-          <div class="me-3" style="min-width: 200px;">
+          <!-- TODO: style="min-width: 200px;" is a dirty hack to get it working -->
+          <div class="me-3 w-100" style="min-width: 200px;">
             {{- include "fragments/thumbnail-dt" . }}
           </div>
           {{- end }}
@@ -75,9 +77,10 @@
   </div>
 </div>
 
-<div class="container mt-4">
+<!-- mb-5 for padding at the bottom of the page -->
+<div class="container mt-4 mb-5">
   <h2>Related works</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4">
     {{- include "fragments/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>

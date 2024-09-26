@@ -1,4 +1,5 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
+<!-- This fragment templates in the work title -->
 <p class="card-title text-truncate">
-  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint" class="text-decoration-none">{{ .Title }}</a>
+  <a target="{{ target }}" href="/artworks/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
 </p>

@@ -18,7 +18,7 @@
     {{- end }}
   </div>
   {{- AiType := isset(.AiType) ? .AiType : 0}}
-  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint" class="d-block h-100">
+  <a target="{{ target }}" href="/artworks/{{ .ID }}" class="d-block h-100">
     {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
     <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover" loading="lazy" />
     {{- else if AiType == 2 && hideAi }}
