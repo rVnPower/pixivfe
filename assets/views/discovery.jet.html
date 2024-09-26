@@ -1,23 +1,35 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="container">
-  <h1>Discover artworks</h1>
-  <div class="switcher">
-    <div class="switch-title">Type</div>
-    <a href="/discovery" class="switch-button">Artworks</a>
-    <a href="/discovery/novel" class="switch-button">Novels</a>
+  <h1 class="display-4 mt-4">Discover artworks</h1>
+
+  <div class="card mt-4">
+    <div class="card-header">Type</div>
+    <div class="card-body">
+      <div class="btn-group" role="group" aria-label="Artwork type">
+        <a href="/discovery" class="btn btn-outline-primary">Artworks</a>
+        <a href="/discovery/novel" class="btn btn-outline-primary">Novels</a>
+      </div>
+    </div>
   </div>
-  <div class="switcher">
-    <div class="switch-title">Filter</div>
-    <a href='{{replaceQuery(.Queries, "mode", "all")}}' class="switch-button">All</a>
-    <a href='{{replaceQuery(.Queries, "mode", "safe")}}' class="switch-button">Safe</a>
-    <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="switch-button">R-18</a>
+
+  <div class="card mt-4">
+    <div class="card-header">Filter</div>
+    <div class="card-body">
+      <div class="btn-group" role="group" aria-label="Filter options">
+        <a href='{{replaceQuery(.Queries, "mode", "all")}}' class="btn btn-outline-primary">All</a>
+        <a href='{{replaceQuery(.Queries, "mode", "safe")}}' class="btn btn-outline-primary">Safe</a>
+        <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="btn btn-outline-primary">R-18</a>
+      </div>
+    </div>
   </div>
-  <div class="artwork-container">
+
+  <div class="row mt-4">
     {{- include "fragments/small-tn" .Artworks }}
   </div>
-  <div class="pagination">
-    <a href="" class="pagination-button">Reload</a>
+
+  <div class="d-flex justify-content-center mt-4">
+    <a href="" class="btn btn-primary">Reload</a>
   </div>
 </div>
 {{- end }}
