@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <a class="text-decoration-none text-dark d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <div class="accordion mb-4" id="commentsAccordion">
+  <div class="accordion mt-4" id="commentsAccordion">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingComments">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
@@ -74,9 +74,9 @@
   </div>
 </div>
 
-<div class="container mb-4">
-  <h2 class="mb-3">Related works</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+<div class="container mt-4">
+  <h2>Related works</h2>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
     {{- include "fragments/small-tn" .Illust.RelatedWorks }}
   </div>
 </div>

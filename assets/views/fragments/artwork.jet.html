@@ -1,10 +1,10 @@
-<div class="container-fluid mt-4">
+<div class="container-fluid">
   {{- if !.IsUgoira }}
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <div class="row">
         {{- range index := .Images }}
-        <div class="col-12 mb-3">
+        <div>
           <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
             {{- if .Width != 0 && .Height != 0 }}
             <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid" data-width="{{.Width}}" data-height="{{.Height}}" />
@@ -18,7 +18,7 @@
     </div>
   </div>
   {{- else }}
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <video class="w-100" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
         src="/proxy/ugoira.com/{{ .ID }}">
@@ -32,7 +32,7 @@
   </div>
   {{- end }}
 
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <ul class="list-group list-group-horizontal">
         <li class="list-group-item flex-fill"><img src="/img/eye.png" alt="Views" class="me-2" /> {{- .Views }}</li>
@@ -83,7 +83,7 @@
     </div>
   </div>
 
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <h6 class="card-subtitle mb-2 text-muted">Tags</h6>
       <div class="d-flex flex-wrap">
@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <div class="card mb-4">
+  <div class="card mt-4">
     <div class="card-body">
       <h6 class="card-subtitle mb-2 text-muted">Description</h6>
       <p class="card-text">{{- raw: parsePixivRedirect(.Description) }}</p>
