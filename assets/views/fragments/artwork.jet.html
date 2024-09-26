@@ -4,9 +4,10 @@
   <!-- The actual work itself, if not a ugoira -->
   <!-- Tried using a carousel, but doesn't really work that well -->
     {{- range index := .Images }}
-      <div class="row justify-content-center mt-3 mb-4">
+      <div class="row justify-content-center mb-4">
         <div class="col-10">
           <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+            <!-- Bootstrap + Jet wizardry to dynamically scale artwork -->
             {{- if .Width != 0 && .Height != 0 }}
               {{- if .Width > .Height }}
                 <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
@@ -26,7 +27,7 @@
     {{- end }}
   {{- else }}
   <!-- The actual work itself, if a ugoira -->
-    <div class="row justify-content-center mt-3">
+    <div class="row justify-content-center">
       <div class="col-12 col-md-8 col-lg-6">
         <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
           src="/proxy/ugoira.com/{{ .ID }}">
@@ -36,7 +37,6 @@
     </div>
   {{- end }}
 </div>
-
 
   <!-- Work title and user information -->
   <div class="card mt-4">
