@@ -8,7 +8,7 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
-          <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+          <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle me-2" style="width: 48px; height: 48px;">
           <span>Other works by {{ .Illust.User.Name }}</span>
           <span class="ms-2">&raquo;</span>
         </a>
@@ -44,22 +44,30 @@
           {{- else }}
           <div class="list-group">
             {{ range .Illust.CommentsList }}
-            <div class="list-group-item">
-              <div class="d-flex">
+            <div class="list-group-item border-0">
+              <div class="d-flex mt-2">
+                <!-- Avatar Image -->
                 <a href="/users/{{ .AuthorID }}" class="me-3">
-                  <img class="rounded-circle" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
+                  <img class="rounded-circle img-fluid" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
                 </a>
                 <div>
-                  <a href="/users/{{ .AuthorID }}" class="text-decoration-none">
-                    <h6 class="mb-1">{{- .AuthorName }}</h6>
-                  </a>
+
+                <!-- Author Name -->
+                <div class="d-flex align-items-bottom">
+                <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none me-2">
+                    <h6 class="fw-bold mb-0">{{- .AuthorName }}</h6>
+                </a>
+                <small class="text-muted">{{ .Date }}</small>
+                </div>
+
+                  <!-- Stamp or Emoji -->
                   {{- if .Stamp }}
-                  <img class="img-fluid" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-                    alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="max-width: 96px; max-height: 96px;" />
+                  <img class="img-fluid rounded mt-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
+                    alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px;" />
                   {{- else }}
-                  <p>{{ raw: parseEmojis(.Context) }}</p>
+                  <!-- Comment with emojis -->
+                  <p class="mt-2">{{ raw: parseEmojis(.Context) }}</p>
                   {{ end }}
-                  <small class="text-muted">{{ .Date }}</small>
                 </div>
               </div>
             </div>
@@ -70,7 +78,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <!-- mt-5 for spacing between the Related works heading and the main card -->
 <!-- mb-5 for spacing at the bottom of the page -->
