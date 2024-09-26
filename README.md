@@ -60,7 +60,7 @@ To deploy PixivFE using Docker or the compiled binary, see [Hosting PixivFE](htt
 <!-- The current instance table is really wide; maybe there's a better way of formatting it without losing information?
 The badges are also difficult to read on a small screen due to Codeberg shrinking the width of the columns -->
 
-**Warning: Instances listed below were deemed to have complied with [the instance rules](https://pixivfe-docs.pages.dev/instance-list/#instance-rules). Any public instance that isn't in this list is considered untrustworthy. Use them at your own risk.**
+**Warning: Instances listed below were deemed to have complied with [the instance rules](https://pixivfe-docs.pages.dev/instance-list/#instance-rules). Any public instance that isn't in this list should be used at your own risk.**
 
 | Name              | URL                                             | Country | Cloudflare? | Observatory Grade                                                                                                                               | Status                                                                                                                                               |
 |-------------------|-------------------------------------------------|---------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
