@@ -2,6 +2,7 @@
 <div class="container-fluid mb-3">
   {{- if !.IsUgoira }}
   <!-- The actual work itself, if not a ugoira -->
+  <!-- Tried using a carousel, but doesn't really work that well -->
     {{- range index := .Images }}
       <div class="mt-3 mb-4">
         <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">

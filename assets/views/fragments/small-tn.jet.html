@@ -1,11 +1,11 @@
 {{- range . }}
   {{- if .ID == "#" }}
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 border-0">
       <img src="/img/deleted.png" alt="{{ .Title }}" class="card-img-top img-fluid" loading="lazy" />
-      <div class="card-body">
-        <h5 class="card-title">{{ .Title }}</h5>
-        <div class="d-flex align-items-center mt-2">
+      <div class="card-body py-2 px-0">
+        <p class="card-title text-truncate">{{ .Title }}</p>
+        <div class="align-items-center mt-2">
           <img src="/img/deleted.png" alt="{{ .ArtistName }}" class="rounded-circle me-2" style="width: 24px; height: 24px;" loading="lazy" />
           <span class="text-muted">{{ .ArtistName }}</span>
         </div>
@@ -14,9 +14,9 @@
   </div>
   {{- else if .ID }}
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 border-0">
       {{ include "thumbnail-dt" . }}
-      <div class="card-body">
+      <div class="card-body py-2 px-0">
         {{ include "thumbnail-tt" . }}
         {{ include "thumbnail-at" . }}
       </div>

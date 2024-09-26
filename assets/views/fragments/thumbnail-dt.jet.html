@@ -24,7 +24,7 @@
     {{- else if AiType == 2 && hideAi }}
     <img src="/img/ai.png" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover" loading="lazy" />
     {{- else }}
-    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover" loading="lazy" />
+    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover rounded" loading="lazy" />
     {{- end }}
   </a>
 </div>
