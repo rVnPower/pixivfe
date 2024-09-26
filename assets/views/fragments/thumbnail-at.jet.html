@@ -1,6 +1,7 @@
-<div class="artwork-author">
-  <a href="/users/{{ .ArtistID }}">
-    <img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" />
-    <span>{{ .ArtistName }}</span>
+{{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
+<div class="d-flex align-items-center mt-2">
+  <a href="/users/{{ .ArtistID }}" class="d-flex align-items-center text-decoration-none">
+    <img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" class="rounded-circle me-2" style="width: 24px; height: 24px;" />
+    <span class="text-muted">{{ .ArtistName }}</span>
   </a>
 </div>

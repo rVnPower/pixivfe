@@ -1,4 +1,4 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
-<div class="artwork-title">
-  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint"> {{ .Title }} </a>
-</div>
+<h5 class="card-title">
+  <a target="{{ target }}" href="/artworks/{{ .ID }}#checkpoint" class="text-decoration-none">{{ .Title }}</a>
+</h5>

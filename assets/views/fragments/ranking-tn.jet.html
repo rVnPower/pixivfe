@@ -1,8 +1,14 @@
+<div class="row">
 {{- range . }}
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
-<div class="artwork-small artwork">
-  {{- include "thumbnail-dt" }}
-  {{- include "thumbnail-tt" }}
-  {{- include "thumbnail-at" }}
+<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+  <div class="card h-100">
+    {{- include "thumbnail-dt" }}
+    <div class="card-body">
+      {{- include "thumbnail-tt" }}
+      {{- include "thumbnail-at" }}
+    </div>
+  </div>
 </div>
 {{- end }}
+</div>
