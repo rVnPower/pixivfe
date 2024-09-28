@@ -13,7 +13,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
           <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle me-2" style="width: 48px; height: 48px;">
-          <h2 class="h5 my-2">Other works by {{ .Illust.User.Name }}</h2>
+          <h2 class="h5 m-0">Other works by {{ .Illust.User.Name }}</h2>
         </a>
         {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
         <a href="{{combinedUrl}}" class="btn btn-outline-primary">View all</a>

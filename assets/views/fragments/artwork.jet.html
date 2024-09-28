@@ -1,8 +1,8 @@
 <!-- Container for the artworks -->
 <div class="container mb-4">
   {{- if !.IsUgoira }}
-  <!-- The actual work itself, if not a ugoira -->
-  <!-- Tried using a carousel, but doesn't really work that well -->
+  <!-- The actual artwork itself, if not a ugoira -->
+  <!-- NOTE: tried using a carousel, but doesn't really work that well -->
     {{- range index := .Images }}
         <!-- This anchor element provides the link to the full size artwork  -->
         <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
@@ -29,7 +29,7 @@
         </a>
     {{- end }}
   {{- else }}
-  <!-- The actual work itself, if a ugoira -->
+  <!-- The actual artwork itself, if a ugoira -->
     <div class="row justify-content-center">
       <div class="col-12">
         <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
@@ -41,18 +41,18 @@
   {{- end }}
 </div>
 
-  <!-- Work title and user information -->
+  <!-- Artwork title and user information -->
   <div class="card mb-4">
     <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <!-- Artist avatar, artwork name, and artist name -->
+      <div class="d-flex justify-content-between align-items-top mb-3">
+        <!-- Artwork name, artist avatar + name -->
         <div class="d-flex align-items-center">
           <a href="/users/{{ .User.ID }}" class="me-3">
             <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;"/>
           </a>
           <div>
-            <h5 class="card-title mb-0">{{ .Title }}</h5>
-            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none">{{ .User.Name }}</a></p>
+            <h2 class="h4 fw-bold mb-0">{{ .Title }}</h2>
+            <h3 class="h5"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none">{{ .User.Name }}</a></>
           </div>
         </div>
         <!-- Bookmark and like buttons -->
