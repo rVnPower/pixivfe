@@ -39,9 +39,9 @@
     </div>
     <div class="card-body p-4 pb-0">
       {{- if .Illust.CommentDisabled == 1 }}
-      <p>The creator turned comments off</p>
+      <p class="mb-4">The creator turned comments off</p>
       {{- else if .Illust.Comments == 0 }}
-      <p>There are no comments yet</p>
+      <p class="mb-4">There are no comments yet</p>
       {{- else }}
       <div class="list-group">
         {{ range .Illust.CommentsList }}
