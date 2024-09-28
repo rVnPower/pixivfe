@@ -10,7 +10,7 @@
         {{- if .Tag.Metadata.ID }}
         <div class="col-md-3">
           <a href="/artworks/{{ .Tag.Metadata.ID }}">
-            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid rounded" />
+            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid object-fit-cover rounded" />
           </a>
         </div>
         {{- end }}
