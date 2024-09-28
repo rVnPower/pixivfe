@@ -30,6 +30,7 @@
     {{- end }}
   {{- else }}
   <!-- The actual artwork itself, if a ugoira -->
+  <!-- TODO: also use dynamic resizing logic for ugoira; currently needs backend changes due to not having .Width and .Height to compare -->
     <div class="row justify-content-center">
       <div class="col-12 p-0">
         <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
