@@ -51,53 +51,61 @@
   <!-- mb-4 for spacing between the navbar and main content -->
   <nav class="navbar bg-body-tertiary mb-4">
     <div class="container-fluid">
+      <!-- Icon and title -->
       <a class="h4 text-decoration-none fw-bold mb-0 d-flex align-items-center" href="/">
         <img src="/img/favicon.png" alt="PixivFE icon" width="30" height="30" class="d-inline-block me-2">
         PixivFE
       </a>
+      <!-- Search bar -->
       <form class="d-flex" action="/tags" method="post" autocomplete="off">
         <input class="form-control me-2" type="search" name="name" required placeholder="⌕ Search artworks..." aria-label="Search">
         <button class="btn btn-outline-success" type="submit">
           <i class="bi bi-search" title="Search"></i>
         </button>
       </form>
-      <!-- Hamburger menu for navigation items -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Offcanvas menu for navigation items -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/discovery"><i class="bi bi-compass" title="compass"></i> Discovery</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/ranking"><i class="bi bi-trophy" title="crown"></i> Ranking</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/rankingCalendar"><i class="bi bi-calendar" title="calendar"></i> Ranking history</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/newest"><i class="bi bi-stars" title="sparkling"></i> Newest</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/self/followingWorks"><i class="bi bi-people" title="users"></i> Latest by followed</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/self/bookmarks"><i class="bi bi-heart" title="heart"></i> Your bookmarks</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/self"><i class="bi bi-person" title="user"></i> Your profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/settings"><i class="bi bi-gear" title="settings"></i> Settings</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about"><i class="bi bi-info-circle" title="about"></i> About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://codeberg.org/vnpower/pixivfe"><i class="bi bi-globe" title="globe"></i> Source code</a>
-          </li>
-        </ul>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/discovery"><i class="bi bi-compass" title="compass"></i> Discovery</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/ranking"><i class="bi bi-trophy" title="crown"></i> Ranking</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/rankingCalendar"><i class="bi bi-calendar" title="calendar"></i> Ranking history</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/newest"><i class="bi bi-stars" title="sparkling"></i> Newest</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/self/followingWorks"><i class="bi bi-people" title="users"></i> Latest by followed</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/self/bookmarks"><i class="bi bi-heart" title="heart"></i> Your bookmarks</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/self"><i class="bi bi-person" title="user"></i> Your profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/settings"><i class="bi bi-gear" title="settings"></i> Settings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about"><i class="bi bi-info-circle" title="about"></i> About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://codeberg.org/vnpower/pixivfe"><i class="bi bi-globe" title="globe"></i> Source code</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
