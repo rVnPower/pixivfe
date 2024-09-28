@@ -48,7 +48,8 @@
 </head>
 
 <body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main">
-  <nav class="navbar bg-body-tertiary">
+  <!-- mb-4 for spacing between the navbar and main content -->
+  <nav class="navbar bg-body-tertiary mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <img src="/img/favicon.png" alt="PixivFE icon" width="30" height="30" class="d-inline-block align-top">
@@ -100,7 +101,8 @@
     </div>
   </nav>
   <script src="/js/on-page-load.js"></script>
-  <main class="container mt-4">
+  <!-- mb-5 for spacing at the bottom of the page -->
+  <main class="container mb-5">
     {{- yield body() }}
   </main>
   <div id="site-config" class="d-none">
