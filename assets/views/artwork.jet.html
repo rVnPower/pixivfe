@@ -37,7 +37,7 @@
     <div class="card-header">
       <h2 class="h5 my-2">Comments</h2>
     </div>
-    <div class="card-body overflow-auto" style="max-height: 500px;">
+    <div class="card-body p-4 pb-0">
       {{- if .Illust.CommentDisabled == 1 }}
       <p>The creator turned comments off</p>
       {{- else if .Illust.Comments == 0 }}
@@ -46,20 +46,28 @@
       <div class="list-group">
         {{ range .Illust.CommentsList }}
         <!-- Element for a single comment -->
-        <div class="list-group-item border-0">
-          <div class="d-flex mb-3">
+        <div class="list-group-item border-0 p-0 mb-4">
+          <div class="row">
+
             <!-- Comment author avatar image -->
-            <a href="/users/{{ .AuthorID }}" class="me-3">
-              <img class="rounded-circle img-fluid" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
-            </a>
-            <div>
-            <!-- Comment author name and date -->
-            <div class="d-flex align-items-center mb-2">
-            <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none me-2">
-                <h6 class="fw-bold mb-0">{{- .AuthorName }}</h6>
-            </a>
-            <small class="text-muted">{{ .Date }}</small>
+            <div class="col-auto">
+              <a href="/users/{{ .AuthorID }}">
+                <img class="rounded-circle img-fluid" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
+              </a>
             </div>
+            <div class="col">
+
+              <!-- Comment author name and date -->
+              <div class="d-md-flex align-items-center mb-2">
+                <div class="me-md-2">
+                  <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
+                    <h6 class="fw-bold mb-0">{{- .AuthorName }}</h6>
+                  </a>
+                </div>
+                <div>
+                  <small class="text-muted">{{ .Date }}</small>
+                </div>
+              </div>
 
               <!-- Stamp or emoji -->
               <!-- TODO: .Stamp occasionally templates in text (which should be part of the main comment text) instead of an image, causing breakage in the layout. See the comment by "Unknown417" on /artworks/107442519 for an example -->
