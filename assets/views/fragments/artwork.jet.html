@@ -1,5 +1,5 @@
 <!-- Container for the artworks -->
-<div class="container">
+<div class="container mb-4">
   {{- if !.IsUgoira }}
   <!-- The actual work itself, if not a ugoira -->
   <!-- Tried using a carousel, but doesn't really work that well -->
@@ -39,9 +39,10 @@
 </div>
 
   <!-- Work title and user information -->
-  <div class="card mt-4">
+  <div class="card">
     <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Artist avatar, artwork name, and artist name -->
         <div class="d-flex align-items-center">
           <a href="/users/{{ .User.ID }}" class="me-3">
             <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;"" />
@@ -51,6 +52,7 @@
             <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none"">{{ .User.Name }}</a></p>
           </div>
         </div>
+        <!-- Bookmark and like buttons -->
         <div>
           {{- if isset(.BookmarkData) && LoggedIn }}
           <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger">
@@ -73,14 +75,16 @@
           {{- end }}
         </div>
       </div>
-      <a href="https://pixiv.net/i/{{ .ID }}" class="btn btn-secondary btn-sm mt-3"><i class="bi bi-box-arrow-up-right me-2"></i>View original on Pixiv</a>
 
-      <!-- Description -->
-      <p class="card-text text-muted mt-4">{{- raw: parsePixivRedirect(.Description) }}</p>
+      <!-- View Pixiv original button -->
+      <a href="https://pixiv.net/i/{{ .ID }}" class="btn btn-secondary btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View original on Pixiv</a>
+
+      <!-- Artwork description -->
+      <p class="card-text mb-3">{{- raw: parsePixivRedirect(.Description) }}</p>
 
       <!-- Tag information -->
       <!-- text-start ensures that the content within non-emphasized tags is left-aligned while still maintaining proper wrapping behavior -->
-      <div class="d-flex flex-wrap mt-2">
+      <div class="d-flex flex-wrap mb-2">
         {{- if .AiType == 2 }}
         <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
         {{- end }}
@@ -88,16 +92,16 @@
           {{- if isEmphasize(.Name) }}
           <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
           {{- else }}
-          <span class="badge text-muted me-2 mb-2 text-wrap text-break text-start">
-            <a href="/tags/{{ escapeString(.Name) }}" class="text-white text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+          <span class="badge fw-normal text-muted me-2 mb-2 p-0 pb-2 text-wrap text-break text-start">
+            <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
             {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
           </span>
           {{- end }}
         {{- end }}
       </div>
 
-      <!-- Other work information -->
-      <div class="d-flex flex-wrap text-muted small mt-3">
+      <!-- Other artwork information (views, bookmarks, likes, creation date) -->
+      <div class="d-flex flex-wrap text-muted small me-2">
         <div class="me-4 mb-2">
             <i class="bi bi-eye me-1"></i>
             <span>{{- .Views }}</span>
