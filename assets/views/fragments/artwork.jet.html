@@ -80,7 +80,10 @@
       <a href="https://pixiv.net/i/{{ .ID }}" class="btn btn-secondary btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View original on Pixiv</a>
 
       <!-- Artwork description -->
+      <!-- Rendered conditionally to avoid a weird empty p element that messes with spacing -->
+      {{- if .Description }}
       <p class="card-text mb-3">{{- raw: parsePixivRedirect(.Description) }}</p>
+      {{- end }}
 
       <!-- Tag information -->
       <!-- text-start ensures that the content within non-emphasized tags is left-aligned while still maintaining proper wrapping behavior -->
@@ -92,7 +95,7 @@
           {{- if isEmphasize(.Name) }}
           <span class="badge bg-primary me-2 mb-2">{{ .Name }}</span>
           {{- else }}
-          <span class="badge fw-normal text-muted me-2 mb-2 p-0 pb-2 text-wrap text-break text-start">
+          <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
             <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
             {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
           </span>
