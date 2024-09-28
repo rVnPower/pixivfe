@@ -4,7 +4,7 @@
   <!-- The Artwork fragment; left outside a card -->
   {{- include "fragments/artwork" .Illust }}
   <!-- Recent works by artist -->
-  <div class="card mt-4">
+  <div class="card mb-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
@@ -28,14 +28,15 @@
     </div>
   </div>
 
-  <div class="accordion mt-4" id="commentsAccordion">
+  <!-- mt-5 for spacing between the comments section and related works -->
+  <div class="accordion mb-5" id="commentsAccordion">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingComments">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
           Comments
         </button>
       </h2>
-      <div id="collapseComments" class="accordion-collapse collapse" aria-labelledby="headingComments" data-bs-parent="#commentsAccordion">
+      <div id="collapseComments" class="accordion-collapse show" aria-labelledby="headingComments" data-bs-parent="#commentsAccordion">
         <div class="accordion-body">
           {{- if .Illust.CommentDisabled == 1 }}
           <p>The creator turned comments off</p>
@@ -45,29 +46,33 @@
           <div class="list-group">
             {{ range .Illust.CommentsList }}
             <div class="list-group-item border-0">
-              <div class="d-flex mt-2">
-                <!-- Avatar Image -->
+              <div class="d-flex mb-3">
+                <!-- Comment author avatar image -->
                 <a href="/users/{{ .AuthorID }}" class="me-3">
                   <img class="rounded-circle img-fluid" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
                 </a>
                 <div>
 
-                <!-- Author Name -->
-                <div class="d-flex align-items-bottom">
+                <!-- Comment author name and date -->
+                <div class="d-flex align-items-bottom mb-2">
                 <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none me-2">
                     <h6 class="fw-bold mb-0">{{- .AuthorName }}</h6>
                 </a>
                 <small class="text-muted">{{ .Date }}</small>
                 </div>
 
-                  <!-- Stamp or Emoji -->
+                  <!-- Stamp or emoji -->
+                <div class="d-flex align-items-bottom">
                   {{- if .Stamp }}
-                  <img class="img-fluid rounded mt-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
+                  <img class="img-fluid rounded me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
                     alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px;" />
                   {{- else }}
                   <!-- Comment with emojis -->
-                  <p class="mt-2">{{ raw: parseEmojis(.Context) }}</p>
+                  <p class="m-0">
+                      {{ raw: parseEmojis(.Context) }}
+                  </p>
                   {{ end }}
+                </div>
                 </div>
               </div>
             </div>
@@ -79,9 +84,8 @@
     </div>
   </div>
 
-<!-- mt-5 for spacing between the Related works heading and the main card -->
 <!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
-<div class="container mt-5">
+<div class="container">
   <h2 class="h4 fw-bold mb-0">Related works</h2>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mt-1">
     {{- include "fragments/small-tn" .Illust.RelatedWorks }}
