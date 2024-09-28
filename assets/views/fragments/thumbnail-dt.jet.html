@@ -14,6 +14,10 @@
     {{- if .XRestrict != 0 }}
     <span class="badge bg-danger">{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
     {{- end }}
+    <!-- When an artwork is tagged as AI-generated -->
+    {{- if .AiType == 2 }}
+    <span class="badge bg-warning text-dark">AI-generated</span>
+    {{- end }}
     <!-- When an artwork has multiple images -->
     {{- if .Pages > 1 }}
     <span class="badge bg-secondary">&boxbox; {{ .Pages }}</span>
