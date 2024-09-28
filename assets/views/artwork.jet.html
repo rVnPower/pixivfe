@@ -34,7 +34,14 @@
   <!-- mb-5 for spacing between the end of the comments section card and related works -->
   <div class="card mb-5">
     <div class="card-header px-4 py-3">
-      <h2 class="h5 p-0 mb-0">Comments</h2>
+        <!-- TODO: clean this logic up -->
+        {{- if .Illust.Comments == 0 }}
+        <h2 class="h5 p-0 mb-0">0 Comments</h2>
+        {{- else if .Illust.Comments == 1 }}
+        <h2 class="h5 p-0 mb-0">1 Comment</h2>
+        {{- else }}
+        <h2 class="h5 p-0 mb-0">{{ .Illust.Comments }} Comments</h2>
+        {{- end }}
     </div>
     <div class="card-body p-4 pb-0">
       {{- if .Illust.CommentDisabled == 1 }}
