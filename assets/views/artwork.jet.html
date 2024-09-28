@@ -44,10 +44,10 @@
       {{- else if .Illust.Comments == 0 }}
       <p class="mb-4">There are no comments yet</p>
       {{- else }}
-      <div class="list-group">
+      <div class="list-group" id="comments-container">
         {{ range .Illust.CommentsList }}
         <!-- Element for a single comment -->
-        <div class="list-group-item border-0 p-0 mb-4">
+        <div class="list-group-item border-0 p-0 mb-4 comment-item">
           <div class="row">
 
             <!-- Comment author avatar image -->
@@ -85,6 +85,9 @@
           </div>
         </div>
         {{- end }}
+        <div class="d-flex justify-content-center mb-4">
+        <button type="button" class="btn btn-outline-primary" id="load-more-btn">Load more</button>
+        </div>
       </div>
       {{ end }}
     </div>
