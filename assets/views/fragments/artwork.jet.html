@@ -45,11 +45,11 @@
         <!-- Artist avatar, artwork name, and artist name -->
         <div class="d-flex align-items-center">
           <a href="/users/{{ .User.ID }}" class="me-3">
-            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;"" />
+            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;"/>
           </a>
           <div>
             <h5 class="card-title mb-0">{{ .Title }}</h5>
-            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none"">{{ .User.Name }}</a></p>
+            <p class="card-text"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none">{{ .User.Name }}</a></p>
           </div>
         </div>
         <!-- Bookmark and like buttons -->
