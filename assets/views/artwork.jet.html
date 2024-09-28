@@ -1,5 +1,8 @@
 {{- extends "layout/default" }}
 {{- block body() }}
+<div class="row justify-content-center">
+<!-- col-9 to ensure that artworks don't take forever to scroll past, especially if there are multiple -->
+<div class="col-9">
 <div class="container">
   <!-- The Artwork fragment; left outside a card -->
   {{- include "fragments/artwork" .Illust }}
@@ -83,12 +86,19 @@
       </div>
     </div>
   </div>
+</div>
+</div>
 
-<!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
+<div class="row justify-content-center">
+<!-- col-12 to display Related works at full width -->
+<div class="col-12">
 <div class="container">
+  <!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
   <h2 class="h4 fw-bold mb-0">Related works</h2>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mt-1">
     {{- include "fragments/small-tn" .Illust.RelatedWorks }}
   </div>
+</div>
+</div>
 </div>
 {{- end }}
