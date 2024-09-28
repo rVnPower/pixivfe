@@ -6,37 +6,40 @@
   <!-- Placing the anchor element out here so that the div that contains the tags acts as a hyperlink -->
   <a target="{{ target }}" href="/artworks/{{ .ID }}" class="d-block h-100">
   <div class="position-absolute top-0 start-0 p-2 d-flex justify-content-between w-100">
-    <!-- When an artwork is listed on the ranking page -->
-    {{- if isset(.Rank) }}
-    <span class="badge bg-primary rounded-pill">{{ .Rank }}</span>
-    {{- end }}
-    <!-- When an artwork is tagged as R-18 or R-18G -->
-    {{- if .XRestrict != 0 }}
-    <span class="badge bg-danger">{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
-    {{- end }}
-    <!-- When an artwork is tagged as AI-generated -->
-    {{- if .AiType == 2 }}
-    <span class="badge bg-warning text-dark">AI-generated</span>
-    {{- end }}
-    <!-- When an artwork has multiple images -->
-    {{- if .Pages > 1 }}
-    <span class="badge bg-secondary">&boxbox; {{ .Pages }}</span>
-    {{- end }}
+    <div class="d-flex flex-column align-items-start">
+      <!-- When an artwork is listed on the ranking page -->
+      {{- if isset(.Rank) }}
+      <span class="badge bg-primary rounded-pill mb-1">{{ .Rank }}</span>
+      {{- end }}
+      <!-- When an artwork is tagged as R-18 or R-18G -->
+      {{- if .XRestrict != 0 }}
+      <span class="badge bg-danger mb-1">{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
+      {{- end }}
+      <!-- When an artwork is tagged as AI-generated -->
+      {{- if .AiType == 2 }}
+      <span class="badge bg-warning small text-dark mb-1">AI</span>
+      {{- end }}
+    </div>
+    <div class="d-flex flex-column align-items-end">
+      <!-- When an artwork has multiple images -->
+      {{- if .Pages > 1 }}
+      <span class="badge bg-secondary">&boxbox; {{ .Pages }}</span>
+      {{- end }}
+    </div>
   </div>
   {{- AiType := isset(.AiType) ? .AiType : 0}}
     {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
     <!-- When the user has enabled hideR18 or hideR18G, display a plain thumbnail instead -->
-    <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover" loading="lazy" />
+    <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy" />
     <!-- When the user has enabled hideAi, display a plain thumbnail instead -->
     {{- else if AiType == 2 && hideAi }}
-    <img src="/img/ai.png" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover" loading="lazy" />
+    <img src="/img/ai.png" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy" />
     {{- else }}
-    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid h-100 object-fit-cover rounded" loading="lazy" />
+    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover rounded" loading="lazy" />
     {{- end }}
     <!-- When an artwork is a ugoira -->
     <!-- Creates a centered, circular overlay (60x60px) with semi-transparent black background.
          The play icon is centered within this overlay and appears on top of the thumbnail. -->
-    <!-- TODO: remove the inline styling here -->
     {{- if .IllustType == 2 }}
     <div class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center bg-dark bg-opacity-50 rounded-circle" style="width: 60px; height: 60px; z-index: 1;">
       <i class="bi bi-play-fill text-white fs-1"></i>
