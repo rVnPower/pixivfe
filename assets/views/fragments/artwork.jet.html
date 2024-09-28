@@ -58,6 +58,7 @@
           </div>
         </div>
         <!-- Bookmark and like buttons -->
+        <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
         <div class="col-12 col-sm-4 d-flex justify-content-start justify-content-sm-end align-items-center">
           {{- if isset(.BookmarkData) && LoggedIn }}
           <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger me-2">
