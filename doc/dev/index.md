@@ -15,15 +15,15 @@ The main developer documentation is comprised of the following files:
 
 2. [Design Flaws](design-flaws.md): Documentation of current design issues in PixivFE, both frontend and backend, with potential solutions.
 
-3. [Feature Ideas](feature-ideas.md): Proposals for potential features or redesigns that can be implemented into PixivFE, including Pixivision integration, Sketch support, and UI improvements.
+3. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
 
 4. [Guidelines](guidelines.md): Guidelines for code development, including the repository file structure.
 
 5. [Helpful Resources](helpful-resources.md): External links to materials and resources that can aid in PixivFE development, including other Pixiv-related projects and tools.
 
-6. [Roadmap](roadmap.md): Planned features and improvements for PixivFE, categorized by implementation status and priority.
+6. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
 
-7. [Testing](testing.md): Information about the current state of testing in PixivFE and considerations for future testing strategies.
+7. [Feature Ideas](feature-ideas.md): Proposals for potential features or redesigns that can be implemented into PixivFE, including Pixivision integration, Sketch support, and UI improvements.
 
 ## Features in development
 

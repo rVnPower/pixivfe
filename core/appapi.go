@@ -83,7 +83,9 @@ func oauth_pkce() (string, string) {
 	return code_verifier, code_challenge
 }
 
-func AppAPIRefresh(refresh_token string) {
+func AppAPIRefresh(refresh_token string) AppAPICredentials {
+	var credentials AppAPICredentials
+
 	var body = []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&grant_type=refresh_token&include_policy=true&refresh_token=%s`, CLIENT_ID, CLIENT_SECRET, refresh_token))
 	req, err := http.NewRequest("POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
 	if err != nil {

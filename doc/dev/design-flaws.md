@@ -9,3 +9,5 @@ This section documents some bad/buggy designs in PixivFE's design, both frontend
 Current proxied URLs don't have weird characters in them. Hopefully it stays this way.
 
 Solution: Replace "net/url" with a better third-party module
+
+Mitigation: replaced `url.Parse` with `urlx.Parse` from `github.com/goware/urlx`

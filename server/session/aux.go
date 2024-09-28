@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/goware/urlx"
+
 	"codeberg.org/vnpower/pixivfe/v2/config"
 )
 
@@ -22,7 +24,7 @@ func GetImageProxy(r *http.Request) url.URL {
 	if value == "" {
 		// fall through to default case
 	} else {
-		proxyUrl, err := url.Parse(value)
+		proxyUrl, err := urlx.Parse(value)
 		if err != nil {
 			// fall through to default case
 		} else {

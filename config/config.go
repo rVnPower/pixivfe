@@ -10,8 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
+	"github.com/goware/urlx"
 	"github.com/sethvargo/go-envconfig"
+
+	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
 )
 
 var GlobalConfig ServerConfig
@@ -91,7 +93,7 @@ func parseRevision(revision string) (date, hash string, isDirty bool) {
 
 // validateURL checks if the given URL is valid
 func validateURL(urlString string, urlType string) (*url.URL, error) {
-	parsedURL, err := url.Parse(urlString)
+	parsedURL, err := urlx.Parse(urlString)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +161,7 @@ func (s *ServerConfig) LoadConfig() error {
 	proxyURL, err := validateURL(s.ProxyServer_staging, "Proxy server")
 	if err != nil {
 		log.Printf("[WARNING] Invalid proxy server URL: %v. Falling back to built-in proxy URL.", err)
-		proxyURL, _ = url.Parse(BuiltinProxyUrl) // We know this is valid
+		proxyURL, _ = urlx.Parse(BuiltinProxyUrl) // We know this is valid
 		log.Printf("Proxy server set to: %s\n", BuiltinProxyUrl)
 	} else {
 		log.Printf("Proxy server set to: %s\n", proxyURL.String())
