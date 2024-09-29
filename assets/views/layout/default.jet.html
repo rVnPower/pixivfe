@@ -64,10 +64,14 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-              <h2 class="display-6 offcanvas-title" id="offcanvasNavbarLabel">PixivFE</h2>
-              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
+              <div class="offcanvas-header d-flex align-items-start">
+                <div class="d-flex flex-column w-75">
+                  <h2 class="display-6 offcanvas-title mb-0" id="offcanvasNavbarLabel">PixivFE</h2>
+                  <span class="h6 text-muted mb-0">A privacy-respecting alternative front-end for Pixiv that doesn't suck.</span>
+                </div>
+                <!-- TODO: p-4 is a dirty hack to 'align' the close button with the title; inconsistent across devices -->
+                <button type="button" class="btn-close text-reset p-4" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav me-auto">
               <div class="mb-4">
