@@ -10,7 +10,7 @@
   <div class="card mb-4">
     <div class="card-header p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <h2 class="h4 fw-bold mb-0">Today's illustration rankings</h2>
+        <h2 class="h3 fw-bold mb-0">Today's illustration rankings</h2>
         <a href="/ranking?content=all" class="btn btn-sm btn-outline-primary">See more</a>
       </div>
     </div>
@@ -24,7 +24,7 @@
   {{- else }}
   <div class="card mb-4">
     <div class="card-header p-3">
-      <h2 class="h4 fw-bold mb-0">Filter</h2>
+      <h2 class="h3 fw-bold mb-0">Filter</h2>
     </div>
     <div class="card-body p-3">
       <nav class="nav nav-pills">
@@ -37,7 +37,7 @@
   <div class="card mb-4">
     <div class="card-header p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <h2 class="h4 fw-bold mb-0">Newest works by users you follow</h2>
+        <h2 class="h3 fw-bold mb-0">Newest works by users you follow</h2>
         <a href="/self/followingWorks" class="btn btn-sm btn-outline-primary">See more</a>
       </div>
     </div>
@@ -50,7 +50,7 @@
 
   <div class="card mb-4">
     <div class="card-header p-3">
-      <h2 class="h4 fw-bold mb-0">Recommended works</h2>
+      <h2 class="h3 fw-bold mb-0">Recommended works</h2>
     </div>
     <div class="card-body p-3">
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
@@ -62,7 +62,7 @@
   {{- range .Data.RecommendByTags }}
   <div class="card mb-4">
     <div class="card-header p-3">
-      <h2 class="h4 fw-bold mb-0">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
+      <h2 class="h3 fw-bold mb-0">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
     </div>
     <div class="card-body p-3">
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
