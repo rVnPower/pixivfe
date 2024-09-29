@@ -51,7 +51,8 @@
         {{- end }}
     </div>
     <!-- The padding disparity with the card-header is intentional -->
-    <div class="card-body p-4">
+    <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
+    <div class="card-body p-4 pb-0">
       {{- if .Illust.CommentDisabled == 1 }}
       <p class="mb-4">The creator turned comments off</p>
       {{- else if .Illust.Comments == 0 }}
@@ -109,15 +110,16 @@
 
 </div>
 
-<div class="row justify-content-center">
+<!-- TODO: check whether there actually are any related works before rendering this section -->
 <!-- col-12 to display Related works at full width -->
 <div class="col-12">
-  <!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
-  <h2 class="h4 fw-bold mb-4">Related works</h2>
-  <!-- Gradually increase the number of artworks shown per row along with device width -->
-  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-    {{- include "fragments/small-tn" .Illust.RelatedWorks }}
-  </div>
+    <!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
+    <h2 class="h4 fw-bold mb-4">Related works</h2>
+    <!-- Gradually increase the number of artworks shown per row along with device width -->
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+        {{- include "fragments/small-tn" .Illust.RelatedWorks }}
+    </div>
 </div>
+
 </div>
 {{- end }}
