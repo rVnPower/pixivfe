@@ -42,18 +42,6 @@
             </div>
         </div>
 
-        <!-- Recommended works (without a specific tag) -->
-        <div class="card mb-4">
-            <div class="card-header p-3">
-                <h2 class="h4 fw-bold mb-0">Recommended works</h2>
-            </div>
-            <div class="card-body p-3">
-                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-                    {{- include "fragments/small-tn" .Data.Recommended }}
-                </div>
-            </div>
-        </div>
-
         <!-- Filter settings -->
         <div class="card mb-4">
             <div class="card-header p-3">
@@ -68,6 +56,10 @@
 
     <!-- Recommended works (with a specific tag) -->
     <div class="col-12">
+        <h2 class="h4 fw-bold mb-4">Recommended works</h2>
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-5">
+            {{- include "fragments/small-tn" .Data.Recommended }}
+        </div>
         {{- range .Data.RecommendByTags }}
             <h2 class="h4 fw-bold mb-4">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
             <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-5">
