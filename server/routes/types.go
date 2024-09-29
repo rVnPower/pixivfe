@@ -133,12 +133,17 @@ type Data_settings struct {
 	WorkingProxyList []string
 }
 type Data_tag struct {
-	Title    string
-	Tag      core.TagDetail
-	Data     core.SearchResult
-	QueriesC template.PartialURL
-	TrueTag  string
-	Page     int
+	Title            string
+	Tag              core.TagDetail
+	Data             core.SearchResult
+	QueriesC         template.PartialURL
+	TrueTag          string
+	Page             int
+	ActiveCategory   string
+	ActiveOrder      string
+	ActiveMode       string
+	ActiveRatio      string
+	ActiveSearchMode string
 }
 type Data_unauthorized struct{}
 type Data_user struct {

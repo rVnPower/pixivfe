@@ -66,38 +66,38 @@
                 {{- URL := unfinishedQuery(.QueriesC, "category") }}
                 {{- path := slice("artworks", "illustrations", "manga")}}
                 {{- name := slice("Artworks", "Illustrations", "Manga")}}
-                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
                 </div>
                 <div class="col-md-4 mb-2 mb-md-0">
                 <h4 class="h5 fw-bold">Order</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "order") }}
                 {{- path := slice("date_d", "date")}}
                 {{- name := slice("Newest", "Oldest")}}
-                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
                 </div>
                 <div class="col-md-4 mb-2 mb-md-0">
                 <h4 class="h5 fw-bold">Filter</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "mode") }}
                 {{- path := slice("all", "safe", "r18")}}
                 {{- name := slice("All", "Safe", "R-18")}}
-                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
                 </div>
-            </div>
+                </div>
 
-            <div class="row mb-3">
+                <div class="row mb-3">
                 <div class="col-md-6 mb-2 mb-md-0">
                 <h4 class="h5 fw-bold">Ratio</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
                 {{- path := slice("", "-0.5", "0", "0.5")}}
                 {{- name := slice("All", "Portrait", "Square", "Landscape")}}
-                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
                 </div>
                 <div class="col-md-6 mb-2 mb-md-0">
                 <h4 class="h5 fw-bold">Search mode</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "smode") }}
                 {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
                 {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveSearchMode) }}
                 </div>
             </div>
 
