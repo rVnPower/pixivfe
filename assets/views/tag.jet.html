@@ -1,5 +1,6 @@
 {{- extends "layout/default" }}
 {{- import "blocks/switcher" }}
+{{- import "blocks/pagination" }}
 {{- block body() }}
 
 <div class="row justify-content-center mb-5">
@@ -174,14 +175,11 @@
   </div>
 
   <!-- Pagination -->
-  <nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-      {{- url := unfinishedQuery(.QueriesC, "page") }}
-      <li class="page-item disabled">
-        <span class="page-link">Page {{ .Page }}</span>
-      </li>
-      {{- raw: createPaginator(url, "#checkpoint", .Page, -1) }}
-    </ul>
-  </nav>
+  <div class="justify-content-center align-items-center">
+    {{- url := unfinishedQuery(.QueriesC, "page") }}
+    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1) }}
+    {{- yield pagination(data=paginationData) }}
+  </div>
+
 </div>
 {{- end }}

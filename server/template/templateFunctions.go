@@ -97,7 +97,27 @@ func ParseEmojis(s string) HTML {
 	return HTML(parsedString)
 }
 
-var re_jump = regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
+type PageInfo struct {
+    Number int
+    URL    string
+}
+
+type PaginationData struct {
+    CurrentPage int
+    MaxPage     int
+    Pages       []PageInfo
+    HasPrevious bool
+    HasNext     bool
+    PreviousURL string
+    NextURL     string
+    FirstURL    string
+    LastURL     string
+    HasMaxPage  bool
+    LastPage    int
+}
+
+func ParsePixivRedirect(s string) HTML {
+	regex := regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
 
 func ParsePixivRedirect(s string) HTML {
 	parsedString := re_jump.ReplaceAllStringFunc(s, func(s string) string {
@@ -123,80 +143,40 @@ func ParseTime(date time.Time) string {
 func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
+func CreatePaginator(base, ending string, current_page, max_page int) PaginationData {
+    pageUrl := func(page int) string {
+        return fmt.Sprintf(`%s%d%s`, base, page, ending)
+    }
 
-func CreatePaginator(base, ending string, current_page, max_page int) HTML {
-	pageUrl := func(page int) string {
-		return fmt.Sprintf(`%s%d%s`, base, page, ending)
-	}
+    const peek = 2 // Number of pages to show on each side of the current page
+    hasMaxPage := max_page != -1
 
-	const (
-		peek  = 5          // this can be changed freely
-		limit = peek*2 + 1 // tied to the algorithm below, do not change
-	)
-	hasMaxPage := max_page != -1
-	count := 0
-	pages := ""
+    start := max(1, current_page-peek)
+    end := current_page + peek
+    if hasMaxPage {
+        end = min(max_page, end)
+    }
 
-	pages += `<div class="pagination-buttons">`
-	{ // "jump to page" <form>
-		hidden_section := ""
-		urlParsed, err := url.Parse(base)
-		if err != nil {
-			panic(err)
-		}
-		for k, vs := range urlParsed.Query() {
-			if k == "page" {
-				continue
-			}
-			for _, v := range vs {
-				hidden_section += fmt.Sprintf(`<input type="hidden" name="%s" value="%s"/>`, k, v)
-			}
-		}
+    pages := make([]PageInfo, 0, end-start+1)
+    for i := start; i <= end; i++ {
+        pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
+    }
 
-		max_section := ""
-		if hasMaxPage {
-			max_section = fmt.Sprintf(`max="%d"`, max_page)
-		}
+    lastPage := pages[len(pages)-1].Number
 
-		pages += fmt.Sprintf(`<form action="%s">%s<input name="page" type="number" required value="%d" min="%d" %s placeholder="Page№" title="Jump To Page Number"/></form>`, pageUrl(current_page), hidden_section, current_page, 1, max_section)
-		pages += `<br />`
-	}
-	{
-		// previous,first (two buttons)
-		pages += `<span>`
-		{
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&laquo;</a>`, pageUrl(1))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&lsaquo;</a>`, pageUrl(max(1, current_page-1)))
-		}
-		pages += `</span>`
-
-		// page number buttons
-		for i := current_page - peek; (i <= max_page || max_page == -1) && count < limit; i++ {
-			if i < 1 {
-				continue
-			}
-			if i == current_page {
-				pages += fmt.Sprintf(`<a href="%s" class="pagination-button" id="highlight">%d</a>`, pageUrl(i), i)
-			} else {
-				pages += fmt.Sprintf(`<a href="%s" class="pagination-button">%d</a>`, pageUrl(i), i)
-			}
-			count++
-		}
-
-		// next,last (two buttons)
-		pages += `<span>`
-		if hasMaxPage {
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&rsaquo;</a>`, pageUrl(min(max_page, current_page+1)))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&raquo;</a>`, pageUrl(max_page))
-		} else {
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&rsaquo;</a>`, pageUrl(current_page+1))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button" class="disabled">&raquo;</a>`, pageUrl(max_page))
-		}
-		pages += `</span>`
-	}
-	pages += `</div>`
-
-	return HTML(pages)
+    return PaginationData{
+        CurrentPage: current_page,
+        MaxPage:     max_page,
+        Pages:       pages,
+        HasPrevious: current_page > 1,
+        HasNext:     !hasMaxPage || current_page < max_page,
+        PreviousURL: pageUrl(current_page - 1),
+        NextURL:     pageUrl(current_page + 1),
+        FirstURL:    pageUrl(1),
+        LastURL:     pageUrl(max_page),
+        HasMaxPage:  hasMaxPage,
+        LastPage:    lastPage,
+    }
 }
 
 func GetNovelGenre(s string) string {
@@ -297,7 +277,7 @@ func GetTemplateFunctions() map[string]any {
 		"parseTimeCustomFormat": func(date time.Time, format string) string {
 			return ParseTimeCustomFormat(date, format)
 		},
-		"createPaginator": func(base, ending string, current_page, max_page int) HTML {
+		"createPaginator": func(base, ending string, current_page, max_page int) PaginationData {
 			return CreatePaginator(base, ending, current_page, max_page)
 		},
 		"joinArtworkIds": func(artworks []core.ArtworkBrief) string {
