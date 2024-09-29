@@ -18,9 +18,11 @@
         {{- end }}
         <!-- Tag information -->
         <div class="col-md-8">
-          <h1 class="display-5">#{{ .Tag.Name }}</h1>
-          <h2 class="h4 text-muted">{{ .Tag.Metadata.Name }}</h2>
-          <p class="lead"><strong>{{ .Data.Artworks.Total }}</strong> works</p>
+            <span class="d-flex flex-wrap align-items-center">
+                <h1 class="display-6 fw-bold me-2">#{{ .Tag.Name }}</h1>
+                <span class="h4 text-muted">{{ .Tag.Metadata.Name }}</span>
+            </span>
+          <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
           <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
           <p class="lead mb-0">{{ .Tag.Metadata.Detail }}</p>
         </div>
