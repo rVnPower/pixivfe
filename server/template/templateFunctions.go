@@ -13,10 +13,12 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
+// HTML is an alias for the HTML type from the core package
 type HTML = core.HTML
 
+// GetRandomColor returns a randomly selected color from a predefined list of color shades
 func GetRandomColor() string {
-	// Some color shade I stole
+	// VnPower: Some color shade I stole
 	colors := []string{
 		// Green
 		"#C8847E",
@@ -40,13 +42,13 @@ func GetRandomColor() string {
 		"#C87EA5",
 	}
 
-	// Randomly choose one and return
+	// Randomly choose one color and return it
 	return colors[rand.Intn(len(colors))]
 }
 
-var re_emoji = regexp.MustCompile(`\(([^)]+)\)`)
-
+// ParseEmojis replaces emoji shortcodes in a string with corresponding image tags
 func ParseEmojis(s string) HTML {
+	// Map of emoji shortcodes to their corresponding image IDs
 	emojiList := map[string]string{
 		"normal":        "101",
 		"surprise":      "102",
@@ -88,8 +90,12 @@ func ParseEmojis(s string) HTML {
 		"star":          "503",
 	}
 
-	parsedString := re_emoji.ReplaceAllStringFunc(s, func(s string) string {
-		s = s[1 : len(s)-1] // Get the string inside
+	// Regular expression to match emoji shortcodes
+	regex := regexp.MustCompile(`\(([^)]+)\)`)
+
+	// Replace shortcodes with corresponding image tags
+	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
+		s = s[1 : len(s)-1] // Get the string inside parentheses
 		id := emojiList[s]
 
 		return fmt.Sprintf(`<img src="/proxy/s.pximg.net/common/images/emoji/%s.png" alt="(%s)" class="emoji" />`, id, s)
@@ -97,11 +103,13 @@ func ParseEmojis(s string) HTML {
 	return HTML(parsedString)
 }
 
+// PageInfo represents information about a single page in pagination
 type PageInfo struct {
 	Number int
 	URL    string
 }
 
+// PaginationData contains all necessary information for rendering pagination controls
 type PaginationData struct {
 	CurrentPage int
 	MaxPage     int
@@ -116,14 +124,18 @@ type PaginationData struct {
 	LastPage    int
 }
 
+// ParsePixivRedirect extracts and unescapes URLs from Pixiv's redirect links
 func ParsePixivRedirect(s string) HTML {
+	// Regular expression to match Pixiv's redirect URLs
 	regex := regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
 
-func ParsePixivRedirect(s string) HTML {
-	parsedString := re_jump.ReplaceAllStringFunc(s, func(s string) string {
+	// Extract the actual URL from the redirect link
+	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
 		s = s[10:]
 		return s
 	})
+
+	// Unescape the URL
 	escaped, err := url.QueryUnescape(parsedString)
 	if err != nil {
 		return HTML(s)
@@ -131,18 +143,23 @@ func ParsePixivRedirect(s string) HTML {
 	return HTML(escaped)
 }
 
+// EscapeString escapes a string for use in a URL query
 func EscapeString(s string) string {
 	escaped := url.QueryEscape(s)
 	return escaped
 }
 
+// ParseTime formats a time.Time value as a string in the format "2006-01-02 15:04"
 func ParseTime(date time.Time) string {
 	return date.Format("2006-01-02 15:04")
 }
 
+// ParseTimeCustomFormat formats a time.Time value as a string using a custom format
 func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
+
+// CreatePaginator generates pagination data based on the current page and maximum number of pages
 func CreatePaginator(base, ending string, current_page, max_page int) PaginationData {
 	pageUrl := func(page int) string {
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
@@ -151,12 +168,14 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 	const peek = 2 // Number of pages to show on each side of the current page
 	hasMaxPage := max_page != -1
 
+	// Calculate the range of pages to display
 	start := max(1, current_page-peek)
 	end := current_page + peek
 	if hasMaxPage {
 		end = min(max_page, end)
 	}
 
+	// Generate page information for the range
 	pages := make([]PageInfo, 0, end-start+1)
 	for i := start; i <= end; i++ {
 		pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
@@ -164,6 +183,7 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 
 	lastPage := pages[len(pages)-1].Number
 
+	// Create and return the PaginationData struct
 	return PaginationData{
 		CurrentPage: current_page,
 		MaxPage:     max_page,
@@ -179,6 +199,7 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 	}
 }
 
+// GetNovelGenre returns the genre name for a given genre ID
 func GetNovelGenre(s string) string {
 	switch s {
 	case "1":
@@ -220,6 +241,7 @@ func GetNovelGenre(s string) string {
 	return i18n.Sprintf("(Unknown Genre: %s)", s)
 }
 
+// SwitchButtonAttributes generates HTML attributes for a switch button based on the current selection
 func SwitchButtonAttributes(baseURL, selection, currentSelection string) string {
 	var cur string = "false"
 	if selection == currentSelection {
@@ -235,6 +257,7 @@ var jumpUriPattern = regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]
 var jumpPagePattern = regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
 var newPagePattern = regexp.MustCompile(`\s*\[newpage\]\s*`)
 
+// GetTemplateFunctions returns a map of custom template functions for use in HTML templates
 func GetTemplateFunctions() map[string]any {
 	return map[string]any{
 		"parseEmojis": func(s string) HTML {
@@ -288,24 +311,29 @@ func GetTemplateFunctions() map[string]any {
 			return strings.Join(ids, ",")
 		},
 		"stripEmbed": func(s string) string {
-			// this is stupid
+			// Remove the last 6 characters from the string (assumes "_embed" suffix)
 			return s[:len(s)-6]
 		},
 		"renderNovel": func(s string) HTML {
+			// Replace furigana markup with HTML ruby tags
 			furiganaTemplate := `<ruby>$1<rp>(</rp><rt>$2</rt><rp>)</rp></ruby>`
 			s = furiganaPattern.ReplaceAllString(s, furiganaTemplate)
 
+			// Replace chapter markup with HTML h2 tags
 			chapterTemplate := `<h2>$1</h2>`
 			s = chapterPattern.ReplaceAllString(s, chapterTemplate)
 
+			// Replace jump URI markup with HTML anchor tags
 			jumpUriTemplate := `<a href="$2" target="_blank">$1</a>`
 			s = jumpUriPattern.ReplaceAllString(s, jumpUriTemplate)
 
+			// Replace jump page markup with HTML anchor tags
 			jumpPageTemplate := `<a href="#$1">To page $1</a>`
 			s = jumpPagePattern.ReplaceAllString(s, jumpPageTemplate)
 
+			// Handle newpage markup
 			if strings.Contains(s, "[newpage]") {
-				// if [newpage] in content , then prepend <hr id="1"/> to the page
+				// Prepend <hr id="1"/> to the page if [newpage] is present
 				s = `<hr id="1"/>` + s
 				pageIdx := 1
 
@@ -315,6 +343,8 @@ func GetTemplateFunctions() map[string]any {
 					return fmt.Sprintf(`<br /><hr id="%d"/>`, pageIdx)
 				})
 			}
+
+			// Replace newlines with HTML line breaks
 			s = strings.ReplaceAll(s, "\n", "<br />")
 			return HTML(s)
 		},
@@ -324,6 +354,7 @@ func GetTemplateFunctions() map[string]any {
 		},
 		"unfinishedQuery": UnfinishedQuery,
 		"replaceQuery":    ReplaceQuery,
+		// TODO: what is AttrGen for
 		// "AttrGen": SwitchButtonAttributes,
 	}
 }
