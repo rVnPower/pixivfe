@@ -12,7 +12,7 @@ require (
 	github.com/goware/urlx v0.3.2
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/oklog/ulid/v2 v2.1.0
-	github.com/playwright-community/playwright-go v0.4501.1
+	github.com/playwright-community/playwright-go v0.4702.0
 	github.com/sethvargo/go-envconfig v1.1.0
 	github.com/sethvargo/go-limiter v1.0.0
 	github.com/soluble-ai/go-jnode v0.1.11
