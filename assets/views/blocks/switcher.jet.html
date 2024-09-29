@@ -1,6 +1,6 @@
 {{- block Switcher(baseURL, paths, names, currentPath="artworks") }}
     {{- range i, k := paths }}
-        <a href="{{ baseURL }}{{k}}" class="btn btn-outline-primary btn-sm me-1 mb-2" selected="{{ currentPath == k ? 1 : 0}}">
+        <a href="{{ baseURL }}{{k}}" class="btn btn-outline-primary{{ currentPath == k ? " active" : "" }} btn-sm me-1 mb-2" role="button" aria-pressed="{{ currentPath == k ? "true" : "false" }}">
         {{- names[i] }}
         </a>
     {{- end }}
