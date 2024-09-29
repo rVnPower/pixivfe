@@ -40,7 +40,7 @@
 
     <!-- Related tags -->
     <!-- <div class="mb-4">
-        <h2 class="h3 fw-bold">Related Tags</h2>
+        <h2 class="h4 fw-bold">Related Tags</h2>
         <div class="d-flex flex-wrap">
         {{- range .Data.RelatedTags }}
         <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
@@ -57,26 +57,26 @@
 
     <div class="card mb-5">
         <div class="card-header p-3">
-            <h3 class="h4 fw-bold p-0 mb-0">Search settings</h3>
+            <h2 class="h5 fw-bold p-0 mb-0">Search settings</h2>
         </div>
         <div class="card-body p-4">
             <div class="row mb-3">
                 <div class="col-md-4 mb-2 mb-md-0">
-                <h4 class="h5 fw-bold">Category</h4>
+                <h3 class="h5 fw-bold">Category</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "category") }}
                 {{- path := slice("artworks", "illustrations", "manga")}}
                 {{- name := slice("Artworks", "Illustrations", "Manga")}}
                 {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
                 </div>
                 <div class="col-md-4 mb-2 mb-md-0">
-                <h4 class="h5 fw-bold">Order</h4>
+                <h3 class="h5 fw-bold">Order</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "order") }}
                 {{- path := slice("date_d", "date")}}
                 {{- name := slice("Newest", "Oldest")}}
                 {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
                 </div>
                 <div class="col-md-4 mb-2 mb-md-0">
-                <h4 class="h5 fw-bold">Filter</h4>
+                <h3 class="h5 fw-bold">Filter</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "mode") }}
                 {{- path := slice("all", "safe", "r18")}}
                 {{- name := slice("All", "Safe", "R-18")}}
@@ -86,14 +86,14 @@
 
                 <div class="row mb-3">
                 <div class="col-md-6 mb-2 mb-md-0">
-                <h4 class="h5 fw-bold">Ratio</h4>
+                <h3 class="h5 fw-bold">Ratio</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
                 {{- path := slice("", "-0.5", "0", "0.5")}}
                 {{- name := slice("All", "Portrait", "Square", "Landscape")}}
                 {{- yield Switcher(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
                 </div>
                 <div class="col-md-6 mb-2 mb-md-0">
-                <h4 class="h5 fw-bold">Search mode</h4>
+                <h3 class="h5 fw-bold">Search mode</h4>
                 {{- URL := unfinishedQuery(.QueriesC, "smode") }}
                 {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
                 {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
@@ -104,11 +104,11 @@
             <!-- Advanced Settings -->
             <div class="accordion" id="advancedSettings">
                 <div class="accordion-item">
-                <h2 class="accordion-header" id="headingAdvanced">
+                <div class="accordion-header" id="headingAdvanced">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
-                    Advanced settings
+                    <span class="h6 fw-bold mb-0">Advanced settings</span>
                     </button>
-                </h2>
+                </div>
                 <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advancedSettings">
                     <div class="accordion-body">
                     {{- URL := unfinishedQuery(.QueriesC, "") }}
@@ -157,19 +157,19 @@
 <div class="col-12">
     <!-- Popular Artworks -->
     {{- if .Data.Popular.Recent }}
-    <h2 class="h3 fw-bold mb-3">Popular artworks</h2>
-    <h3 class="h4 fw-bold mb-3">Recent</h3>
+    <h2 class="h4 fw-bold mb-3">Popular artworks</h2>
+    <h3 class="h5 fw-bold mb-3">Recent</h3>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Popular.Recent }}
     </div>
-    <h3 class="h4 fw-bold mb-3">All Time</h3>
+    <h3 class="h5 fw-bold mb-3">All Time</h3>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Popular.Permanent }}
     </div>
     {{- end }}
 
     <!-- Main Works -->
-    <h2 class="h3 fw-bold mb-3" id="checkpoint">Works</h2>
+    <h2 class="h4 fw-bold mb-3" id="checkpoint">Works</h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
     </div>
