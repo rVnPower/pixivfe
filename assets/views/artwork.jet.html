@@ -22,7 +22,8 @@
       <div class="overflow-auto" id="horizontal-scroll">
         <div class="row flex-nowrap">
           {{- range .Illust.RecentWorks }}
-          <div class="col-2 px-2">
+          <!-- Display artist's other artworks at smaller width on larger devices -->
+          <div class="col-6 col-md-3 px-2">
             {{- include "fragments/thumbnail-dt" . }}
           </div>
           {{- end }}
