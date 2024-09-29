@@ -18,14 +18,19 @@
         <a href="{{combinedUrl}}" class="btn btn-sm btn-outline-primary">View all</a>
       </div>
     </div>
-    <div class="card-body">
-      <div class="overflow-auto" id="horizontal-scroll">
+    <div class="card-body pb-1">
+      <div class="overflow-auto px-2 pt-1" id="horizontal-scroll">
         <div class="row flex-nowrap">
           {{- range .Illust.RecentWorks }}
           <!-- Display artist's other artworks at smaller width on larger devices -->
           <!-- Should always be a bit larger than the thumbnails for the related works -->
           <div class="col-6 col-md-4 col-lg-3 px-2">
-            {{- include "fragments/thumbnail-dt" . }}
+              <div class="card h-100 border-0">
+                {{ include "fragments/thumbnail-dt" . }}
+                <div class="card-body py-2 px-0">
+                  {{ include "fragments/thumbnail-tt" . }}
+                </div>
+              </div>
           </div>
           {{- end }}
         </div>
