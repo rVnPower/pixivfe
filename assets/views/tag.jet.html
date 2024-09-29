@@ -24,21 +24,28 @@
             </span>
           <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
           <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
-          <p class="lead mb-0">{{ .Tag.Metadata.Detail }}</p>
+          <p class="lead">{{ .Tag.Metadata.Detail }}</p>
+            <div class="d-flex flex-wrap align-items-center">
+                {{- range .Data.RelatedTags }}
+                <span class="badge fw-normal me-2 mb-2 p-0 text-wrap text-break text-start">
+                    <a href="/tags/{{ . }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
+                </span>
+                {{- end }}
+            </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Related tags -->
-  <div class="mb-4">
-    <h3>Related Tags</h3>
+  <!-- <div class="mb-4">
+    <h2 class="h3 fw-bold">Related Tags</h2>
     <div class="d-flex flex-wrap">
-      {{- range .Data.RelatedTags }}
-      <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
-      {{- end }}
+    {{- range .Data.RelatedTags }}
+    <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
+    {{- end }}
     </div>
-  </div>
+  </div> -->
 
   <!-- Switchers -->
   {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
