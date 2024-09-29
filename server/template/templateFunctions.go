@@ -98,22 +98,22 @@ func ParseEmojis(s string) HTML {
 }
 
 type PageInfo struct {
-    Number int
-    URL    string
+	Number int
+	URL    string
 }
 
 type PaginationData struct {
-    CurrentPage int
-    MaxPage     int
-    Pages       []PageInfo
-    HasPrevious bool
-    HasNext     bool
-    PreviousURL string
-    NextURL     string
-    FirstURL    string
-    LastURL     string
-    HasMaxPage  bool
-    LastPage    int
+	CurrentPage int
+	MaxPage     int
+	Pages       []PageInfo
+	HasPrevious bool
+	HasNext     bool
+	PreviousURL string
+	NextURL     string
+	FirstURL    string
+	LastURL     string
+	HasMaxPage  bool
+	LastPage    int
 }
 
 func ParsePixivRedirect(s string) HTML {
@@ -144,39 +144,39 @@ func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
 func CreatePaginator(base, ending string, current_page, max_page int) PaginationData {
-    pageUrl := func(page int) string {
-        return fmt.Sprintf(`%s%d%s`, base, page, ending)
-    }
+	pageUrl := func(page int) string {
+		return fmt.Sprintf(`%s%d%s`, base, page, ending)
+	}
 
-    const peek = 2 // Number of pages to show on each side of the current page
-    hasMaxPage := max_page != -1
+	const peek = 2 // Number of pages to show on each side of the current page
+	hasMaxPage := max_page != -1
 
-    start := max(1, current_page-peek)
-    end := current_page + peek
-    if hasMaxPage {
-        end = min(max_page, end)
-    }
+	start := max(1, current_page-peek)
+	end := current_page + peek
+	if hasMaxPage {
+		end = min(max_page, end)
+	}
 
-    pages := make([]PageInfo, 0, end-start+1)
-    for i := start; i <= end; i++ {
-        pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
-    }
+	pages := make([]PageInfo, 0, end-start+1)
+	for i := start; i <= end; i++ {
+		pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
+	}
 
-    lastPage := pages[len(pages)-1].Number
+	lastPage := pages[len(pages)-1].Number
 
-    return PaginationData{
-        CurrentPage: current_page,
-        MaxPage:     max_page,
-        Pages:       pages,
-        HasPrevious: current_page > 1,
-        HasNext:     !hasMaxPage || current_page < max_page,
-        PreviousURL: pageUrl(current_page - 1),
-        NextURL:     pageUrl(current_page + 1),
-        FirstURL:    pageUrl(1),
-        LastURL:     pageUrl(max_page),
-        HasMaxPage:  hasMaxPage,
-        LastPage:    lastPage,
-    }
+	return PaginationData{
+		CurrentPage: current_page,
+		MaxPage:     max_page,
+		Pages:       pages,
+		HasPrevious: current_page > 1,
+		HasNext:     !hasMaxPage || current_page < max_page,
+		PreviousURL: pageUrl(current_page - 1),
+		NextURL:     pageUrl(current_page + 1),
+		FirstURL:    pageUrl(1),
+		LastURL:     pageUrl(max_page),
+		HasMaxPage:  hasMaxPage,
+		LastPage:    lastPage,
+	}
 }
 
 func GetNovelGenre(s string) string {
