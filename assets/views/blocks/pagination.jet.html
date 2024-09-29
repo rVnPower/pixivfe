@@ -1,7 +1,24 @@
 {{- block pagination(data) }}
 <!-- Pagination navigation block -->
 <nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center mb-0">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <!-- Pagination dropdown -->
+        <div class="dropdown mb-3">
+        <!-- TODO: style the dropdown button similarly to the pagination ones -->
+        <button class="btn btn-secondary text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Go to Page
+        </button>
+        <ul class="dropdown-menu">
+            {{ range data.DropdownPages }}
+            {{ if .Number == data.CurrentPage }}
+                <li><a class="dropdown-item active" href="{{ .URL }}">{{ .Number }}</a></li>
+            {{ else }}
+                <li><a class="dropdown-item" href="{{ .URL }}">{{ .Number }}</a></li>
+            {{ end }}
+            {{ end }}
+        </ul>
+        </div>
+  <ul class="pagination mb-0">
     <!-- Previous page button -->
     {{ if data.HasPrevious }}
       <li class="page-item"><a class="page-link" href="{{ data.PreviousURL }}">Previous</a></li>
@@ -40,8 +57,9 @@
     {{ if data.HasNext }}
       <li class="page-item"><a class="page-link" href="{{ data.NextURL }}">Next</a></li>
     {{ else }}
-      <li class="page-item disabled"><span class="page-link">Nex;</span></li>
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
     {{ end }}
   </ul>
+    </div>
 </nav>
 {{- end }}

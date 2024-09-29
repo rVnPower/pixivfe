@@ -111,17 +111,18 @@ type PageInfo struct {
 
 // PaginationData contains all necessary information for rendering pagination controls
 type PaginationData struct {
-	CurrentPage int
-	MaxPage     int
-	Pages       []PageInfo
-	HasPrevious bool
-	HasNext     bool
-	PreviousURL string
-	NextURL     string
-	FirstURL    string
-	LastURL     string
-	HasMaxPage  bool
-	LastPage    int
+	CurrentPage   int
+	MaxPage       int
+	Pages         []PageInfo
+	HasPrevious   bool
+	HasNext       bool
+	PreviousURL   string
+	NextURL       string
+	FirstURL      string
+	LastURL       string
+	HasMaxPage    bool
+	LastPage      int
+	DropdownPages []PageInfo
 }
 
 // ParsePixivRedirect extracts and unescapes URLs from Pixiv's redirect links
@@ -165,7 +166,10 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
 	}
 
-	const peek = 2 // Number of pages to show on each side of the current page
+	// Number of pages to show on each side of the current page
+	//
+	// NOTE: values higher than 1 can cause issues on small devices where the pagination element is too wide
+	const peek = 1
 	hasMaxPage := max_page != -1
 
 	// Calculate the range of pages to display
@@ -183,19 +187,31 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 
 	lastPage := pages[len(pages)-1].Number
 
+	// Generate dropdown pages (previous 5, current, next 5)
+	dropdownStart := max(1, current_page-5)
+	dropdownEnd := current_page + 5
+	if hasMaxPage {
+		dropdownEnd = min(max_page, dropdownEnd)
+	}
+	dropdownPages := make([]PageInfo, 0, dropdownEnd-dropdownStart+1)
+	for i := dropdownStart; i <= dropdownEnd; i++ {
+		dropdownPages = append(dropdownPages, PageInfo{Number: i, URL: pageUrl(i)})
+	}
+
 	// Create and return the PaginationData struct
 	return PaginationData{
-		CurrentPage: current_page,
-		MaxPage:     max_page,
-		Pages:       pages,
-		HasPrevious: current_page > 1,
-		HasNext:     !hasMaxPage || current_page < max_page,
-		PreviousURL: pageUrl(current_page - 1),
-		NextURL:     pageUrl(current_page + 1),
-		FirstURL:    pageUrl(1),
-		LastURL:     pageUrl(max_page),
-		HasMaxPage:  hasMaxPage,
-		LastPage:    lastPage,
+		CurrentPage:   current_page,
+		MaxPage:       max_page,
+		Pages:         pages,
+		HasPrevious:   current_page > 1,
+		HasNext:       !hasMaxPage || current_page < max_page,
+		PreviousURL:   pageUrl(current_page - 1),
+		NextURL:       pageUrl(current_page + 1),
+		FirstURL:      pageUrl(1),
+		LastURL:       pageUrl(max_page),
+		HasMaxPage:    hasMaxPage,
+		LastPage:      lastPage,
+		DropdownPages: dropdownPages,
 	}
 }
 
