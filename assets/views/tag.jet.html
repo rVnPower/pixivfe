@@ -155,31 +155,28 @@
 </div>
 
 <div class="col-12">
-  <!-- Popular Artworks -->
-  {{- if .Data.Popular.Recent }}
-  <h2 class="h3 fw-bold mb-3">Popular artworks</h2>
-  <h3 class="h4 fw-bold mb-3">Recent</h3>
-  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-    {{- include "fragments/small-tn" .Data.Popular.Recent }}
-  </div>
-  <h3 class="h4 fw-bold mb-3">All Time</h3>
-  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-    {{- include "fragments/small-tn" .Data.Popular.Permanent }}
-  </div>
-  {{- end }}
+    <!-- Popular Artworks -->
+    {{- if .Data.Popular.Recent }}
+    <h2 class="h3 fw-bold mb-3">Popular artworks</h2>
+    <h3 class="h4 fw-bold mb-3">Recent</h3>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+        {{- include "fragments/small-tn" .Data.Popular.Recent }}
+    </div>
+    <h3 class="h4 fw-bold mb-3">All Time</h3>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+        {{- include "fragments/small-tn" .Data.Popular.Permanent }}
+    </div>
+    {{- end }}
 
-  <!-- Main Works -->
-  <h2 class="h3 fw-bold mb-3">Works</h2>
-  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-    {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
-  </div>
+    <!-- Main Works -->
+    <h2 class="h3 fw-bold mb-3">Works</h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+        {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
+    </div>
 
-  <!-- Pagination -->
-  <div class="justify-content-center align-items-center">
+    <!-- Pagination -->
     {{- url := unfinishedQuery(.QueriesC, "page") }}
     {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1) }}
     {{- yield pagination(data=paginationData) }}
-  </div>
-
 </div>
 {{- end }}
