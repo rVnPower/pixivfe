@@ -7,17 +7,17 @@
   <!-- Tag header -->
   <div class="card mb-4">
     <div class="card-body">
-      <div class="row">
+      <div class="d-flex flex-column flex-lg-row">
         {{- if .Tag.Metadata.ID }}
         <!-- Tag artwork -->
-        <div class="col-md-4 mb-3">
+        <div class="flex-shrink-0 mb-3 mb-lg-0">
           <a href="/artworks/{{ .Tag.Metadata.ID }}">
             <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid object-fit-cover rounded" />
           </a>
         </div>
         {{- end }}
         <!-- Tag information -->
-        <div class="col-md-8">
+        <div class="flex-grow-1 ms-lg-3">
             <span class="d-flex flex-wrap align-items-center">
                 <h1 class="display-6 fw-bold me-2">#{{ .Tag.Name }}</h1>
                 <span class="h4 text-muted">{{ .Tag.Metadata.Name }}</span>
