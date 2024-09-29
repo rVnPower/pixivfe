@@ -37,112 +37,120 @@
     </div>
   </div>
 
-  <!-- Related tags -->
-  <!-- <div class="mb-4">
-    <h2 class="h3 fw-bold">Related Tags</h2>
-    <div class="d-flex flex-wrap">
-    {{- range .Data.RelatedTags }}
-    <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
-    {{- end }}
-    </div>
-  </div> -->
-
-  <!-- Switchers -->
-  {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
-  {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
-  {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
-  {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
-  {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
-
-  <div class="row mb-4">
-    <div class="col-md-4 mb-3">
-      <h4>Category</h4>
-      {{- URL := unfinishedQuery(.QueriesC, "category") }}
-      {{- path := slice("artworks", "illustrations", "manga")}}
-      {{- name := slice("Artworks", "Illustrations", "Manga")}}
-      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
-    </div>
-    <div class="col-md-4 mb-3">
-      <h4>Order</h4>
-      {{- URL := unfinishedQuery(.QueriesC, "order") }}
-      {{- path := slice("date_d", "date")}}
-      {{- name := slice("Newest", "Oldest")}}
-      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
-    </div>
-    <div class="col-md-4 mb-3">
-      <h4>Filter</h4>
-      {{- URL := unfinishedQuery(.QueriesC, "mode") }}
-      {{- path := slice("all", "safe", "r18")}}
-      {{- name := slice("All", "Safe", "R-18")}}
-      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
-    </div>
-  </div>
-
-  <div class="row mb-4">
-    <div class="col-md-6 mb-3">
-      <h4>Ratio</h4>
-      {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
-      {{- path := slice("", "-0.5", "0", "0.5")}}
-      {{- name := slice("All", "Portrait", "Square", "Landscape")}}
-      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
-    </div>
-    <div class="col-md-6 mb-3">
-      <h4>Search mode</h4>
-      {{- URL := unfinishedQuery(.QueriesC, "smode") }}
-      {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-      {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-      {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
-    </div>
-  </div>
-
-  <!-- Advanced Settings -->
-  <div class="accordion mb-5" id="advancedSettings">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingAdvanced">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
-          Advanced settings
-        </button>
-      </h2>
-      <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advancedSettings">
-        <div class="accordion-body">
-          {{- URL := unfinishedQuery(.QueriesC, "") }}
-          <form action="{{ URL }}&name={{ .QueriesC.Query[" Name"] }}" method="post" class="row g-3">
-            <div class="col-md-6">
-              <label for="wlt" class="form-label">Minimum image width</label>
-              <input type="text" class="form-control" id="wlt" name="wlt" value="{{ .QueriesC.Query[" Wlt"] }}" />
-            </div>
-            <div class="col-md-6">
-              <label for="wgt" class="form-label">Maximum image width</label>
-              <input type="text" class="form-control" id="wgt" name="wgt" value="{{ .QueriesC.Query[" Wgt"] }}" />
-            </div>
-            <div class="col-md-6">
-              <label for="hlt" class="form-label">Minimum image height</label>
-              <input type="text" class="form-control" id="hlt" name="hlt" value="{{ .QueriesC.Query[" Hlt"] }}" />
-            </div>
-            <div class="col-md-6">
-              <label for="hgt" class="form-label">Maximum image height</label>
-              <input type="text" class="form-control" id="hgt" name="hgt" value="{{ .QueriesC.Query[" Hgt"] }}" />
-            </div>
-            <div class="col-md-6">
-              <label for="scd" class="form-label">Posted after (format: yyyy-mm-dd)</label>
-              <input type="text" class="form-control" id="scd" name="scd" value="{{ .QueriesC.Query[" Scd"] }}" />
-            </div>
-            <div class="col-md-6">
-              <label for="ecd" class="form-label">Posted before (format: yyyy-mm-dd)</label>
-              <input type="text" class="form-control" id="ecd" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
-            </div>
-            <div class="col-12">
-              <label for="tool" class="form-label">Tool</label>
-              <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
-            </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary">Set</button>
-            </div>
-          </form>
+    <!-- Related tags -->
+    <!-- <div class="mb-4">
+        <h2 class="h3 fw-bold">Related Tags</h2>
+        <div class="d-flex flex-wrap">
+        {{- range .Data.RelatedTags }}
+        <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
+        {{- end }}
         </div>
-      </div>
+    </div> -->
+
+    <!-- Switchers -->
+    {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
+    {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
+    {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
+    {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
+    {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
+
+    <div class="card mb-4">
+        <div class="card-header px-4 py-3">
+            <h3 class="h4 fw-bold p-0 mb-0">Search settings</h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-3">
+                <div class="col-md-4 mb-2 mb-md-0">
+                <h4 class="h5 fw-bold">Category</h4>
+                {{- URL := unfinishedQuery(.QueriesC, "category") }}
+                {{- path := slice("artworks", "illustrations", "manga")}}
+                {{- name := slice("Artworks", "Illustrations", "Manga")}}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Category) }}
+                </div>
+                <div class="col-md-4 mb-2 mb-md-0">
+                <h4 class="h5 fw-bold">Order</h4>
+                {{- URL := unfinishedQuery(.QueriesC, "order") }}
+                {{- path := slice("date_d", "date")}}
+                {{- name := slice("Newest", "Oldest")}}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Order) }}
+                </div>
+                <div class="col-md-4 mb-2 mb-md-0">
+                <h4 class="h5 fw-bold">Filter</h4>
+                {{- URL := unfinishedQuery(.QueriesC, "mode") }}
+                {{- path := slice("all", "safe", "r18")}}
+                {{- name := slice("All", "Safe", "R-18")}}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Mode) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2 mb-md-0">
+                <h4 class="h5 fw-bold">Ratio</h4>
+                {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
+                {{- path := slice("", "-0.5", "0", "0.5")}}
+                {{- name := slice("All", "Portrait", "Square", "Landscape")}}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=Ratio) }}
+                </div>
+                <div class="col-md-6 mb-2 mb-md-0">
+                <h4 class="h5 fw-bold">Search mode</h4>
+                {{- URL := unfinishedQuery(.QueriesC, "smode") }}
+                {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
+                {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+                {{- yield Switcher(baseURL=URL, paths=path, names=name, currentPath=SearchMode) }}
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="accordion" id="advancedSettings">
+                <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAdvanced">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
+                    Advanced settings
+                    </button>
+                </h2>
+                <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advancedSettings">
+                    <div class="accordion-body">
+                    {{- URL := unfinishedQuery(.QueriesC, "") }}
+                    <form action="{{ URL }}&name={{ .QueriesC.Query[" Name"] }}" method="post" class="row g-3">
+                        <div class="col-md-6">
+                        <label for="wlt" class="form-label">Minimum image width</label>
+                        <input type="text" class="form-control" id="wlt" name="wlt" value="{{ .QueriesC.Query[" Wlt"] }}" />
+                        </div>
+                        <div class="col-md-6">
+                        <label for="wgt" class="form-label">Maximum image width</label>
+                        <input type="text" class="form-control" id="wgt" name="wgt" value="{{ .QueriesC.Query[" Wgt"] }}" />
+                        </div>
+                        <div class="col-md-6">
+                        <label for="hlt" class="form-label">Minimum image height</label>
+                        <input type="text" class="form-control" id="hlt" name="hlt" value="{{ .QueriesC.Query[" Hlt"] }}" />
+                        </div>
+                        <div class="col-md-6">
+                        <label for="hgt" class="form-label">Maximum image height</label>
+                        <input type="text" class="form-control" id="hgt" name="hgt" value="{{ .QueriesC.Query[" Hgt"] }}" />
+                        </div>
+                        <div class="col-md-6">
+                        <label for="scd" class="form-label">Posted after (format: yyyy-mm-dd)</label>
+                        <input type="text" class="form-control" id="scd" name="scd" value="{{ .QueriesC.Query[" Scd"] }}" />
+                        </div>
+                        <div class="col-md-6">
+                        <label for="ecd" class="form-label">Posted before (format: yyyy-mm-dd)</label>
+                        <input type="text" class="form-control" id="ecd" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
+                        </div>
+                        <div class="col-12">
+                        <label for="tool" class="form-label">Tool</label>
+                        <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
+                        </div>
+                        <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Set</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
 </div>
 
 <div class="col-12">
@@ -150,18 +158,18 @@
   {{- if .Data.Popular.Recent }}
   <h2 class="h3 fw-bold mb-3">Popular artworks</h2>
   <h3 class="h4 fw-bold mb-3">Recent</h3>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Popular.Recent }}
   </div>
-  <h2 class="h4 fw-bold mb-3">All Time</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
+  <h3 class="h4 fw-bold mb-3">All Time</h3>
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Popular.Permanent }}
   </div>
   {{- end }}
 
   <!-- Main Works -->
-  <h2 class="mb-3">Works</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 mb-4">
+  <h2 class="h3 fw-bold mb-3">Works</h2>
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
     {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
   </div>
 

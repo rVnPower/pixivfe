@@ -12,7 +12,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
           <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle object-fit-cover me-2" style="width: 40px; height: 40px;">
-          <h2 class="h5 m-0">Other works by {{ .Illust.User.Name }}</h2>
+          <h2 class="h5 fw-bold m-0">Other works by {{ .Illust.User.Name }}</h2>
         </a>
         {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
         <a href="{{combinedUrl}}" class="btn btn-sm btn-outline-primary">View all</a>
@@ -43,11 +43,11 @@
     <div class="card-header px-4 py-3">
         <!-- TODO: clean this logic up -->
         {{- if .Illust.Comments == 0 }}
-        <h2 class="h5 p-0 mb-0">0 Comments</h2>
+        <h2 class="h5 fw-bold p-0 mb-0">0 Comments</h2>
         {{- else if .Illust.Comments == 1 }}
-        <h2 class="h5 p-0 mb-0">1 Comment</h2>
+        <h2 class="h5 fw-bold p-0 mb-0">1 Comment</h2>
         {{- else }}
-        <h2 class="h5 p-0 mb-0">{{ .Illust.Comments }} Comments</h2>
+        <h2 class="h5 fw-bold p-0 mb-0">{{ .Illust.Comments }} Comments</h2>
         {{- end }}
     </div>
     <div class="card-body p-4 pb-0">
