@@ -31,7 +31,8 @@
                             <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
-                                <h2 class="h5 fw-bold mb-3">Login</h2>
+                                <h2 class="h4 fw-bold mb-4">Account</h2>
+                                <h3 class="h5 fw-bold mb-3">Login</h3>
                                 <p>Supported features (for now):</p>
                                 <ul class="mb-3">
                                     <li>Discovery page</li>
@@ -54,7 +55,7 @@
                                 </form>
                                 </li>
                                 <li class="list-group-item bg-body-tertiary p-0">
-                                <h2 class="h5 fw-bold mb-3">Logout</h2>
+                                <h3 class="h5 fw-bold mb-3">Logout</h3>
                                 <p>
                                     To securely end your session, click the 'Logout!' button. This will
                                     immediately remove your session token.
@@ -70,7 +71,8 @@
                             <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
-                                <h2 class="h5 fw-bold mb-3">Image proxy server</h2>
+                                <h2 class="h4 fw-bold mb-4">Site</h2>
+                                <h3 class="h5 fw-bold mb-3">Image proxy server</h3>
                                 <p>
                                     Choose how images are loaded in PixivFE by selecting either the built-in
                                     proxy or one of the provided external proxy servers. If you prefer, you can
@@ -128,7 +130,7 @@
                                 </form>
                                 </li>
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
-                                <h2 class="h5 fw-bold mb-3">Open artworks in new tab</h2>
+                                <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
                                 <form action="/settings/thumbnailToNewTab" method="post">
                                     <div class="mb-3">
                                     <div class="form-check">
@@ -144,7 +146,7 @@
                                 </form>
                                 </li>
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
-                                <h2 class="h5 fw-bold mb-3">Artwork preview pop-ups</h2>
+                                <h3 class="h5 fw-bold mb-3">Artwork preview pop-ups</h3>
                                 <p><span class="fw-bold">Requires Javascript.</span></p>
                                 <form action="/settings/artworkPreview" method="post">
                                     <div class="mb-3">
@@ -174,7 +176,7 @@
                                 </form>
                                 </li>
                                 <li class="list-group-item bg-body-tertiary p-0">
-                                <h2 class="h5 fw-bold mb-3">Filter artworks</h2>
+                                <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
                                 <p>When submitted, unchecked options will be disabled and vice-versa.</p>
                                 <form action="/settings/filter" method="post">
                                     {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
@@ -203,8 +205,9 @@
                             <!-- Novels Tab -->
                             <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
                             <ul class="list-group list-group-flush">
+                                <h2 class="h4 fw-bold mb-4">Novels</h2>
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
-                                <h2 class="h5 fw-bold mb-3">Font family</h2>
+                                <h3 class="h5 fw-bold mb-3">Font family</h3>
                                 <form action="/settings/novelFontType" method="post">
                                     <div class="mb-3">
                                     <div class="form-check">
@@ -220,7 +223,7 @@
                                 </form>
                                 </li>
                                 <li class="list-group-item bg-body-tertiary p-0">
-                                <h2 class="h5 fw-bold mb-3">Force text orientation</h2>
+                                <h3 class="h5 fw-bold mb-3">Force text orientation</h3>
                                 <form action="/settings/novelViewMode" method="post">
                                     <div class="mb-3">
                                     <div class="form-check">
@@ -244,7 +247,8 @@
 
                             <!-- Cookie Values Tab -->
                             <div class="tab-pane fade" id="cookie-values" role="tabpanel" aria-labelledby="cookie-values-tab">
-                            <h2 class="h5 fw-bold mb-3">Current cookie values</h2>
+                            <h2 class="h4 fw-bold mb-4">Cookie values</h2>
+                            <h3 class="h5 fw-bold mb-3">Current cookie values</h3>
                             <p class="mb-4">
                                 Please note that some cookies here such as ShowArtR18,
                                 ShowArtR18G, and ShowArtAI are for features still under development.
@@ -267,7 +271,8 @@
 
                             <!-- Raw Settings Tab -->
                             <div class="tab-pane fade" id="raw-settings" role="tabpanel" aria-labelledby="raw-settings-tab">
-                            <h2 class="h5 fw-bold mb-3">Raw settings</h2>
+                            <h2 class="h4 fw-bold mb-4">Raw settings</h2>
+                            <h3 class="h5 fw-bold mb-3">Raw settings</h3>
                             <p>
                                 You can save your current cookie values to quickly set your settings on other compatible instances,
                                 or if the current instance's cookies went expired.
