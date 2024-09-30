@@ -73,62 +73,32 @@
                             <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
                             <ul class="list-group list-group-flush">
                                 <h2 class="h4 fw-bold mb-4">Site</h2>
+
                                 <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
                                 <h3 class="h5 fw-bold mb-3">Image proxy server</h3>
                                 <p>
                                     Choose how images are loaded in PixivFE by selecting either the built-in
                                     proxy or one of the provided external proxy servers. If you prefer, you can
-                                    also specify a custom proxy server by entering its URL and clicking 'Use
-                                    Custom Proxy'.
+                                    also specify a custom proxy server by entering its URL and clicking 'Save Changes'.
                                 </p>
                                 <form action="/settings/imageServer" method="post">
                                     <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="image-proxy" id="no-proxy" value="" required>
-                                        <label class="form-check-label" for="no-proxy">
-                                        No (use built-in proxy)
-                                        </label>
-                                    </div>
-                                    {{- range .WorkingProxyList }}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="image-proxy" id="proxy-{{.}}" value="{{.}}" required>
-                                        <label class="form-check-label" for="proxy-{{.}}">
-                                        {{- .}}
-                                        </label>
-                                    </div>
-                                    {{- end }}
-                                    </div>
-                                    <div class="accordion mb-3" id="allProxiesAccordion">
-                                        <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingAllProxies">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAllProxies" aria-expanded="false" aria-controls="collapseAllProxies">
-                                            See all built-in proxies
-                                            </button>
-                                        </h2>
-                                        <div id="collapseAllProxies" class="accordion-collapse collapse" aria-labelledby="headingAllProxies" data-bs-parent="#allProxiesAccordion">
-                                            <div class="accordion-body">
+                                        <label for="image-proxy" class="form-label">Select image proxy server</label>
+                                        <select class="form-select" id="image-proxy" name="image-proxy" required>
+                                            <option value="">/proxy/i.pximg.net (built-in proxy)</option>
                                             {{- range .ProxyList }}
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="image-proxy" id="proxy-all-{{.}}" value="{{.}}" required>
-                                                <label class="form-check-label" for="proxy-all-{{.}}">
-                                                {{- .}}
-                                                </label>
-                                            </div>
+                                            <option value="{{.}}">{{.}}</option>
                                             {{- end }}
-                                            </div>
-                                        </div>
-                                        </div>
+                                        </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Use selected proxy</button>
-                                </form>
-                                <form action="/settings/imageServer" method="post" class="mt-4">
                                     <div class="mb-3">
-                                    <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
-                                    <input type="text" class="form-control" id="custom-image-proxy" name="image-proxy" required placeholder="https://example.com" autocomplete="off">
+                                        <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
+                                        <input type="text" class="form-control" id="custom-image-proxy" name="custom-image-proxy" placeholder="https://example.com" autocomplete="off">
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Use custom proxy</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
                                 </form>
                                 </li>
+
                                 <li class="list-group-item bg-body-tertiary py-4 px-0">
                                 <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
                                 <form action="/settings/thumbnailToNewTab" method="post">
