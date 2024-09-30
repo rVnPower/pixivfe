@@ -68,20 +68,6 @@ type ServerConfig struct {
 	// Development options
 	InDevelopment        bool   `env:"PIXIVFE_DEV"`
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
-
-	DefaultCookies       DefaultCookies
-	EnableDefaultCookies bool `env:"PIXIVFE_ENABLE_DEFAULT_COOKIES,overwrite"`
-}
-
-type DefaultCookies struct {
-	ImageProxy        string
-	NovelFontType     string
-	NovelViewMode     string
-	ThumbnailToNewTab string
-	ArtworkPreview    string
-	HideArtR18        string
-	HideArtR18G       string
-	HideArtAI         string
 }
 
 // parseRevision extracts RevisionDate, RevisionHash, and IsDirty status from the Revision string
@@ -158,21 +144,6 @@ func (s *ServerConfig) LoadConfig() error {
 
 	s.ResponseSaveLocation = "/tmp/pixivfe/responses"
 
-	// Set default cookie values
-	s.DefaultCookies = DefaultCookies{
-		// ImageProxy:        s.ProxyServer_staging,
-		NovelFontType:     "gothic",
-		NovelViewMode:     "vertical",
-		ThumbnailToNewTab: "false",
-		ArtworkPreview:    "true",
-		HideArtR18:        "false",
-		HideArtR18G:       "false",
-		HideArtAI:         "false",
-	}
-
-	// Set default value for EnableDefaultCookies
-	s.EnableDefaultCookies = true
-
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {
 		return err
@@ -232,9 +203,6 @@ func (s *ServerConfig) LoadConfig() error {
 	if s.InDevelopment {
 		log.Printf("Response save location: %s\n", s.ResponseSaveLocation)
 	}
-
-	// Log the EnableDefaultCookies setting
-	log.Printf("Enable default cookies: %v\n", s.EnableDefaultCookies)
 
 	return nil
 }

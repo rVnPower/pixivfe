@@ -30,9 +30,6 @@ func serveFile(filename string) http.HandlerFunc {
 func DefineRoutes() *mux.Router {
 	router := mux.NewRouter()
 
-	// Apply the SetDefaultCookies middleware to all routes
-	router.Use(SetDefaultCookies)
-
 	// Tutorial: Adding new routes
 	// 1. Use router.HandleFunc to define the path and handler
 	// 2. Wrap the handler function, defined in package routes, with CatchError for error handling
