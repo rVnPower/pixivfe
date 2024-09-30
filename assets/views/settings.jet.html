@@ -81,6 +81,23 @@
                                     proxy or one of the provided external proxy servers. If you prefer, you can
                                     also specify a custom proxy server by entering its URL and clicking 'Save Changes'.
                                 </p>
+                                {{ if .ProxyCheckEnabled == false }}
+                                <div class="alert alert-warning" role="alert">
+                                    <p>
+                                        <i class="bi bi-exclamation-triangle-fill"></i> This PixivFE instance has been configured to <span class="fw-bold">not</span> check the list of built-in image proxies (<a href="https://pixivfe-docs.pages.dev/hosting/environment-variables/#pixivfe_proxy_check_enabled" class="text-decoration-none"><code class="bg-dark-subtle rounded p-1">PIXIVFE_PROXY_CHECK_ENABLED=false</code></a> has been set).
+                                    </p>
+                                    <p class="mb-0">
+                                        All image proxies will be shown by default, regardless of their actual state.
+                                    </p>
+                                </div>
+                                {{- else -}}
+                                <p>
+                                    This PixivFE instance has been configured to check the list of built-in image proxies every {{ .ProxyCheckInterval }}.
+                                </p>
+                                <p>
+                                    Image proxies that fail this check will not be shown unless "Show all proxy servers" is enabled.
+                                </p>
+                                {{- end -}}
                                 <form action="/settings/imageServer" method="post">
                                     <div class="mb-3 form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch" id="show-all-proxies">

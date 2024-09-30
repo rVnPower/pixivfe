@@ -6,6 +6,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
+	"time"
 )
 
 func RenderHTML[T any](w http.ResponseWriter, r *http.Request, data T) error {
@@ -129,8 +130,10 @@ type Data_rankingCalendar struct {
 	ThisMonth   DateWrap
 }
 type Data_settings struct {
-	ProxyList        []string
-	WorkingProxyList []string
+	ProxyList          []string
+	WorkingProxyList   []string
+	ProxyCheckEnabled  bool
+	ProxyCheckInterval time.Duration
 }
 type Data_tag struct {
 	Title            string
