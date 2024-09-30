@@ -124,29 +124,27 @@
                                 </li>
 
                                 <li class="list-group-item bg-body-tertiary py-4 px-0">
-                                    <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
-                                    <p>
-                                        Check the boxes below to hide specific types of content. Unchecked
-                                        options will allow the content to be shown.
-                                    </p>
-                                    <form action="/settings/filter" method="post">
-                                        {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
-                                        {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
-                                        {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
-                                        <div class="mb-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
-                                                <label class="form-check-label" for="filter-r18">Hide R18 (mature) content</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
-                                                <label class="form-check-label" for="filter-r18g">Hide R18G (explicit) content</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
-                                                <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
-                                            </div>
-                                        </div>
+                                <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
+                                <p>Toggle the switches below to hide specific types of content. Disabled switches will allow the content to be shown.</p>
+                                <form action="/settings/filter" method="post">
+                                    {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
+                                    {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
+                                    {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
+                                        <label class="form-check-label" for="filter-r18">Hide R18 (mature) content</label>
+                                        <div id="filter-r18-help" class="form-text">Hides artwork tagged as R18 (mature content).</div>
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
+                                        <label class="form-check-label" for="filter-r18g">Hide R18G (explicit) content</label>
+                                        <div id="filter-r18g-help" class="form-text">Hides artwork tagged as R18G (explicit content).</div>
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
+                                        <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
+                                        <div id="filter-ai-help" class="form-text">Hides artwork that has been tagged as AI-generated.</div>
+                                    </div>
                                         <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                                     </form>
                                 </li>
@@ -176,7 +174,6 @@
                                     </p>
                                 </div>
                                 <form action="/settings/artworkPreview" method="post">
-                                    <div class="mb-3">
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" type="radio" name="app" id="app-c" value="cover" disabled>
                                         <label class="form-check-label" for="app-c">
@@ -191,13 +188,12 @@
                                         <div id="app-b-help" class="form-text">Add a button at the bottom-right of the thumbnails and open the previewer when you click into it</div>
                                         </label>
                                     </div>
-                                    <div class="form-check mb-0">
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" type="radio" name="app" id="app-d" value="disable" checked disabled>
                                         <label class="form-check-label" for="app-d">
                                         Disable
                                         <div id="app-d-help" class="form-text">No previewing</div>
                                         </label>
-                                    </div>
                                     </div>
                                     <button type="submit" class="btn btn-secondary fw-bold rounded-pill" disabled>Save</button>
                                 </form>
@@ -213,15 +209,13 @@
                                 <li class="list-group-item bg-body-tertiary p-0 mb-4">
                                 <h3 class="h5 fw-bold mb-3">Font family</h3>
                                 <form action="/settings/novelFontType" method="post">
-                                    <div class="mb-3">
-                                    <div class="form-check">
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho">
                                         <label class="form-check-label" for="font-type-mincho">Mincho</label>
                                     </div>
-                                    <div class="form-check">
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic">
                                         <label class="form-check-label" for="font-type-gothic">Gothic</label>
-                                    </div>
                                     </div>
                                     <button type="submit" class="btn btn-secondary fw-bold rounded-pill mb-4">Submit</button>
                                 </form>
