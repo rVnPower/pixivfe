@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const showAllProxiesToggle = document.getElementById("show-all-proxies");
   const imageProxySelect = document.getElementById("image-proxy");
+  const proxyCheckEnabled = imageProxySelect.getAttribute("data-proxy-check-enabled") === "true";
 
-  showAllProxiesToggle.addEventListener("change", function () {
-    const showAll = this.checked;
+  function updateProxyVisibility() {
+    const showAll = showAllProxiesToggle.checked;
     const options = imageProxySelect.options;
     let firstVisibleOption = null;
 
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const option = options[i];
       const proxyType = option.getAttribute("data-proxy-type");
 
-      if (proxyType === "working" || (proxyType === "all" && showAll)) {
+      if (proxyType === "working" || (proxyType === "all" && showAll) || !proxyCheckEnabled) {
         option.style.display = "";
         if (!firstVisibleOption) firstVisibleOption = option;
       } else {
@@ -23,5 +24,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (imageProxySelect.selectedOptions[0].style.display === "none") {
       firstVisibleOption.selected = true;
     }
-  });
+  }
+
+  // Set initial state
+  if (!proxyCheckEnabled) {
+    showAllProxiesToggle.checked = true;
+    showAllProxiesToggle.disabled = true;
+  }
+
+  updateProxyVisibility();
+
+  showAllProxiesToggle.addEventListener("change", updateProxyVisibility);
 });
