@@ -82,12 +82,19 @@
                                     also specify a custom proxy server by entering its URL and clicking 'Save Changes'.
                                 </p>
                                 <form action="/settings/imageServer" method="post">
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="show-all-proxies">
+                                        <label class="form-check-label" for="show-all-proxies">Show all proxy servers</label>
+                                    </div>
                                     <div class="mb-3">
                                         <label for="image-proxy" class="form-label">Select image proxy server</label>
                                         <select class="form-select" id="image-proxy" name="image-proxy" required>
-                                            <option value="">/proxy/i.pximg.net (built-in proxy)</option>
+                                            <option value="" data-proxy-type="working">/proxy/i.pximg.net (built-in proxy)</option>
+                                            {{- range .WorkingProxyList }}
+                                            <option value="{{.}}" data-proxy-type="working">{{.}}</option>
+                                            {{- end }}
                                             {{- range .ProxyList }}
-                                            <option value="{{.}}">{{.}}</option>
+                                            <option value="{{.}}" data-proxy-type="all" style="display: none;">{{.}}</option>
                                             {{- end }}
                                         </select>
                                     </div>
