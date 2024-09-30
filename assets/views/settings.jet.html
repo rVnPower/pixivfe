@@ -3,277 +3,251 @@
   <div class="row justify-content-center mb-5">
     <div class="col-12 col-lg-9">
       <div class="card mb-4">
-        <div class="card-header p-3">
+        <div class="card-header px-4 py-3">
             <h1 class="h4 fw-bold p-0 mb-0">Settings</h1>
         </div>
-        <div class="card-body p-3">
+        <div class="card-body px-4 py-3">
             <p class="card-text">PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your preferences, which you can change on this page to customize your experience on this instance.</p>
-            <!-- Tabs -->
-            <ul class="nav nav-pills mb-4" id="settingsTabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">Account</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="site-tab" data-bs-toggle="tab" data-bs-target="#site" type="button" role="tab" aria-controls="site" aria-selected="false">Site</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="novels-tab" data-bs-toggle="tab" data-bs-target="#novels" type="button" role="tab" aria-controls="novels" aria-selected="false">Novels</button>
-              </li>
-            </ul>
-
-            <!-- Tab content -->
-            <div class="tab-content" id="settingsTabsContent">
-              <!-- Account Tab -->
-              <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                <div class="card mb-4">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Login</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <p>Supported features (for now):</p>
-                    <ul>
-                      <li>Discovery page</li>
-                      <li>Landing page</li>
-                      <li>Like/Bookmark</li>
-                    </ul>
-                    <p>
-                      Log in with your Pixiv account's cookie to access features above.
-                      To learn how to obtain your cookie, please see
-                      <a href="https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
-                    </p>
-                    <p>
-                      Cookies will be saved on your browser, and will expire after a fixed period of time.
-                    </p>
-                    <form action="/settings/token" method="post">
-                      <div class="mb-3">
-                        <input type="text" class="form-control" name="token" autocomplete="off" />
-                      </div>
-                      <button type="submit" class="btn btn-primary">Log in</button>
-                    </form>
-                  </div>
-                </div>
-
-                <!-- Last card for this tab so don't add mb-4 class -->
-                <div class="card">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Logout</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <p>
-                      To securely end your session, click the 'Logout!' button. This will
-                      immediately remove your session token.
-                    </p>
-                    <form action="/settings/logout" method="post">
-                      <button type="submit" class="btn btn-danger">Logout!</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Site Tab -->
-              <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
-                <div class="card mb-4">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Image proxy server</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <p>
-                      Choose how images are loaded in PixivFE by selecting either the built-in
-                      proxy or one of the provided external proxy servers. If you prefer, you can
-                      also specify a custom proxy server by entering its URL and clicking 'Use
-                      Custom Proxy'.
-                    </p>
-                    <form action="/settings/imageServer" method="post">
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="image-proxy" id="no-proxy" value="" required>
-                          <label class="form-check-label" for="no-proxy">
-                            No (use built-in proxy)
-                          </label>
-                        </div>
-                        {{- range .WorkingProxyList }}
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="image-proxy" id="proxy-{{.}}" value="{{.}}" required>
-                          <label class="form-check-label" for="proxy-{{.}}">
-                            {{- .}}
-                          </label>
-                        </div>
-                        {{- end }}
-                      </div>
-                      <div class="mb-3">
-                        <div class="accordion" id="allProxiesAccordion">
-                          <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingAllProxies">
-                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAllProxies" aria-expanded="false" aria-controls="collapseAllProxies">
-                                See all built-in proxies
-                              </button>
-                            </h2>
-                            <div id="collapseAllProxies" class="accordion-collapse collapse" aria-labelledby="headingAllProxies" data-bs-parent="#allProxiesAccordion">
-                              <div class="accordion-body">
-                                {{- range .ProxyList }}
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="image-proxy" id="proxy-all-{{.}}" value="{{.}}" required>
-                                  <label class="form-check-label" for="proxy-all-{{.}}">
-                                    {{- .}}
-                                  </label>
-                                </div>
-                                {{- end }}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Use selected proxy</button>
-                    </form>
-                    <form action="/settings/imageServer" method="post" class="mt-4">
-                      <div class="mb-3">
-                        <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
-                        <input type="text" class="form-control" id="custom-image-proxy" name="image-proxy" required placeholder="https://example.com" autocomplete="off">
-                      </div>
-                      <button type="submit" class="btn btn-primary">Use custom proxy</button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="card mb-4">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Open artworks in new tab</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <form action="/settings/thumbnailToNewTab" method="post">
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="ttnt" id="ttnt-y" value="_blank">
-                          <label class="form-check-label" for="ttnt-y">Yes</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="ttnt" id="ttnt-n" value="_self">
-                          <label class="form-check-label" for="ttnt-n">No</label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="card mb-4">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Artwork preview pop-ups</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <p><b>Require Javascript.</b></p>
-                    <form action="/settings/artworkPreview" method="post">
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="app" id="app-c" value="cover">
-                          <label class="form-check-label" for="app-c">
-                            Cover
-                            <small class="d-block text-muted">Open the previewer when you click into the thumbnails</small>
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="app" id="app-b" value="button">
-                          <label class="form-check-label" for="app-b">
-                            Button
-                            <small class="d-block text-muted">Add a button at the bottom-right of the thumbnails and open the previewer when you click into it</small>
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="app" id="app-d" value="disable">
-                          <label class="form-check-label" for="app-d">
-                            Disable
-                            <small class="d-block text-muted">No previewing</small>
-                          </label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="card">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Filter artworks</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <p>When submitted, unchecked options will be disabled and vice-versa.</p>
-                    <form action="/settings/filter" method="post">
-                      {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
-                      {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
-                      {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
-                          <label class="form-check-label" for="filter-r18">Hide R18</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
-                          <label class="form-check-label" for="filter-r18g">Hide R18G</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
-                          <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Novels Tab -->
-              <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
-                <div class="card mb-4">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Font family</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <form action="/settings/novelFontType" method="post">
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho">
-                          <label class="form-check-label" for="font-type-mincho">Mincho</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic">
-                          <label class="form-check-label" for="font-type-gothic">Gothic</label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="card">
-                  <div class="card-header p-3">
-                    <h2 class="h5 fw-bold mb-0">Force text orientation</h2>
-                  </div>
-                  <div class="card-body p-4">
-                    <form action="/settings/novelViewMode" method="post">
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1">
-                          <label class="form-check-label" for="tx-ori-h">Horizontal</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2">
-                          <label class="form-check-label" for="tx-ori-v">Vertical</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="">
-                          <label class="form-check-label" for="tx-ori-n">Don't force (default from Pixiv)</label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
         </div>
       </div>
+
+      <div class="card mb-4">
+          <div class="card-header px-4 py-3">
+              <!-- Tabs -->
+              <ul class="nav nav-pills nav-fill m-0" id="settingsTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">Account</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="site-tab" data-bs-toggle="tab" data-bs-target="#site" type="button" role="tab" aria-controls="site" aria-selected="false">Site</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="novels-tab" data-bs-toggle="tab" data-bs-target="#novels" type="button" role="tab" aria-controls="novels" aria-selected="false">Novels</button>
+                  </li>
+              </ul>
+          </div>
+          <div class="card-body p-4">
+              <!-- Tab content -->
+              <div class="tab-content" id="settingsTabsContent">
+                  <!-- Account Tab -->
+                  <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item p-0 mb-4">
+                        <h2 class="h5 fw-bold mb-3">Login</h2>
+                        <p>Supported features (for now):</p>
+                        <ul class="mb-3">
+                            <li>Discovery page</li>
+                            <li>Landing page</li>
+                            <li>Like/Bookmark</li>
+                        </ul>
+                        <p>
+                            Log in with your Pixiv account's cookie to access features above.
+                            To learn how to obtain your cookie, please see
+                            <a href="https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
+                        </p>
+                        <p>
+                            Cookies will be saved on your browser, and will expire after a fixed period of time.
+                        </p>
+                        <form action="/settings/token" method="post">
+                            <div class="mb-3">
+                            <input type="text" class="form-control" name="token" autocomplete="off" />
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-4">Log in</button>
+                        </form>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <h2 class="h5 fw-bold mb-3">Logout</h2>
+                        <p>
+                            To securely end your session, click the 'Logout!' button. This will
+                            immediately remove your session token.
+                        </p>
+                        <form action="/settings/logout" method="post">
+                            <button type="submit" class="btn btn-danger">Logout!</button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Site Tab -->
+                  <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item p-0 mb-4">
+                        <h2 class="h5 fw-bold mb-3">Image proxy server</h2>
+                        <p>
+                            Choose how images are loaded in PixivFE by selecting either the built-in
+                            proxy or one of the provided external proxy servers. If you prefer, you can
+                            also specify a custom proxy server by entering its URL and clicking 'Use
+                            Custom Proxy'.
+                        </p>
+                        <form action="/settings/imageServer" method="post">
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="image-proxy" id="no-proxy" value="" required>
+                                <label class="form-check-label" for="no-proxy">
+                                No (use built-in proxy)
+                                </label>
+                            </div>
+                            {{- range .WorkingProxyList }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="image-proxy" id="proxy-{{.}}" value="{{.}}" required>
+                                <label class="form-check-label" for="proxy-{{.}}">
+                                {{- .}}
+                                </label>
+                            </div>
+                            {{- end }}
+                            </div>
+                            <div class="mb-3">
+                            <div class="accordion" id="allProxiesAccordion">
+                                <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingAllProxies">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAllProxies" aria-expanded="false" aria-controls="collapseAllProxies">
+                                    See all built-in proxies
+                                    </button>
+                                </h2>
+                                <div id="collapseAllProxies" class="accordion-collapse collapse" aria-labelledby="headingAllProxies" data-bs-parent="#allProxiesAccordion">
+                                    <div class="accordion-body">
+                                    {{- range .ProxyList }}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="image-proxy" id="proxy-all-{{.}}" value="{{.}}" required>
+                                        <label class="form-check-label" for="proxy-all-{{.}}">
+                                        {{- .}}
+                                        </label>
+                                    </div>
+                                    {{- end }}
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Use selected proxy</button>
+                        </form>
+                        <form action="/settings/imageServer" method="post" class="mt-4">
+                            <div class="mb-3">
+                            <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
+                            <input type="text" class="form-control" id="custom-image-proxy" name="image-proxy" required placeholder="https://example.com" autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-4">Use custom proxy</button>
+                        </form>
+                      </li>
+                      <li class="list-group-item p-0 mb-4">
+                        <h2 class="h5 fw-bold mb-3">Open artworks in new tab</h2>
+                        <form action="/settings/thumbnailToNewTab" method="post">
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="ttnt" id="ttnt-y" value="_blank">
+                                <label class="form-check-label" for="ttnt-y">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="ttnt" id="ttnt-n" value="_self">
+                                <label class="form-check-label" for="ttnt-n">No</label>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-4">Submit</button>
+                        </form>
+                      </li>
+                      <li class="list-group-item p-0 mb-4">
+                        <h2 class="h5 fw-bold mb-3">Artwork preview pop-ups</h2>
+                        <p><span class="fw-bold">Requires Javascript.</span></p>
+                        <form action="/settings/artworkPreview" method="post">
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="app" id="app-c" value="cover">
+                                <label class="form-check-label" for="app-c">
+                                Cover
+                                <small class="d-block text-muted">Open the previewer when you click into the thumbnails</small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="app" id="app-b" value="button">
+                                <label class="form-check-label" for="app-b">
+                                Button
+                                <small class="d-block text-muted">Add a button at the bottom-right of the thumbnails and open the previewer when you click into it</small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="app" id="app-d" value="disable">
+                                <label class="form-check-label" for="app-d">
+                                Disable
+                                <small class="d-block text-muted">No previewing</small>
+                                </label>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-4">Submit</button>
+                        </form>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <h2 class="h5 fw-bold mb-3">Filter artworks</h2>
+                        <p>When submitted, unchecked options will be disabled and vice-versa.</p>
+                        <form action="/settings/filter" method="post">
+                            {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
+                            {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
+                            {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="filter-r18" name="filter-r18" value="1" {{- if hideR18 != "" }}checked{{- end }}>
+                                <label class="form-check-label" for="filter-r18">Hide R18</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="filter-r18g" name="filter-r18g" value="1" {{- if hideR18G != "" }}checked{{- end }}>
+                                <label class="form-check-label" for="filter-r18g">Hide R18G</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="filter-ai" name="filter-ai" value="1" {{- if hideAI != "" }}checked{{- end }}>
+                                <label class="form-check-label" for="filter-ai">Hide AI-generated artworks</label>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Novels Tab -->
+                  <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item p-0 mb-4">
+                        <h2 class="h5 fw-bold mb-3">Font family</h2>
+                        <form action="/settings/novelFontType" method="post">
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho">
+                                <label class="form-check-label" for="font-type-mincho">Mincho</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic">
+                                <label class="form-check-label" for="font-type-gothic">Gothic</label>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-4">Submit</button>
+                        </form>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <h2 class="h5 fw-bold mb-3">Force text orientation</h2>
+                        <form action="/settings/novelViewMode" method="post">
+                            <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1">
+                                <label class="form-check-label" for="tx-ori-h">Horizontal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2">
+                                <label class="form-check-label" for="tx-ori-v">Vertical</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="">
+                                <label class="form-check-label" for="tx-ori-n">Don't force (default from Pixiv)</label>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
 
       <!-- Current cookie values -->
       <div class="card mb-4">
