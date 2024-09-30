@@ -85,8 +85,10 @@ func setNovelViewMode(w http.ResponseWriter, r *http.Request) error {
 
 func setThumbnailToNewTab(w http.ResponseWriter, r *http.Request) error {
 	ttnt := r.FormValue("ttnt")
-	if ttnt == "_blank" || ttnt == "_self" {
+	if ttnt == "_blank" {
 		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, ttnt)
+	} else {
+		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, "_self")
 	}
 
 	return nil

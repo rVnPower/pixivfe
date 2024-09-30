@@ -119,26 +119,22 @@
                                         <label for="custom-image-proxy" class="form-label">Custom image proxy server</label>
                                         <input type="text" class="form-control" id="custom-image-proxy" name="custom-image-proxy" placeholder="https://example.com" autocomplete="off">
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                 </form>
                                 </li>
 
                                 <li class="list-group-item bg-body-tertiary py-4 px-0">
-                                <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
-                                <form action="/settings/thumbnailToNewTab" method="post">
-                                    <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="ttnt" id="ttnt-y" value="_blank">
-                                        <label class="form-check-label" for="ttnt-y">Yes</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="ttnt" id="ttnt-n" value="_self">
-                                        <label class="form-check-label" for="ttnt-n">No</label>
-                                    </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
+                                    <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
+                                    <form action="/settings/thumbnailToNewTab" method="post">
+                                        {{- ttntValue := CookieList["pixivfe-ThumbnailToNewTab"] }}
+                                        <div class="mb-3 form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="ttnt-switch" name="ttnt" value="_blank" {{- if ttntValue == "_blank" }}checked{{- end }}>
+                                            <label class="form-check-label" for="ttnt-switch">Open in new tab</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
                                 </li>
+
                                 <li class="list-group-item bg-body-tertiary py-4 px-0">
                                 <h3 class="h5 fw-bold mb-3">Artwork preview pop-ups</h3>
                                 <p><span class="fw-bold">Requires Javascript.</span></p>
@@ -169,6 +165,7 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
                                 </li>
+
                                 <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
                                 <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
                                 <p>When submitted, unchecked options will be disabled and vice-versa.</p>
