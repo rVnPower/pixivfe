@@ -18,34 +18,47 @@
     </div>
     <div class="list-group list-group-flush">
     <div class="list-group-item p-3">
-        <h3 class="h6 fw-bold">Version</h3>
-        <p><code class="bg-dark-subtle rounded p-1">{{ .Version }}</code></p>
+        <!-- Spacing between the icon + h3 element and the templated in value -->
+        <div class="mb-2">
+            <i class="bi bi-tag me-2"></i><h3 class="h6 fw-bold d-inline">Version</h3>
+        </div>
+        <!-- Larger spacing between the templated in value and description -->
+        <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Version }}</code></p>
         <p class="text-muted mb-0">The current version of PixivFE running on this server</p>
     </div>
 
     {{- if .Revision != "" }}
     <div class="list-group-item p-3">
-        <h3 class="h6 fw-bold">Revision</h3>
-        <p><code class="bg-dark-subtle rounded p-1"><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="text-reset">{{ .Revision }}</a></code></p>
+        <div class="mb-2">
+            <i class="bi bi-git me-2"></i><h3 class="h6 fw-bold d-inline">Revision</h3>
+        </div>
+        <!-- .text-reset causes the text color to be inherited from its parent; the underline decoration is preserved -->
+        <p class="mb-3"><code class="bg-dark-subtle rounded p-1"><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="text-reset">{{ .Revision }}</a></code></p>
         <p class="text-muted mb-0">The specific revision of PixivFE source code in use</p>
     </div>
     {{- end }}
 
     <div class="list-group-item p-3">
-        <h3 class="h6 fw-bold">Server start time (UTC)</h3>
-        <p><code class="bg-dark-subtle rounded p-1">{{ .Time }}</code></p>
+        <div class="mb-2">
+            <i class="bi bi-clock me-2"></i><h3 class="h6 fw-bold d-inline">Server start time (UTC)</h3>
+        </div>
+        <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Time }}</code></p>
         <p class="text-muted mb-0">The date and time when PixivFE was last started on this server</p>
     </div>
 
     <div class="list-group-item p-3">
-        <h3 class="h6 fw-bold">Default image proxy server</h3>
-        <p><code class="bg-dark-subtle rounded p-1">{{ .ImageProxy }}</code></p>
+        <div class="mb-2">
+            <i class="bi bi-image me-2"></i><h3 class="h6 fw-bold d-inline">Default image proxy server</h3>
+        </div>
+        <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .ImageProxy }}</code></p>
         <p class="text-muted mb-0">The image proxy server used to retrieve images from i.pximg.net</p>
     </div>
 
     <div class="list-group-item p-3">
-        <h3 class="h6 fw-bold">Accept-Language header</h3>
-        <p><code class="bg-dark-subtle rounded p-1">{{ .AcceptLanguage }}</code></p>
+        <div class="mb-2">
+            <i class="bi bi-globe me-2"></i><h3 class="h6 fw-bold d-inline">Accept-Language header</h3>
+        </div>
+        <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .AcceptLanguage }}</code></p>
         <p class="text-muted mb-0">The preferred natural language and locale when making requests to the Pixiv API</p>
     </div>
     </div>
