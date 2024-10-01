@@ -35,7 +35,14 @@
                   <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
                   <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2" title="Rankings for explicit content">R-18G</a>
                 </div>
-                <p class="small text-muted"><span class="fw-bold">R-18:</span> Ranking of content with R-18 browsing settings. <span class="fw-bold">R-18G:</span> Ranking of content with R-18G browsing settings.</p>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <p class="small text-muted"><span class="fw-bold">R-18:</span> Ranking of content with R-18 browsing settings.</p>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p class="small text-muted"><span class="fw-bold">R-18G:</span> Ranking of content with R-18G browsing settings.</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -46,7 +53,7 @@
                   <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
                   <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
                 </div>
-                <p class="small text-muted"><span class="fw-bold">Original:</span> Ranking of original contents not included in fan art.</p>
+                <p class="small text-muted mb-0"><span class="fw-bold">Original:</span> Ranking of original contents not included in fan art.</p>
               </div>
               <div class="col-md-6">
                 <h3 class="h5 fw-bold mb-3">R-18 specialized rankings</h3>
@@ -69,7 +76,7 @@
                 <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
                 <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
               </div>
-              <button type="submit" class="btn btn-primary fw-bold rounded-pill">Go</button>
+              <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Go</button>
             </form>
           </div>
         </div>
@@ -120,7 +127,7 @@
     {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
     <ul class="pagination justify-content-center">
       <li class="page-item">
-        <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
+        <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Previous month</a>
       </li>
       <li class="page-item">
         <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
