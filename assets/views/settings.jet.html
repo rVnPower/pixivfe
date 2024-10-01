@@ -106,7 +106,7 @@
                                             <div class="mb-3">
                                                 <label for="image-proxy" class="form-label fw-bold">Select image proxy server</label>
                                                 <select class="form-select" id="image-proxy" name="image-proxy" required data-proxy-check-enabled="{{ .ProxyCheckEnabled }}">
-                                                    <option value="" data-proxy-type="working">/proxy/i.pximg.net (built-in proxy)</option>
+                                                    <option value="/proxy/i.pximg.net" data-proxy-type="working">/proxy/i.pximg.net (built-in proxy)</option>
                                                     {{- range .WorkingProxyList }}
                                                     <option value="{{.}}" data-proxy-type="working">{{.}}</option>
                                                     {{- end }}
