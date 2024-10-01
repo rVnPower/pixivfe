@@ -93,7 +93,7 @@
                                                 Current image proxy server
                                               </label>
                                               <!-- TODO: there's probably a better way of doing this -->
-                                              {{ a, b := CookieList["pixivfe-ImageProxy"] }}
+                                              {{ a, _ := CookieList["pixivfe-ImageProxy"] }}
                                               {{- if a != "" -}}
                                               <input class="form-control" type="text" value="{{ a }}" aria-label="Current image proxy" id="current-image-proxy" disabled readonly>
                                               {{- else }}
