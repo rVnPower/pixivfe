@@ -113,7 +113,7 @@
         <div class="col">Fri</div>
         <div class="col">Sat</div>
       </div>
-      <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3">
+      <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3 mb-4">
         {{ range i, day := .Calendar }}
         <div class="col">
           <div class="card h-100 border-0 rounded">
@@ -135,19 +135,19 @@
         </div>
         {{ end }}
       </div>
+      <nav aria-label="Month navigation">
+        {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+        <ul class="pagination justify-content-center mb-0">
+          <li class="page-item">
+            <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Previous month</a>
+          </li>
+          <li class="page-item">
+            <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 
-  <nav aria-label="Month navigation">
-    {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-    <ul class="pagination justify-content-center">
-      <li class="page-item">
-        <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Previous month</a>
-      </li>
-      <li class="page-item">
-        <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
-      </li>
-    </ul>
-  </nav>
 </div>
 {{- end }}
