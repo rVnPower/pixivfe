@@ -89,25 +89,19 @@
                                         </p>
                                         <form action="/settings/imageServer" method="post">
                                             <div class="mb-3">
+                                              <label for="current-image-proxy" class="form-label fw-bold">
+                                                Current image proxy server
+                                              </label>
                                               <!-- TODO: there's probably a better way of doing this -->
                                               {{ a, b := CookieList["pixivfe-ImageProxy"] }}
                                               {{- if a != "" -}}
-                                              <label for="current-image-proxy" class="form-label fw-bold">
-                                                Current image proxy server
-                                              </label>
                                               <input class="form-control" type="text" value="{{ a }}" aria-label="Current image proxy" id="current-image-proxy" disabled readonly>
-                                              <div id="current-image-proxy-help" class="form-text">
-                                                  The image proxy server currently set.
-                                              </div>
                                               {{- else }}
-                                              <label for="current-image-proxy" class="form-label fw-bold">
-                                                Current image proxy server
-                                              </label>
                                               <input class="form-control" type="text" value="{{ .DefaultProxyServer }}" aria-label="Current image proxy" id="current-image-proxy" disabled readonly>
+                                              {{ end -}}
                                               <div id="current-image-proxy-help" class="form-text">
                                                   The image proxy server currently set.
                                               </div>
-                                              {{ end -}}
                                             </div>
                                             <div class="mb-3">
                                                 <label for="image-proxy" class="form-label fw-bold">Select image proxy server</label>
