@@ -1,7 +1,7 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="row justify-content-center mb-5">
-  <div class="col-sm-12 col-lg-9">
+<div class="row justify-content-center">
+  <div class="col-12">
     <h1 class="h3 fw-bold mb-3">Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
      <div class="row">
       <div class="col-sm-12 col-lg-6">
@@ -54,7 +54,7 @@
 <div class="col-12">
   <div class="card border-0 mb-4">
     <div class="card-body rounded-5 bg-body-tertiary p-4">
-      <h2 class="h4 fw-bold mb-4">Calendar</h2>
+      <h2 class="h4 fw-bold mb-4">Calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h2>
       <div class="row text-center fw-bold mb-3">
         <div class="col">Sun</div>
         <div class="col">Mon</div>
