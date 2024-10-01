@@ -4,8 +4,8 @@
     <h1 class="h3 fw-bold mb-3">Ranking calendar</h1>
     <div class="row g-3">
       <div class="col-sm-12 col-lg-9">
-        <div class="card border-0 mb-4">
-          <div class="card-body rounded-5 bg-body-tertiary p-4">
+        <div class="card border-0">
+          <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
             <h2 class="h4 fw-bold mb-3">Ranking modes</h2>
             {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
             <div class="row">
@@ -67,17 +67,31 @@
         </div>
       </div>
       <div class="col-sm-12 col-lg-3">
-        <div class="card border-0 mb-4">
-          <div class="card-body rounded-5 bg-body-tertiary p-4">
-            <h2 class="h4 fw-bold mb-3">Date Picker</h2>
-            <form action="/rankingCalendar" method="post" class="mb-0">
-              <input type="hidden" name="mode" value="{{ .Mode }}" />
-              <div class="mb-3">
-                <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
-                <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
+        <div class="d-flex flex-column"
+          <div class="card border-0">
+            <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
+              <h2 class="h4 fw-bold mb-3">Reset modes</h2>
+              <p class="small text-muted">You can reset all currently applied ranking modes and use the default one.</p>
+              <a href="/rankingCalendar" type="button" class="btn btn-danger fw-bold rounded-pill">Reset modes</a>
+            </div>
+          </div>
+          <div class="card border-0">
+            <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
+              <h2 class="h4 fw-bold mb-3">Date Picker</h2>
+              <p class="small text-muted">You can select a specific time range to view rankings for.</p>
+                <form action="/rankingCalendar" method="post" class="mb-0">
+                  <input type="hidden" name="mode" value="{{ .Mode }}" />
+                  <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy)</label>
+                  <div class="d-flex">
+                    <div class="col-auto me-2">
+                    <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Go</button>
+                  </div>
+                </form>
               </div>
-              <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Go</button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -86,8 +100,8 @@
 </div>
 
 <div class="col-12">
-  <div class="card border-0 mb-4">
-    <div class="card-body rounded-5 bg-body-tertiary p-4">
+  <div class="card border-0">
+    <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
       <h2 class="h4 fw-bold mb-4">Calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h2>
       <div class="row text-center fw-bold mb-3">
         <div class="col">Sun</div>
