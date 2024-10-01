@@ -318,6 +318,14 @@
                             <div class="tab-pane fade" id="advanced-settings" role="tabpanel" aria-labelledby="advanced-settings-tab">
                                 <ul class="list-group list-group-flush">
                                   <h2 class="h4 fw-bold mb-4">Advanced settings</h2>
+                                  <p>
+                                      This section allows you to directly manage PixivFE's cookie-based preferences. Intended for advanced users who understand the implications of changing these values.
+                                  </p>
+                                  <div class="alert alert-warning" role="alert">
+                                      <p class="mb-0">
+                                          <i class="bi bi-exclamation-triangle-fill"></i> Exercise caution when modifying these settings. Incorrect values may adversely affect PixivFE's functionality or your browsing experience.
+                                      </p>
+                                  </div>
                                     <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
                                         <h3 class="h5 fw-bold mb-3">Cookie values</h3>
                                         <!-- <p>
@@ -325,13 +333,8 @@
                                             ShowArtR18G, and ShowArtAI are for features still under development.
                                         </p> -->
                                         <p>
-                                          You can directly set cookie values here.
+                                            View and edit individual cookie values. This is useful for fine-tuning specific preferences or troubleshooting issues.
                                         </p>
-                                        <div class="alert alert-warning" role="alert">
-                                            <p class="mb-0">
-                                                <i class="bi bi-exclamation-triangle-fill"></i> Be cautious when modifying these values as they directly affect PixivFE's functionality.
-                                            </p>
-                                        </div>
                                         {{- range k, v := CookieList }}
                                         <div class="mb-3">
                                             <h4 class="h6 fw-bold">{{k}}</h4>
@@ -350,10 +353,15 @@
                                         <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
                                         <h3 class="h5 fw-bold mb-3">Raw settings</h3>
                                         <p>
-                                          You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance's cookies expired.
+                                            This area displays all your current cookie values in a raw format. You can:
                                         </p>
+                                        <ul class="mb-3">
+                                            <li>Copy these settings to quickly configure another PixivFE instance</li>
+                                            <li>Restore your settings if the current instance's cookies have expired</li>
+                                            <li>Make bulk changes to multiple preferences at once</li>
+                                        </ul>
                                         <p>
-                                          Invalid values will be ignored.
+                                            When importing settings, any invalid or unrecognized values will be ignored to prevent configuration errors.
                                         </p>
                                         <!-- Save raw settings -->
                                         <form action="/settings/raw" method="post">
@@ -363,7 +371,7 @@
                                             </div>
                                             <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set raw settings</button>
                                             <div id="set-raw-settings-help" class="form-text">
-                                                Apply the raw settings entered above. This will overwrite your current settings with the values provided.
+                                                Applies the raw settings entered above. This action will overwrite your current configuration with the provided values.
                                             </div>
                                         </form>
 
