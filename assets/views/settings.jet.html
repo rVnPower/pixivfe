@@ -45,7 +45,7 @@
                       <li>Like/Bookmark</li>
                     </ul>
                     <p>Cookies will be saved on your browser, and will expire after a fixed period of time.</p>
-                    <form action="/settings/token" method="post">
+                    <form id="login-form" hx-post="/settings/token" hx-target="#login-response" hx-swap="outerHTML">
                       <div class="mb-3">
                         <label for="token" class="form-label"><span class="fw-bold">PixivFE token</span></label>
                         <input type="password" class="form-control" id="token" placeholder="123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP" />
@@ -53,13 +53,15 @@
                       </div>
                       <button type="submit" class="btn btn-primary fw-bold rounded-pill">Log in</button>
                     </form>
+                    <div id="login-response"></div>
                   </li>
                   <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
                     <h3 class="h5 fw-bold mb-3">Log out</h3>
                     <p>To securely end your session, click the 'Log out!' button. This will immediately remove your session token.</p>
-                    <form action="/settings/logout" method="post">
+                    <form id="logout-form" hx-post="/settings/logout" hx-target="#logout-response" hx-swap="outerHTML">
                       <button type="submit" class="btn btn-danger fw-bold rounded-pill">Log out!</button>
                     </form>
+                    <div id="logout-response"></div>
                   </li>
                 </ul>
               </div>
@@ -73,7 +75,7 @@
                     <h3 class="h5 fw-bold mb-3">Image proxy server</h3>
                     <p>Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers.</p>
                     <p>If you prefer, you can also specify a custom proxy server by entering its URL manually.</p>
-                    <form action="/settings/imageServer" method="post">
+                    <form id="image-proxy-form" hx-post="/settings/imageServer" hx-target="#image-proxy-response" hx-swap="outerHTML">
                       <div class="mb-3">
                         <label for="current-image-proxy" class="form-label fw-bold"> Current image proxy server </label>
                         <!-- TODO: there's probably a better way of doing this -->
@@ -120,12 +122,13 @@
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                     </form>
+                    <div id="image-proxy-response"></div>
                   </li>
 
                   <li class="list-group-item bg-body-tertiary py-4 px-0">
                     <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
                     <p>Toggle the switches below to hide specific types of content. Disabled switches will allow the content to be shown.</p>
-                    <form action="/settings/filter" method="post">
+                    <form id="filter-form" hx-post="/settings/filter" hx-target="#filter-response" hx-swap="outerHTML">
                       {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
                       {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
                       {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
@@ -150,12 +153,13 @@
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                     </form>
+                    <div id="filter-response"></div>
                   </li>
 
                   <li class="list-group-item bg-body-tertiary py-4 px-0">
                     <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
                     <p>Choose whether clicking on artwork thumbnails opens the full artwork in the same tab or a new tab.</p>
-                    <form action="/settings/thumbnailToNewTab" method="post">
+                    <form id="ttnt-form" hx-post="/settings/thumbnailToNewTab" hx-target="#ttnt-response" hx-swap="outerHTML">
                       {{- ttntValue := CookieList["pixivfe-ThumbnailToNewTab"] }}
                       <div class="mb-3 form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="ttnt-switch" name="ttnt" value="_blank" {{- if ttntValue == "_blank" }}checked{{- end }} />
@@ -164,6 +168,7 @@
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                     </form>
+                    <div id="ttnt-response"></div>
                   </li>
 
                   <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
@@ -177,7 +182,7 @@
                     <div class="alert alert-warning" role="alert">
                       <p class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> This functionality is currently broken and needs to be updated to work with the Bootstrap front-end rewrite.</p>
                     </div>
-                    <form action="/settings/artworkPreview" method="post">
+                    <form id="artwork-preview-form" hx-post="/settings/artworkPreview" hx-target="#artwork-preview-response" hx-swap="outerHTML">
                       <div class="form-check mb-3">
                         <input class="form-check-input" type="radio" name="app" id="app-c" value="cover" disabled />
                         <label class="form-check-label fw-bold" for="app-c"> Cover </label>
@@ -195,6 +200,7 @@
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill" disabled>Save</button>
                     </form>
+                    <div id="artwork-preview-response"></div>
                   </li>
                 </ul>
               </div>
@@ -207,7 +213,7 @@
                   <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
                     <h3 class="h5 fw-bold mb-3">Font family</h3>
                     <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
-                    <form action="/settings/novelFontType" method="post">
+                    <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
                       <div class="form-check mb-3">
                         <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" />
                         <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
@@ -244,12 +250,13 @@
 
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                     </form>
+                    <div id="novel-font-response"></div>
                   </li>
 
                   <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
                     <h3 class="h5 fw-bold mb-3">Force text orientation</h3>
                     <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
-                    <form action="/settings/novelViewMode" method="post">
+                    <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
                       <div class="form-check mb-3">
                         <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" />
                         <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
@@ -267,6 +274,7 @@
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
                     </form>
+                    <div id="novel-view-mode-response"></div>
                   </li>
                 </ul>
               </div>
@@ -293,7 +301,7 @@
 
                       <div class="d-flex">
                         <!-- Start Set Cookie Form -->
-                        <form action="/settings/set-cookie" method="post" class="row g-2 me-2">
+                        <form id="set-cookie-form-{{k}}" hx-post="/settings/set-cookie" hx-target="#set-cookie-response-{{k}}" hx-swap="outerHTML" class="row g-2 me-2">
                           <!-- Hidden Input for Cookie Key -->
                           <input type="hidden" name="key" value="{{k}}" />
 
@@ -311,7 +319,7 @@
                         <!-- End Set Cookie Form -->
 
                         <!-- Start Clear Cookie Form -->
-                        <form action="/settings/clear-cookie" method="post" class="row g-2">
+                        <form id="clear-cookie-form-{{k}}" hx-post="/settings/clear-cookie" hx-target="#clear-cookie-response-{{k}}" hx-swap="outerHTML" class="row g-2">
                           <input type="hidden" name="key" value="{{k}}" />
 
                           <!-- Clear Button -->
@@ -321,6 +329,8 @@
                         </form>
                         <!-- End Clear Cookie Form -->
                       </div>
+                      <div id="set-cookie-response-{{k}}"></div>
+                      <div id="clear-cookie-response-{{k}}"></div>
                     </div>
                     {{- end }}
                   </li>
@@ -335,15 +345,14 @@
                     </ul>
                     <p>When importing settings, any invalid or unrecognized values will be ignored to prevent configuration errors.</p>
                     <!-- Save raw settings -->
-                    <form action="/settings/raw" method="post">
+                    <form id="raw-settings-form" hx-post="/settings/raw" hx-target="#raw-settings-response" hx-swap="outerHTML">
                       <div class="mb-3">
-                        <textarea class="form-control" name="raw" rows="10">
-                          {{range k, v := CookieList}}&#10;{{k}}={{v}}{{end}}
-                        </textarea>
+                        <textarea class="form-control" name="raw" rows="10">{{range k, v := CookieList}}&#10;{{k}}={{v}}{{end}}</textarea>
                       </div>
                       <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set raw settings</button>
                       <div id="set-raw-settings-help" class="form-text">Applies the raw settings entered above. This action will overwrite your current configuration with the provided values.</div>
                     </form>
+                    <div id="raw-settings-response"></div>
                   </li>
                 </ul>
               </div>
@@ -356,12 +365,13 @@
                   <li class="list-group-item bg-body-tertiary px-0">
                     <h3 class="h5 fw-bold mb-3">Reset all preferences</h3>
                     <p>You can reset all cookies and use PixivFE's default preferences instead. This action will remove all customized settings.</p>
-                    <form action="/settings/reset-all" method="post">
+                    <form id="reset-all-form" hx-post="/settings/reset-all" hx-target="#reset-all-response" hx-swap="outerHTML">
                       <button type="submit" class="btn btn-danger fw-bold rounded-pill">Reset all preferences</button>
                       <div id="reset-all-help" class="form-text">
                         <span class="fw-bold">This action will reset all your preferences to default values. It cannot be undone.</span>
                       </div>
                     </form>
+                    <div id="reset-all-response"></div>
                   </li>
                 </ul>
               </div>
