@@ -20,10 +20,8 @@
   <!-- TODO: figure out custom themes (e.g. charcoal theme) -->
   <!-- <link href="/css/bootstrap-style.css" rel="stylesheet" /> -->
 
-  <!-- TODO: get htmx working properly again; currently causes comment pagination to be persisted across page navigations -->
-  <!-- <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
   <script src="/js/htmx@1.9.10.min.js"
-    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script> -->
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
 
   <!-- TODO: load these JS files only on pages that require them -->
   <script src="/js/illust-preview.js" defer></script>
@@ -55,7 +53,7 @@
   {{- end }}
 </head>
 
-<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main">
+<body>
   <!-- mb-4 for spacing between the navbar and main content -->
   <nav class="navbar bg-body-tertiary mb-4">
     <div class="container-fluid justify-content-between">
@@ -143,7 +141,7 @@
   </nav>
   <script src="/js/on-page-load.js"></script>
   <!-- mb-5 for spacing at the bottom of the page -->
-  <main class="container mb-5">
+  <main class="container mb-5" hx-boost="true" hx-swap="outerHTML">
     {{- yield body() }}
   </main>
   <div id="site-config" class="d-none">
