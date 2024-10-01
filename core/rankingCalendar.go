@@ -38,7 +38,7 @@ func get_weekday(n time.Weekday) int {
 var selector_img = cascadia.MustCompile("img")
 
 // GetRankingCalendar retrieves and processes the ranking calendar data from Pixiv.
-// It returns an HTML string representation of the calendar and any error encountered.
+// It returns an HTML string representation of the calendar using Bootstrap cards and any error encountered.
 //
 // iacore: so the funny thing about Pixiv is that they will return this month's data for a request of a future date. is it a bug or a feature?
 func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, error) {
@@ -73,42 +73,62 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	lastMonth := time.Date(year, time.Month(month), 0, 0, 0, 0, 0, time.UTC)
 	thisMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC)
 
-	// Generate the HTML for the calendar
-	renderString := "<tr>"
+	// Generate the HTML for the calendar using Bootstrap cards
+	renderString := ""
 	dayCount := 0
 
-	// Add empty cells for days before the 1st of the month
+	// Add empty cards for days before the 1st of the month
 	for i := 0; i < get_weekday(lastMonth.Weekday()); i++ {
-		renderString += `<td class="calendar-node calendar-node-empty"></td>`
+		renderString += `<div class="col">
+			<div class="card h-100 bg-light border-0 ratio ratio-1x1"></div>
+		</div>`
 		dayCount++
 	}
 
-	// Add cells for each day of the month
+	// Add cards for each day of the month
 	for i := 0; i < thisMonth.Day(); i++ {
 		// Start a new row if necessary
 		if dayCount == 7 {
-			renderString += "</tr><tr>"
+			renderString += `</div><div class="row g-2">`
 			dayCount = 0
 		}
 
 		// Format the date string
 		date := fmt.Sprintf("%d%02d%02d", year, month, i+1)
 
-		// Add a cell with an image link if available, otherwise just the day number
+		// Add a card with an image link if available, otherwise just the day number
 		if len(links) > i {
-			renderString += fmt.Sprintf(`<td class="calendar-node"><a href="/ranking?mode=%s&date=%s" class="d-block position-relative"><img src="%s" alt="Day %d" class="img-fluid" /><span class="position-absolute bottom-0 end-0 bg-body-tertiary px-2 rounded-pill">%d</span></a></td>`, mode, date, links[i], i+1, i+1)
+			renderString += fmt.Sprintf(`
+				<div class="col">
+					<div class="card h-100 ratio ratio-1x1">
+						<a href="/ranking?mode=%s&date=%s" class="text-decoration-none">
+							<img src="%s" alt="Day %d" class="card-img-top img-fluid object-fit-cover h-100" />
+							<div class="card-img-overlay d-flex align-items-end">
+								<p class="card-text text-white bg-dark bg-opacity-50 rounded px-2 py-1 mb-0">%d</p>
+							</div>
+						</a>
+					</div>
+				</div>`, mode, date, links[i], i+1, i+1)
 		} else {
-			renderString += fmt.Sprintf(`<td class="calendar-node"><span class="d-block text-center">%d</span></td>`, i+1)
+			renderString += fmt.Sprintf(`
+				<div class="col">
+					<div class="card h-100 ratio ratio-1x1">
+						<div class="card-body d-flex align-items-center justify-content-center">
+							<p class="card-text text-center mb-0">%d</p>
+						</div>
+					</div>
+				</div>`, i+1)
 		}
 		dayCount++
 	}
 
-	// Add empty cells to complete the last row if necessary
+	// Add empty cards to complete the last row if necessary
 	for dayCount < 7 {
-		renderString += `<td class="calendar-node calendar-node-empty"></td>`
+		renderString += `<div class="col">
+			<div class="card h-100 bg-light border-0 ratio ratio-1x1"></div>
+		</div>`
 		dayCount++
 	}
 
-	renderString += "</tr>"
 	return HTML(renderString), nil
 }

@@ -50,23 +50,17 @@
     <div class="card border-0 mb-4">
       <div class="card-body rounded-5 bg-body-tertiary p-4">
         <h2 class="h4 fw-bold mb-3">Calendar</h2>
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{- raw: .Render }}
-            </tbody>
-          </table>
+        <div class="row g-2 mb-3">
+          <div class="col text-center fw-bold">Sun</div>
+          <div class="col text-center fw-bold">Mon</div>
+          <div class="col text-center fw-bold">Tue</div>
+          <div class="col text-center fw-bold">Wed</div>
+          <div class="col text-center fw-bold">Thu</div>
+          <div class="col text-center fw-bold">Fri</div>
+          <div class="col text-center fw-bold">Sat</div>
+        </div>
+        <div class="row g-2">
+          {{- raw: .Render }}
         </div>
       </div>
     </div>
