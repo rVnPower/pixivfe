@@ -133,6 +133,17 @@ func setCookie(w http.ResponseWriter, r *http.Request) error {
 	return i18n.Errorf("Invalid Cookie Name: %s", key)
 }
 
+func clearCookie(w http.ResponseWriter, r *http.Request) error {
+	key := r.FormValue("key")
+	for _, cookie_name := range session.AllCookieNames {
+		if string(cookie_name) == key {
+			session.ClearCookie(w, cookie_name)
+			return nil
+		}
+	}
+	return fmt.Errorf("Invalid Cookie Name: %s", key)
+}
+
 func setRawCookie(w http.ResponseWriter, r *http.Request) error {
 	raw := r.FormValue("raw")
 	reader := bufio.NewReader(strings.NewReader(raw))
@@ -205,6 +216,8 @@ func SettingsPost(w http.ResponseWriter, r *http.Request) error {
 		err = setFilter(w, r)
 	case "set-cookie":
 		err = setCookie(w, r)
+	case "clear-cookie":
+		err = clearCookie(w, r)
 	case "raw":
 		err = setRawCookie(w, r)
 	default:
