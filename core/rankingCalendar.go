@@ -80,7 +80,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	// Add empty cards for days before the 1st of the month
 	for i := 0; i < get_weekday(lastMonth.Weekday()); i++ {
 		renderString += `<div class="col">
-			<div class="card h-100 border-0 ratio ratio-1x1"></div>
+			<div class="card h-100 border-0"></div>
 		</div>`
 		dayCount++
 	}
@@ -100,11 +100,11 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 		if len(links) > i {
 			renderString += fmt.Sprintf(`
 				<div class="col">
-					<div class="card h-100 ratio ratio-1x1">
+					<div class="card h-100">
 						<a href="/ranking?mode=%s&date=%s" class="text-decoration-none">
 							<img src="%s" alt="Day %d" class="card-img-top img-fluid object-fit-cover h-100" />
-							<div class="card-img-overlay d-flex align-items-end">
-								<p class="card-text text-white bg-dark bg-opacity-50 rounded px-2 py-1 mb-0">%d</p>
+							<div class="card-img-overlay d-flex align-items-start rounded p-2">
+								<p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">%d</p>
 							</div>
 						</a>
 					</div>
@@ -112,9 +112,9 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 		} else {
 			renderString += fmt.Sprintf(`
 				<div class="col">
-					<div class="card h-100 ratio ratio-1x1">
+					<div class="card h-100 border-0">
 						<div class="card-body d-flex align-items-center justify-content-center">
-							<p class="card-text text-center mb-0">%d</p>
+							<p class="card-text text-center fw-bold mb-0">%d</p>
 						</div>
 					</div>
 				</div>`, i+1)
@@ -125,7 +125,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	// Add empty cards to complete the last row if necessary
 	for dayCount < 7 {
 		renderString += `<div class="col">
-			<div class="card h-100 border-0 ratio ratio-1x1"></div>
+			<div class="card h-100 border-0"></div>
 		</div>`
 		dayCount++
 	}

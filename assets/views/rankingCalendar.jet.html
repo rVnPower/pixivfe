@@ -1,50 +1,55 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="row justify-content-center mb-5">
-  <div class="col-sm-12 col-md-9">
+  <div class="col-sm-12 col-lg-9">
     <h1 class="h3 fw-bold mb-3">Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
-
-    <div class="card border-0 mb-4">
-      <div class="card-body rounded-5 bg-body-tertiary p-4">
-        <h2 class="h4 fw-bold mb-3">Modes</h2>
-        {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
-        <div class="btn-group flex-wrap mb-3" role="group" aria-label="Ranking modes">
-          <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
-          <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
-          <a href="{{ url }}monthly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Monthly</a>
-          <a href="{{ url }}rookie" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Rookie</a>
-        </div>
-        <div class="btn-group flex-wrap mb-3" role="group" aria-label="R-18 modes">
-          <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
-          <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
-          <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">R-18G</a>
-        </div>
-        <div class="btn-group flex-wrap mb-3" role="group" aria-label="Original and gender-specific modes">
-          <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Original</a>
-          <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
-          <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
-        </div>
-        <div class="btn-group flex-wrap" role="group" aria-label="R-18 gender-specific modes">
-          <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
-          <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
+     <div class="row">
+      <div class="col-sm-12 col-lg-6">
+        <div class="card border-0 mb-4">
+          <div class="card-body rounded-5 bg-body-tertiary p-4">
+            <h2 class="h4 fw-bold mb-3">Modes</h2>
+            {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
+            <div class="btn-group flex-wrap mb-3" role="group" aria-label="Ranking modes">
+              <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
+              <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
+              <a href="{{ url }}monthly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Monthly</a>
+              <a href="{{ url }}rookie" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Rookie</a>
+            </div>
+            <div class="btn-group flex-wrap mb-3" role="group" aria-label="R-18 modes">
+              <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
+              <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
+              <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">R-18G</a>
+            </div>
+            <div class="btn-group flex-wrap mb-3" role="group" aria-label="Original and gender-specific modes">
+              <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Original</a>
+              <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
+              <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
+            </div>
+            <div class="btn-group flex-wrap" role="group" aria-label="R-18 gender-specific modes">
+              <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
+              <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="card border-0 mb-4">
-      <div class="card-body rounded-5 bg-body-tertiary p-4">
-        <h2 class="h4 fw-bold mb-3">Date Picker</h2>
-        <form action="/rankingCalendar" method="post" class="mb-0">
-          <input type="hidden" name="mode" value="{{ .Mode }}" />
-          <div class="mb-3">
-            <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
-            <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
+      <div class="col-sm-12 col-lg-6">
+        <div class="card border-0 mb-4">
+          <div class="card-body rounded-5 bg-body-tertiary p-4">
+            <h2 class="h4 fw-bold mb-3">Date Picker</h2>
+            <form action="/rankingCalendar" method="post" class="mb-0">
+              <input type="hidden" name="mode" value="{{ .Mode }}" />
+              <div class="mb-3">
+                <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
+                <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
+              </div>
+              <button type="submit" class="btn btn-primary fw-bold rounded-pill">Go</button>
+            </form>
           </div>
-          <button type="submit" class="btn btn-primary fw-bold rounded-pill">Go</button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
   <div class="col-12">
     <div class="card border-0 mb-4">
