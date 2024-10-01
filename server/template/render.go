@@ -68,6 +68,9 @@ func GetTemplatingVariables(r *http.Request) jet.VarMap {
 		queries[k] = v[0]
 	}
 
+	// Retrieve the CSRF token
+	localCSRFToken := session.GetCookie(r, session.Cookie_LocalCSRF)
+
 	return jet.VarMap{}.
 		Set("BaseURL", baseURL).
 		Set("PageURL", pageURL).

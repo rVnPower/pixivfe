@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/gorilla/mux"
 
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
@@ -50,6 +51,9 @@ func DefineRoutes() *mux.Router {
 		// @iacore: i think this won't have open redirect vuln
 		http.Redirect(w, r, url.String(), http.StatusPermanentRedirect)
 	})
+
+	//
+	router.Use(SetDefaultCookies)
 
 	// Serve static files
 	router.HandleFunc("/robots.txt", serveFile("./assets/robots.txt"))
@@ -107,7 +111,7 @@ func DefineRoutes() *mux.Router {
 
 	// Settings related routes
 	router.HandleFunc("/settings", CatchError(routes.SettingsPage)).Methods("GET")
-	router.HandleFunc("/settings/{type}", CatchError(routes.SettingsPost)).Methods("POST")
+	router.HandleFunc("/settings/{type}", CSRFProtection(CatchError(routes.SettingsPost))).Methods("POST")
 
 	// User action routes (login, bookmarks, likes, etc.)
 	router.HandleFunc("/self", CatchError(routes.LoginUserPage)).Methods("GET")

@@ -135,6 +135,7 @@ type Data_settings struct {
 	ProxyCheckEnabled  bool
 	ProxyCheckInterval time.Duration
 	DefaultProxyServer string
+	LocalCSRFToken          string
 }
 type Data_tag struct {
 	Title            string

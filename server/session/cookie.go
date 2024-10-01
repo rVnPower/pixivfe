@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"net/http"
+	"crypto/rand"
+	"encoding/hex"
 )
 
 type CookieName string
@@ -13,6 +15,7 @@ type CookieName string
 const ( // the __Host thing force it to be secure and same-origin (no subdomain) >> https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
 	Cookie_Token             CookieName = "pixivfe-Token"
 	Cookie_CSRF              CookieName = "pixivfe-CSRF"
+	Cookie_LocalCSRF 			 CookieName = "pixivfe-LocalCSRF" // Used for CSRF protection within PixivFE itself
 	Cookie_ImageProxy        CookieName = "pixivfe-ImageProxy"
 	Cookie_NovelFontType     CookieName = "pixivfe-NovelFontType"
 	Cookie_NovelViewMode     CookieName = "pixivfe-NovelViewMode"
@@ -79,4 +82,10 @@ func ClearAllCookies(w http.ResponseWriter) {
 	for _, name := range AllCookieNames {
 		ClearCookie(w, name)
 	}
+}
+
+func GenerateCSRFToken() string {
+    b := make([]byte, 32)
+    rand.Read(b)
+    return hex.EncodeToString(b)
 }
