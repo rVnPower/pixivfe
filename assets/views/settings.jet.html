@@ -355,35 +355,37 @@
                                         <div class="mb-3">
                                           <h4 class="h6 fw-bold">{{k}}</h4>
 
-                                          <!-- Start Set Cookie Form -->
-                                          <form action="/settings/set-cookie" method="post" class="row g-2">
+                                          <div class="d-flex">
+                                            <!-- Start Set Cookie Form -->
+                                            <form action="/settings/set-cookie" method="post" class="row g-2 me-2">
 
-                                            <!-- Hidden Input for Cookie Key -->
-                                            <input type="hidden" name="key" value="{{k}}" />
+                                              <!-- Hidden Input for Cookie Key -->
+                                              <input type="hidden" name="key" value="{{k}}" />
 
-                                            <!-- Input Field for Cookie Value -->
-                                            <div class="col-auto">
-                                              <label class="visually-hidden" for="cookieValue-{{k}}">Cookie Value</label>
-                                              <input id="cookieValue-{{k}}" type="text" class="form-control" name="value" value="{{v}}" />
-                                            </div>
+                                              <!-- Input Field for Cookie Value -->
+                                              <div class="col-auto">
+                                                <label class="visually-hidden" for="cookieValue-{{k}}">Cookie Value</label>
+                                                <input id="cookieValue-{{k}}" type="text" class="form-control" name="value" value="{{v}}" />
+                                              </div>
 
-                                            <!-- Set Button -->
-                                            <div class="col-auto">
-                                              <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set</button>
-                                            </div>
-                                          </form>
-                                          <!-- End Set Cookie Form -->
+                                              <!-- Set Button -->
+                                              <div class="col-auto">
+                                                <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set</button>
+                                              </div>
+                                            </form>
+                                            <!-- End Set Cookie Form -->
 
-                                          <!-- Start Clear Cookie Form -->
-                                          <form action="/settings/clear-cookie" method="post" class="row g-2 mt-2">
-                                            <input type="hidden" name="key" value="{{k}}" />
+                                            <!-- Start Clear Cookie Form -->
+                                            <form action="/settings/clear-cookie" method="post" class="row g-2">
+                                              <input type="hidden" name="key" value="{{k}}" />
 
-                                            <!-- Clear Button -->
-                                            <div class="col-auto">
-                                              <button type="submit" class="btn btn-danger fw-bold rounded-pill">Clear</button>
-                                            </div>
-                                          </form>
-                                          <!-- End Clear Cookie Form -->
+                                              <!-- Clear Button -->
+                                              <div class="col-auto">
+                                                <button type="submit" class="btn btn-danger fw-bold rounded-pill">Clear</button>
+                                              </div>
+                                            </form>
+                                            <!-- End Clear Cookie Form -->
+                                          </div>
 
                                         </div>
                                         {{- end }}
