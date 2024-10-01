@@ -1,24 +1,22 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="row justify-content-center">
-  <div class="col-sm-12 col-md-9">
-    <h1 class="h2 fw-bold mb-3">Newest works from all users</h1>
+  <h1 class="h3 fw-bold text-center mb-4">Newest works from all users</h1>
 
-    <div class="card border-0 mb-5">
-      <div class="card-body rounded-5 bg-body-tertiary p-4">
-        <h2 class="h4 fw-bold mb-3">Filter</h2>
-        <div class="btn-group" role="group" aria-label="Content filter">
-          <a href="/newest" class="btn btn-secondary fw-bold rounded-pill me-3">Safe</a>
-          <a href="/newest?mode=r18" class="btn btn-danger fw-bold rounded-pill">R-18</a>
-        </div>
+  <div class="col-12 col-lg-6">
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <h2 class="h4 fw-bold mb-3">Filter</h2>
+      <p class="text-muted">Filter by content rating.</p>
+      <div class="d-flex" aria-label="Filter options">
+        <a href="/newest" class="btn btn-secondary fw-bold rounded-pill me-3">Safe</a>
+        <a href="/newest?mode=r18" class="btn btn-danger fw-bold rounded-pill">R-18</a>
       </div>
     </div>
   </div>
 
-  <div class="col-12">
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-      {{ include "fragments/small-tn" .Items }}
+    <div class="col-12">
+      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">{{ include "fragments/small-tn" .Items }}</div>
     </div>
-  </div>
+
 </div>
 {{- end }}
