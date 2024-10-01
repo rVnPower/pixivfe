@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -16,7 +17,7 @@ import (
 type DayCalendar struct {
 	DayNumber   int    // The day of the month
 	ImageURL    string // Proxy URL to the image (optional, can be empty when no image is available)
-	RankingLink string // The link to the ranking page for this day
+	ArtworkLink string // The link to the artwork page for this day
 }
 
 // get_weekday converts a time.Weekday to an integer representation.
@@ -43,6 +44,16 @@ func get_weekday(n time.Weekday) int {
 
 // selector_img is a pre-compiled CSS selector for finding <img> tags in HTML.
 var selector_img = cascadia.MustCompile("img")
+
+// extractArtworkID extracts the artwork ID from the image URL
+func extractArtworkID(imageURL string) string {
+	re := regexp.MustCompile(`/(\d+)_p0_(custom|square)1200\.jpg`)
+	matches := re.FindStringSubmatch(imageURL)
+	if len(matches) > 1 {
+		return matches[1]
+	}
+	return ""
+}
 
 // GetRankingCalendar retrieves and processes the ranking calendar data from Pixiv.
 // It returns a slice of DayCalendar structs and any error encountered.
@@ -92,13 +103,15 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) ([]DayCal
 
 	// Add data for each day of the month
 	for i := 0; i < thisMonth.Day(); i++ {
-		date := fmt.Sprintf("%d%02d%02d", year, month, i+1)
 		day := DayCalendar{
-			DayNumber:   i + 1,
-			RankingLink: fmt.Sprintf("/ranking?mode=%s&date=%s", mode, date),
+			DayNumber: i + 1,
 		}
 		if len(links) > i {
 			day.ImageURL = links[i]
+			artworkID := extractArtworkID(links[i])
+			if artworkID != "" {
+				day.ArtworkLink = fmt.Sprintf("/artworks/%s", artworkID)
+			}
 		}
 		calendar = append(calendar, day)
 		dayCount++
