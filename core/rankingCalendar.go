@@ -12,6 +12,13 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
+// DayCalendar represents the data for a single day in the ranking calendar
+type DayCalendar struct {
+	DayNumber   int    // The day of the month
+	ImageURL    string // Proxy URL to the image (optional, can be empty when no image is available)
+	RankingLink string // The link to the ranking page for this day
+}
+
 // get_weekday converts a time.Weekday to an integer representation.
 // Sunday is 1, Monday is 2, and so on. This is used for calendar calculations.
 func get_weekday(n time.Weekday) int {
@@ -38,10 +45,10 @@ func get_weekday(n time.Weekday) int {
 var selector_img = cascadia.MustCompile("img")
 
 // GetRankingCalendar retrieves and processes the ranking calendar data from Pixiv.
-// It returns an HTML string representation of the calendar using Bootstrap cards and any error encountered.
+// It returns a slice of DayCalendar structs and any error encountered.
 //
 // iacore: so the funny thing about Pixiv is that they will return this month's data for a request of a future date. is it a bug or a feature?
-func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, error) {
+func GetRankingCalendar(r *http.Request, mode string, year, month int) ([]DayCalendar, error) {
 	// Retrieve the user token from the session
 	token := session.GetUserToken(r)
 	URL := GetRankingCalendarURL(mode, year, month)
@@ -49,13 +56,13 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	// Make an API request to Pixiv
 	resp, err := API_GET(r.Context(), URL, token)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Parse the HTML response
 	doc, err := html.Parse(strings.NewReader(resp.Body))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Extract image links from the parsed HTML
@@ -73,62 +80,35 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	lastMonth := time.Date(year, time.Month(month), 0, 0, 0, 0, 0, time.UTC)
 	thisMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC)
 
-	// Generate the HTML for the calendar using Bootstrap cards
-	renderString := ""
+	// Generate the calendar data
+	var calendar []DayCalendar
 	dayCount := 0
 
-	// Add empty cards for days before the 1st of the month
+	// Add empty days for days before the 1st of the month
 	for i := 0; i < get_weekday(lastMonth.Weekday()); i++ {
-		renderString += `<div class="col">
-			<div class="card h-100 border-0"></div>
-		</div>`
+		calendar = append(calendar, DayCalendar{DayNumber: 0})
 		dayCount++
 	}
 
-	// Add cards for each day of the month
+	// Add data for each day of the month
 	for i := 0; i < thisMonth.Day(); i++ {
-		// Start a new row if necessary
-		if dayCount == 7 {
-			renderString += `</div><div class="row g-3 mb-3">`
-			dayCount = 0
-		}
-
-		// Format the date string
 		date := fmt.Sprintf("%d%02d%02d", year, month, i+1)
-
-		// Add a card with an image link if available, otherwise just the day number
-		if len(links) > i {
-			renderString += fmt.Sprintf(`
-				<div class="col">
-					<div class="card h-100">
-						<a href="/ranking?mode=%s&date=%s" class="text-decoration-none">
-							<img src="%s" alt="Day %d" class="card-img-top img-fluid object-fit-cover h-100" />
-							<div class="card-img-overlay d-flex align-items-start rounded p-2">
-								<p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">%d</p>
-							</div>
-						</a>
-					</div>
-				</div>`, mode, date, links[i], i+1, i+1)
-		} else {
-			renderString += fmt.Sprintf(`
-				<div class="col">
-					<div class="card h-100 border-0">
-						<div class="card-body d-flex align-items-center justify-content-center">
-							<p class="card-text text-center fw-bold mb-0">%d</p>
-						</div>
-					</div>
-				</div>`, i+1)
+		day := DayCalendar{
+			DayNumber:   i + 1,
+			RankingLink: fmt.Sprintf("/ranking?mode=%s&date=%s", mode, date),
 		}
+		if len(links) > i {
+			day.ImageURL = links[i]
+		}
+		calendar = append(calendar, day)
 		dayCount++
 	}
 
-	// Add empty cards to complete the last row if necessary
-	for dayCount < 7 {
-		renderString += `<div class="col">
-			<div class="card h-100 border-0"></div>
-		</div>`
+	// Add empty days to complete the last week if necessary
+	for dayCount%7 != 0 {
+		calendar = append(calendar, DayCalendar{DayNumber: 0})
 		dayCount++
 	}
 
-	return HTML(renderString), nil
+	return calendar, nil
 }

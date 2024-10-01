@@ -85,8 +85,8 @@ func RankingCalendarPage(w http.ResponseWriter, r *http.Request) error {
 	monthBefore := realDate.AddDate(0, -1, 0)
 	monthAfter := realDate.AddDate(0, 1, 0)
 
-	// Retrieve the ranking calendar HTML
-	render, err := core.GetRankingCalendar(r, mode, year, month)
+	// Retrieve the ranking calendar data
+	calendar, err := core.GetRankingCalendar(r, mode, year, month)
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func RankingCalendarPage(w http.ResponseWriter, r *http.Request) error {
 	// Prepare and render the template with the calendar data
 	return RenderHTML(w, r, Data_rankingCalendar{
 		Title:       "Ranking calendar",
-		Render:      render,
+		Calendar:    calendar,
 		Mode:        mode,
 		Year:        year,
 		MonthBefore: parseDate(monthBefore),

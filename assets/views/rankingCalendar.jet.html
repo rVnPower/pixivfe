@@ -51,36 +51,59 @@
   </div>
 </div>
 
-  <div class="col-12">
-    <div class="card border-0 mb-4">
-      <div class="card-body rounded-5 bg-body-tertiary p-4">
-        <h2 class="h4 fw-bold mb-3">Calendar</h2>
-        <div class="row g-3 mb-3">
-          <div class="col text-center fw-bold">Sun</div>
-          <div class="col text-center fw-bold">Mon</div>
-          <div class="col text-center fw-bold">Tue</div>
-          <div class="col text-center fw-bold">Wed</div>
-          <div class="col text-center fw-bold">Thu</div>
-          <div class="col text-center fw-bold">Fri</div>
-          <div class="col text-center fw-bold">Sat</div>
-        </div>
-        <div class="row g-3 mb-3">
-          {{- raw: .Render }}
-        </div>
+<div class="col-12">
+  <div class="card border-0 mb-4">
+    <div class="card-body rounded-5 bg-body-tertiary p-4">
+      <h2 class="h4 fw-bold mb-3">Calendar</h2>
+      <div class="row g-3 mb-3">
+        <div class="col text-center fw-bold">Sun</div>
+        <div class="col text-center fw-bold">Mon</div>
+        <div class="col text-center fw-bold">Tue</div>
+        <div class="col text-center fw-bold">Wed</div>
+        <div class="col text-center fw-bold">Thu</div>
+        <div class="col text-center fw-bold">Fri</div>
+        <div class="col text-center fw-bold">Sat</div>
+      </div>
+      <div class="row g-3 mb-3">
+        {{ range i, day := .Calendar }}
+          <div class="col">
+            <div class="card h-100">
+              {{ if day.DayNumber > 0 }}
+                {{ if day.ImageURL }}
+                  <a href="{{ day.RankingLink }}" class="text-decoration-none">
+                    <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100" />
+                    <div class="card-img-overlay d-flex align-items-start rounded p-2">
+                      <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
+                    </div>
+                  </a>
+                {{ else }}
+                  <div class="card-body d-flex align-items-center justify-content-center">
+                    <p class="card-text text-center fw-bold mb-0">{{ day.DayNumber }}</p>
+                  </div>
+                {{ end }}
+              {{ else }}
+                <div class="card h-100 border-0"></div>
+              {{ end }}
+            </div>
+          </div>
+          {{ if (i + 1) % 7 == 0 && i < len(.Calendar) - 1 }}
+            </div><div class="row g-3 mb-3">
+          {{ end }}
+        {{ end }}
       </div>
     </div>
-
-    <nav aria-label="Month navigation">
-      {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-      <ul class="pagination justify-content-center">
-        <li class="page-item">
-          <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
-        </li>
-        <li class="page-item">
-          <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
-        </li>
-      </ul>
-    </nav>
   </div>
+
+  <nav aria-label="Month navigation">
+    {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
+      </li>
+      <li class="page-item">
+        <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 {{- end }}

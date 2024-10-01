@@ -122,7 +122,7 @@ type Data_rank struct {
 }
 type Data_rankingCalendar struct {
 	Title       string
-	Render      core.HTML
+	Calendar    []core.DayCalendar
 	Mode        string
 	Year        int
 	MonthBefore DateWrap
