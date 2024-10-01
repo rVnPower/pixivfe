@@ -182,17 +182,13 @@ func resetAll(w http.ResponseWriter, _ *http.Request) error {
 }
 
 func SettingsPage(w http.ResponseWriter, r *http.Request) error {
-    localCsrfToken := session.GetCookie(r, session.Cookie_LocalCSRF)
-    fmt.Printf("LocalCSRFToken: %s\n", localCsrfToken)
-    data := Data_settings{
-        WorkingProxyList:   proxy_checker.GetWorkingProxies(),
-        ProxyList:          config.BuiltinProxyList,
-        ProxyCheckEnabled:  config.GlobalConfig.ProxyCheckEnabled,
-        ProxyCheckInterval: config.GlobalConfig.ProxyCheckInterval,
-        DefaultProxyServer: config.GlobalConfig.ProxyServer.String(),
-        LocalCSRFToken:          localCsrfToken, // Set local CSRF token
-    }
-    return RenderHTML(w, r, data)
+	return RenderHTML(w, r, Data_settings{
+		WorkingProxyList:   proxy_checker.GetWorkingProxies(),
+		ProxyList:          config.BuiltinProxyList,
+		ProxyCheckEnabled:  config.GlobalConfig.ProxyCheckEnabled,    // Used to check whether proxy_checker is enabled on the instance
+		ProxyCheckInterval: config.GlobalConfig.ProxyCheckInterval,   // Used to display the ProxyCheckInterval configured on the instance
+		DefaultProxyServer: config.GlobalConfig.ProxyServer.String(), // Used to display the default image proxy server
+	})
 }
 
 func SettingsPost(w http.ResponseWriter, r *http.Request) error {

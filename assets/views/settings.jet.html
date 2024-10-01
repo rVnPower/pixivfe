@@ -352,6 +352,7 @@
                                             View and edit individual cookie values. This is useful for fine-tuning specific preferences or troubleshooting issues.
                                         </p>
                                         {{- range k, v := CookieList }}
+                                        {{ CSRFToken, _ := CookieList["pixivfe-CSRF"] }}
                                         <div class="mb-3">
                                           <h4 class="h6 fw-bold">{{k}}</h4>
 

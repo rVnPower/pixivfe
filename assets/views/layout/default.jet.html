@@ -53,8 +53,6 @@
   {{- if isset(.MetaImage) }}
   <meta property="og:image" content="{{ .MetaImage }}" />
   {{- end }}
-
-  <meta name="csrf-token" content="{{ .LocalCSRFToken }}">
 </head>
 
 <body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main">
