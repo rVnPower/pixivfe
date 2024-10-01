@@ -106,6 +106,26 @@
                                         {{- end -}}
                                         <form action="/settings/imageServer" method="post">
                                             <div class="mb-3">
+                                              {{- userProxyServer := CookieList["pixivfe-ImageProxy"] }}
+                                              {{- if isset(.userImageProxy) -}}
+                                              <label for="current-image-proxy" class="form-label">
+                                                Current image proxy server
+                                              </label>
+                                              <input class="form-control" type="text" value="{{ userProxyServer }}" aria-label="Current image proxy" id="current-image-proxy" disabled readonly>
+                                              <div id="current-image-proxy-help" class="form-text">
+                                                  The image proxy server currently set.
+                                              </div>
+                                              {{- else }}
+                                              <label for="current-image-proxy" class="form-label">
+                                                Current image proxy server
+                                              </label>
+                                              <input class="form-control" type="text" value="{{ .DefaultProxyServer }}" aria-label="Current image proxy" id="current-image-proxy" disabled readonly>
+                                              <div id="current-image-proxy-help" class="form-text">
+                                                  The image proxy server currently set.
+                                              </div>
+                                              {{ end -}}
+                                            </div>
+                                            <div class="mb-3">
                                                 <label for="image-proxy" class="form-label">Select image proxy server</label>
                                                 <select class="form-select" id="image-proxy" name="image-proxy" required data-proxy-check-enabled="{{ .ProxyCheckEnabled }}">
                                                     <option value="" data-proxy-type="working">/proxy/i.pximg.net (built-in proxy)</option>
@@ -120,7 +140,7 @@
                                                     Choose a proxy server to load images through.
                                                 </div>
                                             </div>
-                                            <div class="mb-3 form-check form-switch">
+                                            <div class="form-check form-switch mb-3 ">
                                                 <input class="form-check-input" type="checkbox" role="switch" id="show-all-proxies">
                                                 <label class="form-check-label" for="show-all-proxies">Show all proxy servers</label>
                                                 <div id="show-all-proxies-help" class="form-text">

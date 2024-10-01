@@ -134,6 +134,7 @@ type Data_settings struct {
 	WorkingProxyList   []string
 	ProxyCheckEnabled  bool
 	ProxyCheckInterval time.Duration
+	DefaultProxyServer string
 }
 type Data_tag struct {
 	Title            string
