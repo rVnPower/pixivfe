@@ -80,7 +80,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	// Add empty cards for days before the 1st of the month
 	for i := 0; i < get_weekday(lastMonth.Weekday()); i++ {
 		renderString += `<div class="col">
-			<div class="card h-100 bg-light border-0 ratio ratio-1x1"></div>
+			<div class="card h-100 border-0 ratio ratio-1x1"></div>
 		</div>`
 		dayCount++
 	}
@@ -89,7 +89,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	for i := 0; i < thisMonth.Day(); i++ {
 		// Start a new row if necessary
 		if dayCount == 7 {
-			renderString += `</div><div class="row g-2">`
+			renderString += `</div><div class="row g-3 mb-3">`
 			dayCount = 0
 		}
 
@@ -125,7 +125,7 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	// Add empty cards to complete the last row if necessary
 	for dayCount < 7 {
 		renderString += `<div class="col">
-			<div class="card h-100 bg-light border-0 ratio ratio-1x1"></div>
+			<div class="card h-100 border-0 ratio ratio-1x1"></div>
 		</div>`
 		dayCount++
 	}

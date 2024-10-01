@@ -50,7 +50,7 @@
     <div class="card border-0 mb-4">
       <div class="card-body rounded-5 bg-body-tertiary p-4">
         <h2 class="h4 fw-bold mb-3">Calendar</h2>
-        <div class="row g-2 mb-3">
+        <div class="row g-3 mb-3">
           <div class="col text-center fw-bold">Sun</div>
           <div class="col text-center fw-bold">Mon</div>
           <div class="col text-center fw-bold">Tue</div>
@@ -59,7 +59,7 @@
           <div class="col text-center fw-bold">Fri</div>
           <div class="col text-center fw-bold">Sat</div>
         </div>
-        <div class="row g-2">
+        <div class="row g-3 mb-3">
           {{- raw: .Render }}
         </div>
       </div>
@@ -69,10 +69,10 @@
       {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
       <ul class="pagination justify-content-center">
         <li class="page-item">
-          <a class="page-link fw-bold rounded-pill" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
+          <a class="btn btn-secondary fw-bold rounded-pill me-2" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
         </li>
         <li class="page-item">
-          <a class="page-link fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
+          <a class="btn btn-secondary fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
         </li>
       </ul>
     </nav>
