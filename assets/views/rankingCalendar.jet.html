@@ -1,61 +1,87 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container">
-    <h1>Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
-    <div class="switcher">
+<div class="row justify-content-center mb-5">
+  <div class="col-sm-12 col-md-9">
+    <h1 class="h3 fw-bold mb-3">Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
+
+    <div class="card border-0 mb-4">
+      <div class="card-body rounded-5 bg-body-tertiary p-4">
+        <h2 class="h4 fw-bold mb-3">Modes</h2>
         {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
-        <span class="switch-title">Modes</span>
-        <a href="{{ url }}daily" class="switch-button">Daily</a>
-        <a href="{{ url }}weekly" class="switch-button">Weekly</a>
-        <a href="{{ url }}monthly" class="switch-button">Monthly</a>
-        <a href="{{ url }}rookie" class="switch-button">Rookie</a>
-        <span class="switch-seperator"></span>
-        <a href="{{ url }}daily_r18" class="switch-button">Daily (R-18)</a>
-        <a href="{{ url }}weekly_r18" class="switch-button">Weekly (R-18)</a>
-        <a href="{{ url }}r18g" class="switch-button">R-18G</a>
-        <br />
-        <a href="{{ url }}original" class="switch-button">Original</a>
-        <a href="{{ url }}male" class="switch-button">Popular among males</a>
-        <a href="{{ url }}female" class="switch-button">Popular among females</a>
-        <br />
-        <a href="{{ url }}male_r18" class="switch-button">Popular among males (R-18)</a>
-        <a href="{{ url }}female_r18" class="switch-button">Popular among females (R-18)</a>
+        <div class="btn-group flex-wrap mb-3" role="group" aria-label="Ranking modes">
+          <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
+          <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
+          <a href="{{ url }}monthly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Monthly</a>
+          <a href="{{ url }}rookie" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Rookie</a>
+        </div>
+        <div class="btn-group flex-wrap mb-3" role="group" aria-label="R-18 modes">
+          <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
+          <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
+          <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">R-18G</a>
+        </div>
+        <div class="btn-group flex-wrap mb-3" role="group" aria-label="Original and gender-specific modes">
+          <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Original</a>
+          <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
+          <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
+        </div>
+        <div class="btn-group flex-wrap" role="group" aria-label="R-18 gender-specific modes">
+          <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
+          <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
+        </div>
+      </div>
     </div>
 
-    <div>
-        <form action="/rankingCalendar" method="post">
-            <input type="hidden" name="mode" value="{{ .Mode }}" />
-            <label for="date">
-                Date picker (mm/dd/yyyy):
-            </label>
-            <span>
-                <input type="date" name="date" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
-            </span>
-            <span>
-                <input type="submit" value="Go" />
-            </span>
+    <div class="card border-0 mb-4">
+      <div class="card-body rounded-5 bg-body-tertiary p-4">
+        <h2 class="h4 fw-bold mb-3">Date Picker</h2>
+        <form action="/rankingCalendar" method="post" class="mb-0">
+          <input type="hidden" name="mode" value="{{ .Mode }}" />
+          <div class="mb-3">
+            <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
+            <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
+          </div>
+          <button type="submit" class="btn btn-primary fw-bold rounded-pill">Go</button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card border-0 mb-4">
+      <div class="card-body rounded-5 bg-body-tertiary p-4">
+        <h2 class="h4 fw-bold mb-3">Calendar</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{- raw: .Render }}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <br>
-    <div id="calendar">
-        <div class="calendar-weeks">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
-        </div>
-        <div class="calendar-board">
-            {{- raw: .Render }}
-        </div>
-    </div>
-    <div class="pagination">
-        {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-        <a href="{{ url }}{{ .MonthBefore.Link }}" class="pagination-button ">Last month</a>
-        <a href="{{ url }}{{ .MonthAfter.Link }}" class="pagination-button ">Next month</a>
-    </div>
+    <nav aria-label="Month navigation">
+      {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link fw-bold rounded-pill" href="{{ url }}{{ .MonthBefore.Link }}">Last month</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link fw-bold rounded-pill" href="{{ url }}{{ .MonthAfter.Link }}">Next month</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
 {{- end }}

@@ -69,17 +69,29 @@ func GetRankingCalendar(r *http.Request, mode string, year, month int) (HTML, er
 	lastMonth := time.Date(year, time.Month(month), 0, 0, 0, 0, 0, time.UTC)
 	thisMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC)
 
-	renderString := ""
+	renderString := "<tr>"
+	dayCount := 0
 	for i := 0; i < get_weekday(lastMonth.Weekday()); i++ {
-		renderString += "<div class=\"calendar-node calendar-node-empty\"></div>"
+		renderString += `<td class="calendar-node calendar-node-empty"></td>`
+		dayCount++
 	}
 	for i := 0; i < thisMonth.Day(); i++ {
+		if dayCount == 7 {
+			renderString += "</tr><tr>"
+			dayCount = 0
+		}
 		date := fmt.Sprintf("%d%02d%02d", year, month, i+1)
 		if len(links) > i {
-			renderString += fmt.Sprintf(`<a href="/ranking?mode=%s&date=%s"><div class="calendar-node"><img src="%s" alt="Day %d" /><span>%d</span></div></a>`, mode, date, links[i], i+1, i+1)
+			renderString += fmt.Sprintf(`<td class="calendar-node"><a href="/ranking?mode=%s&date=%s" class="d-block position-relative"><img src="%s" alt="Day %d" class="img-fluid" /><span class="position-absolute bottom-0 end-0 bg-white px-2 rounded-pill">%d</span></a></td>`, mode, date, links[i], i+1, i+1)
 		} else {
-			renderString += fmt.Sprintf(`<div class="calendar-node"><span>%d</span></div>`, i+1)
+			renderString += fmt.Sprintf(`<td class="calendar-node"><span class="d-block text-center">%d</span></td>`, i+1)
 		}
+		dayCount++
 	}
+	for dayCount < 7 {
+		renderString += `<td class="calendar-node calendar-node-empty"></td>`
+		dayCount++
+	}
+	renderString += "</tr>"
 	return HTML(renderString), nil
 }
