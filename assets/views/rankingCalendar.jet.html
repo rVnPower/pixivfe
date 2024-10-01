@@ -54,20 +54,20 @@
 <div class="col-12">
   <div class="card border-0 mb-4">
     <div class="card-body rounded-5 bg-body-tertiary p-4">
-      <h2 class="h4 fw-bold mb-3">Calendar</h2>
-      <div class="row g-3 mb-3">
-        <div class="col text-center fw-bold">Sun</div>
-        <div class="col text-center fw-bold">Mon</div>
-        <div class="col text-center fw-bold">Tue</div>
-        <div class="col text-center fw-bold">Wed</div>
-        <div class="col text-center fw-bold">Thu</div>
-        <div class="col text-center fw-bold">Fri</div>
-        <div class="col text-center fw-bold">Sat</div>
+      <h2 class="h4 fw-bold mb-4">Calendar</h2>
+      <div class="row text-center fw-bold mb-3">
+        <div class="col">Sun</div>
+        <div class="col">Mon</div>
+        <div class="col">Tue</div>
+        <div class="col">Wed</div>
+        <div class="col">Thu</div>
+        <div class="col">Fri</div>
+        <div class="col">Sat</div>
       </div>
-      <div class="row g-3 mb-3">
+      <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3">
         {{ range i, day := .Calendar }}
           <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 border-0">
               {{ if day.DayNumber > 0 }}
                 {{ if day.ImageURL }}
                   <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
@@ -86,9 +86,6 @@
               {{ end }}
             </div>
           </div>
-          {{ if (i + 1) % 7 == 0 && i < len(.Calendar) - 1 }}
-            </div><div class="row g-3 mb-3">
-          {{ end }}
         {{ end }}
       </div>
     </div>
