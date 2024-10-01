@@ -1,73 +1,64 @@
-{{- extends "layout/default" }}
-{{- block body() }}
+{{- extends "layout/default" }} {{- block body() }}
 <div class="row justify-content-center">
   <div class="col-12">
-    <h1 class="h3 fw-bold mb-3">Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
-     <div class="row g-3">
-       <div class="col-sm-12 col-lg-9">
-         <div class="card border-0 mb-4">
-           <div class="card-body rounded-5 bg-body-tertiary p-4">
-             <h2 class="h4 fw-bold mb-3">Ranking modes</h2>
-             {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
-             <div class="row">
-               <div class="col-md-6">
-                 <h3 class="h5 fw-bold mb-3">General rankings</h3>
-                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="General ranking modes">
-                   <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
-                   <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
-                   <a href="{{ url }}monthly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Monthly</a>
-                   <a href="{{ url }}rookie" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2" title="Rankings for new artists">Rookie</a>
-                 </div>
-                 <div class="row">
-                   <div class="col-12 col-md-6">
-                      <p class="small text-muted">
-                          <span class="fw-bold">Daily:</span> totals for each day.
-                      </p>
-                      <p class="small text-muted">
-                          <span class="fw-bold">Weekly:</span> total for each week.
-                      </p>
-                      <p class="small text-muted">
-                          <span class="fw-bold">Monthly:</span> total for each month.
-                      </p>
-                   </div>
-                    <div class="col-12 col-md-6">
-                      <p class="small text-muted">
-                          <span class="fw-bold">Rookie:</span> for users never included in daily rankings before.
-                      </p>
+    <h1 class="h3 fw-bold mb-3">Ranking calendar</h1>
+    <div class="row g-3">
+      <div class="col-sm-12 col-lg-9">
+        <div class="card border-0 mb-4">
+          <div class="card-body rounded-5 bg-body-tertiary p-4">
+            <h2 class="h4 fw-bold mb-3">Ranking modes</h2>
+            {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">General rankings</h3>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="General ranking modes">
+                  <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
+                  <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
+                  <a href="{{ url }}monthly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Monthly</a>
+                  <a href="{{ url }}rookie" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2" title="Rankings for new artists">Rookie</a>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <p class="small text-muted"><span class="fw-bold">Daily:</span> totals for each day.</p>
+                    <p class="small text-muted"><span class="fw-bold">Weekly:</span> total for each week.</p>
+                    <p class="small text-muted"><span class="fw-bold">Monthly:</span> total for each month.</p>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p class="small text-muted"><span class="fw-bold">Rookie:</span> for users never included in daily rankings before.</p>
                   </div>
                 </div>
-               </div>
-               <div class="col-md-6">
-                 <h3 class="h5 fw-bold mb-3">R-18 rankings</h3>
-                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="R-18 ranking modes">
-                   <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
-                   <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
-                   <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2" title="Rankings for explicit content">R-18G</a>
-                 </div>
-                 <p class="small text-muted"><span class="fw-bold">R-18:</span> Ranking of content with R-18 browsing settings. <span class="fw-bold">R-18G:</span> Ranking of content with R-18G browsing settings.</p>
-               </div>
-             </div>
-             <div class="row">
-               <div class="col-md-6">
-                 <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
-                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Specialized ranking modes">
-                   <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2" title="Rankings for non-fan art">Original</a>
-                   <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
-                   <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
-                 </div>
-                 <p class="small text-muted"><span class="fw-bold">Original:</span> Ranking of original contents not included in fan art.</p>
-               </div>
-               <div class="col-md-6">
-                 <h3 class="h5 fw-bold mb-3">R-18 specialized rankings</h3>
-                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 specialized ranking modes">
-                   <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
-                   <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
+              </div>
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">R-18 rankings</h3>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="R-18 ranking modes">
+                  <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
+                  <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
+                  <a href="{{ url }}r18g" class="btn btn-danger fw-bold rounded-pill me-2 mb-2" title="Rankings for explicit content">R-18G</a>
+                </div>
+                <p class="small text-muted"><span class="fw-bold">R-18:</span> Ranking of content with R-18 browsing settings. <span class="fw-bold">R-18G:</span> Ranking of content with R-18G browsing settings.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Specialized ranking modes">
+                  <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2" title="Rankings for non-fan art">Original</a>
+                  <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
+                  <a href="{{ url }}female" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among females</a>
+                </div>
+                <p class="small text-muted"><span class="fw-bold">Original:</span> Ranking of original contents not included in fan art.</p>
+              </div>
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">R-18 specialized rankings</h3>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 specialized ranking modes">
+                  <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
+                  <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-sm-12 col-lg-3">
         <div class="card border-0 mb-4">
           <div class="card-body rounded-5 bg-body-tertiary p-4">
@@ -76,7 +67,7 @@
               <input type="hidden" name="mode" value="{{ .Mode }}" />
               <div class="mb-3">
                 <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy):</label>
-                <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
+                <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
               </div>
               <button type="submit" class="btn btn-primary fw-bold rounded-pill">Go</button>
             </form>
@@ -102,26 +93,24 @@
       </div>
       <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3">
         {{ range i, day := .Calendar }}
-          <div class="col">
-            <div class="card h-100 border-0">
-              {{ if day.DayNumber > 0 }}
-                {{ if day.ImageURL }}
-                  <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
-                    <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100" />
-                    <div class="card-img-overlay d-flex align-items-start rounded p-2">
-                      <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
-                    </div>
-                  </a>
-                {{ else }}
-                  <div class="card-body d-flex align-items-center justify-content-center">
-                    <p class="card-text text-center fw-bold mb-0">{{ day.DayNumber }}</p>
-                  </div>
-                {{ end }}
-              {{ else }}
-                <div class="card h-100 border-0"></div>
-              {{ end }}
+        <div class="col">
+          <div class="card h-100 border-0">
+            {{ if day.DayNumber > 0 }} {{ if day.ImageURL }}
+            <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
+              <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100" />
+              <div class="card-img-overlay d-flex align-items-start rounded p-2">
+                <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
+              </div>
+            </a>
+            {{ else }}
+            <div class="card-body d-flex align-items-center justify-content-center">
+              <p class="card-text text-center fw-bold mb-0">{{ day.DayNumber }}</p>
             </div>
+            {{ end }} {{ else }}
+            <div class="card h-100 border-0"></div>
+            {{ end }}
           </div>
+        </div>
         {{ end }}
       </div>
     </div>
