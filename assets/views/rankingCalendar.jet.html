@@ -1,4 +1,5 @@
-{{- extends "layout/default" }} {{- block body() }}
+{{- extends "layout/default" }}
+{{- block body() }}
 <div class="row justify-content-center">
   <div class="col-12">
     <h1 class="h3 fw-bold mb-3">Ranking calendar</h1>
@@ -115,10 +116,10 @@
       <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3">
         {{ range i, day := .Calendar }}
         <div class="col">
-          <div class="card h-100 border-0">
+          <div class="card h-100 border-0 rounded">
             {{ if day.DayNumber > 0 }} {{ if day.ImageURL }}
             <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
-              <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100" />
+              <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100 rounded" />
               <div class="card-img-overlay d-flex align-items-start rounded p-2">
                 <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
               </div>
