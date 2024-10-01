@@ -160,42 +160,81 @@ func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
 
-// CreatePaginator generates pagination data based on the current page and maximum number of pages
-func CreatePaginator(base, ending string, current_page, max_page int) PaginationData {
+// CreatePaginator generates pagination data based on the current page and maximum number of pages.
+// It returns a PaginationData struct containing all necessary information for rendering pagination controls.
+//
+// Parameters:
+// - base: The base part of the pagination URL
+// - ending: The ending part of the pagination URL
+// - current_page: The current page being displayed
+// - max_page: Maximum number of pages (-1 if unknown)
+// - page_margin: Number of pages to display before and after the current page
+// - dropdown_offset: Number of pages to include in dropdown before and after current page
+func CreatePaginator(base, ending string, current_page, max_page, page_margin, dropdown_offset int) (PaginationData, error) {
+	// Validate input parameters
+	if current_page < 1 {
+		return PaginationData{}, fmt.Errorf("current_page must be greater than or equal to 1, got %d", current_page)
+	}
+	if max_page != -1 && max_page < current_page {
+		return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
+	}
+	if page_margin < 0 {
+		return PaginationData{}, fmt.Errorf("page_margin must be non-negative, got %d", page_margin)
+	}
+	if dropdown_offset < 0 {
+		return PaginationData{}, fmt.Errorf("dropdown_offset must be non-negative, got %d", dropdown_offset)
+	}
+
+	hasMaxPage := max_page != -1
+
 	pageUrl := func(page int) string {
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
 	}
 
-	// Number of pages to show on each side of the current page
-	//
-	// NOTE: values higher than 1 can cause issues on small devices where the pagination element is too wide
-	const peek = 1
-	hasMaxPage := max_page != -1
+	// Helper function to generate a range of pages
+	generatePageRange := func(start, end int) []PageInfo {
+		if start > end {
+			return []PageInfo{}
+		}
+		pages := make([]PageInfo, 0, end-start+1)
+		for i := start; i <= end; i++ {
+			pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
+		}
+		return pages
+	}
 
 	// Calculate the range of pages to display
-	start := max(1, current_page-peek)
-	end := current_page + peek
+	start := max(1, current_page-page_margin)
+	end := current_page + page_margin
 	if hasMaxPage {
 		end = min(max_page, end)
 	}
 
 	// Generate page information for the range
-	pages := make([]PageInfo, 0, end-start+1)
-	for i := start; i <= end; i++ {
-		pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
+	pages := generatePageRange(start, end)
+
+	var lastPage int
+	if len(pages) > 0 {
+		lastPage = pages[len(pages)-1].Number
+	} else {
+		lastPage = current_page
 	}
 
-	lastPage := pages[len(pages)-1].Number
-
-	// Generate dropdown pages (previous 5, current, next 5)
-	dropdownStart := max(1, current_page-5)
-	dropdownEnd := current_page + 5
+	// Generate dropdown pages
+	dropdownStart := max(1, current_page-dropdown_offset)
+	dropdownEnd := current_page + dropdown_offset
 	if hasMaxPage {
 		dropdownEnd = min(max_page, dropdownEnd)
 	}
-	dropdownPages := make([]PageInfo, 0, dropdownEnd-dropdownStart+1)
-	for i := dropdownStart; i <= dropdownEnd; i++ {
-		dropdownPages = append(dropdownPages, PageInfo{Number: i, URL: pageUrl(i)})
+	dropdownPages := generatePageRange(dropdownStart, dropdownEnd)
+
+	// Calculate previous and next URLs
+	var previousURL, nextURL string
+	if current_page > 1 {
+		previousURL = pageUrl(current_page - 1)
+	}
+	if !hasMaxPage || current_page < max_page {
+		nextURL = pageUrl(current_page + 1)
 	}
 
 	// Create and return the PaginationData struct
@@ -205,14 +244,14 @@ func CreatePaginator(base, ending string, current_page, max_page int) Pagination
 		Pages:         pages,
 		HasPrevious:   current_page > 1,
 		HasNext:       !hasMaxPage || current_page < max_page,
-		PreviousURL:   pageUrl(current_page - 1),
-		NextURL:       pageUrl(current_page + 1),
+		PreviousURL:   previousURL,
+		NextURL:       nextURL,
 		FirstURL:      pageUrl(1),
 		LastURL:       pageUrl(max_page),
 		HasMaxPage:    hasMaxPage,
 		LastPage:      lastPage,
 		DropdownPages: dropdownPages,
-	}
+	}, nil
 }
 
 // GetNovelGenre returns the genre name for a given genre ID
@@ -316,8 +355,14 @@ func GetTemplateFunctions() map[string]any {
 		"parseTimeCustomFormat": func(date time.Time, format string) string {
 			return ParseTimeCustomFormat(date, format)
 		},
-		"createPaginator": func(base, ending string, current_page, max_page int) PaginationData {
-			return CreatePaginator(base, ending, current_page, max_page)
+		"createPaginator": func(base, ending string, current_page, max_page, page_margin, dropdown_offset int) PaginationData {
+			paginationData, err := CreatePaginator(base, ending, current_page, max_page, page_margin, dropdown_offset)
+			if err != nil {
+				fmt.Printf("Error creating paginator: %v", err)
+				// Return an empty PaginationData in case of error
+				return PaginationData{}
+			}
+			return paginationData
 		},
 		"joinArtworkIds": func(artworks []core.ArtworkBrief) string {
 			ids := []string{}

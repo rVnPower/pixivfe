@@ -176,7 +176,7 @@
 
     <!-- Pagination -->
     {{- url := unfinishedQuery(.QueriesC, "page") }}
-    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1) }}
+    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
     {{- yield pagination(data=paginationData) }}
 </div>
 {{- end }}
