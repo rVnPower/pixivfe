@@ -24,8 +24,3 @@ addEventListener('htmx:beforeOnLoad', function (event) {
 // addEventListener("htmx:pushedIntoHistory", (event) => {
 //   closeNavigationMenu()
 // });
-
-// Scroll to top after htmx content swap
-document.body.addEventListener('htmx:load', function(event) {
-  window.scrollTo(0, 0);
-});
