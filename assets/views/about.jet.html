@@ -1,92 +1,89 @@
-{{- extends "layout/default" }}
-{{- block body() }}
+{{- extends "layout/default" }} {{- block body() }}
 <div class="row justify-content-center">
-  <h1 class="h3 fw-bold mb-3">About PixivFE</h1>
-  <div class="col-sm-12 col-md-9">
+  <h1 class="h3 fw-bold text-center mb-4">About PixivFE</h1>
+
+  <div class="col-12 col-md-9">
     <div class="row">
-      <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-        <div class="mb-4">
-          <p>PixivFE is an open-source alternative frontend for Pixiv, allowing you to enjoy artwork without unnecessary distractions.</p>
-          <p>This instance is hosted by the owner of <span class="fw-bold">{{ .DomainName }}</span>. If you're interested in hosting PixivFE yourself, please visit <a href="{{ .RepoURL }}">the source repository</a> for more information.</p>
-          <!-- The rest of this column is mostly intended to eliminate weird negative space on this page -->
-          <!-- TODO: put actual content here -->
-          <!-- The following section is an adapation of Nitter's about page -->
-          <h2 class="h4 fw-bold mb-3">Why use PixivFE?</h2>
-          <p>It's impossible to use Pixiv without JavaScript enabled. For privacy-minded folks, preventing JavaScript analytics and IP-based tracking is important, but apart from using a VPN and uBlock/uMatrix, it's impossible. Despite being behind a VPN and using heavy-duty adblockers, you can get accurately tracked with your <a href="https://restoreprivacy.com/browser-fingerprinting/">browser's fingerprint</a>, <a href="https://noscriptfingerprint.com/">no JavaScript required</a>.</p>
-          <p>Using an instance of Pixiv, you can browse Pixiv without JavaScript while retaining your privacy. In addition to respecting your privacy, PixivFE is on average around twice as light (in terms of data transfered) than Pixiv, and serves pages faster (e.g. artworks load 2x faster).</p>
-          <div class="row">
-            <div class="col-6">
-              <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="/proxy/i.pximg.net/img-master/img/2023/04/23/13/55/59/107442519_master1200.jpg" src="/proxy/ugoira.com/107442519">Unable to load ugoira.</video>
-            </div>
-            <div class="col-6">
-              <a href="/artworks/107442519" class="text-decoration-none">
-                <figure>
-                  <blockquote class="blockquote">
-                    <p>くるくる〜くるくるりん</p>
-                  </blockquote>
-                  <figcaption class="blockquote-footer">Herta, <cite title="Source Title">#83 of the Genius Society</cite></figcaption>
-                </figure>
-              </a>
-            </div>
+      <div class="col-12 col-lg-6 mb-4">
+        <p>PixivFE is an open-source alternative frontend for Pixiv, allowing you to enjoy artwork without unnecessary distractions.</p>
+        <p>This instance is hosted by the owner of <span class="fw-bold">{{ .DomainName }}</span>. If you're interested in hosting PixivFE yourself, please visit <a href="{{ .RepoURL }}">the source repository</a> for more information.</p>
+        <!-- The rest of this column is mostly intended to eliminate weird negative space on this page -->
+        <!-- TODO: put actual content here -->
+        <!-- The following section is an adapation of Nitter's about page -->
+        <h2 class="h4 fw-bold mb-3">Why use PixivFE?</h2>
+        <p>It's impossible to use Pixiv without JavaScript enabled. For privacy-minded folks, preventing JavaScript analytics and IP-based tracking is important, but apart from using a VPN and uBlock/uMatrix, it's impossible. Despite being behind a VPN and using heavy-duty adblockers, you can get accurately tracked with your <a href="https://restoreprivacy.com/browser-fingerprinting/">browser's fingerprint</a>, <a href="https://noscriptfingerprint.com/">no JavaScript required</a>.</p>
+        <p>Using an instance of Pixiv, you can browse Pixiv without JavaScript while retaining your privacy. In addition to respecting your privacy, PixivFE is on average around twice as light (in terms of data transfered) than Pixiv, and serves pages faster (e.g. artworks load 2x faster).</p>
+        <div class="row">
+          <div class="col-6">
+            <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="/proxy/i.pximg.net/img-master/img/2023/04/23/13/55/59/107442519_master1200.jpg" src="/proxy/ugoira.com/107442519">Unable to load ugoira.</video>
+          </div>
+          <div class="col-6">
+            <a href="/artworks/107442519" class="text-decoration-none">
+              <figure>
+                <blockquote class="blockquote">
+                  <p>くるくる〜くるくるりん</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">Herta, <cite title="Source Title">#83 of the Genius Society</cite></figcaption>
+              </figure>
+            </a>
           </div>
         </div>
       </div>
+
       <div class="col-12 col-lg-6">
-        <div class="card card border-0">
-          <div class="card-body rounded-5 bg-body-tertiary p-4">
-            <h2 class="h4 fw-bold mb-4">Server Information</h2>
-            <div class="list-group list-group-flush">
-              <div class="list-group-item bg-body-tertiary pt-0 pb-3 px-0">
-                <!-- Spacing between the icon + h3 element and the templated in value -->
-                <div class="mb-2">
-                  <i class="bi bi-tag me-2"></i>
-                  <h3 class="h6 fw-bold d-inline">Version</h3>
-                </div>
-                <!-- Larger spacing between the templated in value and description -->
-                <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Version }}</code></p>
-                <p class="text-muted mb-0">The current version of PixivFE running on this server</p>
+        <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+          <h2 class="h4 fw-bold mb-4">Server Information</h2>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item bg-body-tertiary pt-0 pb-3 px-0">
+              <!-- Spacing between the icon + h3 element and the templated in value -->
+              <div class="mb-2">
+                <i class="bi bi-tag me-2"></i>
+                <h3 class="h6 fw-bold d-inline">Version</h3>
               </div>
+              <!-- Larger spacing between the templated in value and description -->
+              <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Version }}</code></p>
+              <p class="text-muted mb-0">The current version of PixivFE running on this server</p>
+            </div>
 
-              {{- if .Revision != "" }}
-              <div class="list-group-item bg-body-tertiary py-3 px-0">
-                <div class="mb-2">
-                  <i class="bi bi-git me-2"></i>
-                  <h3 class="h6 fw-bold d-inline">Revision</h3>
-                </div>
-                <!-- .text-reset causes the text color to be inherited from its parent; the underline decoration is preserved -->
-                <p class="mb-3">
-                  <code class="bg-dark-subtle rounded p-1"><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="text-reset">{{ .Revision }}</a></code>
-                </p>
-                <p class="text-muted mb-0">The specific revision of PixivFE source code in use</p>
+            {{- if .Revision != "" }}
+            <div class="list-group-item bg-body-tertiary py-3 px-0">
+              <div class="mb-2">
+                <i class="bi bi-git me-2"></i>
+                <h3 class="h6 fw-bold d-inline">Revision</h3>
               </div>
-              {{- end }}
+              <!-- .text-reset causes the text color to be inherited from its parent; the underline decoration is preserved -->
+              <p class="mb-3">
+                <code class="bg-dark-subtle rounded p-1"><a href="{{ .RepoURL }}/commit/{{ .RevisionHash }}" class="text-reset">{{ .Revision }}</a></code>
+              </p>
+              <p class="text-muted mb-0">The specific revision of PixivFE source code in use</p>
+            </div>
+            {{- end }}
 
-              <div class="list-group-item bg-body-tertiary py-3 px-0">
-                <div class="mb-2">
-                  <i class="bi bi-clock me-2"></i>
-                  <h3 class="h6 fw-bold d-inline">Server start time (UTC)</h3>
-                </div>
-                <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Time }}</code></p>
-                <p class="text-muted mb-0">The date and time when PixivFE was last started on this server</p>
+            <div class="list-group-item bg-body-tertiary py-3 px-0">
+              <div class="mb-2">
+                <i class="bi bi-clock me-2"></i>
+                <h3 class="h6 fw-bold d-inline">Server start time (UTC)</h3>
               </div>
+              <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .Time }}</code></p>
+              <p class="text-muted mb-0">The date and time when PixivFE was last started on this server</p>
+            </div>
 
-              <div class="list-group-item bg-body-tertiary py-3 px-0">
-                <div class="mb-2">
-                  <i class="bi bi-image me-2"></i>
-                  <h3 class="h6 fw-bold d-inline">Default image proxy server</h3>
-                </div>
-                <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .ImageProxy }}</code></p>
-                <p class="text-muted mb-0">The image proxy server used to retrieve images from i.pximg.net</p>
+            <div class="list-group-item bg-body-tertiary py-3 px-0">
+              <div class="mb-2">
+                <i class="bi bi-image me-2"></i>
+                <h3 class="h6 fw-bold d-inline">Default image proxy server</h3>
               </div>
+              <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .ImageProxy }}</code></p>
+              <p class="text-muted mb-0">The image proxy server used to retrieve images from i.pximg.net</p>
+            </div>
 
-              <div class="list-group-item bg-body-tertiary pt-3 pb-0 px-0">
-                <div class="mb-2">
-                  <i class="bi bi-globe me-2"></i>
-                  <h3 class="h6 fw-bold d-inline">Accept-Language header</h3>
-                </div>
-                <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .AcceptLanguage }}</code></p>
-                <p class="text-muted mb-0">The preferred natural language and locale when making requests to the Pixiv API</p>
+            <div class="list-group-item bg-body-tertiary pt-3 pb-0 px-0">
+              <div class="mb-2">
+                <i class="bi bi-globe me-2"></i>
+                <h3 class="h6 fw-bold d-inline">Accept-Language header</h3>
               </div>
+              <p class="mb-3"><code class="bg-dark-subtle rounded p-1">{{ .AcceptLanguage }}</code></p>
+              <p class="text-muted mb-0">The preferred natural language and locale when making requests to the Pixiv API</p>
             </div>
           </div>
         </div>
