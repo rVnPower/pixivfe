@@ -1,26 +1,41 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container">
-  <h1>Discover novels</h1>
-  <div class="switcher">
-    <div class="switch-title">Filter</div>
-    <a href="/discovery" class="switch-button">Artworks</a>
-    <a href="/discovery/novel" class="switch-button">Novels</a>
+<div class="row justify-content-center">
+  <h1 class="h3 fw-bold text-center mb-4">Discover novels</h1>
+
+  <div class="col-12 col-lg-6">
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <h2 class="h4 fw-bold mb-3">Type</h2>
+      <p class="text-muted">Choose between discovering artworks or novels from users on Pixiv.</p>
+      <div class="d-flex" aria-label="Artwork type">
+        <a href="/discovery" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Artworks</a>
+        <a href="/discovery/novel" class="btn btn-secondary fw-bold rounded-pill py-2 flex-fill">Novels</a>
+      </div>
+    </div>
   </div>
-  <div class="switcher">
-    {{- url := "/discovery/novel?mode=" }}
-    <div class="switch-title">Filter</div>
-    <a href="{{url}}all" class="switch-button">All</a>
-    <a href="{{url}}safe" class="switch-button">Safe</a>
-    <a href="{{url}}r18" class="switch-button">R-18</a>
+
+  <div class="col-12 col-lg-6">
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <h2 class="h4 fw-bold mb-3">Filter</h2>
+      <p class="text-muted">Filter by content rating to customize your discovery experience.</p>
+      <div class="d-flex" aria-label="Filter options">
+        {{- url := "/discovery/novel?mode=" }}
+        <a href="{{ url }}all" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">All</a>
+        <a href="{{ url }}safe" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Safe</a>
+        <a href="{{ url }}r18" class="btn btn-danger fw-bold rounded-pill flex-fill py-2">R-18</a>
+      </div>
+    </div>
   </div>
-  <div class="novel-container">
+
+  <div class="col-12">
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
       {{- range .Novels }}
         {{- include "fragments/novel-tn" . }}
-    {{- end }}
-  </div>
-  <div class="pagination">
-    <a href="" class="pagination-button">Reload</a>
+      {{- end }}
+    </div>
+    <div class="d-flex justify-content-center">
+      <a href="" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2">Reload</a>
+    </div>
   </div>
 </div>
 {{- end }}

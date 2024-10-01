@@ -1,72 +1,51 @@
-
-      <div class="novel-card">
-        <div class="novel-detail">
-            <div class="novel-cover">
-                <a href="/novel/{{ .ID }}">
-                    <img src="{{ .CoverURL }}" alt="{{ .Title }}" />
-                </a>
-            </div>
-            <div class="novel-metadata">
-                {{- if .SeriesID }}
-                <a href="/novel/series/{{ .SeriesID }}">
-                    <div class="novel-series-title">
-                        {{- .SeriesTitle }}
-                    </div>
-                </a>
-                {{- end }}
-                <a href="/novel/{{ .ID }}">
-                    <div class="novel-title">
-                        {{- .Title }}
-                    </div>
-                </a>
-            <small><span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></small>
-            <a href="/users/{{ .UserID }}">
-                <div class="novel-author">
-                        <img src="{{ .UserAvatar }}" alt="{{ .UserName }}" />
-                        <span>{{ .UserName }}</span>
-                </div>
-            </a>
-            <p class="novel-description">{{ raw: parsePixivRedirect(.Description) }}</p>
-
-            <div class="illust-tags">
-                {{- if .AiType == 2 }}
-                <span class="illust-tag">
-                <span class="illust-tag-name" id="highlight">AI-generated</span>
-                </span>
-                {{- end }}
-                {{- if .IsOriginal }}
-                <span class="illust-tag">
-                <span class="illust-tag-name">Original</span>
-                </span>
-                {{- end }}
-                {{- if .Genre != "0" }}
-                <span class="illust-tag">
-                <span class="illust-tag-name">{{ novelGenre: .Genre }}</span>
-                </span>
-                {{- end }}
-                {{- range .Tags }} {{ if isEmphasize(.) }}
-                <span class="illust-tag">
-                <span class="illust-tag-name" id="highlight">{{ . }}</span>
-                </span>
-                {{- else }}
-                <span class="illust-tag">
-                <span class="illust-tag-translation"
-                    ><a href="/tags/{{ escapeString(.) }}">#{{ . }}</a></span
-                >
-                </span>
-                {{- end }} {{ end }}
-            </div>
-
-            <div class="illust-tags">
-                <span class="illust-tag-attr">
-                <img src="/img/heart-solid.png" alt="Bookmarks" />
-                {{- .Bookmarks }}
-                </span>
-                <span class="illust-tag-attr">
-                <img src="/img/calendar.png" alt="Date" />
-                {{- parseTime: .CreateDate }}
-                </span>
-            </div>
-        </div>
-        </div>
+<div class="col">
+  <div class="card h-100 border-0">
+    <a href="/novel/{{ .ID }}" class="text-decoration-none">
+      <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="card-img-top img-fluid rounded" loading="lazy" />
+    </a>
+    <div class="card-body py-2 px-0">
+      {{- if .SeriesID }}
+      <a href="/novel/series/{{ .SeriesID }}" class="text-decoration-none">
+        <p class="card-text text-muted mb-1">{{ .SeriesTitle }}</p>
+      </a>
+      {{- end }}
+      <h5 class="card-title mb-1">
+        <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
+      </h5>
+      <p class="card-text text-muted small mb-2">
+        <span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span>
+      </p>
+      <a href="/users/{{ .UserID }}" class="text-decoration-none d-flex align-items-center mb-2">
+        <img src="{{ .UserAvatar }}" alt="{{ .UserName }}" class="rounded-circle me-2" style="width: 24px; height: 24px;" />
+        <span class="text-muted">{{ .UserName }}</span>
+      </a>
+      <p class="card-text small mb-2">{{ raw: .Description }}</p>
+      <div class="mb-2">
+        {{- if .AiType == 2 }}
+        <span class="badge bg-warning text-dark me-1 mb-1">AI-generated</span>
+        {{- end }}
+        {{- if .IsOriginal }}
+        <span class="badge bg-secondary me-1 mb-1">Original</span>
+        {{- end }}
+        {{- if .Genre != "0" }}
+        <span class="badge bg-info text-dark me-1 mb-1">{{ novelGenre: .Genre }}</span>
+        {{- end }}
+        {{- range .Tags }}
+          {{- if isEmphasize(.) }}
+        <span class="badge bg-primary me-1 mb-1">{{ . }}</span>
+          {{- else }}
+        <a href="/tags/{{ escapeString(.) }}" class="badge bg-light text-dark text-decoration-none me-1 mb-1">#{{ . }}</a>
+          {{- end }}
+        {{- end }}
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="text-muted small">
+          <i class="bi bi-heart-fill me-1"></i>{{ .Bookmarks }}
+        </span>
+        <span class="text-muted small">
+          <i class="bi bi-calendar me-1"></i>{{ parseTime: .CreateDate }}
+        </span>
+      </div>
     </div>
+  </div>
+</div>
