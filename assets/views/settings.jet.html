@@ -48,7 +48,7 @@
                     <form id="login-form" hx-post="/settings/token" hx-target="#login-response" hx-swap="outerHTML">
                       <div class="mb-3">
                         <label for="token" class="form-label"><span class="fw-bold">PixivFE token</span></label>
-                        <input type="password" class="form-control" id="token" placeholder="123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP" />
+                        <input type="password" class="form-control" id="token" name="token" placeholder="123456_AaBbccDDeeFFggHHIiJjkkllmMnnooPP" />
                         <div id="tokenHelpBlock" class="form-text">The underscore separates your member ID (left side) from a random string (right side).</div>
                       </div>
                       <button type="submit" class="btn btn-primary fw-bold rounded-pill">Log in</button>
