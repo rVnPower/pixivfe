@@ -28,15 +28,17 @@
       {{- end }}
     </div>
   </div>
-    {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
-    <!-- When the user has enabled hideR18 or hideR18G, display a plain thumbnail instead -->
-    <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy" />
-    <!-- When the user has enabled hideAi, display a plain thumbnail instead -->
-    {{- else if AiType == 2 && hideAi }}
-    <img src="/img/ai.png" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy" />
-    {{- else }}
-    <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover rounded" loading="lazy" />
-    {{- end }}
+    <div class="ratio ratio-1x1">
+      {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
+      <!-- When the user has enabled hideR18 or hideR18G, display a plain thumbnail instead -->
+      <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid object-fit-cover rounded" loading="lazy" />
+      <!-- When the user has enabled hideAi, display a plain thumbnail instead -->
+      {{- else if AiType == 2 && hideAi }}
+      <img src="/img/ai.png" alt="{{ .Title }}" class="img-fluid object-fit-cover rounded" loading="lazy" />
+      {{- else }}
+      <img src="{{ .Thumbnail }}" alt="{{ .Title }}" class="img-fluid object-fit-cover rounded" loading="lazy" />
+      {{- end }}
+    </div>
     <!-- When an artwork is a ugoira -->
     <!-- Creates a centered, circular overlay (60x60px) with semi-transparent black background.
          The play icon is centered within this overlay and appears on top of the thumbnail. -->
