@@ -9,4 +9,4 @@ $aspect-ratios: (
   "9x16": calc(16 / 9 * 100%),
 );
 
-@import "../bootstrap-5.3.3/scss/bootstrap";
+@import "./bootstrap/bootstrap";
