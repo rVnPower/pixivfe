@@ -133,7 +133,7 @@
           </div>
           <div class="d-flex flex-wrap">
             {{- if .Data.PrevDate != "false" }}
-            <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill me-3 d-flex align-items-center justify-content-center">
+            <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill mb-2 mb-md-0 me-0 me-md-2 d-flex align-items-center justify-content-center">
               <span>Previous day</span>
             </a>
             {{- end }}
@@ -147,7 +147,9 @@
   </div>
 
   <div class="col-12">
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">{{- include "fragments/ranking-tn" .Data.Contents }}</div>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+      {{- include "fragments/ranking-tn" .Data.Contents }}
+    </div>
   </div>
 
   <!-- Pagination -->
