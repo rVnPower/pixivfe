@@ -6939,6 +6939,10 @@ textarea.form-control-lg {
   height: 100%;
 }
 
+.ratio-1x1 {
+  --bs-aspect-ratio: 100%;
+}
+
 .ratio-1x2 {
   --bs-aspect-ratio: 200%;
 }

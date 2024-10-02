@@ -3,7 +3,9 @@
 $grid-row-columns: 7;
 
 /// custom aspect ratio for novels (currently using 3x4)
+/// NOTE: "1x1" needs to be specified here even though it's not custom
 $aspect-ratios: (
+  "1x1": 100%,
   "1x2": calc(2 / 1 * 100%),
   "3x4": calc(4 / 3 * 100%),
   "9x16": calc(16 / 9 * 100%),
