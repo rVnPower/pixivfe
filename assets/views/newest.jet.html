@@ -5,6 +5,7 @@
 
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <!-- TODO: use Switcher fragment instead -->
       <h2 class="h4 fw-bold mb-3">Filter</h2>
       <p class="text-muted">Filter by content rating.</p>
       <div class="d-flex" aria-label="Filter options">
@@ -15,7 +16,9 @@
   </div>
 
     <div class="col-12">
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">{{ include "fragments/small-tn" .Items }}</div>
+      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+        {{ include "fragments/small-tn" .Items }}
+      </div>
     </div>
 
 </div>
