@@ -1,6 +1,27 @@
+{*
+    This Jet template block renders a switcher using Bootstrap buttons.
+    It takes four parameters:
+    - baseURL: The base URL for all buttons
+    - paths: An array of URL paths for each button
+    - names: An array of display names/labels for each button
+    - activeState: The current active path to highlight the corresponding button
+
+    The template loops through the paths, creating a button for each one.
+    Each button is styled using Bootstrap 5 classes, including:
+    - btn-outline-secondary for the button style (or btn-outline-danger for r18 paths)
+    - rounded-pill for pill-shaped edges
+    - fw-bold for bold text
+
+    The template also handles the active state:
+    - Adds 'active' class to the button if its path matches the activeState
+    - Sets aria-pressed attribute for accessibility
+
+    This switcher can be used for tabbed navigation or toggling between different views.
+*}
+
 {{- block Switcher(baseURL, paths, names, activeState) }}
     {{- range i, k := paths }}
-        <a href="{{ baseURL }}{{k}}" class="btn btn-outline-primary{{ activeState == k ? " active" : "" }} btn-sm me-1 mb-2" role="button" aria-pressed="{{ activeState == k ? "true" : "false" }}">
+        <a href="{{ baseURL }}{{k}}" class="btn {{ len(k) >= 3 && k[len(k) - 3:] == "r18" ? "btn-outline-danger" : "btn-outline-secondary" }} text-body fw-bold border-2 rounded-pill me-2 mb-2 {{ activeState == k ? " active" : "" }}" role="button" aria-pressed="{{ activeState == k ? "true" : "false" }}">
         {{- names[i] }}
         </a>
     {{- end }}
