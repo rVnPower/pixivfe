@@ -44,9 +44,10 @@
                 {{- if Content == "all" }}
                 <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                  {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                   {{- path := slice("original", "male", "female") }}
                   {{- name := slice("Original", "Popular among males", "Popular among females")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
                 </div>
                 <p class="small text-muted mb-0">Specialized ranking categories.</p>
                 {{- end }}
