@@ -3,9 +3,8 @@
 <nav aria-label="Page navigation">
     <div class="d-flex flex-column align-items-center justify-content-center">
         <!-- Pagination dropdown -->
-        <div class="dropdown mb-3">
-        <!-- TODO: style the dropdown button similarly to the pagination ones -->
-        <button class="btn btn-secondary text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="dropup mb-3">
+        <button class="btn btn-secondary fw-bold rounded-pill dropdown-toggle py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Go to Page
         </button>
         <ul class="dropdown-menu">
@@ -18,6 +17,7 @@
             {{ end }}
         </ul>
         </div>
+  <!-- TODO: style pagination properly (using SCSS?) -->
   <ul class="pagination mb-0">
     <!-- Previous page button -->
     {{ if data.HasPrevious }}
