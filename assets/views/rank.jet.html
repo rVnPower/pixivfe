@@ -6,84 +6,100 @@
   <h1 class="h3 fw-bold text-center mb-4">{{ .Title }}</h1>
   <div class="col-12">
     <div class="row g-3">
-  <div class="col-12 col-lg-9">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Content</h2>
-      <p class="text-muted">Select the type of content you want to see in the rankings.</p>
-      {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-      {{- Content := isset(Queries.content) ? Queries.content : "all" }} {{- url := "" }}
-      {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
-        {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
-        {{- else }}
-        {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
-      {{- end }}
-      <!-- TODO: align the names of the "Overall" and "Manga" buttons vertically -->
-      <div class="d-flex flex-wrap">
-        {{- path := slice("all", "illust", "manga", "ugoira") }}
-        {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
-        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
+      <div class="col-12 col-lg-9">
+        <div class="card border-0">
+          <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
+            <h2 class="h4 fw-bold mb-3">Ranking options</h2>
+            {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+            {{- Content := isset(Queries.content) ? Queries.content : "all" }}
+            {{- url := "" }}
+            {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
+              {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
+            {{- else }}
+              {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+            {{- end }}
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">General rankings</h3>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Content types">
+                  {{- path := slice("all") }}
+                  {{- name := slice("Overall")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
+                </div>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Content types">
+                  {{- path := slice("illust", "manga", "ugoira") }}
+                  {{- name := slice("Illustrations", "Manga", "Ugoira")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
+                </div>
+                <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
+
+                <h3 class="h5 fw-bold mb-3">Time frame</h3>
+                {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="General ranking modes">
+                  {{- path := slice("daily", "weekly") }}
+                  {{- name := slice("Daily", "Weekly")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- if Content != "ugoira" }}
+                    {{- path := slice("monthly", "rookie") }}
+                    {{- name := slice("Monthly", "Rookie")}}
+                    {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- end }}
+                </div>
+                <p class="small text-muted mb-3">Choose the time frame for the rankings.</p>
+
+              </div>
+              <div class="col-md-6">
+                <h3 class="h5 fw-bold mb-3">R-18 rankings</h3>
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="R-18 ranking modes">
+                  {{- path := slice("daily_r18", "weekly_r18") }}
+                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <p class="small text-muted mb-3">R-18 content rankings by time frame.</p>
+
+                {{- if Content == "all" }}
+                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Specialized ranking modes">
+                  {{- path := slice("original", "male", "female") }}
+                  {{- name := slice("Original", "Popular among males", "Popular among females")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <p class="small text-muted mb-3">Specialized ranking categories.</p>
+                {{- end }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-3">
+        <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
+          <h2 class="h4 fw-bold mb-3">Reset modes</h2>
+          <p class="text-muted">You can reset all currently applied ranking modes and filters.</p>
+          <a href="/ranking" type="button" class="btn btn-danger fw-bold rounded-pill">Reset modes</a>
+        </div>
+
+        <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+          <h2 class="h4 fw-bold mb-3">Date ({{ .Data.CurrentDate }})</h2>
+          <p class="text-muted">Navigate through different dates or view the latest rankings.</p>
+          {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+          <div class="d-flex flex-wrap mb-2">
+            <a href="{{ url }}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center">
+              <span>Latest</span>
+            </a>
+          </div>
+          <div class="d-flex flex-wrap">
+            {{- if .Data.PrevDate != "false" }}
+            <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center">
+              <span>Previous day</span>
+            </a>
+            {{- end }}
+            <a href="{{ url }}&date={{.Data.NextDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
+              <span>Next day</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Modes</h2>
-      <p class="text-muted">Choose the time frame or category for the rankings.</p>
-      {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-      <div class="d-flex flex-wrap mb-3">
-        {{- path := slice("daily", "weekly") }}
-        {{- name := slice("Daily", "Weekly")}} {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}} {{- if Content != "ugoira" }}
-          {{- path := slice("monthly", "rookie") }}
-          {{- name := slice("Monthly", "Rookie")}}
-          {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-        {{- end }}
-      </div>
-
-      <div class="d-flex flex-wrap mb-3">
-        {{- path := slice("daily_r18", "weekly_r18") }}
-        {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-      </div>
-
-      {{- if Content == "all" }}
-      <div class="d-flex flex-wrap">
-        {{- path := slice("original", "male", "female") }}
-        {{- name := slice("Original", "Popular among males", "Popular among females")}}
-        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}</div>
-      {{- end }}
-    </div>
-  </div>
-
-
-  <div class="col-12 col-lg-3">
-    <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Reset modes</h2>
-      <p class="text-muted">You can reset all currently applied ranking modes and filters.</p>
-      <a href="/ranking" type="button" class="btn btn-danger fw-bold rounded-pill">Reset modes</a>
-    </div>
-
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Date ({{ .Data.CurrentDate }})</h2>
-      <p class="text-muted">Navigate through different dates or view the latest rankings.</p>
-      {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
-      <div class="d-flex flex-wrap mb-2">
-        <a href="{{ url }}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center">
-          <span>Latest</span>
-        </a>
-      </div>
-      <div class="d-flex flex-wrap">
-        {{- if .Data.PrevDate != "false" }}
-        <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center">
-          <span>Previous day</span>
-        </a>
-        {{- end }}
-        <a href="{{ url }}&date={{.Data.NextDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
-          <span>Next day</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
   </div>
 
   <div class="col-12">

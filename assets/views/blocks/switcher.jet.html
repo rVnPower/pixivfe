@@ -22,7 +22,7 @@
 
 {{- block Switcher(baseURL, paths, names, activeState) }}
     {{- range i, k := paths }}
-        <a href="{{ baseURL }}{{k}}" class="btn {{ len(k) >= 3 && k[len(k) - 3:] == "r18" ? "btn-danger" : "btn-secondary" }} fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center position-relative {{ activeState == k ? "active" : "" }}" aria-pressed="{{ activeState == k ? "true" : "false" }}" role="button">
+        <a href="{{ baseURL }}{{k}}" class="btn {{ len(k) >= 3 && k[len(k) - 3:] == "r18" ? "btn-danger" : "btn-secondary" }} fw-bold rounded-pill flex-fill me-2 mb-2 d-flex align-items-center justify-content-center position-relative {{ activeState == k ? "active" : "" }}" aria-pressed="{{ activeState == k ? "true" : "false" }}" role="button">
             {{- if activeState == k }}
                 <i class="bi bi-circle-fill start-icon position-absolute start-0 ms-3"></i>
             {{- end }}
