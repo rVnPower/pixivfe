@@ -21,50 +21,54 @@
             <div class="row">
               <div class="col-md-6">
                 <h3 class="h5 fw-bold mb-3">General rankings</h3>
-                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Content types">
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
                   {{- path := slice("all") }}
                   {{- name := slice("Overall")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
                 </div>
-                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Content types">
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
                   {{- path := slice("illust", "manga", "ugoira") }}
                   {{- name := slice("Illustrations", "Manga", "Ugoira")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
                 </div>
                 <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
 
+                {{- if Content == "all" }}
+                <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                  {{- path := slice("original", "male", "female") }}
+                  {{- name := slice("Original", "Popular among males", "Popular among females")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <p class="small text-muted mb-0">Specialized ranking categories.</p>
+                {{- end }}
+              </div>
+
+              <div class="col-md-6">
                 <h3 class="h5 fw-bold mb-3">Time frame</h3>
                 {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="General ranking modes">
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
                   {{- path := slice("daily", "weekly") }}
                   {{- name := slice("Daily", "Weekly")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                  {{- if Content != "ugoira" }}
-                    {{- path := slice("monthly", "rookie") }}
-                    {{- name := slice("Monthly", "Rookie")}}
-                    {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                  {{- end }}
                 </div>
-                <p class="small text-muted mb-3">Choose the time frame for the rankings.</p>
+                {{- if Content != "ugoira" }}
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                  {{- path := slice("monthly", "rookie") }}
+                  {{- name := slice("Monthly", "Rookie")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                {{- end }}
+                <p class="small text-muted">Choose the time frame for the rankings.</p>
 
-              </div>
-              <div class="col-md-6">
                 <h3 class="h5 fw-bold mb-3">R-18 rankings</h3>
-                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="R-18 ranking modes">
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 ranking modes">
                   {{- path := slice("daily_r18", "weekly_r18") }}
                   {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 <p class="small text-muted mb-3">R-18 content rankings by time frame.</p>
 
-                {{- if Content == "all" }}
-                <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Specialized ranking modes">
-                  {{- path := slice("original", "male", "female") }}
-                  {{- name := slice("Original", "Popular among males", "Popular among females")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <p class="small text-muted mb-3">Specialized ranking categories.</p>
-                {{- end }}
               </div>
             </div>
           </div>

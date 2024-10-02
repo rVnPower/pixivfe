@@ -175,14 +175,21 @@ func CreatePaginator(base, ending string, current_page, max_page, page_margin, d
 	if current_page < 1 {
 		return PaginationData{}, fmt.Errorf("current_page must be greater than or equal to 1, got %d", current_page)
 	}
-	if max_page != -1 && max_page < current_page {
-		return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
-	}
 	if page_margin < 0 {
 		return PaginationData{}, fmt.Errorf("page_margin must be non-negative, got %d", page_margin)
 	}
 	if dropdown_offset < 0 {
 		return PaginationData{}, fmt.Errorf("dropdown_offset must be non-negative, got %d", dropdown_offset)
+	}
+
+	// Validation for users that don't have any artworks
+	if max_page < 1 {
+		max_page = 1
+	}
+
+	// Validation for max_page in relation to current_page
+	if max_page != -1 && max_page < current_page {
+		return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
 	}
 
 	hasMaxPage := max_page != -1
