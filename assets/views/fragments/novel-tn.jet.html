@@ -14,7 +14,7 @@
           <p class="small text-muted mb-1">{{ .SeriesTitle }}</p>
         </a>
         {{- end }}
-        <h3 class="h5 mb-1">
+        <h3 class="h6">
           <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
         </h3>
         <p class="card-text text-muted small mb-2"><span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></p>
@@ -22,7 +22,8 @@
           <img src="{{ .UserAvatar }}" alt="{{ .UserName }}" class="rounded-circle me-2" style="width: 24px; height: 24px" />
           <span class="text-muted">{{ .UserName }}</span>
         </a>
-        <p class="small mb-2">{{ raw: .Description }}</p>
+        <!-- TODO: figure this out -->
+        <!-- <p class="small mb-2">{{ raw: .Description }}</p> -->
         <div class="mb-2">
           {{- if .AiType == 2 }}
           <span class="badge bg-warning text-dark me-1 mb-1">AI-generated</span>
@@ -44,7 +45,6 @@
           <span class="text-muted small"> <i class="bi bi-heart-fill me-1"></i>{{ .Bookmarks }} </span>
           <span class="text-muted small"> <i class="bi bi-calendar me-1"></i>{{ parseTime: .CreateDate }} </span>
         </div>
-
       </div>
     </div>
   </div>
