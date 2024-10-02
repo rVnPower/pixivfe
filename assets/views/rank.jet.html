@@ -30,22 +30,23 @@
             <div class="row border-bottom border-2 mb-3">
               <div class="col-12">
                  <div class="row">
-                <div class="col-12 col-md-6">
-                <h3 class="h5 fw-bold mb-3">General rankings</h3>
+                <div class="col-12">
+                <h3 class="h5 fw-bold mb-3">Content type</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
-                  {{- path := slice("all") }}
-                  {{- name := slice("Overall")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
-                </div>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
-                  {{- path := slice("illust", "manga", "ugoira") }}
-                  {{- name := slice("Illustrations", "Manga", "Ugoira")}}
+                  {{- path := slice("all", "illust", "manga", "ugoira") }}
+                  {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
                 </div>
                 <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
 
                 </div>
-                <div class="col-12 col-md-6">
+
+              </div>
+              </div>
+            </div>
+
+              <div class="row">
+                <div class="col-12 col-md-4">
                 {{- if Content == "all" }}
                 <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
@@ -63,14 +64,8 @@
                 <p class="small text-muted mb-3">Specialized ranking categories.</p>
                 {{- end }}
               </div>
-              </div>
-              </div>
-            </div>
 
-          <div class="row">
-            <div class="col-12">
-              <div class="row">
-              <div class="col-md-6">
+              <div class="col-12 col-md-4">
                 <h3 class="h5 fw-bold mb-3">Time frame</h3>
                 {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
@@ -88,7 +83,7 @@
                 <p class="small text-muted mb-3 mb-lg-0">Choose the time frame for the rankings.</p>
 
               </div>
-              <div class="col-md-6">
+              <div class="col-12 col-md-4">
 
                 <h3 class="h5 fw-bold mb-3">Time frame (R-18)</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 ranking modes">
@@ -99,9 +94,7 @@
                 <p class="small text-muted mb-0">R-18 content rankings by time frame.</p>
 
               </div>
-            </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
