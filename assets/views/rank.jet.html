@@ -1,5 +1,6 @@
 {{- extends "layout/default" }}
 {{- import "blocks/switcher" }}
+{{- import "blocks/pagination" }}
 {{- block body() }}
 
 <div class="container">
@@ -73,12 +74,11 @@
     {{- include "fragments/ranking-tn" .Data.Contents }}
   </div>
 
-  <div class="pagination">
-    {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
+
+    {{- url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
     + "&mode=" + Mode + "&page=" }}
-    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
-    <br />
-    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
-  </div>
+    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
+    {{- yield pagination(data=paginationData) }}
+
 </div>
 {{- end }}
