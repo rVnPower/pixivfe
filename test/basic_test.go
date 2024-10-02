@@ -1,4 +1,4 @@
-package main
+package main_test
 
 import (
 	"log"
@@ -13,7 +13,10 @@ var browser playwright.Browser
 func setup() {
 	var err error
 
-	if err = playwright.Install(); err != nil {
+	runOption := &playwright.RunOptions{
+		SkipInstallBrowsers: true,
+	}
+	if err = playwright.Install(runOption); err != nil {
 		log.Fatalf("could not install playwright dependencies. %s", err)
 	}
 
@@ -22,7 +25,11 @@ func setup() {
 		log.Fatalf("could not start playwright")
 	}
 
-	browser, err = pw.Chromium.Launch()
+	option := playwright.BrowserTypeLaunchOptions{
+		Channel: playwright.String("firefox"),
+	}
+
+	browser, err = pw.Firefox.Launch(option)
 	if err != nil {
 		log.Fatalf("could not launch browser: %v", err)
 	}
