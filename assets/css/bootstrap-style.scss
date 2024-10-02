@@ -2,4 +2,11 @@
 /// src: https://github.com/twbs/bootstrap/issues/36691
 $grid-row-columns: 7;
 
+/// custom aspect ratio for novels (currently using 3x4)
+$aspect-ratios: (
+  "1x2": calc(2 / 1 * 100%),
+  "3x4": calc(4 / 3 * 100%),
+  "9x16": calc(16 / 9 * 100%),
+);
+
 @import "../bootstrap-5.3.3/scss/bootstrap";

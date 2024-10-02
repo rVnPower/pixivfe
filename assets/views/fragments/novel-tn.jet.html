@@ -1,7 +1,9 @@
 <div class="col">
   <div class="card h-100 border-0">
     <a href="/novel/{{ .ID }}" class="text-decoration-none">
-      <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="card-img-top img-fluid rounded" loading="lazy" />
+    <div class="ratio ratio-3x4">
+      <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="img-fluid rounded object-fit-cover" loading="lazy" />
+    </div>
     </a>
     <div class="card-body py-2 px-0">
       {{- if .SeriesID }}
