@@ -1,5 +1,5 @@
-/* Bootstrap limits grid-row-columns to 6 by default */
-/* src: https://github.com/twbs/bootstrap/issues/36691 */
-$grid-row-columns: 7 !default;
+/// Bootstrap limits grid-row-columns to 6 by default
+/// src: https://github.com/twbs/bootstrap/issues/36691
+$grid-row-columns: 7;
 
 @import "../bootstrap-5.3.3/scss/bootstrap";
