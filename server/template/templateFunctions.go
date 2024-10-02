@@ -8,8 +8,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	
-	"github.com/goware/urlx"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 )
@@ -141,7 +139,7 @@ func CreatePaginator(base, ending string, current_page, max_page int) HTML {
 	pages += `<div class="pagination-buttons">`
 	{ // "jump to page" <form>
 		hidden_section := ""
-		urlParsed, err := urlx.Parse(base)
+		urlParsed, err := url.Parse(base)
 		if err != nil {
 			panic(err)
 		}
