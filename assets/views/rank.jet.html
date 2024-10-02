@@ -46,54 +46,47 @@
             </div>
 
               <div class="row">
-                <div class="col-12 col-md-4">
-                {{- if Content == "all" }}
-                <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
-                  {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                  {{- path := slice("original") }}
-                  {{- name := slice("Original")}}
-                  {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
-                  {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                  {{- path := slice("male", "female") }}
-                  {{- name := slice("Popular among males", "Popular among females")}}
-                  {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <p class="small text-muted mb-3">Specialized ranking categories.</p>
-                {{- end }}
-              </div>
 
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-6">
                 <h3 class="h5 fw-bold mb-3">Time frame</h3>
                 {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("daily", "weekly") }}
-                  {{- name := slice("Daily", "Weekly")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
                 {{- if Content != "ugoira" }}
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("monthly", "rookie") }}
-                  {{- name := slice("Monthly", "Rookie")}}
+                  {{- path := slice("daily", "weekly", "monthly", "rookie", "daily_r18", "weekly_r18") }}
+                  {{- name := slice("Daily", "Weekly", "Monthly", "Rookie", "Daily (R-18)", "Weekly (R-18)")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                {{- else }}
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                  {{- path := slice("daily", "weekly", "daily_r18", "weekly_r18") }}
+                  {{- name := slice("Daily", "Weekly", "Daily (R-18)", "Weekly (R-18)")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- end }}
-                <p class="small text-muted mb-3 mb-lg-0">Choose the time frame for the rankings.</p>
-
+                <p class="small text-muted mb-2">Choose the time frame for the rankings.</p>
+                <p class="small text-muted mb-md-0"><span class="fw-bold">Monthly</span> and <span class="fw-bold">Rookie</span> are unavailable when filtering for <span class="fw-bold">Ugoira</span>.</p>
               </div>
-              <div class="col-12 col-md-4">
 
-                <h3 class="h5 fw-bold mb-3">Time frame (R-18)</h3>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 ranking modes">
-                  {{- path := slice("daily_r18", "weekly_r18") }}
-                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <p class="small text-muted mb-0">R-18 content rankings by time frame.</p>
-
+              <div class="col-12 col-md-6">
+              {{- if Content == "all" }}
+              <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
+              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("original") }}
+                {{- name := slice("Original")}}
+                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
+              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("male", "female") }}
+                {{- name := slice("Popular among males", "Popular among females")}}
+                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <p class="small text-muted mb-2">Specialized ranking categories.</p>
+              <p class="small text-muted mb-0">These options are only available when filtering for <span class="fw-bold">Overall</span>.</p>
+              {{- end }}
+            </div>
+
               </div>
           </div>
         </div>
