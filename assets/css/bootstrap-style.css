@@ -11869,5 +11869,18 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/* [data-bs-theme="charcoal"] {
+  --bs-body-color: #f5f5f5;
+  --bs-body-color-rgb: rgb(245, 245, 245);
+  --bs-body-bg: #1f1f1f;
+  --bs-body-bg-rgb: rgb(31, 31, 31);
+  --bs-secondary-color: #d6d6d6;
+  --bs-secondary-color-rgb: rgb(214, 214, 214);
+  --bs-secondary-bg: #e9ecef;
+  --bs-secondary-bg-rgb: 233, 236, 239;
+  /// --bs-tertiary-bg: #f8f9fa;
+  --bs-tertiary-bg-rgb: rgba(255,255,255,0.12);
+  --bs-link-color: rgb(102, 159, 194);
+} */
 
 /*# sourceMappingURL=bootstrap-style.css.map */
