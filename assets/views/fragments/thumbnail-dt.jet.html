@@ -2,6 +2,7 @@
 {{- hideR18 := CookieList["pixivfe-HideArtR18"] }}
 {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
 {{- hideAi := CookieList["pixivfe-HideArtAI"] }}
+{{- AiType := isset(.AiType) ? .AiType : 0}}
 <div class="position-relative h-100">
   <!-- Placing the anchor element out here so that the div that contains the tags acts as a hyperlink -->
   <a target="{{ target }}" href="/artworks/{{ .ID }}" class="d-block h-100">
@@ -16,7 +17,7 @@
       <span class="badge bg-danger mb-1">{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
       {{- end }}
       <!-- When an artwork is tagged as AI-generated -->
-      {{- if .AiType == 2 }}
+      {{- if AiType == 2 }}
       <span class="badge bg-warning small text-dark mb-1">AI</span>
       {{- end }}
     </div>
@@ -27,7 +28,6 @@
       {{- end }}
     </div>
   </div>
-  {{- AiType := isset(.AiType) ? .AiType : 0}}
     {{- if (.XRestrict > 0 && hideR18 != "" && hideR18G != "") || (.XRestrict == 2 && hideR18G != "") }}
     <!-- When the user has enabled hideR18 or hideR18G, display a plain thumbnail instead -->
     <img src="/img/nsfw.png" alt="{{ .Title }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy" />
