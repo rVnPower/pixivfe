@@ -10,6 +10,14 @@
         <div class="card border-0">
           <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
             <h2 class="h4 fw-bold mb-3">Ranking options</h2>
+            <!-- TODO: add additional checks to these Switcher buttons to ensure only valid URLs can be generated
+                       e.g. selecting the "Ugoira" button hides the buttons under
+                            "Specialized rankings" as well as the "Monthly" and "Rookie"
+                            options under "Time frame", but this doesn't occur vice versa
+                            with the "Ugoira" button still visible if either of the latter
+                            buttons are selected, thus allowing the user to generate an invalid
+                            URL even when there is no UX indication that this is the case
+            -->
             {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
             {{- Content := isset(Queries.content) ? Queries.content : "all" }}
             {{- url := "" }}
