@@ -8,6 +8,7 @@
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
       <h2 class="h4 fw-bold mb-3">Content</h2>
+      <p class="text-muted">Select the type of content you want to see in the rankings.</p>
       {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
       {{- Content := isset(Queries.content) ? Queries.content : "all" }} {{- url := "" }}
       {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
@@ -24,6 +25,7 @@
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
       <h2 class="h4 fw-bold mb-3">Modes</h2>
+      <p class="text-muted">Choose the time frame or category for the rankings.</p>
       {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
       <div class="d-flex flex-wrap mb-3">
         {{- path := slice("daily", "weekly") }}
@@ -50,16 +52,19 @@
 
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
       <h2 class="h4 fw-bold mb-3">Date (current: {{ .Data.CurrentDate }})</h2>
+      <p class="text-muted">Navigate through different dates or view the latest rankings.</p>
       {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
       <div class="d-flex flex-wrap">
+        <a href="{{ url }}" class="btn btn-outline-secondary text-body fw-bold border-2 rounded-pill me-2 mb-2">Latest</a>
+        <a href="/rankingCalendar" class="btn btn-outline-secondary text-body fw-bold border-2 rounded-pill me-2 mb-2">Ranking calendar</a>
+      </div>
+      <div class="d-flex flex-wrap">
         {{- if .Data.PrevDate != "false" }}
-        <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Yesterday</a>
+        <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-outline-secondary text-body flex-fill fw-bold border-2 rounded-pill me-2 mb-2">Previous day</a>
         {{- end }}
         {{ if .Data.NextDate != "false" }}
-        <a href="{{ url }}&date={{.Data.NextDate}}" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Next day</a>
+        <a href="{{ url }}&date={{.Data.NextDate}}" class="btn btn-outline-secondary text-body flex-fill fw-bold border-2 rounded-pill me-2 mb-2">Next day</a>
         {{- end }}
-        <a href="{{ url }}" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Latest</a>
-        <a href="/rankingCalendar" class="btn btn-secondary fw-bold rounded-pill mb-2">Ranking calendar</a>
       </div>
     </div>
 

@@ -8,21 +8,25 @@
 
     The template loops through the paths, creating a button for each one.
     Each button is styled using Bootstrap 5 classes, including:
-    - btn-outline-secondary for the button style (or btn-outline-danger for r18 paths)
+    - btn-secondary for the button style (or btn-danger for r18 paths)
     - rounded-pill for pill-shaped edges
     - fw-bold for bold text
 
     The template also handles the active state:
     - Adds 'active' class to the button if its path matches the activeState
     - Sets aria-pressed attribute for accessibility
+    - Adds an icon (bi-circle-fill) for the active state
 
     This switcher can be used for tabbed navigation or toggling between different views.
 *}
 
 {{- block Switcher(baseURL, paths, names, activeState) }}
     {{- range i, k := paths }}
-        <a href="{{ baseURL }}{{k}}" class="btn {{ len(k) >= 3 && k[len(k) - 3:] == "r18" ? "btn-outline-danger" : "btn-outline-secondary" }} text-body fw-bold border-2 rounded-pill me-2 mb-2 {{ activeState == k ? " active" : "" }}" role="button" aria-pressed="{{ activeState == k ? "true" : "false" }}">
-        {{- names[i] }}
+        <a href="{{ baseURL }}{{k}}" class="btn {{ len(k) >= 3 && k[len(k) - 3:] == "r18" ? "btn-danger" : "btn-secondary" }} fw-bold rounded-pill flex-fill py-2 me-3 mb-2 d-flex align-items-center justify-content-center position-relative {{ activeState == k ? "active" : "" }}" aria-pressed="{{ activeState == k ? "true" : "false" }}" role="button">
+            {{- if activeState == k }}
+                <i class="bi bi-circle-fill start-icon position-absolute start-0 ms-3"></i>
+            {{- end }}
+            <span>{{ names[i] }}</span>
         </a>
     {{- end }}
 {{- end }}

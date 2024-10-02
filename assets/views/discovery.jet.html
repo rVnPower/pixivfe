@@ -1,14 +1,18 @@
 {{- extends "layout/default" }}
+{{- import "blocks/switcher" }}
 {{- block body() }}
 <div class="row justify-content-center">
   <h1 class="h3 fw-bold text-center mb-4">Discover artworks</h1>
 
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Type</h2>
+      <h2 class="h4 fw-bold mb-3"><i class="bi bi-list"></i> Type</h2>
       <p class="text-muted">Choose between discovering artworks or novels from users on Pixiv.</p>
       <div class="d-flex" aria-label="Artwork type">
-        <a href="/discovery" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Artworks</a>
+        <a href="/discovery" class="btn btn-secondary fw-bold rounded-pill flex-fill active py-2 me-3 d-flex align-items-center justify-content-center position-relative" aria-pressed="true">
+          <i class="bi bi-circle-fill start-icon position-absolute start-0 ms-3"></i>
+          <span>Artworks</span>
+        </a>
         <a href="/discovery/novel" class="btn btn-secondary fw-bold rounded-pill py-2 flex-fill">Novels</a>
       </div>
     </div>
@@ -16,12 +20,14 @@
 
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Filter</h2>
+      <h2 class="h4 fw-bold mb-3"><i class="bi bi-funnel-fill"></i> Filter</h2>
       <p class="text-muted">Filter by content rating to customize your discovery experience.</p>
       <div class="d-flex" aria-label="Filter options">
-        <a href='{{replaceQuery(.Queries, "mode", "all")}}' class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">All</a>
-        <a href='{{replaceQuery(.Queries, "mode", "safe")}}' class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Safe</a>
-        <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="btn btn-danger fw-bold rounded-pill flex-fill py-2">R-18</a>
+        {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
+        {{- url := replaceQuery(.Queries, "mode", "") }}
+        {{- path := slice("all", "safe", "r18") }}
+        {{- name := slice("All", "Safe", "R-18")}}
+        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
       </div>
     </div>
   </div>
