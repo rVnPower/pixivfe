@@ -10,6 +10,7 @@
         <div class="card border-0">
           <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
             <h2 class="h4 fw-bold mb-3">Ranking options</h2>
+            <p class="small text-muted">Select ranking modes and filters.</p>
             <!-- TODO: add additional checks to these Switcher buttons to ensure only valid URLs can be generated
                        e.g. selecting the "Ugoira" button hides the buttons under
                             "Specialized rankings" as well as the "Monthly" and "Rookie"
@@ -49,8 +50,14 @@
                 <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
                   {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                  {{- path := slice("original", "male", "female") }}
-                  {{- name := slice("Original", "Popular among males", "Popular among females")}}
+                  {{- path := slice("original") }}
+                  {{- name := slice("Original")}}
+                  {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                  {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                  {{- path := slice("male", "female") }}
+                  {{- name := slice("Popular among males", "Popular among females")}}
                   {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
                 </div>
                 <p class="small text-muted mb-3">Specialized ranking categories.</p>
@@ -78,7 +85,7 @@
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- end }}
-                <p class="small text-muted">Choose the time frame for the rankings.</p>
+                <p class="small text-muted mb-3 mb-lg-0">Choose the time frame for the rankings.</p>
 
               </div>
               <div class="col-md-6">
@@ -89,7 +96,7 @@
                   {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
-                <p class="small text-muted mb-3">R-18 content rankings by time frame.</p>
+                <p class="small text-muted mb-0">R-18 content rankings by time frame.</p>
 
               </div>
             </div>
