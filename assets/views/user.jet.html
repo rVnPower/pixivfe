@@ -1,107 +1,91 @@
 {{- extends "layout/default" }}
+{{- import "blocks/pagination" }}
 {{- block body() }}
-{{- if ! .User.BackgroundImage }}
-<div class="background-cover"></div>
-{{- else }}
-<div class="background-cover" id="hasbg">
-  <img src="{{ .User.BackgroundImage }}" alt="{{ .User.Name }}" />
-</div>
-{{- end }}
-<div class="container user">
-  <div class="user-avatar">
-    <img src="{{.User.Avatar}}" alt="Avatar Of User">
-  </div>
-  <div class="user-details">
-    <h1>{{ .User.Name }}</h1>
-    <div>
-      <a href="https://pixiv.net/u/{{ .User.ID }}">pixiv.net/u/{{ .User.ID }}</a>
-      <br />
-    </div>
-    <small> {{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv </small>
-    <div class="user-social">
-      {{- if .User.Webpage }}
-      <span><a href="{{ .User.Webpage }}"><img src="/img/globe.png" alt="Webpage" /></a></span>
-      {{- end }} {{ range index, item := .User.Social }}
-      <span>
-        <a href="{{ item.url }}">
-          <img src="/img/{{ index }}.svg" alt="{{ index }}" />
-        </a>
-      </span>
-      {{- end }}
-    </div>
-    <p>{{ raw: parsePixivRedirect(.User.Comment) }}</p>
-  </div>
-  <div>Frequently Used Tags</div>
-  <div class="tag-list">
-    {{- range .User.FrequentTags }}
-    <a href="/tags/{{ .Name }}">
-      #{{ .Name }}
-      {* <div>
-        {{- if ! .TranslatedName }}
-        <div class="main">{{ .Name }}</div>
-        {{- else }}
-        <div class="main">{{ .TranslatedName }}</div>
-        <div class="sub">#{{ .Name }}</div>
-        {{- end }}
-      </div> *}
-    </a>
-    {{- end }}
-  </div>
-  <div class="switcher">
-    <div class="switch-title">Category</div>
-    <a href="/users/{{ .User.ID }}/#checkpoint" class="switch-button">All</a>
-    <a href="/users/{{ .User.ID }}/illustrations#checkpoint" class="switch-button">Illustrations</a>
-    <a href="/users/{{ .User.ID }}/manga#checkpoint" class="switch-button">Mangas</a>
-    <a href="/users/{{ .User.ID }}/novels#checkpoint" class="switch-button">Novels</a>
-    <a href="/users/{{ .User.ID }}/bookmarks#checkpoint" class="switch-button">Bookmarks</a>
-  </div>
-  <div>
-    {{- if .Category != "novels" }}
-      {{- if .Category == "manga" && .User.MangaSeries }}
-      <div class="artwork-container-header">
-        <h2 id="checkpoint">Series</h2>
-      </div>
-      <div class="manga-container">
-        {{- range .User.MangaSeries }}
-        {{- include "fragments/mangaseries-tn" . }}
-        {{- end }}
-      </div>
-      {{- end }}
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Illustrations and Mangas</h2>
-      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
-      <div class="artwork-actions"><a href="{{combinedUrl}}">View all art on this page</a></div>
-    </div>
-    <div class="artwork-container">
-      {{- include "fragments/small-tn" .User.Artworks }}
-    </div>
+<div class="row justify-content-center">
+  <div class="col-12">
+    {{- if ! .User.BackgroundImage }}
+    <div class="bg-body-tertiary rounded-5 p-4" style="height: 200px;"></div>
     {{- else }}
-    {{- if .User.NovelSeries }}
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Series</h2>
-    </div>
-    <div class="novel-container">
-      {{- range .User.NovelSeries }}
-      {{- include "fragments/novelseries-tn" . }}
-      {{- end }}
-    </div>
-    {{- end }}
-
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Novels</h2>
-    </div>
-    <div class="novel-container">
-      {{- range .User.Novels }}
-      {{- include "fragments/novel-tn" . }}
-      {{- end }}
+    <div class="bg-body-tertiary rounded-5 p-4" style="height: 200px; overflow: hidden;">
+      <img src="{{ .User.BackgroundImage }}" alt="{{ .User.Name }}" class="img-fluid w-100 h-100 object-fit-cover" />
     </div>
     {{- end }}
   </div>
-  <div class="pagination">
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-9">
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <div class="row g-4">
+        <div class="col-12 col-md-3 text-center">
+          <img src="{{.User.Avatar}}" alt="Avatar Of User" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        <div class="col-12 col-md-9">
+          <h1 class="h3 fw-bold mb-3">{{ .User.Name }}</h1>
+          <p class="mb-2">
+            <a href="https://pixiv.net/u/{{ .User.ID }}" class="text-decoration-none">pixiv.net/u/{{ .User.ID }}</a>
+          </p>
+          <p class="text-muted mb-3">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
+          <div class="mb-3">
+            {{- if .User.Webpage }}
+            <a href="{{ .User.Webpage }}" class="btn btn-secondary rounded-pill me-2 mb-2">
+              <i class="bi bi-globe"></i>
+            </a>
+            {{- end }}
+            {{- range index, item := .User.Social }}
+            <a href="{{ item.url }}" class="btn btn-secondary rounded-pill me-2 mb-2">
+              <i class="bi bi-{{ index }}"></i>
+            </a>
+            {{- end }}
+          </div>
+          <p class="mb-0">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <h2 class="h4 fw-bold mb-3">Frequently Used Tags</h2>
+      <div class="d-flex flex-wrap">
+        {{- range .User.FrequentTags }}
+        <a href="/tags/{{ .Name }}" class="btn btn-secondary rounded-pill me-2 mb-2">#{{ .Name }}</a>
+        {{- end }}
+      </div>
+    </div>
+
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      <h2 class="h4 fw-bold mb-3">Category</h2>
+      <nav class="nav nav-pills flex-column flex-sm-row">
+        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/#checkpoint">All</a>
+        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/illustrations#checkpoint">Illustrations</a>
+        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/manga#checkpoint">Mangas</a>
+        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/novels#checkpoint">Novels</a>
+        <a class="flex-sm-fill text-sm-center nav-link rounded-pill" href="/users/{{ .User.ID }}/bookmarks#checkpoint">Bookmarks</a>
+      </nav>
+    </div>
+
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
+      {{- if .Category != "novels" }}
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 fw-bold mb-0" id="checkpoint">Illustrations and Manga</h2>
+        {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
+        <a href="{{combinedUrl}}" class="btn btn-secondary rounded-pill">View all art on this page</a>
+      </div>
+      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+        {{- include "fragments/small-tn" .User.Artworks }}
+      </div>
+      {{- else }}
+      <h2 class="h4 fw-bold mb-3" id="checkpoint">Novels</h2>
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        {{- range .User.Novels }}
+        {{- include "fragments/novel-tn" . }}
+        {{- end }}
+      </div>
+      {{- end }}
+    </div>
+s
     {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
-    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
-    <br />
-    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
+    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
+    {{- yield pagination(data=paginationData) }}
   </div>
 </div>
 {{- end }}
