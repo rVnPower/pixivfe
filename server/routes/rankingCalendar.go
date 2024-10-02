@@ -81,5 +81,5 @@ func RankingCalendarPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_rankingCalendar{Title: "Ranking calendar", Render: render, Mode: mode, Year: year, MonthBefore: parseDate(monthBefore), MonthAfter: parseDate(monthAfter), ThisMonth: parseDate(realDate)})
+	return RenderHTML(w, r, Data_rankingCalendar{Title: "Ranking calendar", Render: render, Mode: mode, Year: year, MonthBefore: parseDate(monthBefore), MonthAfter: parseDate(monthAfter), ThisMonth: parseDate(realDate)})
 }

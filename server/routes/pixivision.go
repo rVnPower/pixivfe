@@ -17,7 +17,7 @@ func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
 		data[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data[i].Thumbnail)
 	}
 
-	return Render(w, r, Data_pixivisionIndex{Data: data})
+	return RenderHTML(w, r, Data_pixivisionIndex{Data: data})
 }
 
 func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
@@ -33,7 +33,7 @@ func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
 		data.Items[i].Avatar = session.ProxyImageUrlNoEscape(r, data.Items[i].Avatar)
 	}
 
-	return Render(w, r, Data_pixivisionArticle{Article: data})
+	return RenderHTML(w, r, Data_pixivisionArticle{Article: data})
 }
 
 func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
@@ -47,7 +47,7 @@ func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
 		data.Articles[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data.Articles[i].Thumbnail)
 	}
 
-	return Render(w, r, Data_pixivisionCategory{Category: data})
+	return RenderHTML(w, r, Data_pixivisionCategory{Category: data})
 }
 
 func PixivisionTagPage(w http.ResponseWriter, r *http.Request) error {
@@ -61,5 +61,5 @@ func PixivisionTagPage(w http.ResponseWriter, r *http.Request) error {
 		data.Articles[i].Thumbnail = session.ProxyImageUrlNoEscape(r, data.Articles[i].Thumbnail)
 	}
 
-	return Render(w, r, Data_pixivisionTag{Tag: data})
+	return RenderHTML(w, r, Data_pixivisionTag{Tag: data})
 }

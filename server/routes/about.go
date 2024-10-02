@@ -6,7 +6,7 @@ import (
 )
 
 func AboutPage(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, Data_about{
+	return RenderHTML(w, r, Data_about{
 		Time:           config.GlobalConfig.StartingTime,
 		Version:        config.GlobalConfig.Version,
 		DomainName:     r.Host, // Used to template in the actual domain name serving PixivFE

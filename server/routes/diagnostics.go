@@ -11,7 +11,7 @@ import (
 )
 
 func Diagnostics(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, Data_diagnostics{})
+	return RenderHTML(w, r, Data_diagnostics{})
 }
 
 func ResetDiagnosticsData(w http.ResponseWriter, r *http.Request) {

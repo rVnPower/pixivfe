@@ -15,5 +15,5 @@ func NewestPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_newest{Items: works, Title: "Newest works"})
+	return RenderHTML(w, r, Data_newest{Items: works, Title: "Newest works"})
 }

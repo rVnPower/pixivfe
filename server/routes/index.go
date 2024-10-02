@@ -19,7 +19,7 @@ func IndexPage(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 
-		return Render(w, r, Data_index{
+		return RenderHTML(w, r, Data_index{
 			Title:    "Landing",
 			Data:     *works,
 			LoggedIn: true,
@@ -31,7 +31,7 @@ func IndexPage(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return Render(w, r, Data_index{
+	return RenderHTML(w, r, Data_index{
 		Title:       "Landing",
 		NoTokenData: works,
 		LoggedIn:    false,

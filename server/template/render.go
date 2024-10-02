@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"strings"
 
-	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 
@@ -33,16 +32,7 @@ func Init(DisableCache bool, assetsLocation string) {
 	}
 }
 
-// render the template selected based on the name of type `T`
-func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
-	w.Header().Set("content-type", "text/html; charset=utf-8")
-	// todo: think about caching a bit more. see doc/dev/features/caching.md
-	// w.Header().Set("expires", time.Now().Add(config.ExpiresIn).Format(time.RFC1123))
-	w.WriteHeader(request_context.Get(r).RenderStatusCode)
-	return RenderInner(w, GetTemplatingVariables(r), data)
-}
-
-func RenderInner[T any](w io.Writer, variables jet.VarMap, data T) error {
+func Render[T any](w io.Writer, variables jet.VarMap, data T) error {
 	template_name, found := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
 	if !found {
 		log.Panicf("struct name does not start with 'Data_': %s", template_name)

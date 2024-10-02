@@ -59,7 +59,7 @@ func UserPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
+	return RenderHTML(w, r, Data_user{Title: data.user.Name, User: data.user, Category: data.category, PageLimit: data.pageLimit, Page: data.page, MetaImage: data.user.BackgroundImage})
 }
 
 func UserAtomFeed(w http.ResponseWriter, r *http.Request) error {
@@ -68,9 +68,7 @@ func UserAtomFeed(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	w.Header().Set("content-type", "application/atom+xml")
-
-	return Render(w, r, Data_userAtom{
+	return RenderWithContentType(w, r, "application/atom+xml", Data_userAtom{
 		URL:       r.RequestURI,
 		Title:     data.user.Name,
 		User:      data.user,

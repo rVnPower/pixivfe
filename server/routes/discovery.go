@@ -17,7 +17,7 @@ func DiscoveryPage(w http.ResponseWriter, r *http.Request) error {
 
 	urlc := template.PartialURL{Path: "discovery", Query: map[string]string{"mode": mode}}
 
-	return Render(w, r, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
+	return RenderHTML(w, r, Data_discovery{Artworks: works, Title: "Discovery", Queries: urlc})
 }
 
 func NovelDiscoveryPage(w http.ResponseWriter, r *http.Request) error {
@@ -28,5 +28,5 @@ func NovelDiscoveryPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_novelDiscovery{Novels: works, Title: "Discovery"})
+	return RenderHTML(w, r, Data_novelDiscovery{Novels: works, Title: "Discovery"})
 }

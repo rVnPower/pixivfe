@@ -4,11 +4,18 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
 )
 
-func Render[T any](w http.ResponseWriter, r *http.Request, data T) error {
-	return template.Render(w, r, data)
+func RenderHTML[T any](w http.ResponseWriter, r *http.Request, data T) error {
+	return RenderWithContentType(w, r, "text/html; charset=utf-8", data)
+}
+
+func RenderWithContentType[T any](w http.ResponseWriter, r *http.Request, contentType string, data T) error {
+	w.Header().Set("content-type", contentType)
+	w.WriteHeader(request_context.Get(r).RenderStatusCode)
+	return template.Render(w, template.GetTemplatingVariables(r), data)
 }
 
 // Tutorial: adding new types in this file

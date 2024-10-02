@@ -81,7 +81,7 @@ func testWith[T any](t *testing.T, data T) {
 		variables.Set(k, v)
 	}
 
-	err := template.RenderInner(io.Discard, variables, data)
+	err := template.Render(io.Discard, variables, data)
 
 	if err != nil {
 		template_name, _ := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")

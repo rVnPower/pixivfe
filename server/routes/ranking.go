@@ -23,5 +23,5 @@ func RankingPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_rank{Title: "Ranking", Page: pageInt, PageLimit: 10, Date: date, Data: works})
+	return RenderHTML(w, r, Data_rank{Title: "Ranking", Page: pageInt, PageLimit: 10, Date: date, Data: works})
 }

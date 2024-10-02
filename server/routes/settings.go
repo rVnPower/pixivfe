@@ -157,7 +157,7 @@ func resetAll(w http.ResponseWriter, _ *http.Request) error {
 }
 
 func SettingsPage(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, Data_settings{WorkingProxyList: proxy_checker.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
+	return RenderHTML(w, r, Data_settings{WorkingProxyList: proxy_checker.GetWorkingProxies(), ProxyList: config.BuiltinProxyList})
 }
 
 func SettingsPost(w http.ResponseWriter, r *http.Request) error {

@@ -29,7 +29,7 @@ func ArtworkPage(w http.ResponseWriter, r *http.Request) error {
 		PreloadImage(w, img.Large)
 	}
 
-	return Render(w, r, Data_artwork{
+	return RenderHTML(w, r, Data_artwork{
 		Illust:          *illust,
 		Title:           illust.Title,
 		MetaDescription: metaDescription,

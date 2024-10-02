@@ -44,5 +44,5 @@ func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
 
 	title := fmt.Sprintf("%s / %s Series", series.Title, series.UserName)
 
-	return Render(w, r, Data_novelSeries{NovelSeries: series, NovelSeriesContents: seriesContents, Title: title, User: user, Page: pageNum, PageLimit: pageLimit})
+	return RenderHTML(w, r, Data_novelSeries{NovelSeries: series, NovelSeriesContents: seriesContents, Title: title, User: user, Page: pageNum, PageLimit: pageLimit})
 }

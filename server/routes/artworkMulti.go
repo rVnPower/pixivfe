@@ -64,7 +64,7 @@ func ArtworkMultiPage(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	return Render(w, r, Data_artworkMulti{
+	return RenderHTML(w, r, Data_artworkMulti{
 		Artworks: artworks,
 		Title:    fmt.Sprintf("(%d images)", len(artworks)),
 	})

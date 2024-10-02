@@ -12,7 +12,7 @@ import (
 
 func PromptUserToLoginPage(w http.ResponseWriter, r *http.Request) error {
 	request_context.Get(r).RenderStatusCode = http.StatusUnauthorized
-	err := Render(w, r, Data_unauthorized{})
+	err := RenderHTML(w, r, Data_unauthorized{})
 	if err != nil {
 		return err
 	}
@@ -64,5 +64,5 @@ func FollowingWorksPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, Data_following{Title: "Following works", Mode: mode, Artworks: works, CurPage: page, Page: pageInt})
+	return RenderHTML(w, r, Data_following{Title: "Following works", Mode: mode, Artworks: works, CurPage: page, Page: pageInt})
 }
