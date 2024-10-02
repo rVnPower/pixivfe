@@ -67,9 +67,17 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			return nil, err
 		}
 
+
 		start := time.Now()
 		resp, err := retryClient.Do(req)
 		end := time.Now()
+
+                // Unwrap the body here so that we could log stuff correctly
+                defer resp.Body.Close()
+                body, err := io.ReadAll(resp.Body)
+                if err != nil {
+                        return nil, err
+                }
 
 		audit.LogAPIRoundTrip(audit.APIRequestSpan{
 			RequestId: request_context.GetFromContext(ctx).RequestId,
@@ -77,7 +85,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			Error:     err,
 			Method:    req.Method,
 			Token:     tokenValue,
-			Body:      "",
+			Body:      string(body),
 			StartTime: start,
 			EndTime:   end,
 		})
@@ -85,11 +93,6 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		if err == nil && resp.StatusCode == http.StatusOK {
 			if userToken == "" && !isPost {
 				tokenManager.MarkTokenStatus(token, token_manager.Good)
-			}
-			defer resp.Body.Close()
-			body, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return nil, err
 			}
 			return &SimpleHTTPResponse{
 				StatusCode: resp.StatusCode,
