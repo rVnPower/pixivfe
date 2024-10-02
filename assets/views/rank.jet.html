@@ -52,14 +52,29 @@
                 {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- if Content != "ugoira" }}
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("daily", "weekly", "monthly", "rookie", "daily_r18", "weekly_r18") }}
-                  {{- name := slice("Daily", "Weekly", "Monthly", "Rookie", "Daily (R-18)", "Weekly (R-18)")}}
+                  {{- path := slice("daily", "weekly", "monthly") }}
+                  {{- name := slice("Daily", "Weekly", "Monthly")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                  {{- path := slice("rookie") }}
+                  {{- name := slice("Rookie")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                  {{- path := slice("daily_r18", "weekly_r18") }}
+                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- else }}
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("daily", "weekly", "daily_r18", "weekly_r18") }}
-                  {{- name := slice("Daily", "Weekly", "Daily (R-18)", "Weekly (R-18)")}}
+                  {{- path := slice("daily", "weekly") }}
+                  {{- name := slice("Daily", "Weekly")}}
+                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                </div>
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                  {{- path := slice("daily_r18", "weekly_r18") }}
+                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
                   {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- end }}
@@ -78,8 +93,14 @@
               </div>
               <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                {{- path := slice("male", "female") }}
-                {{- name := slice("Popular among males", "Popular among females")}}
+                {{- path := slice("male",) }}
+                {{- name := slice("Popular among males")}}
+                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("female") }}
+                {{- name := slice("Popular among females")}}
                 {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
               <p class="small text-muted mb-2">Specialized ranking categories.</p>
