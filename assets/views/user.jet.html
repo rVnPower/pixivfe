@@ -37,7 +37,7 @@
             </a>
             {{- end }}
           </div>
-          <p>{{ raw: parsePixivRedirect(.User.Comment) }}</p>
+          <p >{{ raw: parsePixivRedirect(.User.Comment) }}</p>
           <div class="card border-0 rounded-5 bg-body-secondary p-4" id="checkpoint">
             <h3 class="h5 fw-bold mb-3"><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
             <div class="d-flex flex-wrap">
@@ -55,6 +55,7 @@
 
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4" id="checkpoint">
       <h2 class="h4 fw-bold mb-3"><i class="bi bi-list"></i> Category</h2>
+      <p class="text-muted">Filter for different types of works by this user.</p>
       <div class="d-flex flex-wrap">
         {{- baseURL := "/users/" + .User.ID + "/" }}
         {{- paths := slice("" + "#checkpoint", "illustrations" + "#checkpoint", "manga" + "#checkpoint", "novels" + "#checkpoint", "bookmarks" + "#checkpoint") }}
