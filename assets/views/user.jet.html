@@ -37,53 +37,56 @@
             </a>
             {{- end }}
           </div>
-          <p class="mb-0">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
+          <p>{{ raw: parsePixivRedirect(.User.Comment) }}</p>
+          <div class="card border-0 rounded-5 bg-body-secondary p-4" id="checkpoint">
+            <h3 class="h5 fw-bold mb-3"><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
+            <div class="d-flex flex-wrap">
+              {{- range .User.FrequentTags }}
+                <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+                  <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+                  {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
+                </span>
+              {{- end }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Frequently Used Tags</h2>
-      <div class="d-flex flex-wrap">
-        {{- range .User.FrequentTags }}
-        <a href="/tags/{{ .Name }}" class="btn btn-secondary rounded-pill me-2 mb-2">#{{ .Name }}</a>
-        {{- end }}
-      </div>
-    </div>
-
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4" id="checkpoint">
-      <h2 class="h4 fw-bold mb-3">Category</h2>
+      <h2 class="h4 fw-bold mb-3"><i class="bi bi-list"></i> Category</h2>
       <div class="d-flex flex-wrap">
         {{- baseURL := "/users/" + .User.ID + "/" }}
         {{- paths := slice("" + "#checkpoint", "illustrations" + "#checkpoint", "manga" + "#checkpoint", "novels" + "#checkpoint", "bookmarks" + "#checkpoint") }}
-        {{- names := slice("All", "Illustrations", "Mangas", "Novels", "Bookmarks") }}
+        {{- names := slice("All", "Illustrations", "Manga", "Novels", "Bookmarks") }}
         {{- yield Switcher(baseURL=baseURL, paths=paths, names=names, activeState=.Category + "#checkpoint") }}
       </div>
     </div>
+  </div>
 
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      {{- if .Category != "novels" }}
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h4 fw-bold mb-0" id="checkpoint">Illustrations and Manga</h2>
-        {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
-        <a href="{{combinedUrl}}" class="btn btn-secondary rounded-pill">View all art on this page</a>
-      </div>
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{- include "fragments/small-tn" .User.Artworks }}
-      </div>
-      {{- else }}
-      <h2 class="h4 fw-bold mb-3" id="checkpoint">Novels</h2>
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-        {{- range .User.Novels }}
-        {{- include "fragments/novel-tn" . }}
-        {{- end }}
-      </div>
+  <div class="col-12 mb-4">
+    {{- if .Category != "novels" }}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h4 fw-bold mb-0">Illustrations and Manga</h2>
+      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
+      <a href="{{combinedUrl}}" class="btn btn-secondary rounded-pill">View all art on this page</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .User.Artworks }}
+    </div>
+    {{- else }}
+
+    <h2 class="h4 fw-bold mb-4">Novels</h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- range .User.Novels }}
+      {{- include "fragments/novel-tn" . }}
       {{- end }}
     </div>
-
-    {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
-    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
-    {{- yield pagination(data=paginationData) }}
+    {{- end }}
   </div>
+
+  {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
+  {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
+  {{- yield pagination(data=paginationData) }}
 </div>
 {{- end }}
