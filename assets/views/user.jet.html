@@ -1,19 +1,18 @@
 {{- extends "layout/default" }}
 {{- import "blocks/pagination" }}
+{{- import "blocks/switcher" }}
 {{- block body() }}
 <div class="row justify-content-center">
   <div class="col-12">
     {{- if ! .User.BackgroundImage }}
-    <div class="bg-body-tertiary rounded-5 p-4" style="height: 200px;"></div>
+    <div class="bg-body-tertiary rounded-5 p-4 mb-4" style="height: 200px;"></div>
     {{- else }}
-    <div class="bg-body-tertiary rounded-5 p-4" style="height: 200px; overflow: hidden;">
+    <div class="bg-body-tertiary rounded-5 p-4 mb-4" style="height: 200px; overflow: hidden;">
       <img src="{{ .User.BackgroundImage }}" alt="{{ .User.Name }}" class="img-fluid w-100 h-100 object-fit-cover" />
     </div>
     {{- end }}
   </div>
-</div>
 
-<div class="row justify-content-center">
   <div class="col-12 col-lg-9">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
       <div class="row g-4">
@@ -54,13 +53,12 @@
 
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
       <h2 class="h4 fw-bold mb-3">Category</h2>
-      <nav class="nav nav-pills flex-column flex-sm-row">
-        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/#checkpoint">All</a>
-        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/illustrations#checkpoint">Illustrations</a>
-        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/manga#checkpoint">Mangas</a>
-        <a class="flex-sm-fill text-sm-center nav-link rounded-pill mb-2 mb-sm-0 me-sm-2" href="/users/{{ .User.ID }}/novels#checkpoint">Novels</a>
-        <a class="flex-sm-fill text-sm-center nav-link rounded-pill" href="/users/{{ .User.ID }}/bookmarks#checkpoint">Bookmarks</a>
-      </nav>
+      <div class="d-flex flex-wrap">
+        {{- baseURL := "/users/" + .User.ID + "/" }}
+        {{- paths := slice("", "illustrations", "manga", "novels", "bookmarks") }}
+        {{- names := slice("All", "Illustrations", "Mangas", "Novels", "Bookmarks") }}
+        {{- yield Switcher(baseURL=baseURL, paths=paths, names=names, activeState=.Category) }}
+      </div>
     </div>
 
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
@@ -82,7 +80,7 @@
       </div>
       {{- end }}
     </div>
-s
+
     {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
     {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
     {{- yield pagination(data=paginationData) }}
