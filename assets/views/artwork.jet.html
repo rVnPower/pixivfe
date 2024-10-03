@@ -39,20 +39,17 @@
   </div>
 
   <!-- mb-5 for spacing between the end of the comments section card and related works -->
-  <div class="card mb-5">
-    <div class="card-header p-3">
-        <!-- TODO: clean this logic up -->
-        {{- if .Illust.Comments == 0 }}
-        <h2 class="h5 fw-bold p-0 mb-0">0 Comments</h2>
-        {{- else if .Illust.Comments == 1 }}
-        <h2 class="h5 fw-bold p-0 mb-0">1 Comment</h2>
-        {{- else }}
-        <h2 class="h5 fw-bold p-0 mb-0">{{ .Illust.Comments }} Comments</h2>
-        {{- end }}
-    </div>
-    <!-- The padding disparity with the card-header is intentional -->
-    <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
-    <div class="card-body p-4 pb-0">
+  <div class="card border-0 mb-5">
+    <div class="card-body rounded-5 bg-body-tertiary border-0 p-4 pb-0">
+      <!-- TODO: clean this logic up -->
+      {{- if .Illust.Comments == 0 }}
+      <h2 class="h4 fw-bold mb-4">0 Comments</h2>
+      {{- else if .Illust.Comments == 1 }}
+      <h2 class="h4 fw-bold mb-4">1 Comment</h2>
+      {{- else }}
+      <h2 class="h4 fw-bold mb-4">{{ .Illust.Comments }} Comments</h2>
+      {{- end }}
+      <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
       {{- if .Illust.CommentDisabled == 1 }}
       <p class="mb-4">The creator turned comments off</p>
       {{- else if .Illust.Comments == 0 }}
@@ -61,13 +58,12 @@
       <div class="list-group" id="comments-container">
         {{ range .Illust.CommentsList }}
         <!-- Element for a single comment -->
-        <div class="list-group-item border-0 p-0 mb-4 comment-item">
+        <div class="list-group-item border-0 bg-body-tertiary p-0 mb-4 comment-item">
           <div class="row">
-
             <!-- Comment author avatar image -->
             <div class="col-auto">
               <a href="/users/{{ .AuthorID }}">
-                <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px;" />
+                <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
               </a>
             </div>
 
@@ -87,21 +83,18 @@
               <!-- Stamp or emoji -->
               <!-- TODO: .Stamp occasionally templates in text (which should be part of the main comment text) instead of an image, causing breakage in the layout. See the comment by "Unknown417" on /artworks/107442519 for an example -->
               {{- if .Stamp }}
-              <img class="img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-                alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px;" />
+              <img class="img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px" />
               {{- else }}
               <!-- Comment with emojis -->
-              <p class="m-0">
-                  {{ raw: parseEmojis(.Context) }}
-              </p>
+              <p class="m-0">{{ raw: parseEmojis(.Context) }}</p>
               {{ end }}
             </div>
           </div>
         </div>
         {{- end }}
         <div class="d-flex justify-content-center">
-            <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
-            <button type="button" class="btn btn-secondary rounded-pill border-0 bg-body-secondary flex-fill fw-bold p-2 mb-4" id="load-more-btn">Load more</button>
+          <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
+          <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
         </div>
       </div>
       {{ end }}

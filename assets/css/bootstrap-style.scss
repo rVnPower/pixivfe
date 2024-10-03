@@ -25,8 +25,16 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import "./bootstrap/mixins";
 @import "./bootstrap/utilities";
 
-
 @import "./bootstrap/bootstrap";
+
+.custom-btn-secondary-flex {
+  @extend .btn;
+  @extend .btn-secondary;
+  @extend .fw-bold;
+  @extend .rounded-pill;
+  @extend .flex-fill;
+  @extend .border-0;
+}
 
 /* [data-bs-theme="charcoal"] {
   --bs-body-color: #f5f5f5;
