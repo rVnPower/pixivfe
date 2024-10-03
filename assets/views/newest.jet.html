@@ -2,11 +2,9 @@
 {{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center">
-  <div class="d-flex justify-content-center">
-    <h1 class="h3 fw-bold mb-4">Newest works from all users</h1>
-  </div>
+  <h1 class="h3 fw-bold text-center mb-4">Newest works from all users</h1>
 
-  <div class="d-flex justify-content-center">
+  <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
     {{- baseURL := "/newest" }}
     {{- paths := slice("", "?mode=r18") }}
     {{- names := slice("Safe", "R-18") }}
@@ -14,11 +12,11 @@
     {{- yield UnderlineNav(baseURL=baseURL, paths=paths, names=names, activeState=activeState) }}
   </div>
 
-    <div class="col-12">
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{ include "fragments/small-tn" .Items }}
-      </div>
+  <div class="col-12">
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{ include "fragments/small-tn" .Items }}
     </div>
+  </div>
 
 </div>
 {{- end }}
