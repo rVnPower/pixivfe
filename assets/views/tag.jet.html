@@ -41,7 +41,7 @@
 
     <!-- Related tags -->
     <!-- <div class="mb-4">
-        <h2 class="h4 fw-bold">Related Tags</h2>
+        <h2>Related Tags</h2>
         <div class="d-flex flex-wrap">
         {{- range .Data.RelatedTags }}
         <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
@@ -58,7 +58,7 @@
 
     <div class="card border-0 mb-5">
         <div class="card-body bg-body-tertiary rounded-5 p-4">
-            <h2 class="h4 fw-bold mb-4"><i class="bi bi-funnel-fill"></i> Search settings</h2>
+            <h2 class="mb-4"><i class="bi bi-funnel-fill"></i> Search settings</h2>
             <div class="row mb-3">
                 <div class="col-md-4 mb-2 mb-md-0">
                 <h3>Category</h3>
@@ -156,19 +156,19 @@
 <div class="col-12">
     <!-- Popular Artworks -->
     {{- if .Data.Popular.Recent }}
-    <h2 class="h4 fw-bold mb-3">Popular artworks</h2>
-    <h3 class="h5 fw-bold mb-3">Recent</h3>
+    <h2 class="mb-3">Popular artworks</h2>
+    <h3 class="mb-3">Recent</h3>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Popular.Recent }}
     </div>
-    <h3 class="h5 fw-bold mb-3">All Time</h3>
+    <h3 class="mb-3">All Time</h3>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Popular.Permanent }}
     </div>
     {{- end }}
 
     <!-- Main Works -->
-    <h2 class="h4 fw-bold mb-3" id="checkpoint">Works</h2>
+    <h2 class="mb-3" id="checkpoint">Works</h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
         {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
     </div>

@@ -14,7 +14,7 @@
           <p class="small text-muted mb-1">{{ .SeriesTitle }}</p>
         </a>
         {{- end }}
-        <h3 class="h6">
+        <h3>
           <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
         </h3>
         <p class="card-text text-muted small mb-2"><span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></p>

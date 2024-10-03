@@ -1,6 +1,6 @@
 {{- extends "layout/default" }} {{- block body() }}
 <div class="row justify-content-center" data-hx-boost="false">
-  <h1 class="h3 fw-bold text-center mb-4">Settings</h1>
+  <h1 class="text-center mb-4">Settings</h1>
   <div class="col-12 col-lg-9">
     <p class="card-text">PixivFE uses <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">cookies</a> to store your preferences, which you can change on this page to customize your experience on this instance.</p>
     <div class="row">
@@ -26,10 +26,10 @@
             <!-- Account tab -->
             <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="h4 fw-bold mb-4">Account</h2>
+                <h2 class="mb-4">Account</h2>
 
                 <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Log in</h3>
+                  <h3 class="mb-3">Log in</h3>
                   <p>
                     Log in with your Pixiv account's cookie to access the features below. To learn how to obtain your cookie, please see
                     <a href="https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/">the guide on obtaining your PixivFE token</a>.
@@ -52,7 +52,7 @@
                   <div id="login-response"></div>
                 </li>
                 <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
-                  <h3 class="h5 fw-bold mb-3">Log out</h3>
+                  <h3 class="mb-3">Log out</h3>
                   <p>To securely end your session, click the 'Log out!' button. This will immediately remove your session token.</p>
                   <form id="logout-form" hx-post="/settings/logout" hx-target="#logout-response" hx-swap="outerHTML">
                     <button type="submit" class="btn btn-danger fw-bold rounded-pill">Log out!</button>
@@ -65,10 +65,10 @@
             <!-- Site tab -->
             <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="h4 fw-bold mb-4">Site</h2>
+                <h2 class="mb-4">Site</h2>
 
                 <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Image proxy server</h3>
+                  <h3 class="mb-3">Image proxy server</h3>
                   <p>Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers.</p>
                   <p>If you prefer, you can also specify a custom proxy server by entering its URL manually.</p>
                   <form id="image-proxy-form" hx-post="/settings/imageServer" hx-target="#image-proxy-response" hx-swap="outerHTML">
@@ -121,7 +121,7 @@
                 </li>
 
                 <li class="list-group-item bg-body-tertiary py-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Filter artworks</h3>
+                  <h3 class="mb-3">Filter artworks</h3>
                   <p>Toggle the switches below to hide specific types of content. Disabled switches will allow the content to be shown.</p>
                   <form id="filter-form" hx-post="/settings/filter" hx-target="#filter-response" hx-swap="outerHTML">
                     {{- hideR18 := CookieList["pixivfe-HideArtR18"] }} {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }} {{- hideAI := CookieList["pixivfe-HideArtAI"] }}
@@ -150,7 +150,7 @@
                 </li>
 
                 <li class="list-group-item bg-body-tertiary py-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Open artworks in new tab</h3>
+                  <h3 class="mb-3">Open artworks in new tab</h3>
                   <p>Choose whether clicking on artwork thumbnails opens the full artwork in the same tab or a new tab.</p>
                   <form id="ttnt-form" hx-post="/settings/thumbnailToNewTab" hx-target="#ttnt-response" hx-swap="outerHTML">
                     {{- ttntValue := CookieList["pixivfe-ThumbnailToNewTab"] }}
@@ -165,7 +165,7 @@
                 </li>
 
                 <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
-                  <h3 class="h5 fw-bold mb-3">Artwork preview pop-ups</h3>
+                  <h3 class="mb-3">Artwork preview pop-ups</h3>
                   <p>Configure how artwork previews are displayed when interacting with thumbnails.</p>
                   <!-- <div class="alert alert-warning" role="alert">
                     <p class="mb-0">
@@ -201,10 +201,10 @@
             <!-- Novels tab -->
             <div class="tab-pane fade" id="novels" role="tabpanel" aria-labelledby="novels-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="h4 fw-bold mb-4">Novels</h2>
+                <h2 class="mb-4">Novels</h2>
 
                 <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Font family</h3>
+                  <h3 class="mb-3">Font family</h3>
                   <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
                   <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
                     <div class="form-check mb-3">
@@ -228,11 +228,11 @@
                           <div class="accordion-body">
                             <div class="row">
                               <div class="col-md-6">
-                                <h3 class="h5 fw-bold mb-3">Mincho</h3>
+                                <h3 class="mb-3">Mincho</h3>
                                 <p class="mb-0" style="font-family: &quot;Noto Serif JP&quot;, serif">吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。</p>
                               </div>
                               <div class="col-md-6">
-                                <h3 class="h5 fw-bold mb-3">Gothic</h3>
+                                <h3 class="mb-3">Gothic</h3>
                                 <p class="mb-0" style="font-family: &quot;Noto Sans JP&quot;, sans-serif">吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。</p>
                               </div>
                             </div>
@@ -247,7 +247,7 @@
                 </li>
 
                 <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
-                  <h3 class="h5 fw-bold mb-3">Force text orientation</h3>
+                  <h3 class="mb-3">Force text orientation</h3>
                   <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
                   <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
                     <div class="form-check mb-3">
@@ -275,14 +275,14 @@
             <!-- Advanced settings tab -->
             <div class="tab-pane fade" id="advanced-settings" role="tabpanel" aria-labelledby="advanced-settings-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="h4 fw-bold mb-4">Advanced settings</h2>
+                <h2 class="mb-4">Advanced settings</h2>
                 <p>This section allows you to directly manage PixivFE's cookie-based preferences. Intended for advanced users who understand the implications of changing these values.</p>
                 <div class="alert alert-warning" role="alert">
                   <p class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Exercise caution when modifying these settings. Incorrect values may adversely affect PixivFE's functionality or your browsing experience.</p>
                 </div>
 
                 <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
-                  <h3 class="h5 fw-bold mb-3">Cookie values</h3>
+                  <h3 class="mb-3">Cookie values</h3>
                   <p>
                     Please note that some cookies here such as ShowArtR18, ShowArtR18G, and ShowArtAI are for features still under development.
                   </p>
@@ -328,7 +328,7 @@
                 </li>
 
                 <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
-                  <h3 class="h5 fw-bold mb-3">Raw settings</h3>
+                  <h3 class="mb-3">Raw settings</h3>
                   <p>This area displays all your current cookie values in a raw format. You can:</p>
                   <ul class="mb-3">
                     <li>Copy these settings to quickly configure another PixivFE instance</li>
@@ -352,10 +352,10 @@
             <!-- Reset tab -->
             <div class="tab-pane fade" id="reset" role="tabpanel" aria-labelledby="reset-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="h4 fw-bold mb-4">Reset</h2>
+                <h2 class="mb-4">Reset</h2>
                 <!-- Reset all prefererences -->
                 <li class="list-group-item bg-body-tertiary px-0">
-                  <h3 class="h5 fw-bold mb-3">Reset all preferences</h3>
+                  <h3 class="mb-3">Reset all preferences</h3>
                   <p>You can reset all cookies and use PixivFE's default preferences instead. This action will remove all customized settings.</p>
                   <form id="reset-all-form" hx-post="/settings/reset-all" hx-target="#reset-all-response" hx-swap="outerHTML">
                     <button type="submit" class="btn btn-danger fw-bold rounded-pill">Reset all preferences</button>

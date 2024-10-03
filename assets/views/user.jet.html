@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="col-12 col-md-9">
-            <h1 class="h3 fw-bold">{{ .User.Name }}</h1>
+            <h1>{{ .User.Name }}</h1>
             <p class="text-muted">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
             <div class="mb-3">
               {{- if .User.Webpage }}
@@ -45,7 +45,7 @@
             <p class="mb-4">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
 
             <div class="card border-0 rounded-5 bg-body-secondary p-4" id="checkpoint">
-              <h3 class="h5 fw-bold mb-3"><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
+              <h3 class="mb-3"><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
               <div class="d-flex flex-wrap">
                 {{- range .User.FrequentTags }}
                   <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
@@ -61,7 +61,7 @@
     </div>
 
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4" id="checkpoint">
-      <h2 class="h4 fw-bold mb-3"><i class="bi bi-list"></i> Category</h2>
+      <h2 class="mb-3"><i class="bi bi-list"></i> Category</h2>
       <p class="text-muted">Filter for different types of works by this user.</p>
       <div class="d-flex flex-wrap">
         {{- baseURL := "/users/" + .User.ID + "/" }}
@@ -75,7 +75,7 @@
   <div class="col-12 mb-4">
     {{- if .Category != "novels" }}
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="h4 fw-bold mb-0">Illustrations and Manga</h2>
+      <h2 class="mb-0">Illustrations and Manga</h2>
       {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
       <a href="{{combinedUrl}}" class="btn btn-secondary rounded-pill">View all art on this page</a>
     </div>
@@ -84,7 +84,7 @@
     </div>
     {{- else }}
 
-    <h2 class="h4 fw-bold mb-4">Novels</h2>
+    <h2 class="mb-4">Novels</h2>
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .User.Novels }}
       {{- include "fragments/novel-tn" . }}

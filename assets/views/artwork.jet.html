@@ -47,11 +47,11 @@
         <div class="card-body rounded-5 bg-body-tertiary border-0 p-4 pb-0">
           <!-- TODO: clean this logic up -->
           {{- if .Illust.Comments == 0 }}
-          <h2 class="h4 fw-bold mb-4">0 Comments</h2>
+          <h2 class="mb-4">0 Comments</h2>
           {{- else if .Illust.Comments == 1 }}
-          <h2 class="h4 fw-bold mb-4">1 Comment</h2>
+          <h2 class="mb-4">1 Comment</h2>
           {{- else }}
-          <h2 class="h4 fw-bold mb-4">{{ .Illust.Comments }} Comments</h2>
+          <h2 class="mb-4">{{ .Illust.Comments }} Comments</h2>
           {{- end }}
           <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
           {{- if .Illust.CommentDisabled == 1 }}
@@ -113,7 +113,7 @@
 <!-- col-12 to display Related works at full width -->
 <div class="col-12">
     <!-- h2 class="h4 fw-bold mb-0" used to replicate Pixiv headings -->
-    <h2 class="h4 fw-bold mb-4">Related works</h2>
+    <h2 class="mb-4">Related works</h2>
     <!-- Gradually increase the number of artworks shown per row along with device width -->
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
         {{- include "fragments/small-tn" .Illust.RelatedWorks }}

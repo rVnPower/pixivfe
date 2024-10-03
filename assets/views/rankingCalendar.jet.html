@@ -1,17 +1,17 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="row justify-content-center">
-  <h1 class="h3 fw-bold text-center mb-4">Ranking calendar</h1>
+  <h1 class="text-center mb-4">Ranking calendar</h1>
   <div class="col-12">
     <div class="row g-3">
       <div class="col-sm-12 col-lg-9">
         <div class="card border-0">
           <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
-            <h2 class="h4 fw-bold mb-3">Ranking modes</h2>
+            <h2 class="mb-3">Ranking modes</h2>
             {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
             <div class="row">
               <div class="col-md-6">
-                <h3 class="h5 fw-bold mb-3">General rankings</h3>
+                <h3 class="mb-3">General rankings</h3>
                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="General ranking modes">
                   <a href="{{ url }}daily" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Daily</a>
                   <a href="{{ url }}weekly" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Weekly</a>
@@ -30,7 +30,7 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <h3 class="h5 fw-bold mb-3">R-18 rankings</h3>
+                <h3 class="mb-3">R-18 rankings</h3>
                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="R-18 ranking modes">
                   <a href="{{ url }}daily_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Daily (R-18)</a>
                   <a href="{{ url }}weekly_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Weekly (R-18)</a>
@@ -48,7 +48,7 @@
             </div>
             <div class="row">
               <div class="col-md-6">
-                <h3 class="h5 fw-bold mb-3">Specialized rankings</h3>
+                <h3 class="mb-3">Specialized rankings</h3>
                 <div class="btn-group d-flex flex-wrap mb-2" role="group" aria-label="Specialized ranking modes">
                   <a href="{{ url }}original" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2" title="Rankings for non-fan art">Original</a>
                   <a href="{{ url }}male" class="btn btn-secondary fw-bold rounded-pill me-2 mb-2">Popular among males</a>
@@ -57,7 +57,7 @@
                 <p class="small text-muted mb-0"><span class="fw-bold">Original:</span> Ranking of original contents not included in fan art.</p>
               </div>
               <div class="col-md-6">
-                <h3 class="h5 fw-bold mb-3">R-18 specialized rankings</h3>
+                <h3 class="mb-3">R-18 specialized rankings</h3>
                 <div class="btn-group d-flex flex-wrap" role="group" aria-label="R-18 specialized ranking modes">
                   <a href="{{ url }}male_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among males (R-18)</a>
                   <a href="{{ url }}female_r18" class="btn btn-danger fw-bold rounded-pill me-2 mb-2">Popular among females (R-18)</a>
@@ -71,7 +71,7 @@
         <div class="d-flex flex-column"
           <div class="card border-0">
             <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
-              <h2 class="h4 fw-bold mb-3">Reset modes</h2>
+              <h2 class="mb-3">Reset modes</h2>
               <p class="small text-muted">You can reset all currently applied ranking modes and use the default one.</p>
               <div class="d-flex flex-wrap">
                 <a href="/rankingCalendar" type="button" class="btn btn-danger flex-fill fw-bold rounded-pill">Reset modes</a>
@@ -80,7 +80,7 @@
           </div>
           <div class="card border-0">
             <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
-              <h2 class="h4 fw-bold mb-3">Date Picker</h2>
+              <h2 class="mb-3">Date Picker</h2>
               <p class="small text-muted">You can select a specific time range to view rankings for.</p>
                 <form action="/rankingCalendar" method="post" class="mb-0">
                   <input type="hidden" name="mode" value="{{ .Mode }}" />
