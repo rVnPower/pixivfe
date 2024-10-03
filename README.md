@@ -2,7 +2,7 @@
 
 A open source alternative frontend for Pixiv.
 
-**Notice**: PixivFE now has a public room on Matrix, [join here](https://matrix.to/#/!YqHdIPECWMDHWvoxTi:exozy.me)!
+**Notice**: PixivFE now has a public room on Matrix, [join here](https://matrix.to/#/#pixivfe:exozy.me)!
 
 <p>
 <a href="https://codeberg.org/vnpower/pixivfe">
