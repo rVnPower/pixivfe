@@ -27,13 +27,17 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 @import "./bootstrap/bootstrap";
 
-.custom-btn-secondary-flex {
+.custom-btn-secondary {
   @extend .btn;
   @extend .btn-secondary;
   @extend .fw-bold;
   @extend .rounded-pill;
-  @extend .flex-fill;
   @extend .border-0;
+}
+
+.custom-btn-secondary-flex {
+  @extend .custom-btn-secondary;
+  @extend .flex-fill;
 }
 
 /* [data-bs-theme="charcoal"] {
