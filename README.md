@@ -14,7 +14,9 @@ A open source alternative frontend for Pixiv.
 [![Docker Pulls](https://img.shields.io/docker/pulls/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
 [![Docker Stars](https://img.shields.io/docker/stars/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
 
-Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:eientei.org) on Matrix! You can also see the [Known quirks](https://pixivfe-docs.pages.dev/known-quirks/) page to check if your issue has a known solution.
+**Notice**: PixivFE now has a public room on Matrix, [join here](https://matrix.to/#/!YqHdIPECWMDHWvoxTi:exozy.me)!
+
+Questions? Feedback? You can [PM me](https://matrix.to/#/@vnpower:matrix.4d2.org) on Matrix! You can also see the [Known quirks](https://pixivfe-docs.pages.dev/known-quirks/) page to check if your issue has a known solution.
 
 You can keep track of this project's development using the [Roadmap](https://pixivfe-docs.pages.dev/dev/roadmap/).
 
