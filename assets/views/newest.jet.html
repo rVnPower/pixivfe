@@ -1,18 +1,18 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="row justify-content-start">
-  <h1 class="h3 fw-bold mb-4">Newest works from all users</h1>
+<div class="row justify-content-center">
+  <div class="d-flex justify-content-center">
+    <h1 class="h3 fw-bold mb-4">Newest works from all users</h1>
+  </div>
 
-  <div class="d-flex justify-content-start">
-  <ul class="nav nav-underline mb-4">
-    <li class="nav-item">
-      <a class="fs-5 nav-link fw-bold active border-bottom border-custom-color border-4 px-3" aria-current="page" href="/newest">Safe</a>
-    </li>
-    <li class="nav-item">
-      <a class="fs-5 nav-link fw-bold text-muted border-4 px-3" href="/newest?mode=r18">R-18</a>
-    </li>
-  </ul>
- </div>
+  <div class="d-flex justify-content-center">
+    {{- baseURL := "/newest" }}
+    {{- paths := slice("", "?mode=r18") }}
+    {{- names := slice("Safe", "R-18") }}
+    {{- activeState := isset(Queries.mode) ? "?mode=" + Queries.mode : "" }}
+    {{- yield UnderlineNav(baseURL=baseURL, paths=paths, names=names, activeState=activeState) }}
+  </div>
 
     <div class="col-12">
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
