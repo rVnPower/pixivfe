@@ -1,11 +1,11 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 <div class="row justify-content-center">
-  <h1 class="h3 fw-bold text-center mb-4">Discover novels</h1>
+  <h1 class="text-center mb-4">Discover novels</h1>
 
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Type</h2>
+      <h2 class="mb-3">Type</h2>
       <p class="text-muted">Choose between discovering artworks or novels from users on Pixiv.</p>
       <div class="d-flex" aria-label="Artwork type">
         <a href="/discovery" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Artworks</a>
@@ -16,7 +16,7 @@
 
   <div class="col-12 col-lg-6">
     <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3">Filter</h2>
+      <h2 class="mb-3">Filter</h2>
       <p class="text-muted">Filter by content rating to customize your discovery experience.</p>
       <div class="d-flex" aria-label="Filter options">
         {{- url := "/discovery/novel?mode=" }}

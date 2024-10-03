@@ -12,7 +12,7 @@
 
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h3 fw-bold mb-0">Today's illustration rankings</h2>
+        <h2 class="mb-0">Today's illustration rankings</h2>
         <a href="/ranking" class="btn btn-secondary rounded-pill">See more</a>
       </div>
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
@@ -23,7 +23,7 @@
 
     <div class="col-12">
       <div class="card border-0 rounded-5 bg-body-tertiary p-4">
-        <h2 class="h4 fw-bold mb-3">Filter</h2>
+        <h2 class="mb-3">Filter</h2>
         <div class="btn-group" role="group" aria-label="Content filter">
           <a href="/?mode=all" class="btn btn-secondary rounded-pill">All</a>
           <a href="/?mode=r18" class="btn btn-danger rounded-pill">R-18</a>
@@ -33,7 +33,7 @@
 
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h3 fw-bold mb-0">Newest works by users you follow</h2>
+        <h2 class="mb-0">Newest works by users you follow</h2>
         <a href="/self/followingWorks" class="btn btn-secondary rounded-pill">See more</a>
       </div>
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
@@ -42,14 +42,14 @@
     </div>
 
     <div class="col-12">
-      <h2 class="h3 fw-bold mb-3">Recommended works</h2>
+      <h2 class="mb-3">Recommended works</h2>
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
         {{- include "fragments/small-tn" .Data.Recommended }}
       </div>
     </div>
 
     <div class="col-12">
-      <h2 class="h3 fw-bold mb-3">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
+      <h2 class="mb-3">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
       <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
         {{- include "fragments/small-tn" .Artworks }}
       </div>
