@@ -1,35 +1,23 @@
 {{- extends "layout/default" }}
-{{- import "blocks/switcher" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center">
   <h1 class="h3 fw-bold text-center mb-4">Discover artworks</h1>
 
-  <div class="col-12 col-lg-6">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3"><i class="bi bi-list"></i> Type</h2>
-      <p class="text-muted">Choose between discovering artworks or novels from users on Pixiv.</p>
-      <div class="d-flex" aria-label="Artwork type">
-        <a href="/discovery" class="custom-btn-secondary-flex active me-3 d-flex align-items-center justify-content-center position-relative" aria-pressed="true">
-          <i class="bi bi-circle-fill start-icon position-absolute start-0 ms-3"></i>
-          <span>Artworks</span>
-        </a>
-        <a href="/discovery/novel" class="custom-btn-secondary-flex">Novels</a>
-      </div>
-    </div>
-  </div>
+  <div class="col-12 text-center">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto">
+        {{- Type := "discovery" }}
+        {{- path := slice("discovery", "discovery/novel") }}
+        {{- name := slice("Artworks", "Novels")}}
+        {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
 
-  <div class="col-12 col-lg-6">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="h4 fw-bold mb-3"><i class="bi bi-funnel-fill"></i> Filter</h2>
-      <p class="text-muted">Filter by content rating to customize your discovery experience.</p>
-      <div class="d-flex" aria-label="Filter options">
-        {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
+        <!-- TODO: is it actually set to "safe" by default? -->
+        {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
         {{- url := replaceQuery(.Queries, "mode", "") }}
         {{- path := slice("all", "safe", "r18") }}
         {{- name := slice("All", "Safe", "R-18")}}
-        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+        {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
       </div>
-    </div>
   </div>
 
   <div class="col-12">
