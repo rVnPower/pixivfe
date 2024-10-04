@@ -12226,6 +12226,18 @@ h6, .h6 {
   font-weight: 700;
 }
 
+.bookmark-spinner {
+  display: none;
+}
+
+.htmx-request .bookmark-spinner {
+  display: inline;
+}
+
+.htmx-request.bookmark-spinner {
+  display: inline;
+}
+
 /* [data-bs-theme="charcoal"] {
   --bs-body-color: #f5f5f5;
   --bs-body-color-rgb: rgb(245, 245, 245);
