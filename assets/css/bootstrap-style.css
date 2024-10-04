@@ -12238,6 +12238,18 @@ h6, .h6 {
   display: inline;
 }
 
+.like-spinner {
+  display: none;
+}
+
+.htmx-request .like-spinner {
+  display: inline;
+}
+
+.htmx-request.like-spinner {
+  display: inline;
+}
+
 /* [data-bs-theme="charcoal"] {
   --bs-body-color: #f5f5f5;
   --bs-body-color-rgb: rgb(245, 245, 245);

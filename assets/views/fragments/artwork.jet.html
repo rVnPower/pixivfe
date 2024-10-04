@@ -58,6 +58,7 @@
             </div>
           </div>
         </div>
+
         <!-- Bookmark and like buttons -->
         <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
         <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
@@ -85,12 +86,27 @@
           {{- end }}
 
           {{- if .Liked && LoggedIn}}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" disabled>
-            <i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked
+          <!-- NOTE: /self/unlike isn't a real URI path, just keeping it here for consistency -->
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" disabled>
+            <div class="d-flex">
+              <div class="like-text"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked</div>
+              <div class="like-spinner ms-2" id="like-spinner">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
           </button>
           {{- else }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" onclick="window.location.href='/self/like/{{ .ID }}'">
-            <i class="bi bi-hand-thumbs-up me-2"></i>Like
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner">
+            <div class="d-flex">
+              <div class="like-text"><i class="bi bi-hand-thumbs-up me-2"></i>Like</div>
+              <div class="like-spinner ms-2" id="like-spinner">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
           </button>
           {{- end }}
         </div>
