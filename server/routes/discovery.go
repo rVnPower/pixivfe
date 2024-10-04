@@ -28,5 +28,7 @@ func NovelDiscoveryPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return RenderHTML(w, r, Data_novelDiscovery{Novels: works, Title: "Discovery"})
+	urlc := template.PartialURL{Path: "discovery/novel", Query: map[string]string{"mode": mode}}
+
+	return RenderHTML(w, r, Data_novelDiscovery{Novels: works, Title: "Discovery", Queries: urlc})
 }

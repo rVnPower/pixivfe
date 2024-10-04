@@ -95,8 +95,9 @@ type Data_novelSeries struct {
 	PageLimit           int
 }
 type Data_novelDiscovery struct {
-	Novels []core.NovelBrief
-	Title  string
+	Novels  []core.NovelBrief
+	Title   string
+	Queries template.PartialURL
 }
 type Data_pixivisionIndex struct {
 	Data []core.PixivisionArticle
