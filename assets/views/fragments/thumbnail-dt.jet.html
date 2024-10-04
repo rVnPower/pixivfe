@@ -10,7 +10,7 @@
     <div class="d-flex flex-column align-items-start z-3">
       <!-- When an artwork is listed on the ranking page -->
       {{- if isset(.Rank) }}
-      <span class="badge bg-custom-color fs-6 rounded-pill bg-opacity-75 mb-1">{{ .Rank }}</span>
+      <span class="badge bg-black fs-6 rounded-pill bg-opacity-75 mb-1">{{ .Rank }}</span>
       {{- end }}
       <!-- When an artwork is tagged as R-18 or R-18G -->
       {{- if .XRestrict != 0 }}

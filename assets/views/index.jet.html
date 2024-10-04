@@ -3,57 +3,59 @@
 
 <div class="row justify-content-center">
   {{- if !.LoggedIn }}
-    <div class="col-12 col-lg-6">
-      <div class="alert alert-info" role="alert">
-        <p class="text-center mb-0">You are not logged in. You can login <a href="/settings" class="alert-link">here</a>.
-        </p>
-      </div>
+  <div class="col-9">
+    <div class="alert alert-info" role="alert">
+      <p class="text-center mb-0"><i class="bi bi-person-circle"></i> You are not logged in. You can login on the <a href="/settings" class="alert-link">settings page</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
+      <a href="/ranking" class="custom-btn-secondary bg-charcoal-surface2">See more</a>
     </div>
 
-    <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Today's illustration rankings</h2>
-        <a href="/ranking" class="btn btn-secondary rounded-pill">See more</a>
-      </div>
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{- include "fragments/ranking-tn" .NoTokenData.Contents }}
-      </div>
+    <!-- mt-0 to remove the margin that g-4 adds to the top of the element -->
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mt-0">
+      {{- include "fragments/ranking-tn" .NoTokenData.Contents }}
     </div>
+  </div>
   {{- else }}
 
-    <div class="col-12">
-      <div class="card border-0 rounded-5 bg-body-tertiary p-4">
-        <h2 class="mb-3">Filter</h2>
-        <div class="btn-group" role="group" aria-label="Content filter">
-          <a href="/?mode=all" class="btn btn-secondary rounded-pill">All</a>
-          <a href="/?mode=r18" class="btn btn-danger rounded-pill">R-18</a>
-        </div>
+  <div class="col-12">
+    <div class="card border-0 rounded-5 bg-body-tertiary p-4">
+      <h2 class="mb-3">Filter</h2>
+      <div class="btn-group" role="group" aria-label="Content filter">
+        <a href="/?mode=all" class="btn btn-secondary rounded-pill">All</a>
+        <a href="/?mode=r18" class="btn btn-danger rounded-pill">R-18</a>
       </div>
     </div>
+  </div>
 
-    <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Newest works by users you follow</h2>
-        <a href="/self/followingWorks" class="btn btn-secondary rounded-pill">See more</a>
-      </div>
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{- include "fragments/small-tn" .Data.Following }}
-      </div>
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Newest works by users you follow</h2>
+      <a href="/self/followingWorks" class="custom-btn-secondary bg-charcoal-surface2">See more</a>
     </div>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .Data.Following }}
+    </div>
+  </div>
 
-    <div class="col-12">
-      <h2 class="mb-3">Recommended works</h2>
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{- include "fragments/small-tn" .Data.Recommended }}
-      </div>
+  <div class="col-12">
+    <h2 class="mb-3">Recommended works</h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .Data.Recommended }}
     </div>
+  </div>
 
-    <div class="col-12">
-      <h2 class="mb-3">Recommended illustrations tagged <a href="/tags/{{.Name}}" class="text-decoration-none">#{{.Name}}</a></h2>
-      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-        {{- include "fragments/small-tn" .Artworks }}
-      </div>
+  <div class="col-12">
+    <h2 class="mb-3">Recommended illustrations tagged <a href="/tags/{{ .Name }}" class="text-decoration-none">#{{ .Name }}</a></h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .Artworks }}
     </div>
-  {{- end }}
+  </div>
+{{- end }}
 </div>
 {{- end }}

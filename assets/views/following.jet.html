@@ -1,7 +1,9 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container">
-  <h1>Newest works from people you follow</h1>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center">Newest works from people you follow<</h1>
+
+  <div class="col-12 col-lg-9">
   <div class="switcher">
     <div class="switch-title">Filter</div>
     <a href="/following_works?mode=all&page=1" class="switch-button">All</a>
@@ -14,6 +16,8 @@
     <small>Page {{ .CurPage }}</small>
     <br />
     {{- raw: createPaginator(url, "#checkpoint", .Page, -1) }}
+  </div>
+
   </div>
 </div>
 {{- end }}

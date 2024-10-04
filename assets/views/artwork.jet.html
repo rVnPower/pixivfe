@@ -1,23 +1,23 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="row justify-content-center">
-<!-- col-md-9 to ensure that artworks don't take forever to scroll past, especially if there are multiple, but col-sm-12 to display artworks at full width on small devices -->
-<div class="col-sm-12 col-md-9">
+<div class="row justify-content-center g-4">
+<!-- col-md-9 to ensure that artworks don't take forever to scroll past, especially if there are multiple, but col-12 to display artworks at full width on small devices -->
+<div class="col-12 col-md-9">
   <!-- The artwork fragment -->
   {{- include "fragments/artwork" .Illust }}
 
   <div class="row">
     <!-- Recent works by artist -->
     <div class="col-12 col-lg-6">
-      <div class="card border-0 mb-4">
-        <div class="card-header border-0 rounded-5 rounded-bottom bg-body-tertiary p-4">
+      <div class="custom-card bg-black mb-4 mb-lg-0">
+        <div class="card-header border-0 rounded-5 bg-charcoal-surface1 p-4">
           <div class="d-flex justify-content-between align-items-center">
             <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
               <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px;">
               <h2 class="m-0">{{ .Illust.User.Name }}</h2>
             </a>
             {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
-            <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
+            <a href="{{combinedUrl}}" class="custom-btn-secondary bg-charcoal-surface2">View all</a>
           </div>
         </div>
         <div class="card-body pb-0 p-lg-3">
@@ -29,7 +29,7 @@
               <div class="col-6 col-md-4 px-2">
                   <div class="card h-100 border-0">
                     {{ include "fragments/thumbnail-dt" . }}
-                    <div class="card-body py-2 px-0">
+                    <div class="card-body bg-black py-2 px-0">
                       {{ include "fragments/thumbnail-tt" . }}
                     </div>
                   </div>
@@ -43,15 +43,15 @@
 
     <div class="col-12 col-lg-6">
       <!-- mb-5 for spacing between the end of the comments section card and related works -->
-      <div class="card border-0 mb-5">
-        <div class="card-body rounded-5 bg-body-tertiary border-0 p-4 pb-0">
+      <div class="custom-card bg-black">
+        <div class="card-body border-0 rounded-5 bg-charcoal-surface1 p-4 pb-0">
           <!-- TODO: clean this logic up -->
           {{- if .Illust.Comments == 0 }}
-          <h2 class="mb-4">0 Comments</h2>
+          <h2>0 Comments</h2>
           {{- else if .Illust.Comments == 1 }}
-          <h2 class="mb-4">1 Comment</h2>
+          <h2>1 Comment</h2>
           {{- else }}
-          <h2 class="mb-4">{{ .Illust.Comments }} Comments</h2>
+          <h2>{{ .Illust.Comments }} Comments</h2>
           {{- end }}
           <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
           {{- if .Illust.CommentDisabled == 1 }}
@@ -62,7 +62,7 @@
           <div class="list-group" id="comments-container">
             {{ range .Illust.CommentsList }}
             <!-- Element for a single comment -->
-            <div class="list-group-item border-0 bg-body-tertiary p-0 mb-4 comment-item">
+            <div class="list-group-item border-0 bg-charcoal-surface1 p-0 mb-4 comment-item">
               <div class="row">
                 <!-- Comment author avatar image -->
                 <div class="col-auto">
@@ -98,7 +98,7 @@
             {{- end }}
             <div class="d-flex justify-content-center">
               <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
-              <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+              <button type="button" class="custom-btn-secondary-flex bg-charcoal-surface2 mb-4" id="load-more-btn">Load more</button>
             </div>
           </div>
           {{ end }}
@@ -112,7 +112,7 @@
 <!-- TODO: check whether there actually are any related works before rendering this section -->
 <!-- col-12 to display Related works at full width -->
 <div class="col-12">
-    <h2 class="mb-4">Related works</h2>
+    <h2>Related works</h2>
     <!-- Gradually increase the number of artworks shown per row along with device width -->
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
         {{- include "fragments/small-tn" .Illust.RelatedWorks }}

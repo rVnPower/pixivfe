@@ -43,11 +43,11 @@
 </div>
 
   <!-- Artwork title and user information -->
-  <div class="card border-0 mb-4">
-    <div class="card-body bg-body-tertiary rounded-5 p-4">
+  <div class="custom-card bg-black mb-4">
+    <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
       <div class="row mb-3">
         <!-- Artist avatar, artwork name, and artist name -->
-        <div class="col-12 col-sm-8 mb-3 mb-sm-0">
+        <div class="col-12 col-xl-8 mb-3 mb-xl-0">
           <div class="d-flex align-items-center">
             <a href="/users/{{ .User.ID }}" class="me-3">
               <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;"/>
@@ -60,31 +60,31 @@
         </div>
         <!-- Bookmark and like buttons -->
         <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
-        <div class="col-12 col-sm-4 d-flex justify-content-start justify-content-sm-end align-items-center">
+        <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
           {{- if isset(.BookmarkData) && LoggedIn }}
-          <a href="/self/deleteBookmark/{{ .BookmarkID }}" class="btn btn-outline-danger rounded-pill me-2">
-            <i class="bi bi-heart-fill"></i>
-          </a>
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" onclick="window.location.href='/self/deleteBookmark/{{ .BookmarkID }}'">
+            <i class="bi bi-heart-fill me-2"></i>Bookmarked
+          </button>
           {{- else }}
-          <a href="/self/addBookmark/{{ .ID }}" class="btn btn-outline-custom-color text-body rounded-pill me-2">
-            <i class="bi bi-heart"></i>
-          </a>
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" onclick="window.location.href='/self/addBookmark/{{ .ID }}'">
+            <i class="bi bi-heart me-2"></i>Bookmark
+          </button>
           {{- end }}
 
           {{- if .Liked && LoggedIn}}
-          <button class="btn btn-custom-color text-body rounded-pill" disabled>
-            <i class="bi bi-hand-thumbs-up-fill"></i>
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" disabled>
+            <i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked
           </button>
           {{- else }}
-          <a href="/self/like/{{ .ID }}" class="btn btn-outline-custom-color text-body rounded-pill">
-            <i class="bi bi-hand-thumbs-up"></i>
-          </a>
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" onclick="window.location.href='/self/like/{{ .ID }}'">
+            <i class="bi bi-hand-thumbs-up me-2"></i>Like
+          </button>
           {{- end }}
         </div>
       </div>
 
       <!-- View Pixiv original button -->
-      <a href="https://pixiv.net/i/{{ .ID }}" class="custom-btn-secondary btn-sm px-3 mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net</a>
+      <a href="https://pixiv.net/i/{{ .ID }}" class="custom-btn-secondary bg-charcoal-surface2 btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net</a>
 
       <!-- Artwork description -->
       <!-- Rendered conditionally to avoid a weird empty p element that messes with spacing -->

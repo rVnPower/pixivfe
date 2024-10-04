@@ -1,7 +1,7 @@
 {{- range . }}
   {{- if .ID == "#" }}
   <div class="col">
-    <div class="card h-100 border-0">
+    <div class="card h-100 border-0 bg-black">
       <img src="/img/deleted.png" alt="{{ .Title }}" class="card-img-top img-fluid" loading="lazy" />
       <div class="card-body py-2 px-0">
         <p class="card-title text-body text-truncate">{{ .Title }}</p>
@@ -14,7 +14,7 @@
   </div>
   {{- else if .ID }}
   <div class="col">
-    <div class="card h-100 border-0">
+    <div class="card h-100 border-0 bg-black">
       {{ include "thumbnail-dt" . }}
       <div class="card-body py-2 px-0">
         {{ include "thumbnail-tt" . }}

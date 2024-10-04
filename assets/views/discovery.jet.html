@@ -1,30 +1,32 @@
 {{- extends "layout/default" }}
 {{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="row justify-content-center">
-  <h1 class="text-center mb-4">Discover artworks</h1>
-
-  <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto">
-    {{- Type := "discovery" }}
-    {{- path := slice("discovery", "discovery/novel") }}
-    {{- name := slice("Artworks", "Novels")}}
-    {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
-
-    <!-- TODO: is it actually set to "safe" by default? -->
-    {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
-    {{- url := replaceQuery(.Queries, "mode", "") }}
-    {{- path := slice("all", "safe", "r18") }}
-    {{- name := slice("All", "Safe", "R-18")}}
-    {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-  </div>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center">Discover artworks</h1>
 
   <div class="col-12">
+
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto">
+        {{- Type := "discovery" }}
+        {{- path := slice("discovery", "discovery/novel") }}
+        {{- name := slice("Artworks", "Novels")}}
+        {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+
+        <!-- TODO: is it actually set to "safe" by default? -->
+        {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
+        {{- url := replaceQuery(.Queries, "mode", "") }}
+        {{- path := slice("all", "safe", "r18") }}
+        {{- name := slice("All", "Safe", "R-18")}}
+        {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+      </div>
+
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
       {{- include "fragments/small-tn" .Artworks }}
     </div>
     <div class="d-flex justify-content-center">
       <a href="/discovery" class="custom-btn-secondary-flex">Refresh</a>
     </div>
+
   </div>
 </div>
 {{- end }}

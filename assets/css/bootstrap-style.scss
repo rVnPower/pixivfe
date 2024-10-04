@@ -17,7 +17,9 @@ $aspect-ratios: (
 
 // Add a custom color to $theme-colors
 $custom-colors: (
-  "custom-color": #7aa2f7
+  "custom-color": #7aa2f7,
+  "charcoal-surface1": #1f1f1f,
+  "charcoal-surface2": #3a3a3a,
 );
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
@@ -29,15 +31,22 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .custom-btn-secondary {
   @extend .btn;
-  @extend .btn-secondary;
   @extend .fw-bold;
   @extend .rounded-pill;
   @extend .border-0;
+  @extend .py-2;
+  @extend .px-3;
 }
 
 .custom-btn-secondary-flex {
   @extend .custom-btn-secondary;
   @extend .flex-fill;
+}
+
+.custom-card {
+  @extend .card;
+  @extend .border-0;
+  @extend .rounded-5;
 }
 
 /// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
@@ -48,10 +57,12 @@ h1 {
 h2 {
   font-size: $h4-font-size;
   font-weight: $font-weight-bold;
+  margin-bottom: 1.5rem;
 }
 h3 {
   font-size: $h5-font-size;
   font-weight: $font-weight-bold;
+  margin-bottom: 1rem;
 }
 h4 {
   font-size: $h6-font-size;
