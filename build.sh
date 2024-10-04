@@ -25,7 +25,7 @@ build() {
 
 test() {
     echo "Running tests..."
-    go test ./test/...
+    go test ./...
 }
 
 run() {
