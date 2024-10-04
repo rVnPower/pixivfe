@@ -35,7 +35,7 @@
 
   <div class="col-12">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">Newest works by users you follow</h2>
+      <h2>Newest works by users you follow</h2>
       <a href="/self/followingWorks" class="custom-btn-secondary bg-charcoal-surface2">See more</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
@@ -44,7 +44,7 @@
   </div>
 
   <div class="col-12">
-    <h2 class="mb-3">Recommended works</h2>
+    <h2>Recommended works</h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .Data.Recommended }}
     </div>
@@ -52,7 +52,7 @@
 
   {{- range .Data.RecommendByTags }}
   <div class="col-12">
-    <h2 class="mb-3">Recommended illustrations tagged <a href="/tags/{{ .Name }}" class="text-decoration-none">#{{ .Name }}</a></h2>
+    <h2>Recommended illustrations tagged <a href="/tags/{{ .Name }}" class="text-decoration-none">#{{ .Name }}</a></h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .Artworks }}
     </div>
