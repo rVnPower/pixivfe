@@ -64,6 +64,7 @@ type ServerConfig struct {
 
 	ProxyCheckEnabled  bool          `env:"PIXIVFE_PROXY_CHECK_ENABLED,overwrite"`
 	ProxyCheckInterval time.Duration `env:"PIXIVFE_PROXY_CHECK_INTERVAL,overwrite"`
+	ProxyCheckTimeout  time.Duration `env:"PIXIVFE_PROXY_CHECK_TIMEOUT,overwrite"`
 
 	// Development options
 	InDevelopment        bool   `env:"PIXIVFE_DEV"`
@@ -132,6 +133,7 @@ func (s *ServerConfig) LoadConfig() error {
 	s.ProxyServer_staging = BuiltinProxyUrl
 	s.ProxyCheckEnabled = true
 	s.ProxyCheckInterval = 8 * time.Hour
+	s.ProxyCheckTimeout = 4 * time.Second
 	s.TokenLoadBalancing = "round-robin"
 	s.TokenMaxRetries = 5
 	s.TokenBaseTimeout = 1000 * time.Millisecond

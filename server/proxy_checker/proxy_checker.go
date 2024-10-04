@@ -1,12 +1,12 @@
 package proxy_checker
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
 	"sync"
-	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
@@ -19,46 +19,9 @@ const (
 var (
 	workingProxies      []string
 	workingProxiesMutex sync.RWMutex
-	stopChan            chan struct{}
 )
 
-func InitializeProxyChecker() chan struct{} {
-	stopChan = make(chan struct{})
-	firstCheckDone := make(chan struct{})
-
-	go func() {
-		checkProxies()
-		close(firstCheckDone) // Signal that the first check is done
-
-		if t := config.GlobalConfig.ProxyCheckInterval; t > 0 {
-			ticker := time.NewTicker(t)
-			defer ticker.Stop()
-
-			for {
-				select {
-				case <-stopChan:
-					log.Print("Stop signal received. Stopping proxy checker...")
-					return
-				case <-ticker.C:
-					checkProxies()
-				}
-			}
-		} else {
-			log.Print("Proxy check interval set to 0, no further checks will be performed.")
-			<-stopChan // Wait for stop signal
-		}
-	}()
-
-	return firstCheckDone
-}
-
-func StopProxyChecker() {
-	if stopChan != nil {
-		close(stopChan)
-	}
-}
-
-func checkProxies() {
+func CheckProxies(ctx context.Context) {
 	logln("Starting proxy check...")
 	var wg sync.WaitGroup
 	var mutex sync.Mutex
@@ -70,7 +33,7 @@ func checkProxies() {
 		wg.Add(1)
 		go func(proxyURL string) {
 			defer wg.Done()
-			isWorking, resp := testProxy(proxyURL)
+			isWorking, resp := testProxy(ctx, proxyURL)
 			status := ""
 			if resp != nil {
 				status = resp.Status
@@ -91,11 +54,11 @@ func checkProxies() {
 	updateWorkingProxies(newWorkingProxies)
 }
 
-func testProxy(proxyBaseURL string) (bool, *http.Response) {
+func testProxy(ctx context.Context, proxyBaseURL string) (bool, *http.Response) {
 	fullURL := fmt.Sprintf("%s%s", strings.TrimRight(proxyBaseURL, "/"), testImagePath)
 	logf("Testing proxy %s with full URL: %s", proxyBaseURL, fullURL)
 
-	req, err := http.NewRequest("GET", fullURL, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", fullURL, nil)
 	if err != nil {
 		logf("Error creating request for proxy %s: %v", proxyBaseURL, err)
 		return false, nil

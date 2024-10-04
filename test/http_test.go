@@ -1,10 +1,10 @@
-package main_test
+package main
 
 import (
+	"io"
+	"log"
+	"net/http"
 	"testing"
-        "net/http"
-        "io"
-        "log"
 )
 
 func setup() {
@@ -28,7 +28,7 @@ func getBaseURL() string {
 func generateRequest(link, method string, body io.Reader) *http.Request {
 	req, err := http.NewRequest(method, link, body)
 	if err != nil {
-                log.Fatalf("Failed to generate a request: %s", err)
+		log.Fatalf("Failed to generate a request: %s", err)
 	}
 
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0")
@@ -39,7 +39,7 @@ func generateRequest(link, method string, body io.Reader) *http.Request {
 func executeRequest(req *http.Request) *http.Response {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-                log.Fatalf("Failed to execute a request: %s", err)
+		log.Fatalf("Failed to execute a request: %s", err)
 	}
 
 	return resp
@@ -72,14 +72,13 @@ func TestBasicAllRoutes(t *testing.T) {
 	}
 
 	for _, path := range testPositiveURLs {
-                URL := getBaseURL() + path
-                t.Logf("GETting: %s", URL)
-                req := generateRequest(URL, "GET", nil)
-                resp := executeRequest(req)
+		URL := getBaseURL() + path
+		t.Logf("GETting: %s", URL)
+		req := generateRequest(URL, "GET", nil)
+		resp := executeRequest(req)
 
-
-                if resp.StatusCode != 200 {
-                        t.Errorf("Request route response NOT OK: %d", resp.StatusCode)
-                }
+		if resp.StatusCode != 200 {
+			t.Errorf("Request route response NOT OK: %d", resp.StatusCode)
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -8,7 +9,9 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"sync"
 	"syscall"
+	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
@@ -27,12 +30,27 @@ func main() {
 
 	// Conditionally initialize and start the proxy checker
 	if config.GlobalConfig.ProxyCheckEnabled {
-		defer proxy_checker.StopProxyChecker()
-		firstCheckDone := proxy_checker.InitializeProxyChecker()
+		var wg_firstCheck sync.WaitGroup
+		wg_firstCheck.Add(1)
+
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
+			proxy_checker.CheckProxies(ctx)
+			cancel()
+			wg_firstCheck.Done()
+			if config.GlobalConfig.ProxyCheckInterval != 0 {
+				for {
+					time.Sleep(config.GlobalConfig.ProxyCheckInterval)
+					ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
+					proxy_checker.CheckProxies(ctx)
+					cancel()
+				}
+			}
+		}()
 
 		// Wait for the first proxy check to complete
 		log.Println("Waiting for initial proxy check to complete...")
-		<-firstCheckDone
+		wg_firstCheck.Wait()
 		log.Println("Initial proxy check completed.")
 	} else {
 		log.Println("Skipping proxy checker initialization.")
