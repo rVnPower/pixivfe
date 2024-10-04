@@ -113,9 +113,9 @@ func DefineRoutes() *mux.Router {
 	router.HandleFunc("/self", CatchError(routes.LoginUserPage)).Methods("GET")
 	router.HandleFunc("/self/followingWorks", CatchError(routes.FollowingWorksPage)).Methods("GET")
 	router.HandleFunc("/self/bookmarks", CatchError(routes.LoginBookmarkPage)).Methods("GET")
-	router.HandleFunc("/self/addBookmark/{id}", CatchError(routes.AddBookmarkRoute)).Methods("POST")
-	router.HandleFunc("/self/deleteBookmark/{id}", CatchError(routes.DeleteBookmarkRoute)).Methods("POST")
-	router.HandleFunc("/self/like/{id}", CatchError(routes.LikeRoute)).Methods("POST")
+	router.HandleFunc("/self/addBookmark/{id}", CatchError(routes.AddBookmarkRoute)).Methods("GET")
+	router.HandleFunc("/self/deleteBookmark/{id}", CatchError(routes.DeleteBookmarkRoute)).Methods("GET")
+	router.HandleFunc("/self/like/{id}", CatchError(routes.LikeRoute)).Methods("GET")
 
 	// oEmbed endpoint for embedding Pixiv content
 	router.HandleFunc("/oembed", CatchError(routes.Oembed)).Methods("GET")

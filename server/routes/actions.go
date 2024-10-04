@@ -34,14 +34,6 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	if r.Header.Get("HX-Request") == "true" {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/deleteBookmark/%s" hx-target="#bookmark-button" hx-swap="outerHTML">
-			<i class="bi bi-heart-fill me-2"></i>Bookmarked
-		</button>`, id)
-		return nil
-	}
-
 	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }
@@ -66,14 +58,6 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	if r.Header.Get("HX-Request") == "true" {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/addBookmark/%s" hx-target="#bookmark-button" hx-swap="outerHTML">
-			<i class="bi bi-heart me-2"></i>Bookmark
-		</button>`, id)
-		return nil
-	}
-
 	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }
@@ -95,14 +79,6 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
 	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
 		return err
-	}
-
-	if r.Header.Get("HX-Request") == "true" {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" disabled>
-			<i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked
-		</button>`)
-		return nil
 	}
 
 	utils.RedirectToWhenceYouCame(w, r)
