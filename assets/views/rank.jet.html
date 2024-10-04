@@ -1,17 +1,16 @@
 {{- extends "layout/default" }}
-{{- import "blocks/switcher" }}
 {{- import "blocks/pagination" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="row justify-content-center">
-  <h1 class="text-center mb-4">{{ .Title }}</h1>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center">{{ .Title }}</h1>
   <div class="col-12">
     <div class="row g-3">
       <div class="col-12 col-lg-9">
-        <div class="card border-0">
-          <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
+        <div class="custom-card">
+          <div class="custom-card-body bg-charcoal-surface1 p-4">
             <h2 class="mb-3">Ranking options</h2>
-            <p class="small text-muted">Select ranking modes and filters.</p>
-            <!-- TODO: add additional checks to these Switcher buttons to ensure only valid URLs can be generated
+            <!-- TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
                        e.g. selecting the "Ugoira" button hides the buttons under
                             "Specialized rankings" as well as the "Monthly" and "Rookie"
                             options under "Time frame", but this doesn't occur vice versa
@@ -30,77 +29,72 @@
             <div class="row border-bottom border-2 mb-3">
               <div class="col-12">
                  <div class="row">
-                <div class="col-12">
-                <h3 class="mb-3">Content type</h3>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
-                  {{- path := slice("all", "illust", "manga", "ugoira") }}
-                  {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Content)}}
-                </div>
-                <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
-
-                </div>
-
-              </div>
+                   <div class="col-12">
+                     <h3>Content type</h3>
+                      <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
+                        {{- path := slice("all", "illust", "manga", "ugoira") }}
+                        {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
+                        {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Content)}}
+                      </div>
+                      <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
+                   </div>
+                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-12 col-md-6">
-                <h3 class="mb-3">Time frame</h3>
+              <div class="col-12 col-md-7">
+                <h3>Time frame</h3>
                 {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- if Content != "ugoira" }}
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("daily", "weekly", "monthly") }}
-                  {{- name := slice("Daily", "Weekly", "Monthly")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
+                  {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+                  {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
-                  {{- path := slice("rookie") }}
-                  {{- name := slice("Rookie")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
                   {{- path := slice("daily_r18", "weekly_r18") }}
                   {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- else }}
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
                   {{- path := slice("daily", "weekly") }}
                   {{- name := slice("Daily", "Weekly")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
-                <div class="btn-group d-flex flex-wrap" role="group" aria-label="General ranking modes">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
                   {{- path := slice("daily_r18", "weekly_r18") }}
                   {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-                  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=Mode)}}
+                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
                 </div>
                 {{- end }}
-                <p class="small text-muted mb-2">Choose the time frame for the rankings.</p>
-                <p class="small text-muted mb-md-0"><span class="fw-bold">Monthly</span> and <span class="fw-bold">Rookie</span> are unavailable when filtering for <span class="fw-bold">Ugoira</span>.</p>
+                <p class="small text-body-secondary mb-2">Choose the time frame for the rankings.</p>
+                <p class="small text-body-secondary mb-md-0">
+                  <span class="fw-bold">Monthly</span> and <span class="fw-bold">Rookie</span> are unavailable when filtering for <span class="fw-bold">Ugoira</span>.
+                </p>
               </div>
 
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-5">
               {{- if Content == "all" }}
-              <h3 class="mb-3">Specialized rankings</h3>
+              <h3>Specialized rankings</h3>
               <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- path := slice("original") }}
                 {{- name := slice("Original")}}
-                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
               <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- path := slice("male",) }}
                 {{- name := slice("Popular among males")}}
-                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
               <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- path := slice("female") }}
                 {{- name := slice("Popular among females")}}
-                {{- yield Switcher(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
               <p class="small text-muted mb-2">Specialized ranking categories.</p>
               <p class="small text-muted mb-0">These options are only available when filtering for <span class="fw-bold">Overall</span>.</p>

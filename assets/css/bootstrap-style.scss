@@ -11,6 +11,7 @@ $aspect-ratios: (
   "9x16": calc(16 / 9 * 100%),
 );
 
+/// Define custom colors
 @import "./bootstrap/functions";
 @import "./bootstrap/variables";
 @import "./bootstrap/variables-dark";
@@ -29,6 +30,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 @import "./bootstrap/bootstrap";
 
+/// Custom classes to reduce boilerplate
 .custom-btn-secondary {
   @extend .btn;
   @extend .fw-bold;
@@ -49,28 +51,39 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   @extend .rounded-5;
 }
 
+.custom-card-body {
+  @extend .card-body;
+  @extend .border-0;
+  @extend .rounded-5;
+}
+
 /// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
 h1 {
   font-size: $h3-font-size;
   font-weight: $font-weight-bold;
 }
+
 h2 {
   font-size: $h4-font-size;
   font-weight: $font-weight-bold;
   margin-bottom: 1.5rem;
 }
+
 h3 {
   font-size: $h5-font-size;
   font-weight: $font-weight-bold;
   margin-bottom: 1rem;
 }
+
 h4 {
   font-size: $h6-font-size;
   font-weight: $font-weight-bold;
 }
+
 h5 {
   font-weight: $font-weight-bold;
 }
+
 h6 {
   font-weight: $font-weight-bold;
 }
@@ -95,17 +108,3 @@ h6 {
 .htmx-request.like-spinner {
   display: inline;
 }
-
-/* [data-bs-theme="charcoal"] {
-  --bs-body-color: #f5f5f5;
-  --bs-body-color-rgb: rgb(245, 245, 245);
-  --bs-body-bg: #1f1f1f;
-  --bs-body-bg-rgb: rgb(31, 31, 31);
-  --bs-secondary-color: #d6d6d6;
-  --bs-secondary-color-rgb: rgb(214, 214, 214);
-  --bs-secondary-bg: #e9ecef;
-  --bs-secondary-bg-rgb: 233, 236, 239;
-  /// --bs-tertiary-bg: #f8f9fa;
-  --bs-tertiary-bg-rgb: rgba(255,255,255,0.12);
-  --bs-link-color: rgb(102, 159, 194);
-} */
