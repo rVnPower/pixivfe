@@ -1,3 +1,29 @@
+{*
+    This Jet template block renders an underline navigation using Bootstrap classes.
+    It takes four parameters:
+    - baseURL: The base URL for all navigation items
+    - paths: A slice of URL paths for each navigation item
+    - names: A slice of display names/labels for each navigation item
+    - activeState: The current active path to highlight the corresponding item
+
+    The template loops through the paths, creating a nav item for each one.
+    Each nav item is styled using Bootstrap 5 classes, including:
+    - nav-item for the list item
+    - nav-link for the anchor tag
+    - fs-6 for font size
+    - fw-bold for bold text
+    - active and border-custom-color for the active state
+    - text-muted for inactive items
+
+    The template also handles the active state:
+    - Adds 'active' and 'border-custom-color' classes to the link if its path matches the activeState
+    - Sets aria-current attribute to "page" for accessibility on the active item
+
+    This underline navigation can be used for top-level navigation or sub-navigation in a web application.
+
+    Tip: For absolute URI paths, start the baseURL with a forward slash.
+*}
+
 {{- block UnderlineNav(baseURL, paths, names, activeState) }}
 <ul class="nav nav-underline">
     {{- range i, k := paths }}

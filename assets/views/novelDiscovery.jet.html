@@ -1,41 +1,37 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="row justify-content-center">
-  <h1 class="text-center mb-4">Discover novels</h1>
-
-  <div class="col-12 col-lg-6">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="mb-3">Type</h2>
-      <p class="text-muted">Choose between discovering artworks or novels from users on Pixiv.</p>
-      <div class="d-flex" aria-label="Artwork type">
-        <a href="/discovery" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Artworks</a>
-        <a href="/discovery/novel" class="btn btn-secondary fw-bold rounded-pill py-2 flex-fill">Novels</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-12 col-lg-6">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-      <h2 class="mb-3">Filter</h2>
-      <p class="text-muted">Filter by content rating to customize your discovery experience.</p>
-      <div class="d-flex" aria-label="Filter options">
-        {{- url := "/discovery/novel?mode=" }}
-        <a href="{{ url }}all" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">All</a>
-        <a href="{{ url }}safe" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2 me-3">Safe</a>
-        <a href="{{ url }}r18" class="btn btn-danger fw-bold rounded-pill flex-fill py-2">R-18</a>
-      </div>
-    </div>
-  </div>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center">Discover novels</h1>
 
   <div class="col-12">
+
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
+      {{- Type := "/discovery/novel" }}
+      {{- path := slice("/discovery", "/discovery/novel") }}
+      {{- name := slice("Artworks", "Novels")}}
+      {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+
+      <!-- TODO: is it actually set to "safe" by default? -->
+      {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
+      {{- url := replaceQuery(.Queries, "mode", "") }}
+      {{- path := slice("all", "safe", "r18") }}
+      {{- name := slice("All", "Safe", "R-18")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+    </div>
+
+    <!-- Main content -->
     <div class="row row-cols-2 g-4">
       {{- range .Novels }}
         {{- include "fragments/novel-tn" . }}
       {{- end }}
     </div>
-    <div class="d-flex justify-content-center">
-      <a href="" class="btn btn-secondary fw-bold rounded-pill flex-fill py-2">Reload</a>
-    </div>
+
   </div>
+
+  <div class="d-flex justify-content-center">
+    <a href="" class="custom-btn-secondary-flex bg-charcoal-surface2">Reload</a>
+  </div>
+
 </div>
 {{- end }}

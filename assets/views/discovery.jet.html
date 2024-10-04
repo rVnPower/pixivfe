@@ -20,13 +20,16 @@
       {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
     </div>
 
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+    <!-- Main content -->
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .Artworks }}
-    </div>
-    <div class="d-flex justify-content-center">
-      <a href="/discovery" class="custom-btn-secondary-flex">Refresh</a>
     </div>
 
   </div>
+
+  <div class="d-flex justify-content-center">
+    <a href="" class="custom-btn-secondary-flex bg-charcoal-surface2">Refresh</a>
+  </div>
+
 </div>
 {{- end }}
