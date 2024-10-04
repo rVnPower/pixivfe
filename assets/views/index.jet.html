@@ -1,7 +1,6 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-
-<div class="row justify-content-center">
+<div class="row justify-content-center g-4">
   {{- if !.LoggedIn }}
   <div class="col-9">
     <div class="alert alert-info" role="alert">
@@ -50,12 +49,15 @@
     </div>
   </div>
 
+  {{- range .Data.RecommendByTags }}
   <div class="col-12">
     <h2 class="mb-3">Recommended illustrations tagged <a href="/tags/{{ .Name }}" class="text-decoration-none">#{{ .Name }}</a></h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .Artworks }}
     </div>
   </div>
+  {{- end }}
+
 {{- end }}
 </div>
 {{- end }}
