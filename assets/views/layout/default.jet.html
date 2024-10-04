@@ -57,9 +57,9 @@
   <!-- mb-4 for spacing between the navbar and main content -->
   <nav class="navbar bg-charcoal-surface1 mb-4">
     <div class="container-fluid justify-content-between">
-        <div class="d-flex align-items-center">
+        <div class="d-flex">
           <!-- Offcanvas menu for navigation items -->
-          <button class="navbar-toggler border-0 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler border-0 me-2 px-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="offcanvas offcanvas-start bg-charcoal-surface1 border-0" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -124,12 +124,9 @@
           </a>
         </div>
         <!-- Search bar -->
-        <div class="flex-grow-1 d-flex justify-content-center">
+        <div class="position-absolute top-50 start-50 translate-middle">
           <form class="d-flex" action="/tags" method="post" autocomplete="off">
-            <input class="form-control me-2" type="search" name="name" required placeholder="⌕ Search artworks..." aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">
-              <i class="bi bi-search" title="Search"></i>
-            </button>
+            <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="⌕ Search artworks" aria-label="Search">
           </form>
         </div>
         <!-- TODO: figure out how to have the logged in user's avatar and name in the navbar -->
