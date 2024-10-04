@@ -25,8 +25,8 @@
 
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
-      {{- Mode := "all" }}
-      {{- url := "?mode=" }}
+      {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
+      {{- url := replaceQuery(.Queries, "mode", "") }}
       {{- path := slice("all", "r18") }}
       {{- name := slice("All", "R-18")}}
       {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}

@@ -70,6 +70,7 @@ type Data_index struct {
 	LoggedIn    bool
 	Data        core.LandingArtworks
 	NoTokenData core.Ranking
+	Queries     template.PartialURL
 }
 type Data_newest struct {
 	Items []core.ArtworkBrief
