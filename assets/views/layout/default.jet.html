@@ -55,11 +55,11 @@
 
 <body class="bg-black">
   <!-- mb-4 for spacing between the navbar and main content -->
-  <nav class="navbar bg-charcoal-surface1 mb-4">
-    <div class="container-fluid justify-content-between">
+  <nav class="navbar bg-charcoal-surface1 py-3 mb-4">
+    <div class="container">
         <div class="d-flex">
           <!-- Offcanvas menu for navigation items -->
-          <button class="navbar-toggler border-0 me-2 px-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler border-0 p-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="offcanvas offcanvas-start bg-charcoal-surface1 border-0" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -120,14 +120,22 @@
           <!-- Icon and title -->
           <a class="text-decoration-none fw-bold mb-0 d-flex align-items-center" href="/">
             <img src="/img/favicon.svg" alt="PixivFE icon" width="30" height="30" class="d-inline-block me-2">
-            <p class="h3 text-body m-0">PixivFE</p>
+            <p class="h2 text-body m-0">PixivFE</p>
           </a>
         </div>
-        <!-- Search bar -->
-        <div class="position-absolute top-50 start-50 translate-middle">
+        <!-- Search bar (visible on md and larger devices) -->
+        <div class="position-absolute top-50 start-50 translate-middle d-none d-md-block">
           <form class="d-flex" action="/tags" method="post" autocomplete="off">
             <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="⌕ Search artworks" aria-label="Search">
           </form>
+        </div>
+        <!-- Search icon (visible on smaller devices) -->
+        <div class="d-md-none ms-auto">
+          <button class="btn btn-link text-body p-0 me-1" type="button" data-bs-toggle="modal" data-bs-target="#searchModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </button>
         </div>
         <!-- TODO: figure out how to have the logged in user's avatar and name in the navbar -->
         <!-- <a class="h5 text-decoration-none mb-0 d-flex align-items-center" href="/">
@@ -136,6 +144,24 @@
         </a> -->
     </div>
   </nav>
+
+  <!-- Search modal -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-charcoal-surface1 rounded-5 border-0 p-4">
+        <div class="modal-header border-0 p-0 mb-3">
+          <h2 class="modal-title" id="searchModalLabel">Search</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <form action="/tags" method="post" autocomplete="off">
+            <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="⌕ Search artworks" aria-label="Search">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/on-page-load.js"></script>
   <!-- mb-5 for spacing at the bottom of the page -->
   <main class="container mb-5" hx-boost="true" hx-swap="outerHTML">
