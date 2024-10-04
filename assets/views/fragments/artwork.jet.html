@@ -62,11 +62,11 @@
         <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
         <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
           {{- if isset(.BookmarkData) && LoggedIn }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" onclick="window.location.href='/self/deleteBookmark/{{ .BookmarkID }}'">
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body">
             <i class="bi bi-heart-fill me-2"></i>Bookmarked
           </button>
           {{- else }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" onclick="window.location.href='/self/addBookmark/{{ .ID }}'">
+          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body">
             <i class="bi bi-heart me-2"></i>Bookmark
           </button>
           {{- end }}
