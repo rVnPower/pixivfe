@@ -1,5 +1,5 @@
 {{- block UnderlineNav(baseURL, paths, names, activeState) }}
-<ul class="nav nav-underline mb-4">
+<ul class="nav nav-underline">
     {{- range i, k := paths }}
         <li class="nav-item">
             <a class="fs-6 nav-link fw-bold {{ activeState == k ? "active border-custom-color" : "text-muted" }} border-4 px-3" {{ activeState == k ? `aria-current="page"` : "" }} href="{{ baseURL }}{{k}}">{{ names[i] }}</a>

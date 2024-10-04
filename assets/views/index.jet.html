@@ -1,4 +1,5 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center g-4">
   {{- if !.LoggedIn }}
@@ -23,12 +24,12 @@
   {{- else }}
 
   <div class="col-12">
-    <div class="card border-0 rounded-5 bg-body-tertiary p-4">
-      <h2 class="mb-3">Filter</h2>
-      <div class="btn-group" role="group" aria-label="Content filter">
-        <a href="/?mode=all" class="btn btn-secondary rounded-pill">All</a>
-        <a href="/?mode=r18" class="btn btn-danger rounded-pill">R-18</a>
-      </div>
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
+      {{- Mode := "all" }}
+      {{- url := "?mode=" }}
+      {{- path := slice("all", "r18") }}
+      {{- name := slice("All", "R-18")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
     </div>
   </div>
 

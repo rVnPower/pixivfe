@@ -6,19 +6,19 @@
 
   <div class="col-12">
 
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto">
-        {{- Type := "discovery" }}
-        {{- path := slice("discovery", "discovery/novel") }}
-        {{- name := slice("Artworks", "Novels")}}
-        {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
+      {{- Type := "discovery" }}
+      {{- path := slice("discovery", "discovery/novel") }}
+      {{- name := slice("Artworks", "Novels")}}
+      {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
 
-        <!-- TODO: is it actually set to "safe" by default? -->
-        {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
-        {{- url := replaceQuery(.Queries, "mode", "") }}
-        {{- path := slice("all", "safe", "r18") }}
-        {{- name := slice("All", "Safe", "R-18")}}
-        {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-      </div>
+      <!-- TODO: is it actually set to "safe" by default? -->
+      {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
+      {{- url := replaceQuery(.Queries, "mode", "") }}
+      {{- path := slice("all", "safe", "r18") }}
+      {{- name := slice("All", "Safe", "R-18")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+    </div>
 
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
       {{- include "fragments/small-tn" .Artworks }}
