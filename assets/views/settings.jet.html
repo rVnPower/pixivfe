@@ -7,6 +7,7 @@
       <div class="col-12 col-lg-3 mb-3 mb-lg-0">
         <!-- Tabs -->
         <nav class="nav nav-pills nav-fill d-flex flex-column fw-bold" id="settingsTabs" role="tablist">
+          <!-- TODO: update nav buttons to use charcoal colours -->
           <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold mb-1 active" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">Account</button>
 
           <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold mb-1" id="site-tab" data-bs-toggle="tab" data-bs-target="#site" type="button" role="tab" aria-controls="site" aria-selected="false">Site</button>
@@ -20,7 +21,7 @@
       </div>
 
       <div class="col-12 col-lg-9">
-        <div class="card border-0 rounded-5 bg-body-tertiary p-4">
+        <div class="custom-card bg-charcoal-surface1 p-4">
           <!-- Tab content -->
           <div class="tab-content" id="settingsTabsContent">
             <!-- Account tab -->
@@ -28,7 +29,7 @@
               <ul class="list-group list-group-flush">
                 <h2 class="mb-4">Account</h2>
 
-                <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
                   <h3 class="mb-3">Log in</h3>
                   <p>
                     Log in with your Pixiv account's cookie to access the features below. To learn how to obtain your cookie, please see
@@ -51,7 +52,7 @@
                   </form>
                   <div id="login-response"></div>
                 </li>
-                <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
                   <h3 class="mb-3">Log out</h3>
                   <p>To securely end your session, click the 'Log out!' button. This will immediately remove your session token.</p>
                   <form id="logout-form" hx-post="/settings/logout" hx-target="#logout-response" hx-swap="outerHTML">
@@ -67,7 +68,7 @@
               <ul class="list-group list-group-flush">
                 <h2 class="mb-4">Site</h2>
 
-                <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
                   <h3 class="mb-3">Image proxy server</h3>
                   <p>Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers.</p>
                   <p>If you prefer, you can also specify a custom proxy server by entering its URL manually.</p>
@@ -115,12 +116,12 @@
                       <input type="text" class="form-control" id="custom-image-proxy" name="custom-image-proxy" placeholder="https://example.com" autocomplete="off" />
                       <div id="custom-image-proxy-help" class="form-text">Enter the URL of a custom proxy server if you wish to use one not listed above.</div>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
                   </form>
                   <div id="image-proxy-response"></div>
                 </li>
 
-                <li class="list-group-item bg-body-tertiary py-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 py-4 px-0">
                   <h3 class="mb-3">Filter artworks</h3>
                   <p>Toggle the switches below to hide specific types of content. Disabled switches will allow the content to be shown.</p>
                   <form id="filter-form" hx-post="/settings/filter" hx-target="#filter-response" hx-swap="outerHTML">
@@ -144,12 +145,12 @@
                       <label class="form-check-label fw-bold" for="filter-ai">Hide AI-generated artworks</label>
                       <div id="filter-ai-help" class="form-text">Hides artwork that has been tagged as AI-generated. This helps focus on human-created content.</div>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
                   </form>
                   <div id="filter-response"></div>
                 </li>
 
-                <li class="list-group-item bg-body-tertiary py-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 py-4 px-0">
                   <h3 class="mb-3">Open artworks in new tab</h3>
                   <p>Choose whether clicking on artwork thumbnails opens the full artwork in the same tab or a new tab.</p>
                   <form id="ttnt-form" hx-post="/settings/thumbnailToNewTab" hx-target="#ttnt-response" hx-swap="outerHTML">
@@ -159,12 +160,12 @@
                       <label class="form-check-label fw-bold" for="ttnt-switch">Open in new tab</label>
                       <div id="ttnt-switch-help" class="form-text">When enabled, clicking on artwork thumbnails will open the full artwork in a new browser tab.</div>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
                   </form>
                   <div id="ttnt-response"></div>
                 </li>
 
-                <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
                   <h3 class="mb-3">Artwork preview pop-ups</h3>
                   <p>Configure how artwork previews are displayed when interacting with thumbnails.</p>
                   <!-- <div class="alert alert-warning" role="alert">
@@ -191,7 +192,7 @@
                       <label class="form-check-label fw-bold" for="app-d"> Disable </label>
                       <div id="app-d-help" class="form-text">No previewing. Clicking on thumbnails will directly open the full artwork page.</div>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill" disabled>Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2" disabled>Save</button>
                   </form>
                   <div id="artwork-preview-response"></div>
                 </li>
@@ -203,7 +204,7 @@
               <ul class="list-group list-group-flush">
                 <h2 class="mb-4">Novels</h2>
 
-                <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
                   <h3 class="mb-3">Font family</h3>
                   <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
                   <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
@@ -241,12 +242,12 @@
                       </div>
                     </div>
 
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
                   </form>
                   <div id="novel-font-response"></div>
                 </li>
 
-                <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
                   <h3 class="mb-3">Force text orientation</h3>
                   <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
                   <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
@@ -265,7 +266,7 @@
                       <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
                       <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Save</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
                   </form>
                   <div id="novel-view-mode-response"></div>
                 </li>
@@ -281,7 +282,7 @@
                   <p class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Exercise caution when modifying these settings. Incorrect values may adversely affect PixivFE's functionality or your browsing experience.</p>
                 </div>
 
-                <li class="list-group-item bg-body-tertiary pt-0 pb-4 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
                   <h3 class="mb-3">Cookie values</h3>
                   <p>
                     Please note that some cookies here such as ShowArtR18, ShowArtR18G, and ShowArtAI are for features still under development.
@@ -305,7 +306,7 @@
 
                         <!-- Set Button -->
                         <div class="col-auto">
-                          <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set</button>
+                          <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Set</button>
                         </div>
                       </form>
                       <!-- End Set Cookie Form -->
@@ -327,7 +328,7 @@
                   {{- end }}
                 </li>
 
-                <li class="list-group-item bg-body-tertiary pt-4 pb-0 px-0">
+                <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
                   <h3 class="mb-3">Raw settings</h3>
                   <p>This area displays all your current cookie values in a raw format. You can:</p>
                   <ul class="mb-3">
@@ -341,7 +342,7 @@
                     <div class="mb-3">
                       <textarea class="form-control" name="raw" rows="10">{{range k, v := CookieList}}&#10;{{k}}={{v}}{{end}}</textarea>
                     </div>
-                    <button type="submit" class="btn btn-secondary fw-bold rounded-pill">Set raw settings</button>
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Set raw settings</button>
                     <div id="set-raw-settings-help" class="form-text">Applies the raw settings entered above. This action will overwrite your current configuration with the provided values.</div>
                   </form>
                   <div id="raw-settings-response"></div>
@@ -354,7 +355,7 @@
               <ul class="list-group list-group-flush">
                 <h2 class="mb-4">Reset</h2>
                 <!-- Reset all prefererences -->
-                <li class="list-group-item bg-body-tertiary px-0">
+                <li class="list-group-item bg-charcoal-surface1 px-0">
                   <h3 class="mb-3">Reset all preferences</h3>
                   <p>You can reset all cookies and use PixivFE's default preferences instead. This action will remove all customized settings.</p>
                   <form id="reset-all-form" hx-post="/settings/reset-all" hx-target="#reset-all-response" hx-swap="outerHTML">
