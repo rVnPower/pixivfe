@@ -20,25 +20,26 @@ A release version will be published when all features assigned with that version
 
 | Features                                                  | Release |
 |-----------------------------------------------------------|---------|
-| AI/R15/R18/R18-G filtering                                | 2.9 ✅  |
-| Novel series                                              | 2.9 ✅  |
-| Testing                                                   | 2.10 🔁 |
-| Pixivision (articles, tags, categories, RSS)              | 2.11 🔁 |
-| Full landing page (recommended users, trending tags, ...) | 2.11 🔁 |
-| Manga series                                              | N/A     |
-| Complete novel content support (furigana, pages, ...)     | N/A     |
-| Pixiv Sketch                                              | N/A     |
-| Pixiv Idea (pixiv.net/idea)                               | N/A     |
-| Pixiv Request (pixiv.net/request)                         | N/A     |
-| User discovery                                            | N/A     |
-| Semi-popular artworks                                     | N/A     |
-| Localization (l10n)                                       | N/A     |
-| App API (mobile API) support                              | N/A     |
-| Native Ugoira support                                     | N/A     |
-| Search page / Search suggestions                          | N/A     |
-| Dynamic image gallery                                     | N/A     |
-| CSS reorganization / Theming                              | N/A     |
-| Git version display                                       | N/A     |
+| AI/R15/R18/R18-G filtering                                | 2.9     |
+| Novel series                                              | 2.9     |
+|     > We are here     (move me down on every release)     | current |
+| Testing                                                   | 2.10    |
+| Git version display                                       | 2.10    |
+| Pixivision (articles, tags, categories, RSS)              | 2.11    |
+| Full landing page (recommended users, trending tags, ...) | 2.11    |
+| Manga series                                              |         |
+| Complete novel content support (furigana, pages, ...)     |         |
+| Pixiv Sketch                                              |         |
+| Pixiv Idea (pixiv.net/idea)                               |         |
+| Pixiv Request (pixiv.net/request)                         |         |
+| User discovery                                            |         |
+| Semi-popular artworks                                     |         |
+| Localization (l10n)                                       |         |
+| App API (mobile API) support                              |         |
+| Native Ugoira support                                     |         |
+| Search page / Search suggestions                          |         |
+| Dynamic image gallery                                     |         |
+| CSS reorganization / Theming                              |         |
 
 ## To implement
 
