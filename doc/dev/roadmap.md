@@ -15,13 +15,16 @@ A release version will be published when all features assigned with that version
 
 **Developers note:** Sort features by their release number. Only core developers should be allowed to assign release versions to features.
 
+**Changelog:**
+- 05/10/24: Pixivision and full landing page has been postponed for the new template rewrite.
+
 | Features                                                  | Release |
 |-----------------------------------------------------------|---------|
 | AI/R15/R18/R18-G filtering                                | 2.9 ✅  |
 | Novel series                                              | 2.9 ✅  |
 | Testing                                                   | 2.10 🔁 |
-| Pixivision (articles, tags, categories, RSS)              | 2.10 🔁 |
-| Full landing page (recommended users, trending tags, ...) | 2.10 🔁 |
+| Pixivision (articles, tags, categories, RSS)              | 2.11 🔁 |
+| Full landing page (recommended users, trending tags, ...) | 2.11 🔁 |
 | Manga series                                              | N/A     |
 | Complete novel content support (furigana, pages, ...)     | N/A     |
 | Pixiv Sketch                                              | N/A     |
