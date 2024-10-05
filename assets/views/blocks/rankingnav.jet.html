@@ -1,0 +1,31 @@
+{*
+    This Jet template block renders "Past day", "Latest", and "Next day buttons".
+*}
+
+{*
+  {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+  {{- path := slice("", "&date=" + .Data.PrevDate, "&date=" + .Data.NextDate) }}
+  {{- name := slice("Latest", "Previous day", "Next day")}}
+  {{- activeState := isset(Queries.date) ? Queries.date : "" }}
+  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=activeState)}}
+  {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+*}
+
+{{- block RankingNav() }}
+  {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+  {{- if .Data.PrevDate != "false" }}
+  <a href="{{ url }}&date={{.Data.PrevDate}}" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+    <span>
+      <i class="bi bi-arrow-left-circle-fill me-2"></i>Past day
+    </span>
+  </a>
+  {{- end }}
+  <a href="{{ url }}" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+    <span>Latest</span>
+  </a>
+  <a href="{{ url }}&date={{.Data.NextDate}}" class="custom-btn-secondary bg-charcoal-surface2{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
+    <span>
+      Next day<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+    </span>
+  </a>
+{{- end }}
