@@ -28,18 +28,6 @@ type AppAPICredentials struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-// VnPower: This function must be run before any of the generators could be used.
-func init() {
-	// Assert that a cryptographically secure PRNG is available.
-	// Panic otherwise.
-	buf := make([]byte, 1)
-
-	_, err := io.ReadFull(rand.Reader, buf)
-	if err != nil {
-		panic(fmt.Sprintf("crypto/rand is unavailable: Read() failed with %#v", err))
-	}
-}
-
 // GenerateRandomBytes returns securely generated random bytes.
 // It will return an error if the system's secure random
 // number generator fails to function correctly, in which
