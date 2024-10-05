@@ -31,7 +31,7 @@ func (s UserArtCategory) Validate() error {
 		s != UserArt_Manga &&
 		s != UserArt_Bookmarks &&
 		s != UserArt_Novel {
-		return i18n.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarks, UserArt_Novel)
+		return i18n.Errorf(`Invalid work category: %#v. Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarks, UserArt_Novel)
 	} else {
 		return nil
 	}
