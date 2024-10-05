@@ -1,181 +1,151 @@
-{{- extends "layout/default" }}
-{{- import "blocks/switcher" }}
-{{- import "blocks/underlinenav" }}
-{{- import "blocks/pagination" }}
-{{- block body() }}
+{{- extends "layout/default" }} {{- import "blocks/switcher" }} {{- import "blocks/underlinenav" }} {{- import "blocks/pagination" }} {{- block body() }}
 
-<div class="row justify-content-center mb-5">
-<div class="col-sm-12 col-md-9">
-  <!-- Tag header -->
-  <div class="card border-0 mb-4">
+<div class="row justify-content-center g-4">
+  <div class="col-12">
+    <!-- Tag header -->
+    <div class="custom-card bg-charcoal-surface1">
       <div class="row g-0">
         {{- if .Tag.Metadata.ID }}
         <!-- Tag artwork -->
-        <div class="col-4">
+        <div class="col-md-4">
           <a href="/artworks/{{ .Tag.Metadata.ID }}">
-            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid h-100 object-fit-cover rounded-end-0 rounded-5" />
+            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid h-100 object-fit-cover card-img-top rounded-top-5 rounded-start-md-5 rounded-end-md-0" />
           </a>
         </div>
         {{- end }}
         <!-- Tag information -->
-        <div class="col-8">
-          <div class="card-body bg-body-tertiary rounded-start-0 rounded-5 p-4">
-            <span class="d-flex flex-wrap align-items-center">
+        <div class="col-md-8">
+          <div class="custom-card-body p-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-start">
+              <div class="d-flex flex-column flex-sm-row align-items-center">
                 <h1 class="display-6 fw-bold me-2">#{{ .Tag.Name }}</h1>
                 <span class="h4 text-muted">{{ .Tag.Metadata.Name }}</span>
-            </span>
-          <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
-          <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
-          <p class="lead">{{ .Tag.Metadata.Detail }}</p>
-            <div class="d-flex flex-wrap align-items-center">
-                {{- range .Data.RelatedTags }}
-                <span class="badge fw-normal me-2 mb-2 p-0 text-wrap text-break text-start">
-                    <a href="/tags/{{ . }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
-                </span>
-                {{- end }}
+              </div>
+              <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
+                <i class="bi bi-gear-fill me-2"></i>Options
+              </button>
             </div>
+            <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
+            <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
+            <p class="lead">{{ .Tag.Metadata.Detail }}</p>
+            <div class="d-flex flex-wrap align-items-center">
+              {{- range .Data.RelatedTags }}
+              <span class="badge fw-normal me-2 mb-2 p-0 text-wrap text-break text-start">
+                <a href="/tags/{{ . }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
+              </span>
+              {{- end }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-    <!-- Related tags -->
-    <!-- <div class="mb-4">
-        <h2>Related Tags</h2>
-        <div class="d-flex flex-wrap">
-        {{- range .Data.RelatedTags }}
-        <a href="/tags/{{ . }}" class="badge text-bg-secondary text-decoration-none me-2 mt-2 text-wrap text-break">#{{ . }}</a>
-        {{- end }}
-        </div>
-    </div> -->
-
-    <!-- Switchers -->
+  <!-- Switchers -->
+  <div class="col-12">
     {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
     {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
     {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
     {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
     {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
 
-    <div class="card border-0 mb-5">
-        <div class="card-body bg-body-tertiary rounded-5 p-4">
-            <h2 class="mb-4"><i class="bi bi-funnel-fill"></i> Search settings</h2>
-            <div class="row mb-3">
-                <div class="col-md-4 mb-2 mb-md-0">
-                <h3>Category</h3>
-                {{- URL := unfinishedQuery(.QueriesC, "category") }}
-                {{- path := slice("artworks", "illustrations", "manga")}}
-                {{- name := slice("Artworks", "Illustrations", "Manga")}}
-                {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
-                </div>
-                <div class="col-md-4 mb-2 mb-md-0">
-                <h3>Order</h3>
-                {{- URL := unfinishedQuery(.QueriesC, "order") }}
-                {{- path := slice("date_d", "date")}}
-                {{- name := slice("Newest", "Oldest")}}
-                {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
-                </div>
-                <div class="col-md-4 mb-2 mb-md-0">
-                <h3>Filter</h3>
-                {{- URL := unfinishedQuery(.QueriesC, "mode") }}
-                {{- path := slice("all", "safe", "r18")}}
-                {{- name := slice("All", "Safe", "R-18")}}
-                {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
-                </div>
-                </div>
-
-                <div class="row mb-3">
-                <div class="col-md-6 mb-2 mb-md-0">
-                <h3>Ratio</h3>
-                {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
-                {{- path := slice("", "-0.5", "0", "0.5")}}
-                {{- name := slice("All", "Portrait", "Square", "Landscape")}}
-                {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
-                </div>
-                <div class="col-md-6 mb-2 mb-md-0">
-                <h3>Search mode</h3>
-                {{- URL := unfinishedQuery(.QueriesC, "smode") }}
-                {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-                {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
-                {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveSearchMode) }}
-                </div>
-            </div>
-
-            <!-- Advanced Settings -->
-            <div class="accordion" id="advancedSettings">
-                <div class="accordion-item">
-                <div class="accordion-header" id="headingAdvanced">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
-                    <span class="h6 fw-bold mb-0">Advanced settings</span>
-                    </button>
-                </div>
-                <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advancedSettings">
-                    <div class="accordion-body">
-                    {{- URL := unfinishedQuery(.QueriesC, "") }}
-                    <form action="{{ URL }}&name={{ .QueriesC.Query[" Name"] }}" method="post" class="row g-3">
-                        <div class="col-md-6">
-                        <label for="wlt" class="form-label">Minimum image width</label>
-                        <input type="text" class="form-control" id="wlt" name="wlt" value="{{ .QueriesC.Query[" Wlt"] }}" />
-                        </div>
-                        <div class="col-md-6">
-                        <label for="wgt" class="form-label">Maximum image width</label>
-                        <input type="text" class="form-control" id="wgt" name="wgt" value="{{ .QueriesC.Query[" Wgt"] }}" />
-                        </div>
-                        <div class="col-md-6">
-                        <label for="hlt" class="form-label">Minimum image height</label>
-                        <input type="text" class="form-control" id="hlt" name="hlt" value="{{ .QueriesC.Query[" Hlt"] }}" />
-                        </div>
-                        <div class="col-md-6">
-                        <label for="hgt" class="form-label">Maximum image height</label>
-                        <input type="text" class="form-control" id="hgt" name="hgt" value="{{ .QueriesC.Query[" Hgt"] }}" />
-                        </div>
-                        <div class="col-md-6">
-                        <label for="scd" class="form-label">Posted after (format: yyyy-mm-dd)</label>
-                        <input type="text" class="form-control" id="scd" name="scd" value="{{ .QueriesC.Query[" Scd"] }}" />
-                        </div>
-                        <div class="col-md-6">
-                        <label for="ecd" class="form-label">Posted before (format: yyyy-mm-dd)</label>
-                        <input type="text" class="form-control" id="ecd" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
-                        </div>
-                        <div class="col-12">
-                        <label for="tool" class="form-label">Tool</label>
-                        <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
-                        </div>
-                        <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Set</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-                </div>
-            </div>
+    <div class="custom-card bg-charcoal-surface1">
+      <div class="custom-card-body p-4">
+        <h2 class="mb-4"><i class="bi bi-gear-fill me-2"></i> Search settings</h2>
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <h3><i class="bi bi-grid-fill me-2"></i>Category</h3>
+            {{- URL := unfinishedQuery(.QueriesC, "category") }} {{- path := slice("artworks", "illustrations", "manga")}} {{- name := slice("Artworks", "Illustrations", "Manga")}} {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
+          </div>
+          <div class="col-md-4 mb-4">
+            <h3><i class="bi bi-sort-down me-2"></i>Order</h3>
+            {{- URL := unfinishedQuery(.QueriesC, "order") }} {{- path := slice("date_d", "date")}} {{- name := slice("Newest", "Oldest")}} {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
+          </div>
+          <div class="col-md-4 mb-4">
+            <h3><i class="bi bi-funnel-fill me-2"></i>Filter</h3>
+            {{- URL := unfinishedQuery(.QueriesC, "mode") }} {{- path := slice("all", "safe", "r18")}} {{- name := slice("All", "Safe", "R-18")}} {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <h3><i class="bi bi-aspect-ratio-fill me-2"></i>Ratio</h3>
+            {{- URL := unfinishedQuery(.QueriesC, "ratio") }} {{- path := slice("", "-0.5", "0", "0.5")}} {{- name := slice("All", "Portrait", "Square", "Landscape")}} {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
+          </div>
+          <div class="col-md-6 mb-4">
+            <h3><i class="bi bi-search me-2"></i>Search mode</h3>
+            {{- URL := unfinishedQuery(.QueriesC, "smode") }} {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}} {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}} {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveSearchMode) }}
+          </div>
+        </div>
+
+        <!-- Advanced settings -->
+        <div class="accordion" id="advancedSettings">
+          <div class="accordion-item">
+            <div class="accordion-header rounded-2" id="headingAdvanced">
+              <button class="accordion-button bg-charcoal-surface2 text-body collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
+                <h3 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Advanced settings</h3>
+              </button>
+            </div>
+            <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advancedSettings">
+              <div class="accordion-body bg-charcoal-surface1 rounded-2">
+                {{- URL := unfinishedQuery(.QueriesC, "") }}
+                <form action="{{ URL }}&name={{ .QueriesC.Query[" Name"] }}" method="post" class="row g-3">
+                  <div class="col-md-6">
+                    <label for="wlt" class="form-label">Minimum image width</label>
+                    <input type="text" class="form-control" id="wlt" name="wlt" value="{{ .QueriesC.Query[" Wlt"] }}" />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="wgt" class="form-label">Maximum image width</label>
+                    <input type="text" class="form-control" id="wgt" name="wgt" value="{{ .QueriesC.Query[" Wgt"] }}" />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="hlt" class="form-label">Minimum image height</label>
+                    <input type="text" class="form-control" id="hlt" name="hlt" value="{{ .QueriesC.Query[" Hlt"] }}" />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="hgt" class="form-label">Maximum image height</label>
+                    <input type="text" class="form-control" id="hgt" name="hgt" value="{{ .QueriesC.Query[" Hgt"] }}" />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="scd" class="form-label">Posted after (format: yyyy-mm-dd)</label>
+                    <input type="text" class="form-control" id="scd" name="scd" value="{{ .QueriesC.Query[" Scd"] }}" />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="ecd" class="form-label">Posted before (format: yyyy-mm-dd)</label>
+                    <input type="text" class="form-control" id="ecd" name="ecd" value="{{ .QueriesC.Query[" Ecd"] }}" />
+                  </div>
+                  <div class="col-12">
+                    <label for="tool" class="form-label">Tool</label>
+                    <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Set</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-</div>
-
-<div class="col-12">
-    <!-- Popular Artworks -->
+  <div class="col-12">
+    <!-- Popular artworks -->
     {{- if .Data.Popular.Recent }}
-    <h2 class="mb-3">Popular artworks</h2>
-    <h3 class="mb-3">Recent</h3>
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-        {{- include "fragments/small-tn" .Data.Popular.Recent }}
-    </div>
-    <h3 class="mb-3">All Time</h3>
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-        {{- include "fragments/small-tn" .Data.Popular.Permanent }}
-    </div>
+    <h2>Popular artworks</h2>
+    <h3>Recent</h3>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">{{- include "fragments/small-tn" .Data.Popular.Recent }}</div>
+    <h3>All Time</h3>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">{{- include "fragments/small-tn" .Data.Popular.Permanent }}</div>
     {{- end }}
 
-    <!-- Main Works -->
-    <h2 class="mb-3" id="checkpoint">Works</h2>
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
-        {{- include "fragments/small-tn" .Data.Artworks.Artworks }}
-    </div>
+    <!-- Main works -->
+    <h2 id="checkpoint">Works</h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">{{- include "fragments/small-tn" .Data.Artworks.Artworks }}</div>
 
     <!-- Pagination -->
-    {{- url := unfinishedQuery(.QueriesC, "page") }}
-    {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
-    {{- yield pagination(data=paginationData) }}
+    {{- url := unfinishedQuery(.QueriesC, "page") }} {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }} {{- yield pagination(data=paginationData) }}
+  </div>
+  {{- end }}
 </div>
-{{- end }}

@@ -11,10 +11,12 @@ $aspect-ratios: (
   "9x16": calc(16 / 9 * 100%),
 );
 
-/// Define custom colors
+/// Base twbs imports
 @import "./bootstrap/functions";
 @import "./bootstrap/variables";
 @import "./bootstrap/variables-dark";
+
+/// Define custom colors
 
 // Add a custom color to $theme-colors
 $custom-colors: (
@@ -27,6 +29,25 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import "./bootstrap/maps";
 @import "./bootstrap/mixins";
 @import "./bootstrap/utilities";
+
+/// Enable responsive border classes
+/// ref: https://getbootstrap.com/docs/5.3/utilities/api/#enable-responsive
+$utilities: map-merge(
+  $utilities, (
+    "rounded-start": map-merge(
+      map-get($utilities, "rounded-start"),
+      ( responsive: true ),
+    ),
+    "rounded-top": map-merge(
+      map-get($utilities, "rounded-top"),
+      ( responsive: true ),
+    ),
+    "rounded-end": map-merge(
+      map-get($utilities, "rounded-end"),
+      ( responsive: true ),
+    ),
+  )
+);
 
 @import "./bootstrap/bootstrap";
 
