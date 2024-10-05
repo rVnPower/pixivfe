@@ -13,6 +13,8 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 const USER_AGENT = "PixivAndroidApp/5.0.234 (Android 11; Pixel 5)"
@@ -82,7 +84,7 @@ func AppAPIRefresh(r *http.Request, refresh_token string) AppAPICredentials {
 	req.Header.Set("User-Agent", USER_AGENT)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		panic(err)
 	}
@@ -117,7 +119,7 @@ func AppAPILogin(r *http.Request) AppAPICredentials {
 	req.Header.Set("User-Agent", USER_AGENT)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
 		panic(err)
 	}

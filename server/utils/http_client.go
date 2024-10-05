@@ -7,6 +7,7 @@ import "net/http"
 var HttpClient = &http.Client{
 	Transport: &http.Transport{
 		Proxy:               http.ProxyFromEnvironment,
+		MaxIdleConns:        0,
 		MaxIdleConnsPerHost: 20,
 	},
 }

@@ -180,7 +180,6 @@ rules:
     fmt.Errorf("$MSG", $...ARGS)
   fix: |
     i18n.Errorf("$MSG", $...ARGS)
-
 - id: "14"
   message: "non-global regexp.MustCompile"
   languages: [go]
@@ -194,3 +193,11 @@ rules:
       $VAR := regexp.MustCompile($PATT)
   fix: |
       var $VAR = regexp.MustCompile($PATT)
+- id: "15"
+  message: "http.DefaultClient"
+  languages: [go]
+  severity: ERROR
+  pattern: |
+    http.DefaultClient
+  fix: |
+    utils.HttpClient
