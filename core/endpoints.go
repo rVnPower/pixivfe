@@ -170,3 +170,9 @@ func GetInsertIllustURL(novelid, id string) string {
 
 	return fmt.Sprintf(base, novelid, id)
 }
+
+func GetMangaSeriesContentURL(id string, page int) string {
+	base := "https://www.pixiv.net/ajax/series/%s?p=%d"
+
+	return fmt.Sprintf(base, id, page)
+}

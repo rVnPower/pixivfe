@@ -44,6 +44,7 @@ func TestAutoRender(t *testing.T) {
 	test[Data_user](t)
 	test[Data_userAtom](t)
 	test[Data_novelSeries](t)
+	test[Data_mangaSeries](t)
 }
 
 func fakeData[T any]() T {

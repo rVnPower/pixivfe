@@ -1,0 +1,44 @@
+{{- extends "layout/default" }}
+{{- block body() }}
+<div class="container illust" id="checkpoint">
+    {{- if .MangaSeriesContent.IsSetCover }}
+    <div>
+        <img class="illust-cover" src="{{ .MangaSeriesContent.Brief.URL }}" alt="{{ .MangaSeriesContent.Brief.Title }}">
+    </div>
+    {{- end }}
+    <div class="illust-attr">
+        <div class="illust-author-attr">
+            <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}"
+                    class="illust-avatar" />
+            </a>
+            <div class="attr-wrap">
+                <div class="illust-title">{{ .MangaSeriesContent.Brief.Title }}</div>
+                <div class="illust-author">
+                    <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="attr-wrap">
+            {* .MangaSeriesContent.Brief.Total w/o token is accurate. *}
+            {* .MangaSeriesContent.Total isn't accurate without token. *}
+            <div class="illust-title">{{ .MangaSeriesContent.Brief.Total }} Works</div>
+            <div class="illust-author"><a href="/artworks/{{ .MangaSeriesContent.Brief.FirstIllustID  }}">Read from the
+                    begining</a></div>
+        </div>
+    </div>
+    <div class="artwork-container">
+        {{- range .MangaSeriesContent.Series }}
+        <div class="artwork-small artwork">
+            {{ include "fragments/thumbnail-dt" .Brief }} {{ include "fragments/thumbnail-tt" .Brief }}
+        </div>
+        {{- end }}
+    </div>
+    <div class="pagination">
+        {{- url := "/user/" + .User.ID + "/series/" + .MangaSeriesContent.SeriesID + "?p="}}
+        <small>Page {{ .Page }}/{{ .PageLimit }}</small>
+        <br />
+        {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
+    </div>
+</div>
+{{- end }}

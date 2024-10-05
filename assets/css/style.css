@@ -847,6 +847,9 @@ edit style.scss
     object-fit: cover;
     object-position: center top;
   }
+  .illust .illust-cover {
+    width: 100%;
+  }
   .comment {
     display: flex;
     margin-bottom: 10px;
