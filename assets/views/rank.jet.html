@@ -1,145 +1,137 @@
 {{- extends "layout/default" }}
 {{- import "blocks/pagination" }}
 {{- import "blocks/underlinenav" }}
+{{- import "blocks/switcher" }}
 {{- block body() }}
 <div class="row justify-content-center g-4">
-  <h1 class="text-center">{{ .Title }}</h1>
+  <h1 class="text-center">{{ .Title }}  ({{ .Data.CurrentDate }})</h1>
   <div class="col-12">
-    <div class="row g-3">
-      <div class="col-12 col-lg-9">
-        <div class="custom-card">
-          <div class="custom-card-body bg-charcoal-surface1 p-4">
-            <h2 class="mb-3">Ranking options</h2>
-            <!-- TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
-                       e.g. selecting the "Ugoira" button hides the buttons under
-                            "Specialized rankings" as well as the "Monthly" and "Rookie"
-                            options under "Time frame", but this doesn't occur vice versa
-                            with the "Ugoira" button still visible if either of the latter
-                            buttons are selected, thus allowing the user to generate an invalid
-                            URL even when there is no UX indication that this is the case
-            -->
-            {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-            {{- Content := isset(Queries.content) ? Queries.content : "all" }}
-            {{- url := "" }}
-            {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
-              {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
-            {{- else }}
-              {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
-            {{- end }}
-            <div class="row border-bottom border-2 mb-3">
-              <div class="col-12">
-                 <div class="row">
-                   <div class="col-12">
-                     <h3>Content type</h3>
-                      <div class="btn-group d-flex flex-wrap" role="group" aria-label="Content types">
-                        {{- path := slice("all", "illust", "manga", "ugoira") }}
-                        {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
-                        {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Content)}}
-                      </div>
-                      <p class="small text-muted mb-3">Select the type of content you want to see in the rankings.</p>
-                   </div>
-                 </div>
+    <div class="custom-card bg-charcoal-surface1 p-4">
+      <div class="d-flex flex-row align-items-center justify-content-between" aria-label="Date navigation">
+        <h2 class="mb-0">Ranking options</h2>
+        <button class="custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="collapse" data-bs-target="#RankingOptions" aria-expanded="false" aria-controls="RankingOptions">
+          Expand
+        </button>
+       </div>
+      <div class="collapse" id="RankingOptions">
+        <div class="custom-card-body bg-charcoal-surface1 p-0 mt-4">
+          <!-- TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
+                      e.g. selecting the "Ugoira" button hides the buttons under
+                          "Specialized rankings" as well as the "Monthly" and "Rookie"
+                          options under "Time frame", but this doesn't occur vice versa
+                          with the "Ugoira" button still visible if either of the latter
+                          buttons are selected, thus allowing the user to generate an invalid
+                          URL even when there is no UX indication that this is the case
+          -->
+          {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+          {{- Content := isset(Queries.content) ? Queries.content : "all" }}
+          {{- url := "" }}
+          {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
+            {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
+          {{- else }}
+            {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+          {{- end }}
+          <div class="row border-bottom border-2 mb-4">
+            <div class="col-12 col-md-6">
+              <h3>Content type</h3>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Content types">
+                {{- path := slice("all", "illust", "manga", "ugoira") }}
+                {{- name := slice("Overall", "Illustrations", "Manga", "Ugoira")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Content)}}
               </div>
+              <p class="small text-body-secondary mb-4">Select the type of content you want to see in the rankings.</p>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-12 col-md-6">
+              <h3>Time frame</h3>
+              {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+              {{- if Content != "ugoira" }}
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+                {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily_r18", "weekly_r18") }}
+                {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              {{- else }}
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily", "weekly") }}
+                {{- name := slice("Daily", "Weekly")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily_r18", "weekly_r18") }}
+                {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              {{- end }}
+              <p class="small text-body-secondary">Choose the time frame for the rankings.</p>
+              <p class="small text-body-secondary mb-4 mb-md-0">
+                <span class="fw-bold">Monthly</span> and <span class="fw-bold">Rookie</span> are unavailable when filtering for <span class="fw-bold">Ugoira</span>.
+              </p>
             </div>
 
-            <div class="row">
-              <div class="col-12 col-md-7">
-                <h3>Time frame</h3>
-                {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                {{- if Content != "ugoira" }}
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
-                  {{- path := slice("daily", "weekly", "monthly", "rookie") }}
-                  {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
-                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
-                  {{- path := slice("daily_r18", "weekly_r18") }}
-                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                {{- else }}
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
-                  {{- path := slice("daily", "weekly") }}
-                  {{- name := slice("Daily", "Weekly")}}
-                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
-                  {{- path := slice("daily_r18", "weekly_r18") }}
-                  {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-                  {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-                </div>
-                {{- end }}
-                <p class="small text-body-secondary mb-2">Choose the time frame for the rankings.</p>
-                <p class="small text-body-secondary mb-md-0">
-                  <span class="fw-bold">Monthly</span> and <span class="fw-bold">Rookie</span> are unavailable when filtering for <span class="fw-bold">Ugoira</span>.
-                </p>
-              </div>
-
-              <div class="col-12 col-md-5">
+            <div class="col-12 col-md-6">
               {{- if Content == "all" }}
               <h3>Specialized rankings</h3>
-              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- path := slice("original") }}
                 {{- name := slice("Original")}}
                 {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
-              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                {{- path := slice("male",) }}
-                {{- name := slice("Popular among males")}}
+                {{- path := slice("male", "female") }}
+                {{- name := slice("Popular among males", "Popular among females")}}
                 {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
-              <div class="btn-group d-flex flex-wrap" role="group" aria-label="Specialized ranking modes">
-                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                {{- path := slice("female") }}
-                {{- name := slice("Popular among females")}}
-                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
-              </div>
-              <p class="small text-muted mb-2">Specialized ranking categories.</p>
+              <p class="small text-muted">Specialized ranking categories.</p>
               <p class="small text-muted mb-0">These options are only available when filtering for <span class="fw-bold">Overall</span>.</p>
               {{- end }}
+              </div>
             </div>
 
-              </div>
+          <div class="row">
+            <div class="col-12">
+              <a href="/ranking" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-12 col-lg-3">
-        <div class="card-body rounded-5 bg-body-tertiary p-4 mb-4">
-          <h2 class="mb-3">Reset modes</h2>
-          <p class="small text-muted">You can reset all currently applied ranking modes and filters.</p>
-          <div class="d-flex flex-wrap">
-            <a href="/ranking" type="button" class="btn btn-danger flex-fill fw-bold rounded-pill">Reset modes</a>
-          </div>
-        </div>
-
-        <div class="card border-0 rounded-5 bg-body-tertiary p-4 mb-4">
-          <h2 class="mb-3">Date ({{ .Data.CurrentDate }})</h2>
-          <p class="small text-muted">Navigate through different dates or view the latest rankings.</p>
-          {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
-          <div class="d-flex flex-wrap mb-2">
-            <a href="{{ url }}" class="btn btn-secondary fw-bold rounded-pill flex-fill mb-2 d-flex align-items-center justify-content-center">
-              <span>Latest</span>
-            </a>
-          </div>
-          <div class="d-flex flex-wrap">
-            {{- if .Data.PrevDate != "false" }}
-            <a href="{{ url }}&date={{.Data.PrevDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill mb-2 mb-md-0 me-0 me-md-2 d-flex align-items-center justify-content-center">
-              <span>Previous day</span>
-            </a>
-            {{- end }}
-            <a href="{{ url }}&date={{.Data.NextDate}}" class="btn btn-secondary fw-bold rounded-pill flex-fill d-flex align-items-center justify-content-center{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
-              <span>Next day</span>
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
   <div class="col-12">
+    <div class="d-flex flex-row align-items-center justify-content-between mx-auto mb-4" aria-label="Date navigation">
+      <!-- {*
+        {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+        {{- path := slice("", "&date=" + .Data.PrevDate, "&date=" + .Data.NextDate) }}
+        {{- name := slice("Latest", "Previous day", "Next day")}}
+        {{- activeState := isset(Queries.date) ? Queries.date : "" }}
+        {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=activeState)}}
+        {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+      *} -->
+      {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+      {{- if .Data.PrevDate != "false" }}
+      <a href="{{ url }}&date={{.Data.PrevDate}}" class="custom-btn-secondary-flex bg-charcoal-surface2 me-2">
+        <span>Previous day</span>
+      </a>
+      {{- end }}
+      <a href="{{ url }}" class="custom-btn-secondary-flex bg-charcoal-surface2 me-2">
+        <span>Latest</span>
+      </a>
+      <a href="{{ url }}&date={{.Data.NextDate}}" class="custom-btn-secondary-flex bg-charcoal-surface2{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
+        <span>Next day</span>
+      </a>
+    </div>
+
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/ranking-tn" .Data.Contents }}
     </div>
