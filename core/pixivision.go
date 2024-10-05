@@ -14,14 +14,15 @@ import (
 
 const PixivDatetimeLayout = "2006-01-02"
 
-func generateRequest(link, method string, body io.Reader) *http.Request {
-	req, err := http.NewRequest(method, link, body)
+var re_lang = regexp.MustCompile(`.*\/\/.*?\/(.*?)\/`)
+
+func generateRequest(r *http.Request, link, method string, body io.Reader) *http.Request {
+	req, err := http.NewRequestWithContext(r.Context(), method, link, body)
 	if err != nil {
 		panic(err)
 	}
 
-	r := regexp.MustCompile(`.*\/\/.*?\/(.*?)\/`)
-	lang := r.FindStringSubmatch(link)[1]
+	lang := re_lang.FindStringSubmatch(link)[1]
 
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0")
 	req.Header.Set("Connection", "keep-alive")
@@ -112,11 +113,11 @@ func parseBackgroundImage(link string) string {
 	return r.FindStringSubmatch(link)[1]
 }
 
-func PixivisionGetHomepage(page string, lang ...string) ([]PixivisionArticle, error) {
+func PixivisionGetHomepage(r *http.Request, page string, lang ...string) ([]PixivisionArticle, error) {
 	var articles []PixivisionArticle
 
 	URL := generatePixivisionURL(fmt.Sprintf("?p=%s", page), lang)
-	req := generateRequest(URL, "GET", nil)
+	req := generateRequest(r, URL, "GET", nil)
 	resp, err := executeRequest(req)
 	if err != nil {
 		return articles, err
@@ -157,11 +158,11 @@ func PixivisionGetHomepage(page string, lang ...string) ([]PixivisionArticle, er
 	return articles, nil
 }
 
-func PixivisionGetTag(id string, page string, lang ...string) (PixivisionTag, error) {
+func PixivisionGetTag(r *http.Request, id string, page string, lang ...string) (PixivisionTag, error) {
 	var tag PixivisionTag
 
 	URL := generatePixivisionURL(fmt.Sprintf("t/%s/?p=%s", id, page), lang)
-	req := generateRequest(URL, "GET", nil)
+	req := generateRequest(r, URL, "GET", nil)
 	resp, err := executeRequest(req)
 	if err != nil {
 		return tag, err
@@ -203,11 +204,11 @@ func PixivisionGetTag(id string, page string, lang ...string) (PixivisionTag, er
 	return tag, nil
 }
 
-func PixivisionGetArticle(id string, lang ...string) (PixivisionArticle, error) {
+func PixivisionGetArticle(r *http.Request, id string, lang ...string) (PixivisionArticle, error) {
 	var article PixivisionArticle
 
 	URL := generatePixivisionURL(fmt.Sprintf("a/%s", id), lang)
-	req := generateRequest(URL, "GET", nil)
+	req := generateRequest(r, URL, "GET", nil)
 	resp, err := executeRequest(req)
 	if err != nil {
 		return article, err
@@ -265,11 +266,11 @@ func PixivisionGetArticle(id string, lang ...string) (PixivisionArticle, error) 
 	return article, nil
 }
 
-func PixivisionGetCategory(id string, page string, lang ...string) (PixivisionCategory, error) {
+func PixivisionGetCategory(r *http.Request, id string, page string, lang ...string) (PixivisionCategory, error) {
 	var category PixivisionCategory
 
 	URL := generatePixivisionURL(fmt.Sprintf("c/%s/?p=%s", id, page), lang)
-	req := generateRequest(URL, "GET", nil)
+	req := generateRequest(r, URL, "GET", nil)
 	resp, err := executeRequest(req)
 	if err != nil {
 		return category, err

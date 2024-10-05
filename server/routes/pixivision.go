@@ -8,7 +8,7 @@ import (
 )
 
 func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
-	data, err := core.PixivisionGetHomepage("1", "en")
+	data, err := core.PixivisionGetHomepage(r, "1", "en")
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {
 
 func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
-	data, err := core.PixivisionGetArticle(id, "en")
+	data, err := core.PixivisionGetArticle(r, id, "en")
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func PixivisionArticlePage(w http.ResponseWriter, r *http.Request) error {
 
 func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
-	data, err := core.PixivisionGetCategory(id, "1", "en")
+	data, err := core.PixivisionGetCategory(r, id, "1", "en")
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func PixivisionCategoryPage(w http.ResponseWriter, r *http.Request) error {
 
 func PixivisionTagPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
-	data, err := core.PixivisionGetTag(id, "1", "en")
+	data, err := core.PixivisionGetTag(r, id, "1", "en")
 	if err != nil {
 		return err
 	}

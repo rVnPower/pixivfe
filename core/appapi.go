@@ -29,7 +29,7 @@ type AppAPICredentials struct {
 }
 
 // VnPower: This function must be run before any of the generators could be used.
-func assertAvailablePRNG() {
+func init() {
 	// Assert that a cryptographically secure PRNG is available.
 	// Panic otherwise.
 	buf := make([]byte, 1)
@@ -83,10 +83,10 @@ func oauth_pkce() (string, string) {
 	return code_verifier, code_challenge
 }
 
-func AppAPIRefresh(refresh_token string) AppAPICredentials {
+func AppAPIRefresh(r *http.Request, refresh_token string) AppAPICredentials {
 	var credentials AppAPICredentials
 	var body = []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&grant_type=refresh_token&include_policy=true&refresh_token=%s`, CLIENT_ID, CLIENT_SECRET, refresh_token))
-	req, err := http.NewRequest("POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
+	req, err := http.NewRequestWithContext(r.Context(), "POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +110,7 @@ func AppAPIRefresh(refresh_token string) AppAPICredentials {
 	return credentials
 }
 
-func AppAPILogin() AppAPICredentials {
+func AppAPILogin(r *http.Request) AppAPICredentials {
 	var credentials AppAPICredentials
 	code_verifier, code_challenge := oauth_pkce()
 
@@ -121,7 +121,7 @@ func AppAPILogin() AppAPICredentials {
 	fmt.Scanln(&s)
 
 	var body = []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&code=%s&code_verifier=%s&grant_type=authorization_code&include_policy=true&redirect_uri=%s`, CLIENT_ID, CLIENT_SECRET, s, code_verifier, REDIRECT_URI))
-	req, err := http.NewRequest("POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
+	req, err := http.NewRequestWithContext(r.Context(), "POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
 	if err != nil {
 		panic(err)
 	}

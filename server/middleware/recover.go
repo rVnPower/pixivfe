@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"errors"
 	"net/http"
 )
 
@@ -9,19 +8,19 @@ import (
 // If a panic occurs, it sends an HTTP 500 Internal Server Error response with the panic message.
 func RecoverFromPanic(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var err error
+		var errorString string
 		defer func() {
 			r := recover()
 			if r != nil {
 				switch t := r.(type) {
 				case string:
-					err = errors.New(t)
+					errorString = t
 				case error:
-					err = t
+					errorString = t.Error()
 				default:
-					err = errors.New("Unknown error")
+					errorString = "Unknown error"
 				}
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				http.Error(w, errorString, http.StatusInternalServerError)
 			}
 		}()
 		h.ServeHTTP(w, r)

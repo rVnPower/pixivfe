@@ -86,9 +86,12 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		start := time.Now()
 		resp, err := retryClient.Do(req)
 		end := time.Now()
-
 		// Unwrap the body here so that we could log stuff correctly
+		if err != nil {
+			return nil, err
+		}
 		defer resp.Body.Close()
+
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, err
@@ -105,7 +108,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			EndTime:   end,
 		})
 
-		if err == nil && resp.StatusCode == http.StatusOK {
+		if resp.StatusCode == http.StatusOK {
 			if userToken == "" && !isPost {
 				tokenManager.MarkTokenStatus(token, token_manager.Good)
 			}
@@ -115,10 +118,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			}, nil
 		}
 
-		lastErr = err
-		if err == nil {
-			lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
-		}
+		lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
 
 		if userToken == "" && !isPost {
 			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)

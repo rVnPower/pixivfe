@@ -3,33 +3,42 @@ package core
 import (
 	"errors"
 	"fmt"
+	"log"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 // Pixiv returns 0, 1, 2 to filter SFW and/or NSFW artworks.
-// Those values are saved in `xRestrict`
+// Those values are saved in `XRestrict`
 // 0: Safe
 // 1: R18
 // 2: R18G
-type xRestrict int
+type XRestrict int
 
 const (
-	Safe xRestrict = 0
-	R18  xRestrict = 1
-	R18G xRestrict = 2
+	Safe XRestrict = 0
+	R18  XRestrict = 1
+	R18G XRestrict = 2
 )
 
-var xRestrictModel = map[xRestrict]string{
-	Safe: "",
-	R18:  "R18",
-	R18G: "R18G",
+func (x XRestrict) String() string {
+	switch x {
+	case Safe:
+		return ""
+	case R18:
+		return "R18"
+	case R18G:
+		return "R18G"
+	}
+	log.Panicf("invalid value: %#v", int(x))
+	return ""
 }
 
 // Pixiv returns 0, 1, 2 to filter SFW and/or NSFW artworks.
@@ -38,18 +47,25 @@ var xRestrictModel = map[xRestrict]string{
 // 1: Not AI-generated
 // 2: AI-generated
 
-type aiType int
+type AiType int
 
 const (
-	Unrated aiType = 0
-	NotAI   aiType = 1
-	AI      aiType = 2
+	Unrated AiType = 0
+	NotAI   AiType = 1
+	AI      AiType = 2
 )
 
-var aiTypeModel = map[aiType]string{
-	Unrated: "Unrated",
-	NotAI:   "Not AI",
-	AI:      "AI",
+func (x AiType) String() string {
+	switch x {
+	case Unrated:
+		return "Unrated"
+	case NotAI:
+		return "Not AI"
+	case AI:
+		return "AI"
+	}
+	log.Panicf("invalid value: %#v", int(x))
+	return ""
 }
 
 type ImageResponse struct {
@@ -118,8 +134,8 @@ type Illust struct {
 	Views           int       `json:"viewCount"`
 	CommentDisabled int       `json:"commentOff"`
 	SanityLevel     int       `json:"sl"`
-	XRestrict       xRestrict `json:"xRestrict"`
-	AiType          aiType    `json:"aiType"`
+	XRestrict       XRestrict `json:"xRestrict"`
+	AiType          AiType    `json:"aiType"`
 	BookmarkData    any       `json:"bookmarkData"`
 	Liked           bool      `json:"likeData"`
 	User            UserBrief
