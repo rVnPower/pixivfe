@@ -196,15 +196,24 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
 	resp, err := utils.HttpClient.Do(req)
 	if err != nil {
-		return err
+		return i18n.Errorf("failed to proxy request: %w", err)
 	}
 	defer resp.Body.Close()
 
+	// Copy response headers
 	header := w.Header()
 	for k, v := range resp.Header {
 		header[k] = v
 	}
 
+	// Set the status code
+	w.WriteHeader(resp.StatusCode)
+
+	// Copy the body from the response to the original writer
 	_, err = io.Copy(w, resp.Body)
-	return err
+	if err != nil {
+		return i18n.Errorf("failed to copy response body: %w", err)
+	}
+
+	return nil
 }
