@@ -4,15 +4,15 @@ package core
 // Don't panic on any errors in production btw.
 
 import (
-	"io"
 	"bytes"
-	"strings"
-	"fmt"
-	"net/http"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
-	"crypto/rand"
 	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
 )
 
 const USER_AGENT = "PixivAndroidApp/5.0.234 (Android 11; Pixel 5)"

@@ -44,7 +44,7 @@ var limiter *httplimit.Middleware
 
 // InitializeRateLimiter sets up the global rate limiter based on the application's configuration.
 // If the request limit is less than 1, it sets an infinite rate limit.
-// 
+//
 // Returns the rate limit middleware
 func InitializeRateLimiter() func(http.Handler) http.Handler {
 	if config.GlobalConfig.RequestLimit < 1 {

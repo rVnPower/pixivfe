@@ -21,10 +21,10 @@ func TestMain(m *testing.M) {
 }
 
 type HTTPTestCase struct {
-        URL string
-        Method string
-        Queries map[string]string
-        Expect string
+	URL     string
+	Method  string
+	Queries map[string]string
+	Expect  string
 }
 
 func getBaseURL() string {
@@ -53,113 +53,112 @@ func executeRequest(req *http.Request) *http.Response {
 }
 
 func TestBasicAllRoutes(t *testing.T) {
-        testCases := []HTTPTestCase{
-                {
-                        URL: "/newest",
-                        Method: "GET",
-                },
-                {
-                        URL: "/discovery",
-                        Method: "GET",
-                },
-                {
-                        URL: "/discovery?mode=r18",
-                        Method: "GET",
-                },
+	testCases := []HTTPTestCase{
 		{
-                        URL: "/discovery/novel",
-                        Method: "GET",
-                },
+			URL:    "/newest",
+			Method: "GET",
+		},
 		{
-                        URL: "/discovery/novel?mode=r18",
-                        Method: "GET",
-                },
+			URL:    "/discovery",
+			Method: "GET",
+		},
+		{
+			URL:    "/discovery?mode=r18",
+			Method: "GET",
+		},
+		{
+			URL:    "/discovery/novel",
+			Method: "GET",
+		},
+		{
+			URL:    "/discovery/novel?mode=r18",
+			Method: "GET",
+		},
 
 		// Ranking pages
 		{
-                        URL: "/ranking",
-                        Method: "GET",
-                },
+			URL:    "/ranking",
+			Method: "GET",
+		},
 		{
-                        URL: "/ranking?content=all&date=20230212&page=1&mode=male",
-                        Method: "GET",
-                },
+			URL:    "/ranking?content=all&date=20230212&page=1&mode=male",
+			Method: "GET",
+		},
 		{
-                        URL: "/ranking?content=manga&page=2&mode=weekly_r18",
-                        Method: "GET",
-                },
+			URL:    "/ranking?content=manga&page=2&mode=weekly_r18",
+			Method: "GET",
+		},
 		{
-                        URL: "/ranking?content=ugoira&mode=daily_r18",
-                        Method: "GET",
-                },
+			URL:    "/ranking?content=ugoira&mode=daily_r18",
+			Method: "GET",
+		},
 		{
-                        URL: "/rankingCalendar?mode=daily_r18&date=2018-08-01",
-                        Method: "GET",
-                },
+			URL:    "/rankingCalendar?mode=daily_r18&date=2018-08-01",
+			Method: "GET",
+		},
 
 		// Artwork page
 		{
-                        URL: "/artworks/121247335",
-                        Method: "GET",
-                },
+			URL:    "/artworks/121247335",
+			Method: "GET",
+		},
 		{
-                        URL: "/artworks/120131626",
-                        Method: "GET",
-                },
+			URL:    "/artworks/120131626",
+			Method: "GET",
+		},
 		{
-                        URL: "/artworks-multi/121289276,121247331,121200724",
-                        Method: "GET",
-                },
-                // User page
+			URL:    "/artworks-multi/121289276,121247331,121200724",
+			Method: "GET",
+		},
+		// User page
 		{
-                        URL: "/users/810305",
-                        Method: "GET",
-                },
+			URL:    "/users/810305",
+			Method: "GET",
+		},
 		{
-                        URL: "/users/810305.atom.xml",
-                        Method: "GET",
-                },
+			URL:    "/users/810305.atom.xml",
+			Method: "GET",
+		},
 		{
-                        URL: "/users/810305/manga.atom.xml",
-                        Method: "GET",
-                },
+			URL:    "/users/810305/manga.atom.xml",
+			Method: "GET",
+		},
 		{
-                        URL: "/users/810305/novels",
-                        Method: "GET",
-                },
+			URL:    "/users/810305/novels",
+			Method: "GET",
+		},
 		{
-                        URL: "/users/810305/bookmarks",
-                        Method: "GET",
-                },
-                // Pixivision page
-                {
-                        URL: "/pixivision/",
-                        Method: "GET",
-                },
-                {
-                        URL: "/pixivision/a/10128",
-                        Method: "GET",
-                },
-                {
-                        URL: "/pixivision/t/27",
-                        Method: "GET",
-                },
-                {
-                        URL: "/pixivision/c/manga",
-                        Method: "GET",
-                },
+			URL:    "/users/810305/bookmarks",
+			Method: "GET",
+		},
+		// Pixivision page
+		{
+			URL:    "/pixivision/",
+			Method: "GET",
+		},
+		{
+			URL:    "/pixivision/a/10128",
+			Method: "GET",
+		},
+		{
+			URL:    "/pixivision/t/27",
+			Method: "GET",
+		},
+		{
+			URL:    "/pixivision/c/manga",
+			Method: "GET",
+		},
 
-                // Tag page
-                {
-                        URL: "/tags/original",
-                        Method: "GET",
-                },
-                {
-                        URL: "/tags?category=manga&ecd=&hgt=1000&hlt=&mode=r18&name=original&order=date&page=1&ratio=0&scd=&tool=&wgt=&wlt=",
-                        Method: "GET",
-                },
-
-        }
+		// Tag page
+		{
+			URL:    "/tags/original",
+			Method: "GET",
+		},
+		{
+			URL:    "/tags?category=manga&ecd=&hgt=1000&hlt=&mode=r18&name=original&order=date&page=1&ratio=0&scd=&tool=&wgt=&wlt=",
+			Method: "GET",
+		},
+	}
 
 	for _, testCase := range testCases {
 		URL := getBaseURL() + testCase.URL
