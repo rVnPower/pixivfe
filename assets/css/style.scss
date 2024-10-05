@@ -1133,6 +1133,31 @@ $font-fallback-sans: YuGothic,
     .illust-cover {
       width: 100%;
     }
+
+    .illust-series-nav {
+      text-align: center;
+      padding: 20px;
+
+      .illust-series-title {
+        color: $fg-secondary;
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      .prev, .next {
+        margin-top: 10px;
+      }
+
+      .illust-title {
+        color: $fg;
+        font-weight: bold;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+    }
   }
 
   .comment {

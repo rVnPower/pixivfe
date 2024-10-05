@@ -8,9 +8,10 @@ import (
 	"sync"
 	"time"
 
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 // Pixiv returns 0, 1, 2 to filter SFW and/or NSFW artworks.
@@ -122,12 +123,30 @@ type Illust struct {
 	AiType          aiType    `json:"aiType"`
 	BookmarkData    any       `json:"bookmarkData"`
 	Liked           bool      `json:"likeData"`
-	User            UserBrief
-	RecentWorks     []ArtworkBrief
-	RelatedWorks    []ArtworkBrief
-	CommentsList    []Comment
-	IsUgoira        bool
-	BookmarkID      string
+	SeriesNavData   struct {
+		SeriesType  string `json:"seriesType"`
+		SeriesID    string `json:"seriesId"`
+		Title       string `json:"title"`
+		IsWatched   bool   `json:"isWatched"`
+		IsNotifying bool   `json:"isNotifying"`
+		Order       int    `json:"order"`
+		Next        struct {
+			Title string `json:"title"`
+			Order int    `json:"order"`
+			ID    string `json:"id"`
+		} `json:"next"`
+		Prev struct {
+			Title string `json:"title"`
+			Order int    `json:"order"`
+			ID    string `json:"id"`
+		} `json:"prev"`
+	} `json:"seriesNavData"`
+	User         UserBrief
+	RecentWorks  []ArtworkBrief
+	RelatedWorks []ArtworkBrief
+	CommentsList []Comment
+	IsUgoira     bool
+	BookmarkID   string
 }
 
 func GetUserBasicInformation(r *http.Request, id string) (UserBrief, error) {
