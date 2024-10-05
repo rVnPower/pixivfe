@@ -50,6 +50,15 @@
   {{- if isset(.MetaImage) }}
   <meta property="og:image" content="{{ .MetaImage }}" />
   {{- end }}
+
+  <!-- Hide elements that require JS when scripting is disabled; only works when inline styling is allowed -->
+  <noscript>
+    <style>
+    .js-required {
+      display: none !important;
+    }
+    </style>
+  </noscript>
 </head>
 
 <body class="bg-black">

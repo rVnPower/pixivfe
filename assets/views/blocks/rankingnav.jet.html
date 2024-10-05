@@ -3,12 +3,13 @@
 *}
 
 {*
-  {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
-  {{- path := slice("", "&date=" + .Data.PrevDate, "&date=" + .Data.NextDate) }}
-  {{- name := slice("Latest", "Previous day", "Next day")}}
-  {{- activeState := isset(Queries.date) ? Queries.date : "" }}
-  {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=activeState)}}
-  {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+  Alternate version that uses Switcher as an import:
+    {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
+    {{- path := slice("", "&date=" + .Data.PrevDate, "&date=" + .Data.NextDate) }}
+    {{- name := slice("Latest", "Previous day", "Next day")}}
+    {{- activeState := isset(Queries.date) ? Queries.date : "" }}
+    {{- yield Switcher(baseURL=url, paths=path, names=name, activeState=activeState)}}
+    {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
 *}
 
 {{- block RankingNav() }}

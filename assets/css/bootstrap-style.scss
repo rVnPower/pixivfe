@@ -108,3 +108,14 @@ h6 {
 .htmx-request.like-spinner {
   display: inline;
 }
+
+/// Hide elements that require JS when scripting is disabled
+/// NOTE: This only seems to work when JS is actually disabled browser-wide, not via an extension like uBO
+///       See the callout on https://developer.mozilla.org/en-US/docs/Web/CSS/@media/scripting
+///       and the CSS spec at https://drafts.csswg.org/mediaqueries-5/#scripting for more on this
+///
+@media (scripting: none) {
+  .js-required {
+    display: none !important;
+  }
+}

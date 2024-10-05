@@ -1,65 +1,65 @@
 {{- block pagination(data) }}
 <!-- Pagination navigation block -->
 <nav aria-label="Page navigation">
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <!-- Pagination dropdown -->
-        <div class="dropup mb-3">
-        <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Go to Page
-        </button>
-        <ul class="dropdown-menu">
-            {{ range data.DropdownPages }}
-            {{ if .Number == data.CurrentPage }}
-                <li><a class="dropdown-item active" href="{{ .URL }}">{{ .Number }}</a></li>
-            {{ else }}
-                <li><a class="dropdown-item" href="{{ .URL }}">{{ .Number }}</a></li>
-            {{ end }}
-            {{ end }}
-        </ul>
-        </div>
-  <!-- TODO: style pagination properly (using SCSS?) -->
-  <ul class="pagination mb-0">
-    <!-- Previous page button -->
-    {{ if data.HasPrevious }}
-      <li class="page-item"><a class="page-link" href="{{ data.PreviousURL }}">Previous</a></li>
-    {{ else }}
-      <li class="page-item disabled"><span class="page-link">Previous</span></li>
-    {{ end }}
-
-    <!-- First page and ellipsis (if needed) -->
-    {{ if data.Pages[0].Number > 1 }}
-      <li class="page-item"><a class="page-link" href="{{ data.FirstURL }}">1</a></li>
-      {{ if data.Pages[0].Number > 2 }}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-      {{ end }}
-    {{ end }}
-
-    <!-- Page numbers -->
-    {{ range data.Pages }}
-      {{ if .Number == data.CurrentPage }}
-        <li class="page-item active"><span class="page-link">{{ .Number }}</span></li>
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <!-- Pagination dropdown -->
+    <div class="js-required dropup mb-3">
+      <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Go to Page
+      </button>
+      <ul class="dropdown-menu">
+        {{ range data.DropdownPages }}
+        {{ if .Number == data.CurrentPage }}
+            <li><a class="dropdown-item active" href="{{ .URL }}">{{ .Number }}</a></li>
+        {{ else }}
+            <li><a class="dropdown-item" href="{{ .URL }}">{{ .Number }}</a></li>
+        {{ end }}
+        {{ end }}
+      </ul>
+    </div>
+    <!-- TODO: style pagination properly (using SCSS?) -->
+    <ul class="pagination mb-0">
+      <!-- Previous page button -->
+      {{ if data.HasPrevious }}
+        <li class="page-item"><a class="page-link" href="{{ data.PreviousURL }}">Previous</a></li>
       {{ else }}
-        <li class="page-item"><a class="page-link" href="{{ .URL }}">{{ .Number }}</a></li>
+        <li class="page-item disabled"><span class="page-link">Previous</span></li>
       {{ end }}
-    {{ end }}
 
-    <!-- Last page and ellipsis (if needed) -->
-    {{ if data.HasMaxPage }}
-      {{ if data.LastPage < data.MaxPage }}
-        {{ if data.LastPage < data.MaxPage - 1 }}
+      <!-- First page and ellipsis (if needed) -->
+      {{ if data.Pages[0].Number > 1 }}
+        <li class="page-item"><a class="page-link" href="{{ data.FirstURL }}">1</a></li>
+        {{ if data.Pages[0].Number > 2 }}
           <li class="page-item disabled"><span class="page-link">...</span></li>
         {{ end }}
-        <li class="page-item"><a class="page-link" href="{{ data.LastURL }}">{{ data.MaxPage }}</a></li>
       {{ end }}
-    {{ end }}
 
-    <!-- Next page button -->
-    {{ if data.HasNext }}
-      <li class="page-item"><a class="page-link" href="{{ data.NextURL }}">Next</a></li>
-    {{ else }}
-      <li class="page-item disabled"><span class="page-link">Next</span></li>
-    {{ end }}
-  </ul>
-    </div>
+      <!-- Page numbers -->
+      {{ range data.Pages }}
+        {{ if .Number == data.CurrentPage }}
+          <li class="page-item active"><span class="page-link">{{ .Number }}</span></li>
+        {{ else }}
+          <li class="page-item"><a class="page-link" href="{{ .URL }}">{{ .Number }}</a></li>
+        {{ end }}
+      {{ end }}
+
+      <!-- Last page and ellipsis (if needed) -->
+      {{ if data.HasMaxPage }}
+        {{ if data.LastPage < data.MaxPage }}
+          {{ if data.LastPage < data.MaxPage - 1 }}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+          {{ end }}
+          <li class="page-item"><a class="page-link" href="{{ data.LastURL }}">{{ data.MaxPage }}</a></li>
+        {{ end }}
+      {{ end }}
+
+      <!-- Next page button -->
+      {{ if data.HasNext }}
+        <li class="page-item"><a class="page-link" href="{{ data.NextURL }}">Next</a></li>
+      {{ else }}
+        <li class="page-item disabled"><span class="page-link">Next</span></li>
+      {{ end }}
+    </ul>
+  </div>
 </nav>
 {{- end }}

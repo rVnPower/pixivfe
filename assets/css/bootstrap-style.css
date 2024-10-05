@@ -12250,4 +12250,10 @@ h6, .h6 {
   display: inline;
 }
 
+@media (scripting: none) {
+  .js-required {
+    display: none !important;
+  }
+}
+
 /*# sourceMappingURL=bootstrap-style.css.map */
