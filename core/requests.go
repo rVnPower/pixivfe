@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
 
-	config "codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
@@ -65,7 +65,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 
 		if token == nil && !isPost {
 			tokenManager.ResetAllTokens()
-			return nil, fmt.Errorf("All tokens (%d) are timed out, resetting all tokens to their initial good state.\n"+
+			return nil, i18n.Errorf("All tokens (%d) are timed out, resetting all tokens to their initial good state.\n"+
 				"Consider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\n"+
 				"Please refer the following documentation for additional information:\n"+
 				"- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n"+
@@ -118,7 +118,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			}, nil
 		}
 
-		lastErr = fmt.Errorf("HTTP status code: %d", resp.StatusCode)
+		lastErr = i18n.Errorf("HTTP status code: %d", resp.StatusCode)
 
 		if userToken == "" && !isPost {
 			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
@@ -132,7 +132,7 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 		}
 	}
 
-	return nil, fmt.Errorf("Max retries reached. Last error: %v", lastErr)
+	return nil, i18n.Errorf("Max retries reached. Last error: %v", lastErr)
 }
 
 // API_GET performs a GET request to the Pixiv API with automatic retries
@@ -161,13 +161,13 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 	}
 
 	if !gjson.Valid(resp.Body) {
-		return "", fmt.Errorf("Invalid JSON: %v", resp.Body)
+		return "", i18n.Errorf("Invalid JSON: %v", resp.Body)
 	}
 
 	err2 := gjson.Get(resp.Body, "error")
 
 	if !err2.Exists() {
-		return "", errors.New("Incompatible request body")
+		return "", i18n.Error("Incompatible request body")
 	}
 
 	if err2.Bool() {
@@ -180,7 +180,7 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 // API_POST performs a POST request to the Pixiv API with automatic retries
 func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) error {
 	if userToken == "" {
-		return errors.New("userToken is required for POST requests")
+		return i18n.Error("userToken is required for POST requests")
 	}
 
 	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
@@ -236,7 +236,7 @@ func proxyWorker(jobs <-chan ProxyJob) {
 func processProxyJob(job ProxyJob) error {
 	resp, err := utils.HttpClient.Do(job.Request)
 	if err != nil {
-		return fmt.Errorf("failed to process request: %w", err)
+		return i18n.Errorf("failed to process request: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -252,7 +252,7 @@ func processProxyJob(job ProxyJob) error {
 	// Copy the body from the response to the original writer
 	_, err = io.Copy(job.Response, resp.Body)
 	if err != nil {
-		return fmt.Errorf("failed to copy response body: %w", err)
+		return i18n.Errorf("failed to copy response body: %w", err)
 	}
 
 	return nil

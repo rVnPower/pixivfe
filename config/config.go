@@ -3,8 +3,6 @@ package config
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"log"
 	"net/url"
 	"strings"
@@ -15,6 +13,7 @@ import (
 	// "github.com/goware/urlx"
 	"github.com/sethvargo/go-envconfig"
 
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/token_manager"
 )
 
@@ -102,10 +101,10 @@ func validateURL(urlString string, urlType string) (*url.URL, error) {
 	}
 	// Ensure both scheme and host are present in the URL
 	if parsedURL.Scheme == "" || parsedURL.Host == "" {
-		return nil, fmt.Errorf("%s URL is invalid: %s. Please specify a complete URL with scheme and host, e.g. https://example.com", urlType, urlString)
+		return nil, i18n.Errorf("%s URL is invalid: %s. Please specify a complete URL with scheme and host, e.g. https://example.com", urlType, urlString)
 	}
 	if strings.HasSuffix(parsedURL.Path, "/") {
-		return nil, fmt.Errorf("%s URL path (%s) cannot end in /: %s. PixivFE does not support this now", urlType, parsedURL.Path, urlString)
+		return nil, i18n.Errorf("%s URL path (%s) cannot end in /: %s. PixivFE does not support this now", urlType, parsedURL.Path, urlString)
 	}
 	return parsedURL, nil
 }
@@ -152,13 +151,13 @@ func (s *ServerConfig) LoadConfig() error {
 
 	if s.Port == "" && s.UnixSocket == "" {
 		log.Fatalln("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set.")
-		return errors.New("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set")
+		return i18n.Error("Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set")
 	}
 
 	// a check for tokens
 	if len(s.Token) < 1 {
 		log.Fatalln("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details.")
-		return errors.New("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details")
+		return i18n.Error("PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details")
 	}
 
 	// Validate proxy server URL

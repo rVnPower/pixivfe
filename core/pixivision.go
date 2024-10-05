@@ -1,7 +1,6 @@
 package core
 
 import (
-	"errors"
 	"fmt"
 	"html"
 	"io"
@@ -10,6 +9,8 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 const PixivDatetimeLayout = "2006-01-02"
@@ -37,7 +38,7 @@ func executeRequest(req *http.Request) (*http.Response, error) {
 	client := http.Client{Timeout: 60 * time.Second}
 	resp, err := client.Do(req)
 	if resp.StatusCode != 200 {
-		return nil, errors.New("Pixivision: Page not found")
+		return nil, i18n.Error("Pixivision: Page not found")
 	}
 	if err != nil {
 		return nil, err
@@ -126,7 +127,7 @@ func PixivisionGetHomepage(r *http.Request, page string, lang ...string) ([]Pixi
 	}
 
 	if resp.StatusCode == 404 {
-		return articles, errors.New("We couldn't find the page you're looking for")
+		return articles, i18n.Error("We couldn't find the page you're looking for")
 	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)

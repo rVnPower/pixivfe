@@ -1,14 +1,15 @@
 package core
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"sort"
 
+	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 // pixivfe internal data type. not used by pixiv.
@@ -30,7 +31,7 @@ func (s UserArtCategory) Validate() error {
 		s != UserArt_Manga &&
 		s != UserArt_Bookmarks &&
 		s != UserArt_Novel {
-		return fmt.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarks, UserArt_Novel)
+		return i18n.Errorf("Invalid work category: %#v. "+`Only "%s", "%s", "%s", "%s", "%s" and "%s" are available`, s, UserArt_Any, UserArt_AnyAlt, UserArt_Illustration, UserArt_Manga, UserArt_Bookmarks, UserArt_Novel)
 	} else {
 		return nil
 	}
@@ -234,7 +235,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 	worksPerPage := 30.0
 
 	if page < 1 || float64(page) > math.Ceil(worksNumber/worksPerPage)+1.0 {
-		return "", -1, errors.New("No page available.")
+		return "", -1, i18n.Error("No page available.")
 	}
 
 	start := (page - 1) * int(worksPerPage)

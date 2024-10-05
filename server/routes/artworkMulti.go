@@ -2,12 +2,13 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"sync"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"net/http"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 func ArtworkMultiPage(w http.ResponseWriter, r *http.Request) error {
@@ -26,7 +27,7 @@ func ArtworkMultiPage(w http.ResponseWriter, r *http.Request) error {
 	var err_global error = nil
 	for i, id := range ids {
 		if _, err := strconv.Atoi(id); err != nil {
-			err_global = fmt.Errorf("Invalid ID: %s", id)
+			err_global = i18n.Errorf("Invalid ID: %s", id)
 			break
 		}
 

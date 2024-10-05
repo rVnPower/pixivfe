@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
@@ -20,7 +20,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 
 	id := GetPathVar(r, "id")
 	if id == "" {
-		return errors.New("No ID provided.")
+		return i18n.Error("No ID provided.")
 	}
 
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/add"
@@ -48,7 +48,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 
 	id := GetPathVar(r, "id")
 	if id == "" {
-		return errors.New("No ID provided.")
+		return i18n.Error("No ID provided.")
 	}
 
 	// You can't unlike
@@ -72,7 +72,7 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 
 	id := GetPathVar(r, "id")
 	if id == "" {
-		return errors.New("No ID provided.")
+		return i18n.Error("No ID provided.")
 	}
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"

@@ -8,12 +8,13 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return fmt.Errorf("Invalid ID: %s", id)
+		return i18n.Errorf("Invalid ID: %s", id)
 	}
 
 	series, err := core.GetNovelSeriesByID(r, id)
@@ -28,7 +29,7 @@ func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
 	page := GetQueryParam(r, "p", "1")
 	pageNum, err := strconv.Atoi(page)
 	if err != nil || pageNum < 1 || pageNum > pageLimit {
-		return fmt.Errorf("Invalid Page")
+		return i18n.Errorf("Invalid Page Number: %d", pageNum)
 	}
 
 	// TODO should use token only if R-18/R-18G

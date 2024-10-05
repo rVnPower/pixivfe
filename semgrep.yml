@@ -164,15 +164,23 @@ rules:
   - pattern-not-inside: |
       ...
       defer $RESP.Body.Close()
-- id: "13"
-  message: "error string"
+- id: "13a"
+  message: "untranslated errors.New"
   languages: [go]
-  severity: INFO
-  pattern-either:
-  - pattern: |
-      errors.New(...)
-  - pattern: |
-      fmt.Errorf(...)
+  severity: ERROR
+  pattern: |
+    errors.New("$MSG")
+  fix: |
+    i18n.Error("$MSG")
+- id: "13b"
+  message: "untranslated fmt.Errorf"
+  languages: [go]
+  severity: ERROR
+  pattern: |
+    fmt.Errorf("$MSG", $...ARGS)
+  fix: |
+    i18n.Errorf("$MSG", $...ARGS)
+
 - id: "14"
   message: "non-global regexp.MustCompile"
   languages: [go]

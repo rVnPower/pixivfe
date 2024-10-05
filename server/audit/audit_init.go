@@ -1,11 +1,11 @@
 package audit
 
 import (
-	"fmt"
 	"log"
 	"os"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 var optionSaveResponse bool
@@ -26,7 +26,7 @@ func Init(saveResponse bool) error {
 
 	if err := os.MkdirAll(savePath, 0o700); err != nil {
 		log.Printf("Error creating response save directory: %v", err)
-		return fmt.Errorf("failed to create response save directory: %w", err)
+		return i18n.Errorf("failed to create response save directory: %w", err)
 	}
 
 	return nil

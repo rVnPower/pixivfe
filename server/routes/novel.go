@@ -2,19 +2,19 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
-	"net/http"
-
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
 func NovelPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return fmt.Errorf("Invalid ID: %s", id)
+		return i18n.Errorf("Invalid ID: %s", id)
 	}
 
 	novel, err := core.GetNovelByID(r, id)

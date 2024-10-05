@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -14,6 +13,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/middleware"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
@@ -86,7 +86,7 @@ func run_sass() {
 	runtime.LockOSThread() // Go quirk https://github.com/golang/go/issues/27505
 	err := cmd.Run()
 	if err != nil {
-		log.Print(fmt.Errorf("when running sass: %w", err))
+		log.Print(i18n.Errorf("when running sass: %w", err), err)
 	}
 }
 

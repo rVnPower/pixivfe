@@ -2,11 +2,13 @@ package core
 
 import (
 	"fmt"
+	"net/http"
 
-	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
 	"github.com/tidwall/gjson"
-	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
 type Pixivision struct {
@@ -59,7 +61,7 @@ func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 	resp = session.ProxyImageUrl(r, resp)
 
 	if !gjson.Valid(resp) {
-		return nil, fmt.Errorf("Invalid JSON: %v", resp)
+		return nil, i18n.Errorf("Invalid JSON: %v", resp)
 	}
 
 	artworks := map[string]ArtworkBrief{}

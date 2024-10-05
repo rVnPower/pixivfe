@@ -1,12 +1,13 @@
 package middleware
 
 import (
-	"errors"
 	"net/http"
 	"strings"
 
-	"codeberg.org/vnpower/pixivfe/v2/server/routes"
 	"github.com/gorilla/mux"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
+	"codeberg.org/vnpower/pixivfe/v2/server/routes"
 )
 
 // handleStripPrefix is a utility function that combines path prefix matching with
@@ -129,7 +130,7 @@ func DefineRoutes() *mux.Router {
 	// Fallback route (if nothing else matches)
 	// This ensures that a proper HTTP 404 error is returned for undefined routes
 	router.NewRoute().HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		routes.ErrorPage(w, r, errors.New("Route not found"), http.StatusNotFound)
+		routes.ErrorPage(w, r, i18n.Error("Route not found"), http.StatusNotFound)
 	})
 
 	return router

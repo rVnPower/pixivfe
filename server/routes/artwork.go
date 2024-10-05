@@ -2,16 +2,17 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"net/http"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 func ArtworkPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return fmt.Errorf("Invalid ID: %s", id)
+		return i18n.Errorf("Invalid ID: %s", id)
 	}
 
 	illust, err := core.GetArtworkByID(r, id, true)

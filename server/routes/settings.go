@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"errors"
-	"fmt"
 	"net/http"
 	"regexp"
 	"slices"
@@ -10,6 +8,7 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
@@ -24,7 +23,7 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 
 		_, err := core.API_GET_UnwrapJson(r.Context(), URL, token)
 		if err != nil {
-			return errors.New("Cannot authorize with supplied token.")
+			return i18n.Error("Cannot authorize with supplied token.")
 		}
 
 		// Make a test request to verify the token.
@@ -35,14 +34,14 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 		}
 
 		if resp.StatusCode != 200 {
-			return errors.New("Cannot authorize with supplied token.")
+			return i18n.Error("Cannot authorize with supplied token.")
 		}
 
 		// CSRF token
 		csrf := r_csrf.FindStringSubmatch(resp.Body)[1]
 
 		if csrf == "" {
-			return errors.New("Cannot authorize with supplied token.")
+			return i18n.Error("Cannot authorize with supplied token.")
 		}
 
 		// Set the token
@@ -51,7 +50,7 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 
 		return nil
 	}
-	return errors.New("You submitted an empty/invalid form.")
+	return i18n.Error("You submitted an empty/invalid form.")
 }
 
 func setImageServer(w http.ResponseWriter, r *http.Request) error {
@@ -127,7 +126,7 @@ func setCookie(w http.ResponseWriter, r *http.Request) error {
 			return nil
 		}
 	}
-	return fmt.Errorf("Invalid Cookie Name: %s", key)
+	return i18n.Errorf("Invalid Cookie Name: %s", key)
 }
 
 func setRawCookie(w http.ResponseWriter, r *http.Request) error {
@@ -189,7 +188,7 @@ func SettingsPost(w http.ResponseWriter, r *http.Request) error {
 	case "raw":
 		err = setRawCookie(w, r)
 	default:
-		err = errors.New("No such setting is available.")
+		err = i18n.Error("No such setting is available.")
 	}
 
 	if err != nil {

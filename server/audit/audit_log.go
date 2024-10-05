@@ -3,14 +3,15 @@
 package audit
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path"
 	"time"
 
-	"codeberg.org/vnpower/pixivfe/v2/config"
 	"github.com/oklog/ulid/v2"
+
+	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 // Logger is a custom logger with no timestamp prefix, as we control the timestamps in our log messages.
@@ -77,7 +78,7 @@ func writeResponseBodyToFile(body string) (string, error) {
 	// Write the body to the file with read/write permissions for the owner only
 	err := os.WriteFile(filename, []byte(body), 0o600)
 	if err != nil {
-		return "", fmt.Errorf("failed to write response body to file %s: %w", filename, err)
+		return "", i18n.Errorf("failed to write response body to file %s: %w", filename, err)
 	}
 	log.Printf("Successfully wrote response body to file: %s", filename)
 	return filename, nil
