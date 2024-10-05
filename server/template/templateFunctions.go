@@ -183,14 +183,15 @@ func CreatePaginator(base, ending string, current_page, max_page, page_margin, d
 	}
 
 	// Validation for users that don't have any artworks
-	if max_page < 1 {
-		max_page = 1
-	}
+	// NOTE: the following breaks the current max_page implementation, commenting it out for now
+	// if max_page < 1 {
+	// 	max_page = 1
+	// }
 
 	// Validation for max_page in relation to current_page
-	if max_page != -1 && max_page < current_page {
-		return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
-	}
+	// if max_page < current_page {
+	// 	return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
+	// }
 
 	hasMaxPage := max_page != -1
 
