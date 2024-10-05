@@ -54,7 +54,7 @@
 
 <body class="bg-black">
   <!-- mb-4 for spacing between the navbar and main content -->
-  <nav class="navbar bg-charcoal-surface1 py-3 mb-4">
+  <nav class="navbar bg-charcoal-surface1 py-3 mb-4" id="main-navbar">
     <div class="container">
         <div class="d-flex">
           <!-- Offcanvas menu for navigation items -->
@@ -142,6 +142,35 @@
         </a> -->
     </div>
   </nav>
+
+  <!-- <noscript>
+    <nav class="navbar bg-charcoal-surface1 py-3 mb-4" id="noscript-navbar">
+      <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center w-100">
+          <a class="text-decoration-none fw-bold mb-0 d-flex align-items-center" href="/">
+            <img src="/img/favicon.svg" alt="PixivFE icon" width="30" height="30" class="d-inline-block me-2">
+            <p class="h2 text-body m-0">PixivFE</p>
+          </a>
+
+          <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="/discovery">Discovery</a></li>
+            <li class="nav-item"><a class="nav-link" href="/ranking">Ranking</a></li>
+            <li class="nav-item"><a class="nav-link" href="/rankingCalendar">Ranking calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/newest">Newest</a></li>
+            <li class="nav-item"><a class="nav-link" href="/self/followingWorks">Following</a></li>
+            <li class="nav-item"><a class="nav-link" href="/self/bookmarks">Bookmarks</a></li>
+            <li class="nav-item"><a class="nav-link" href="/self">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="/settings">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          </ul>
+
+          <form class="d-flex" action="/tags" method="post" autocomplete="off">
+            <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="⌕ Search artworks" aria-label="Search">
+          </form>
+        </div>
+      </div>
+    </nav>
+  </noscript> -->
 
   <!-- Search modal -->
   <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
