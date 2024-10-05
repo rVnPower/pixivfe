@@ -98,7 +98,7 @@ func chooseListener() net.Listener {
 			panic(err)
 		}
 		l = ln
-		log.Printf("Listening on domain socket %v\n", config.GlobalConfig.UnixSocket)
+		log.Printf("Listening on domain socket %v", config.GlobalConfig.UnixSocket)
 	} else {
 		addr := config.GlobalConfig.Host + ":" + config.GlobalConfig.Port
 		ln, err := net.Listen("tcp", addr)
@@ -107,7 +107,11 @@ func chooseListener() net.Listener {
 		}
 		l = ln
 		addr = ln.Addr().String()
-		log.Printf("Listening on http://%v/\n", addr)
+		_, port, err := net.SplitHostPort(addr)
+		if err != nil {
+			panic(err)
+		}
+		log.Printf("Listening on %v  http://pixivfe.localhost:%v/", addr, port)
 	}
 	return l
 }
