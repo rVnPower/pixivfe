@@ -124,6 +124,13 @@ type NovelBrief struct {
 	Genre          string    `json:"genre"`
 }
 
+// Novel embedded illusts
+var re_r = regexp.MustCompile(`\[pixivimage:\d+(-\d+)?\]`)
+var re_d = regexp.MustCompile(`\d+(-\d+)?`)
+var re_t = regexp.MustCompile(`\"original\":\"(.+?)\"`)
+var re_u = regexp.MustCompile(`\[uploadedimage:(\d+)\]`)
+var re_id = regexp.MustCompile(`\d+`)
+
 func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	var novel Novel
 
@@ -139,11 +146,6 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	if err != nil {
 		return novel, err
 	}
-
-	// Novel embedded illusts
-	re_r := regexp.MustCompile(`\[pixivimage:\d+(-\d+)?\]`)
-	re_d := regexp.MustCompile(`\d+(-\d+)?`)
-	re_t := regexp.MustCompile(`\"original\":\"(.+?)\"`)
 
 	novel.Content = re_r.ReplaceAllStringFunc(novel.Content, func(s string) string {
 		illustid := re_d.FindString(s)
@@ -162,8 +164,6 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 		return fmt.Sprintf(`<a href="%s" target="_blank"><img src=%s alt="%s"/></a>`, link, url, s)
 	})
 
-	re_u := regexp.MustCompile(`\[uploadedimage:(\d+)\]`)
-	re_id := regexp.MustCompile(`\d+`)
 	novel.Content = re_u.ReplaceAllStringFunc(novel.Content, func(s string) string {
 		imageId := re_id.FindString(s)
 		if val, ok := novel.TextEmbeddedImages[imageId]; ok {

@@ -1,6 +1,6 @@
 # Usage: semgrep scan -f semgrep.yml
 rules:
-- id: rule-0
+- id: "0"
   message: "http requests made without *fiber.Ctx"
   languages: [go]
   severity: WARNING
@@ -15,7 +15,7 @@ rules:
         ...
       }
 # note: the below two rules autofix have slight problems. where `http` is sometimes "net/http". need minor manual tweaking after --autofix.
-- id: rule-1-0
+- id: "1a"
   message: "find http requests made to Pixiv"
   languages: [go]
   severity: INFO
@@ -24,7 +24,7 @@ rules:
       http.UnwrapWebAPIRequest($A, $B)
   fix: |
     http.UnwrapWebAPIRequest(c.Context(), $A, $B)
-- id: rule-1-1
+- id: "1b"
   message: "find http requests made to Pixiv"
   languages: [go]
   severity: INFO
@@ -33,7 +33,7 @@ rules:
       http.WebAPIRequest($A, $B)
   fix: |
     http.WebAPIRequest(c.Context(), $A, $B)
-- id: rule-2
+- id: "2"
   message: "gjson.Get without gjson.Valid"
   languages: [go]
   severity: ERROR
@@ -49,7 +49,7 @@ rules:
         $...DISCARD
       }
       ...
-- id: rule-3
+- id: "3"
   message: "http request without context"
   languages: [go]
   severity: WARNING
@@ -66,7 +66,7 @@ rules:
       if err != nil {
         $...I
       }
-- id: rule-3a
+- id: "3a"
   message: "http request without context"
   languages: [go]
   severity: WARNING
@@ -76,19 +76,19 @@ rules:
       http.NewRequest($...ARGV)
   fix: |
       http.NewRequestWithContext(r.Context(), $...ARGV)
-- id: rule-4
+- id: "4"
   message: "fmt.Sprint on string"
   languages: [go]
   severity: WARNING
   pattern: |
     fmt.Sprint(($S : string))
-- id: rule-5
+- id: "5"
   message: "unhandled error"
   languages: [go]
   severity: WARNING
   pattern: |
     (_ : error) = ...
-- id: rule-6
+- id: "6"
   message: "raw UserArtCategory string"
   languages: [go]
   severity: WARNING
@@ -97,7 +97,7 @@ rules:
       ($A : UserArtCategory) == $B
   - pattern-not: |
       ($A : UserArtCategory) == ($B : UserArtCategory)
-- id: rule-7
+- id: "7"
   message: "c.Render"
   languages: [go]
   severity: INFO
@@ -108,7 +108,7 @@ rules:
       - "render_types.go"
   fix: |
     Render(w, r, Data_$NAME{$...INSIDE})
-- id: rule-8
+- id: "8"
   message: "c.Render"
   languages: [go]
   severity: INFO
@@ -122,7 +122,7 @@ rules:
   paths:
     exclude:
       - "render.go"
-- id: rule-9
+- id: "9"
   message: "still using *fiber.Ctx"
   languages: [go]
   severity: INVENTORY
@@ -135,7 +135,7 @@ rules:
     func $NAME(w http.ResponseWriter, r *http.Request) error {
       $...I
     }
-- id: rule-10
+- id: "10"
   message: "masquerading CompatRequest"
   languages: [go]
   severity: INFO
@@ -146,14 +146,14 @@ rules:
   #   func $NAME(w http.ResponseWriter, r *http.Request) error {
   #     $...I
   #   }
-- id: rule-11
+- id: "11"
   message: "Use StatusSeeOther or StatusPermanentRedirect"
   languages: [go]
   severity: WARNING
   patterns:
   - pattern: |
       StatusFound
-- id: rule-12
+- id: "12"
   message: "response body not closed"
   comment: "Needed to reuse connections"
   languages: [go]
@@ -164,7 +164,7 @@ rules:
   - pattern-not-inside: |
       ...
       defer $RESP.Body.Close()
-- id: rule-13
+- id: "13"
   message: "error string"
   languages: [go]
   severity: INFO
@@ -173,3 +173,16 @@ rules:
       errors.New(...)
   - pattern: |
       fmt.Errorf(...)
+- id: "14"
+  message: "non-global regexp.MustCompile"
+  languages: [go]
+  severity: ERROR
+  patterns:
+  - pattern-inside: |
+      {
+        ...
+      }
+  - pattern: |
+      $VAR := regexp.MustCompile($PATT)
+  fix: |
+      var $VAR = regexp.MustCompile($PATT)

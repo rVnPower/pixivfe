@@ -15,6 +15,8 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
+var r_csrf = regexp.MustCompile(`"token":"([0-9a-f]+)"`)
+
 func setToken(w http.ResponseWriter, r *http.Request) error {
 	token := r.FormValue("token")
 	if token != "" {
@@ -37,8 +39,7 @@ func setToken(w http.ResponseWriter, r *http.Request) error {
 		}
 
 		// CSRF token
-		r := regexp.MustCompile(`"token":"([0-9a-f]+)"`)
-		csrf := r.FindStringSubmatch(resp.Body)[1]
+		csrf := r_csrf.FindStringSubmatch(resp.Body)[1]
 
 		if csrf == "" {
 			return errors.New("Cannot authorize with supplied token.")

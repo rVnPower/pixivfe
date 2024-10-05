@@ -4,9 +4,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-        "net/url"
+	"net/url"
+	"strings"
 	"testing"
-        "strings"
 )
 
 func setup() {
@@ -23,16 +23,16 @@ func TestMain(m *testing.M) {
 }
 
 type HTTPTestCase struct {
-	URL     string
-	Method  string
-	FormData url.Values
-	ExpectedStatusCode  int
+	URL                string
+	Method             string
+	FormData           url.Values
+	ExpectedStatusCode int
 }
 
 func (c *HTTPTestCase) SetDefault() {
-        if c.ExpectedStatusCode == 0 {
-                c.ExpectedStatusCode = 200
-        }
+	if c.ExpectedStatusCode == 0 {
+		c.ExpectedStatusCode = 200
+	}
 }
 
 func getBaseURL() string {
@@ -166,36 +166,36 @@ func TestBasicAllRoutes(t *testing.T) {
 			URL:    "/tags?category=manga&ecd=&hgt=1000&hlt=&mode=r18&name=original&order=date&page=1&ratio=0&scd=&tool=&wgt=&wlt=",
 			Method: "GET",
 		},
-                {
+		{
 			URL:    "/tags",
 			Method: "POST",
-                        FormData: url.Values{
-                                "name": {"original"},
-                        },
-                },
+			FormData: url.Values{
+				"name": {"original"},
+			},
+		},
 	}
 
 	for _, testCase := range testCases {
-                // Set default values of optional values
-                testCase.SetDefault()
+		// Set default values of optional values
+		testCase.SetDefault()
 
 		URL := getBaseURL() + testCase.URL
 		t.Logf("%s: %s", testCase.Method, testCase.URL)
 		req := generateRequest(URL, testCase.Method,
-                        strings.NewReader(testCase.FormData.Encode()))
+			strings.NewReader(testCase.FormData.Encode()))
 
-                // Set Content-Type in case we are sending form data
-                if testCase.FormData != nil {
-                    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-                }
+		// Set Content-Type in case we are sending form data
+		if testCase.FormData != nil {
+			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		}
 
 		resp := executeRequest(req)
 
 		if resp.StatusCode != testCase.ExpectedStatusCode {
 			t.Errorf("Request route response NOT OK: %d, expected %d",
-                                resp.StatusCode,
-                                testCase.ExpectedStatusCode,
-                        )
+				resp.StatusCode,
+				testCase.ExpectedStatusCode,
+			)
 		}
 	}
 }

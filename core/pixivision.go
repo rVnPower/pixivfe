@@ -103,14 +103,16 @@ func generatePixivisionURL(route string, lang []string) string {
 	return fmt.Sprintf(template, language, route)
 }
 
+var re_findid = regexp.MustCompile(`.*\/(\d+)`)
+
 func parseIDFromPixivLink(link string) string {
-	r := regexp.MustCompile(`.*\/(\d+)`)
-	return r.FindStringSubmatch(link)[1]
+	return re_findid.FindStringSubmatch(link)[1]
 }
 
+var r_img = regexp.MustCompile(`.*\((.*)\)`)
+
 func parseBackgroundImage(link string) string {
-	r := regexp.MustCompile(`.*\((.*)\)`)
-	return r.FindStringSubmatch(link)[1]
+	return r_img.FindStringSubmatch(link)[1]
 }
 
 func PixivisionGetHomepage(r *http.Request, page string, lang ...string) ([]PixivisionArticle, error) {

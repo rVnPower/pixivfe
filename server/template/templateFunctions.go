@@ -43,6 +43,8 @@ func GetRandomColor() string {
 	return colors[rand.Intn(len(colors))]
 }
 
+var re_emoji = regexp.MustCompile(`\(([^)]+)\)`)
+
 func ParseEmojis(s string) HTML {
 	emojiList := map[string]string{
 		"normal":        "101",
@@ -85,9 +87,7 @@ func ParseEmojis(s string) HTML {
 		"star":          "503",
 	}
 
-	regex := regexp.MustCompile(`\(([^)]+)\)`)
-
-	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
+	parsedString := re_emoji.ReplaceAllStringFunc(s, func(s string) string {
 		s = s[1 : len(s)-1] // Get the string inside
 		id := emojiList[s]
 
@@ -96,10 +96,10 @@ func ParseEmojis(s string) HTML {
 	return HTML(parsedString)
 }
 
-func ParsePixivRedirect(s string) HTML {
-	regex := regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
+var re_jump = regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
 
-	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
+func ParsePixivRedirect(s string) HTML {
+	parsedString := re_jump.ReplaceAllStringFunc(s, func(s string) string {
 		s = s[10:]
 		return s
 	})
@@ -248,6 +248,12 @@ func SwitchButtonAttributes(baseURL, selection, currentSelection string) string 
 	return fmt.Sprintf(`href=%s%s class=switch-button selected=%s`, baseURL, selection, cur)
 }
 
+var furiganaPattern = regexp.MustCompile(`\[\[rb:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+var chapterPattern = regexp.MustCompile(`\[chapter:\s*(.+?)\s*\]`)
+var jumpUriPattern = regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+var jumpPagePattern = regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
+var newPagePattern = regexp.MustCompile(`\s*\[newpage\]\s*`)
+
 func GetTemplateFunctions() map[string]any {
 	return map[string]any{
 		"parseEmojis": func(s string) HTML {
@@ -306,19 +312,15 @@ func GetTemplateFunctions() map[string]any {
 		},
 		"renderNovel": func(s string) HTML {
 			furiganaTemplate := `<ruby>$1<rp>(</rp><rt>$2</rt><rp>)</rp></ruby>`
-			furiganaPattern := regexp.MustCompile(`\[\[rb:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
 			s = furiganaPattern.ReplaceAllString(s, furiganaTemplate)
 
 			chapterTemplate := `<h2>$1</h2>`
-			chapterPattern := regexp.MustCompile(`\[chapter:\s*(.+?)\s*\]`)
 			s = chapterPattern.ReplaceAllString(s, chapterTemplate)
 
 			jumpUriTemplate := `<a href="$2" target="_blank">$1</a>`
-			jumpUriPattern := regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
 			s = jumpUriPattern.ReplaceAllString(s, jumpUriTemplate)
 
 			jumpPageTemplate := `<a href="#$1">To page $1</a>`
-			jumpPagePattern := regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
 			s = jumpPagePattern.ReplaceAllString(s, jumpPageTemplate)
 
 			if strings.Contains(s, "[newpage]") {
@@ -327,7 +329,6 @@ func GetTemplateFunctions() map[string]any {
 				pageIdx := 1
 
 				// Should run before replace `\n` -> `<br />`
-				newPagePattern := regexp.MustCompile(`\s*\[newpage\]\s*`)
 				s = newPagePattern.ReplaceAllStringFunc(s, func(_ string) string {
 					pageIdx += 1
 					return fmt.Sprintf(`<br /><hr id="%d"/>`, pageIdx)
