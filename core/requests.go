@@ -26,12 +26,28 @@ type SimpleHTTPResponse struct {
 
 var retryClient *retryablehttp.Client
 
+// ProxyJob represents a job for the proxy worker pool
+type ProxyJob struct {
+	Request  *http.Request
+	Response http.ResponseWriter
+	Done     chan error
+}
+
+var proxyJobQueue chan ProxyJob
+var numWorkers = 10 // TODO: allow number of workers to be configured
+
 func init() {
 	retryClient = retryablehttp.NewClient()
 	retryClient.RetryMax = config.GlobalConfig.APIMaxRetries
 	retryClient.RetryWaitMin = config.GlobalConfig.APIBaseTimeout
 	retryClient.RetryWaitMax = config.GlobalConfig.APIMaxBackoffTime
 	retryClient.HTTPClient = utils.HttpClient
+
+	// Initialize the proxy worker pool
+	proxyJobQueue = make(chan ProxyJob, 100) // TODO: allow buffer size to be configured
+	for i := 0; i < numWorkers; i++ {
+		go proxyWorker(proxyJobQueue)
+	}
 }
 
 // retryRequest performs a request with automatic retries and token management
@@ -67,17 +83,16 @@ func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*r
 			return nil, err
 		}
 
-
 		start := time.Now()
 		resp, err := retryClient.Do(req)
 		end := time.Now()
 
-                // Unwrap the body here so that we could log stuff correctly
-                defer resp.Body.Close()
-                body, err := io.ReadAll(resp.Body)
-                if err != nil {
-                        return nil, err
-                }
+		// Unwrap the body here so that we could log stuff correctly
+		defer resp.Body.Close()
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
 
 		audit.LogAPIRoundTrip(audit.APIRequestSpan{
 			RequestId: request_context.GetFromContext(ctx).RequestId,
@@ -193,18 +208,52 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 }
 
 // ProxyRequest forwards an HTTP request to the target server and copies the response back
-func ProxyRequest(w http.ResponseWriter, req *http.Request) error {
-	resp, err := utils.HttpClient.Do(req)
+func ProxyRequest(w http.ResponseWriter, req *http.Request) {
+	done := make(chan error, 1)
+	job := ProxyJob{
+		Request:  req,
+		Response: w,
+		Done:     done,
+	}
+
+	proxyJobQueue <- job
+
+	err := <-done
 	if err != nil {
-		return err
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// proxyWorker processes jobs from the proxyJobQueue
+func proxyWorker(jobs <-chan ProxyJob) {
+	for job := range jobs {
+		err := processProxyJob(job)
+		job.Done <- err
+	}
+}
+
+// processProxyJob handles the actual proxying of the request
+func processProxyJob(job ProxyJob) error {
+	resp, err := utils.HttpClient.Do(job.Request)
+	if err != nil {
+		return fmt.Errorf("failed to process request: %w", err)
 	}
 	defer resp.Body.Close()
 
-	header := w.Header()
+	// Copy response headers
+	header := job.Response.Header()
 	for k, v := range resp.Header {
 		header[k] = v
 	}
 
-	_, err = io.Copy(w, resp.Body)
-	return err
+	// Set the status code
+	job.Response.WriteHeader(resp.StatusCode)
+
+	// Copy the body from the response to the original writer
+	_, err = io.Copy(job.Response, resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to copy response body: %w", err)
+	}
+
+	return nil
 }
