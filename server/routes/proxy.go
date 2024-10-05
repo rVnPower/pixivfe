@@ -13,7 +13,9 @@ func SPximgProxy(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return core.ProxyRequest(w, req)
+	core.ProxyRequest(w, req)
+	return nil
+
 }
 
 func IPximgProxy(w http.ResponseWriter, r *http.Request) error {
@@ -23,7 +25,9 @@ func IPximgProxy(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	req.Header.Add("Referer", "https://www.pixiv.net/")
-	return core.ProxyRequest(w, req)
+	core.ProxyRequest(w, req)
+	return nil
+
 }
 
 func UgoiraProxy(w http.ResponseWriter, r *http.Request) error {
@@ -32,5 +36,6 @@ func UgoiraProxy(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return core.ProxyRequest(w, req)
+	core.ProxyRequest(w, req)
+	return nil
 }
