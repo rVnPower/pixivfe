@@ -9,7 +9,7 @@
   <div class="row">
     <!-- Recent works by artist -->
     <div class="col-12 col-lg-6">
-      <div class="custom-card mb-4 mb-lg-0">
+      <div class="custom-card bg-black mb-4 mb-lg-0">
         <div class="card-header border-0 rounded-5 bg-charcoal-surface1 p-4">
           <div class="d-flex justify-content-between align-items-center">
             <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .Illust.User.ID }}">
@@ -44,7 +44,7 @@
     <div class="col-12 col-lg-6">
       <!-- mb-5 for spacing between the end of the comments section card and related works -->
       <div class="custom-card">
-        <div class="card-body border-0 rounded-5 bg-charcoal-surface1 p-4 pb-0">
+        <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
           <!-- TODO: clean this logic up -->
           {{- if .Illust.Comments == 0 }}
           <h2>0 Comments</h2>
