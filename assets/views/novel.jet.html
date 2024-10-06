@@ -1,6 +1,10 @@
 {{- extends "layout/default" }}
 {{- import "blocks/underlinenav" }}
 {{- block body() }}
+
+{{ fontType := .FontType }}
+{{ viewMode := .ViewMode }}
+
 <div class="row justify-content-center g-4">
 
   <div class="col-12 col-lg-9">
@@ -106,12 +110,12 @@
               <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
               <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" />
+                  <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" {{- if fontType == "mincho" }}checked{{- end }} />
                   <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
                   <div id="font-type-mincho-help" class="form-text">A serif font style that resembles traditional Japanese printing. It's often used for formal or literary content, providing a classic and elegant look.</div>
                 </div>
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" checked />
+                  <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" {{- if fontType == "gothic" }}checked{{- end }} />
                   <label class="form-check-label fw-bold" for="font-type-gothic">Gothic</label>
                   <div id="font-type-gothic-help" class="form-text">A sans-serif font style that's clean and modern. It's commonly used for easy readability on digital screens, offering a contemporary appearance.</div>
                 </div>
@@ -126,17 +130,17 @@
               <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
               <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" />
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" {{- if viewMode == "1" }}checked{{- end }} />
                   <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
                   <div id="tx-ori-h-help" class="form-text">Forces the text to be displayed horizontally, left-to-right. This is common for most languages and easier to read on smaller screens or for those more accustomed to Western text layouts.</div>
                 </div>
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" />
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" {{- if viewMode == "2" }}checked{{- end }} />
                   <label class="form-check-label fw-bold" for="tx-ori-v">Vertical</label>
                   <div id="tx-ori-v-help" class="form-text">Forces the text to be displayed vertically, top-to-bottom and right-to-left. This is traditional for some East Asian languages and can provide a unique reading experience, especially for longer texts.</div>
                 </div>
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" checked />
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" {{- if viewMode == "" }}checked{{- end }} />
                   <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
                   <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
                 </div>
@@ -318,18 +322,19 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">
+
         <ul class="list-group list-group-flush">
           <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
             <h3>Font family</h3>
             <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
             <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
               <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" />
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" {{- if fontType == "mincho" }}checked{{- end }} />
                 <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
                 <div id="font-type-mincho-help" class="form-text">A serif font style that resembles traditional Japanese printing. It's often used for formal or literary content, providing a classic and elegant look.</div>
               </div>
               <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" checked />
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" {{- if fontType == "gothic" }}checked{{- end }} />
                 <label class="form-check-label fw-bold" for="font-type-gothic">Gothic</label>
                 <div id="font-type-gothic-help" class="form-text">A sans-serif font style that's clean and modern. It's commonly used for easy readability on digital screens, offering a contemporary appearance.</div>
               </div>
@@ -344,17 +349,17 @@
             <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
             <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
               <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" />
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" {{- if viewMode == "1" }}checked{{- end }} />
                 <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
                 <div id="tx-ori-h-help" class="form-text">Forces the text to be displayed horizontally, left-to-right. This is common for most languages and easier to read on smaller screens or for those more accustomed to Western text layouts.</div>
               </div>
               <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" />
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" {{- if viewMode == "2" }}checked{{- end }} />
                 <label class="form-check-label fw-bold" for="tx-ori-v">Vertical</label>
                 <div id="tx-ori-v-help" class="form-text">Forces the text to be displayed vertically, top-to-bottom and right-to-left. This is traditional for some East Asian languages and can provide a unique reading experience, especially for longer texts.</div>
               </div>
               <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" checked />
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" {{- if viewMode == "" }}checked{{- end }} />
                 <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
                 <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
               </div>
@@ -363,6 +368,7 @@
             <div id="novel-view-mode-response"></div>
           </li>
         </ul>
+
       </div>
     </div>
   </div>
