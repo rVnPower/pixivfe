@@ -11,8 +11,7 @@
           #{{ .Series.ContentOrder }}&nbsp;{{- .Title }}
         </div>
       </a>
-      <small><span>{{ .CharacterCount }} character(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }}
-          mins</span></small>
+      <small><span>{{ .CharacterCount }} character(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></small>
       <div class="illust-tags">
         {{- if .AiType == 2 }}
         <span class="illust-tag">
