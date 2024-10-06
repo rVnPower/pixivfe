@@ -289,7 +289,7 @@
   },
   {
     "file": "assets/views/novel.jet.html",
-    "msg": "{{ floor: .Novel.ReadingTime / 60 }}\n          mins"
+    "msg": "{{ floor: .Novel.ReadingTime / 60 }} mins"
   },
   {
     "file": "assets/views/novel.jet.html",
@@ -629,7 +629,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Log in with your Pixiv account's cookie to access features above.\n        To learn how to obtain your cookie, please see"
+    "msg": "Log in with your Pixiv account's cookie to access features above. To learn how to obtain your cookie, please see"
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -649,7 +649,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "To securely end your session, click the 'Logout!' button. This will\n        immediately remove your session token."
+    "msg": "To securely end your session, click the 'Logout!' button. This will immediately remove your session token."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -661,7 +661,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Choose how images are loaded in PixivFE by selecting either the built-in\n        proxy or one of the provided external proxy servers. If you prefer, you can\n        also specify a custom proxy server by entering its URL and clicking 'Use\n        Custom Proxy'."
+    "msg": "Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers. If you prefer, you can also specify a custom proxy server by entering its URL and clicking 'Use Custom Proxy'."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -781,7 +781,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Please note that some cookies here such as ShowArtR18,\n    ShowArtR18G, and ShowArtAI are for features still under development."
+    "msg": "Please note that some cookies here such as ShowArtR18, ShowArtR18G, and ShowArtAI are for features still under development."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -789,7 +789,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "You can save your current cookie values to quickly set your settings on other compatible instances,\n      or if the current instance's cookies went expired."
+    "msg": "You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance's cookies went expired."
   },
   {
     "file": "assets/views/settings.jet.html",
