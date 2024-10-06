@@ -17,7 +17,7 @@
   {{- if .Data.PrevDate != "false" }}
   <a href="{{ url }}&date={{.Data.PrevDate}}" class="custom-btn-secondary bg-charcoal-surface2 me-2">
     <span>
-      <i class="bi bi-arrow-left-circle-fill me-2"></i>Past day
+      <i class="bi bi-arrow-left-circle-fill me-2"></i>Past
     </span>
   </a>
   {{- end }}
@@ -26,7 +26,7 @@
   </a>
   <a href="{{ url }}&date={{.Data.NextDate}}" class="custom-btn-secondary bg-charcoal-surface2{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
     <span>
-      Next day<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+      Next<i class="bi bi-arrow-right-circle-fill ms-2"></i>
     </span>
   </a>
 {{- end }}
