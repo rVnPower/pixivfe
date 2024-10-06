@@ -148,50 +148,72 @@
     </div>
   </div>
 
-  <div class="col-12 col-lg-9">
+  <div class="col-12">
     <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4">
+      <div class="custom-card-body bg-charcoal-surface1 py-4 px-0">
 
-        <!-- The novel title and settings button -->
-        <div class="d-flex flex-row align-items-center justify-content-between mb-4" aria-label="Ranking options">
-          <h2 class="mb-0">{{ .Novel.Title }}</h2>
-          <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#NovelOptionsModal">
+        <div class="d-flex flex-column align-items-center position-relative mx-4 mb-4 justify-content-center">
+          <div class="d-flex flex-column text-center">
+            <h2 class="mb-2">{{ .Novel.Title }}</h2>
+            <h3><a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">{{ .User.Name }}</a></h3>
+            <p class="text-body-secondary small mb-0">
+              <span>{{ .Novel.WordCount }} word(s)</span> &middot; <span>{{ floor: .Novel.ReadingTime / 60 }} mins</span>
+            </p>
+          </div>
+
+          <!-- Options button that will stay on the side for larger screens but 'move' to the bottom for smaller screens -->
+          <button
+            class="js-required custom-btn-secondary bg-charcoal-surface2 position-absolute top-50 end-0 translate-middle-y d-none d-lg-block"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#NovelOptionsModal">
             <i class="bi bi-gear-fill me-2"></i>Options
+          </button>
+
+          <!-- The smaller version of the button for mobile that is displayed below the text -->
+          <button
+            class="js-required custom-btn-secondary bg-charcoal-surface2 mt-3 d-lg-none"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#NovelOptionsModal">
+            <i class="bi bi-gear"></i> Options
           </button>
         </div>
 
         <!-- The actual novel itself -->
         <!-- TODO: make background color configurable (need to update backend source files etc) -->
-        <div id="content" class="card-body bg-off-white text-dark rounded">
-          <p data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+        <div id="content" class="card-body bg-off-white text-dark p-5">
+          <p class="lh-lg" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
             {{- raw: renderNovel(.Novel.Content) }}
           </p>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- Series navigation, if present -->
-  {{- if .Novel.SeriesNavData }}
-  <div class="col-12 col-lg-9">
-    <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h2>Series</h2>
-        <div class="list-group">
-          {{- range i,v := .NovelSeriesContentTitles }}
-            {{- if v.ID == .Novel.ID  }}
-            <span class="list-group-item bg-charcoal-surface2 text-light">#{{ i + 1 }} {{ v.Title }}</span>
-            {{- else }}
-            <a href="/novel/{{ v.ID }}" class="list-group-item bg-charcoal-surface1 text-light">#{{ i + 1 }} {{ v.Title }}</a>
-            {{- end }}
-          {{- end }}
+        <!-- Series navigation, if present -->
+        <!-- NOTE: col element unconditionally for spacing -->
+        <div class="d-flex flex-row justify-content-center">
+        {{- if .Novel.SeriesNavData }}
+          <div class="custom-card">
+            <div class="custom-card-body bg-charcoal-surface1 p-4">
+              <h2>Series</h2>
+              <div class="list-group">
+                {{- range i,v := .NovelSeriesContentTitles }}
+                  {{- if v.ID == .Novel.ID  }}
+                  <span class="list-group-item bg-charcoal-surface2 text-light">#{{ i + 1 }} {{ v.Title }}</span>
+                  {{- else }}
+                  <a href="/novel/{{ v.ID }}" class="list-group-item bg-charcoal-surface1 text-light">#{{ i + 1 }} {{ v.Title }}</a>
+                  {{- end }}
+                {{- end }}
+              </div>
+            </div>
+          </div>
+        {{- end }}
         </div>
+
       </div>
     </div>
   </div>
-  {{- end }}
 
+  <!-- Author information -->
   <div class="col-12 col-lg-9">
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 p-4">
