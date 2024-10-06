@@ -57,6 +57,16 @@
   </div>
   <div>
     {{- if .Category != "novels" }}
+      {{- if .Category == "manga" && .User.MangaSeries }}
+      <div class="artwork-container-header">
+        <h2 id="checkpoint">Series</h2>
+      </div>
+      <div class="manga-container">
+        {{- range .User.MangaSeries }}
+        {{- include "fragments/mangaseries-tn" . }}
+        {{- end }}
+      </div>
+      {{- end }}
     <div class="artwork-container-header">
       <h2 id="checkpoint">Illustrations and Mangas</h2>
       {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
@@ -66,6 +76,16 @@
       {{- include "fragments/small-tn" .User.Artworks }}
     </div>
     {{- else }}
+    {{- if .User.NovelSeries }}
+    <div class="artwork-container-header">
+      <h2 id="checkpoint">Series</h2>
+    </div>
+    <div class="novel-container">
+      {{- range .User.NovelSeries }}
+      {{- include "fragments/novelseries-tn" . }}
+      {{- end }}
+    </div>
+    {{- end }}
 
     <div class="artwork-container-header">
       <h2 id="checkpoint">Novels</h2>

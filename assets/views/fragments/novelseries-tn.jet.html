@@ -1,0 +1,41 @@
+<div class="novel-card">
+    <div class="novel-detail">
+        <div class="novel-cover">
+            <a href="/novel/series/{{ .ID }}">
+                <img src="{{ .Cover.Urls.Four80Mw }}" alt="{{ .Title }}" />
+            </a>
+        </div>
+        <div class="novel-metadata">
+            <a href="/novel/series/{{ .ID }}">
+                <div class="novel-title">
+                    {{- .Title }}
+                </div>
+            </a>
+            <p class="novel-description">{{ raw: .Caption }}</p>
+            <small><span>{{ .Total }} Episode(s)</span>&nbsp;&nbsp;<span>{{ .PublishedTotalCharacterCount }} character(s)</span>&nbsp;&nbsp;<span>{{ floor: .PublishedReadingTime / 60 }} mins</span></small>
+            <div class="illust-tags">
+                {{- if .XRestrict != 0 }}
+                <span class="illust-tag">
+                    <span class="illust-tag-name" id="highlight">{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}</span>
+                    </span>
+                {{- end }}
+                {{- if .AiType == 2 }}
+                <span class="illust-tag">
+                <span class="illust-tag-name" id="highlight">AI-generated</span>
+                </span>
+                {{- end }}
+                {{- if .GenreID != "0" }}
+                <span class="illust-tag">
+                <span class="illust-tag-name">{{ novelGenre: .GenreID }}</span>
+                </span>
+                {{- end }}
+                {{- if .IsOriginal }}
+                <span class="illust-tag">
+                <span class="illust-tag-name">Original</span>
+                </span>
+                {{- end }}
+            </div>
+            <a href="/novel/{{ .FirstNovelID }}">Read from the beginning</a>
+        </div>
+    </div>
+</div>

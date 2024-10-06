@@ -21,6 +21,7 @@ $font-family: "Roboto", "Open Sans", "Noto Sans", sans-serif, "Noto Sans CJK JP"
 $small-artwork-width: 184px;
 $large-artwork-width: 288px;
 $novel-width: 392px;
+$manga-width: 392px;
 $small-breakpoint: 440px;
 $font-fallback-serif: "Yu Mincho",
   YuMincho,
@@ -780,6 +781,64 @@ $font-fallback-sans: YuGothic,
 
   .error.container {
     text-align: center;
+  }
+
+  .manga-container {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit,
+        minmax(calc($manga-width + 15px), 1fr));
+    align-items: center;
+    justify-items: center;
+
+    .manga-card {
+      font-size: 1.5rem;
+      padding: 5px 15px;
+      padding-top: 1em;
+
+      .manga-detail {
+        display: flex;
+
+        .manga-cover img {
+          /* warning: hard-coded values */
+          width: 300px;
+          object-fit: cover;
+          object-position: center center;
+        }
+      }
+
+      .manga-metadata {
+        margin-left: 1.5rem;
+
+        .manga-title {
+          color: $fg;
+          font-size: 1.17em;
+          font-weight: bold;
+          overflow: hidden;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          text-overflow: ellipsis;
+          width: 100%;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+      }
+
+      @media screen and (max-width: 950px) {
+        .manga-detail {
+          display: block;
+
+          .manga-cover img {
+            width: 100%;
+          }
+        }
+
+        .manga-metadata {
+          margin-left: 0;
+        }
+      }
+    }
   }
 
   .artwork-container-header {
