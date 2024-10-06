@@ -49,7 +49,7 @@
             </div>
             <!-- User bio and frequently used tags -->
             <p class="mb-4">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
-            <div class="custom-card bg-charcoal-surface2 p-4" id="checkpoint">
+            <div class="custom-card bg-charcoal-surface2 p-4">
               <h3><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
               <div class="d-flex flex-wrap">
                 {{- range .User.FrequentTags }}
