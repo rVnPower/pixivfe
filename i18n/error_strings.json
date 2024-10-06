@@ -1,113 +1,248 @@
 [
   {
-    "msg": "%s URL is invalid: %s. Please specify a complete URL with scheme and host, e.g. https://example.com"
+    "msg": "%s URL is invalid: %s. Please specify a complete URL with scheme and host, e.g. https://example.com",
+    "file": "config/config.go",
+    "line": 104,
+    "col": 27
   },
   {
-    "msg": "%s URL path (%s) cannot end in /: %s. PixivFE does not support this now"
+    "msg": "%s URL path (%s) cannot end in /: %s. PixivFE does not support this now",
+    "file": "config/config.go",
+    "line": 107,
+    "col": 27
   },
   {
-    "msg": "Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set"
+    "msg": "Either PIXIVFE_PORT or PIXIVFE_UNIXSOCKET has to be set",
+    "file": "config/config.go",
+    "line": 154,
+    "col": 21
   },
   {
-    "msg": "PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details"
+    "msg": "PIXIVFE_TOKEN has to be set. Visit https://pixivfe-docs.pages.dev/hosting/hosting-pixivfe for more details",
+    "file": "config/config.go",
+    "line": 160,
+    "col": 21
   },
   {
-    "msg": "Invalid JSON: %v"
+    "msg": "Invalid JSON: %v",
+    "file": "core/discovery.go",
+    "line": 26,
+    "col": 27
   },
   {
-    "msg": "Invalid JSON: %v"
+    "msg": "Invalid JSON: %v",
+    "file": "core/discovery.go",
+    "line": 51,
+    "col": 27
   },
   {
-    "msg": "Invalid JSON: %v"
+    "msg": "Invalid JSON: %v",
+    "file": "core/index.go",
+    "line": 64,
+    "col": 27
   },
   {
-    "msg": "Pixivision: Page not found"
+    "msg": "Pixivision: Page not found",
+    "file": "core/pixivision.go",
+    "line": 41,
+    "col": 26
   },
   {
-    "msg": "We couldn't find the page you're looking for"
+    "msg": "We couldn't find the page you're looking for",
+    "file": "core/pixivision.go",
+    "line": 130,
+    "col": 31
   },
   {
-    "msg": "All tokens (%d) are timed out, resetting all tokens to their initial good state.\nConsider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\nPlease refer the following documentation for additional information:\n- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n- https://pixivfe-docs.pages.dev/hosting/environment-variables/#exponential-backoff-configuration"
+    "msg": "All tokens (%d) are timed out, resetting all tokens to their initial good state.\nConsider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\nPlease refer the following documentation for additional information:\n- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n- https://pixivfe-docs.pages.dev/hosting/environment-variables/#exponential-backoff-configuration",
+    "file": "core/requests.go",
+    "line": 53,
+    "col": 5
   },
   {
-    "msg": "HTTP status code: %d"
+    "msg": "HTTP status code: %d",
+    "file": "core/requests.go",
+    "line": 106,
+    "col": 25
   },
   {
-    "msg": "Max retries reached. Last error: %v"
+    "msg": "Max retries reached. Last error: %v",
+    "file": "core/requests.go",
+    "line": 120,
+    "col": 26
   },
   {
-    "msg": "Invalid JSON: %v"
+    "msg": "Invalid JSON: %v",
+    "file": "core/requests.go",
+    "line": 149,
+    "col": 26
   },
   {
-    "msg": "Incompatible request body"
+    "msg": "Incompatible request body",
+    "file": "core/requests.go",
+    "line": 155,
+    "col": 25
   },
   {
-    "msg": "userToken is required for POST requests"
+    "msg": "userToken is required for POST requests",
+    "file": "core/requests.go",
+    "line": 168,
+    "col": 21
   },
   {
-    "msg": "failed to proxy request: %w"
+    "msg": "failed to proxy request: %w",
+    "file": "core/requests.go",
+    "line": 199,
+    "col": 22
   },
   {
-    "msg": "failed to copy response body: %w"
+    "msg": "failed to copy response body: %w",
+    "file": "core/requests.go",
+    "line": 215,
+    "col": 22
   },
   {
-    "msg": "Invalid work category: %#v. Only \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" and \"%s\" are available"
+    "msg": "Invalid work category: %#v. Only \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" and \"%s\" are available",
+    "file": "core/user.go",
+    "line": 34,
+    "col": 22
   },
   {
-    "msg": "No page available."
+    "msg": "No page available.",
+    "file": "core/user.go",
+    "line": 238,
+    "col": 29
   },
   {
-    "msg": "when running sass: %w"
+    "msg": "when running sass: %w",
+    "file": "main.go",
+    "line": 89,
+    "col": 25
   },
   {
-    "msg": "failed to create response save directory: %w"
+    "msg": "failed to create response save directory: %w",
+    "file": "server/audit/audit_init.go",
+    "line": 29,
+    "col": 22
   },
   {
-    "msg": "failed to write response body to file %s: %w"
+    "msg": "failed to write response body to file %s: %w",
+    "file": "server/audit/audit_log.go",
+    "line": 81,
+    "col": 26
   },
   {
-    "msg": "Route not found"
+    "msg": "Route not found",
+    "file": "server/middleware/router.go",
+    "line": 136,
+    "col": 37
   },
   {
-    "msg": "No ID provided."
+    "msg": "No ID provided.",
+    "file": "server/routes/actions.go",
+    "line": 23,
+    "col": 21
   },
   {
-    "msg": "No ID provided."
+    "msg": "No ID provided.",
+    "file": "server/routes/actions.go",
+    "line": 51,
+    "col": 21
   },
   {
-    "msg": "No ID provided."
+    "msg": "No ID provided.",
+    "file": "server/routes/actions.go",
+    "line": 75,
+    "col": 21
   },
   {
-    "msg": "Invalid ID: %s"
+    "msg": "Invalid ID: %s",
+    "file": "server/routes/artwork.go",
+    "line": 15,
+    "col": 22
   },
   {
-    "msg": "Invalid ID: %s"
+    "msg": "Invalid ID: %s",
+    "file": "server/routes/artworkMulti.go",
+    "line": 30,
+    "col": 29
   },
   {
-    "msg": "Invalid ID: %s"
+    "msg": "Invalid ID: %s",
+    "file": "server/routes/mangaseries.go",
+    "line": 17,
+    "col": 22
   },
   {
-    "msg": "Invalid ID: %s"
+    "msg": "Invalid Series ID: %s",
+    "file": "server/routes/mangaseries.go",
+    "line": 22,
+    "col": 22
   },
   {
-    "msg": "Invalid Page Number: %d"
+    "msg": "Invalid Page",
+    "file": "server/routes/mangaseries.go",
+    "line": 29,
+    "col": 22
   },
   {
-    "msg": "Cannot authorize with supplied token."
+    "msg": "Invalid Page",
+    "file": "server/routes/mangaseries.go",
+    "line": 60,
+    "col": 22
   },
   {
-    "msg": "Cannot authorize with supplied token."
+    "msg": "Invalid ID: %s",
+    "file": "server/routes/novel.go",
+    "line": 17,
+    "col": 22
   },
   {
-    "msg": "Cannot authorize with supplied token."
+    "msg": "Invalid ID: %s",
+    "file": "server/routes/novelseries.go",
+    "line": 17,
+    "col": 22
   },
   {
-    "msg": "You submitted an empty/invalid form."
+    "msg": "Invalid Page Number: %d",
+    "file": "server/routes/novelseries.go",
+    "line": 32,
+    "col": 22
   },
   {
-    "msg": "Invalid Cookie Name: %s"
+    "msg": "Cannot authorize with supplied token.",
+    "file": "server/routes/settings.go",
+    "line": 26,
+    "col": 22
   },
   {
-    "msg": "No such setting is available."
+    "msg": "Cannot authorize with supplied token.",
+    "file": "server/routes/settings.go",
+    "line": 37,
+    "col": 22
+  },
+  {
+    "msg": "Cannot authorize with supplied token.",
+    "file": "server/routes/settings.go",
+    "line": 44,
+    "col": 22
+  },
+  {
+    "msg": "You submitted an empty/invalid form.",
+    "file": "server/routes/settings.go",
+    "line": 53,
+    "col": 20
+  },
+  {
+    "msg": "Invalid Cookie Name: %s",
+    "file": "server/routes/settings.go",
+    "line": 129,
+    "col": 21
+  },
+  {
+    "msg": "No such setting is available.",
+    "file": "server/routes/settings.go",
+    "line": 191,
+    "col": 20
   }
 ]

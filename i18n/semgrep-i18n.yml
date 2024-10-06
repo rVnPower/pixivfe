@@ -1,4 +1,4 @@
-# semgrep scan -f i18n/semgrep-i18n.yml --json | jq '.results[].extra.metavars["$MSG"].abstract_content' > error_strings.json
+# ./build.sh i18n
 
 rules:
 - id: "i18n.error"

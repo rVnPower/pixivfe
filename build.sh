@@ -28,6 +28,10 @@ test() {
     go test ./...
 }
 
+i18n() {
+    semgrep scan -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, col:.start.col})' > i18n/error_strings.json
+}
+
 run() {
     build
     echo "Running ${BINARY_NAME}..."
@@ -50,7 +54,7 @@ clean() {
 install_pre_commit() {
     echo "Installing pre-commit hook..."
     echo '#!/bin/sh' > .git/hooks/pre-commit
-    echo 'go test ./server/template' >> .git/hooks/pre-commit
+    echo './build.sh test' >> .git/hooks/pre-commit
     chmod +x .git/hooks/pre-commit
 }
 
@@ -60,6 +64,7 @@ help() {
     echo "  fmt                - Format Go code"
     echo "  build              - Build the binary"
     echo "  test               - Run tests"
+    echo "  i18n               - Generate"
     echo "  run [--do-not-load-env-file] - Build and run the binary"
     echo "  clean              - Remove the binary"
     echo "  install-pre-commit - Install testing pre-commit hook"
@@ -71,6 +76,7 @@ help() {
 
 all() {
     fmt
+    i18n
     build
     test
 }
@@ -81,6 +87,7 @@ execute_command() {
         fmt) fmt ;;
         build) build ;;
         test) test ;;
+        i18n) i18n ;;
         run)
             if [ "$2" = "--do-not-load-env-file" ]; then
                 run "--do-not-load-env-file"
