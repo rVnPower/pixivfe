@@ -847,6 +847,30 @@ edit style.scss
     object-fit: cover;
     object-position: center top;
   }
+  .illust .illust-cover {
+    width: 100%;
+  }
+  .illust .illust-series-nav {
+    text-align: center;
+    padding: 20px;
+  }
+  .illust .illust-series-nav .illust-series-title {
+    color: #aaa;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .illust .illust-series-nav .prev, .illust .illust-series-nav .next {
+    margin-top: 10px;
+  }
+  .illust .illust-series-nav .illust-title {
+    color: #fff;
+    font-weight: bold;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
   .comment {
     display: flex;
     margin-bottom: 10px;

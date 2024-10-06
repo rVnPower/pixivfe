@@ -159,3 +159,10 @@ type Data_userAtom struct {
 	Page      int
 	// MetaImage string
 }
+type Data_mangaSeries struct {
+	MangaSeriesContent core.MangaSeriesContent
+	Title              string
+	User               core.UserBrief
+	Page               int
+	PageLimit          int
+}

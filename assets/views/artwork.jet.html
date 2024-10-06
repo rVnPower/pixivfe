@@ -2,6 +2,27 @@
 {{- block body() }}
 <div class="container illust" id="checkpoint">
   {{- include "fragments/artwork" .Illust }}
+  {{- if .Illust.SeriesNavData }}
+  <div class="illust-series-nav">
+    <div>
+      Series: <a class="illust-series-title" href="/user/{{ .Illust.UserID }}/series/{{ .Illust.SeriesNavData.SeriesID }}">
+        {{- .Illust.SeriesNavData.Title }}
+      </a>
+    </div>
+    {{- if .Illust.SeriesNavData.Next }}
+    <div class="prev">
+      Next:<a class="illust-title" href="/artworks/{{.Illust.SeriesNavData.Next.ID}}">
+        #{{- .Illust.SeriesNavData.Next.Order }}&nbsp;{{ .Illust.SeriesNavData.Next.Title }}</a>
+    </div>
+    {{- end}}
+    {{- if .Illust.SeriesNavData.Prev }}
+    <div class="next">
+      Prev:<a class="illust-title" href="/artworks/{{.Illust.SeriesNavData.Prev.ID}}">
+        #{{- .Illust.SeriesNavData.Prev.Order }}&nbsp;{{ .Illust.SeriesNavData.Prev.Title }}</a>
+    </div>
+    {{- end}}
+  </div>
+  {{- end}}
   <div class="illust-other-works">
     <div class="artwork-container-header">
       <a class="illust-other-works-author" href="/users/{{ .Illust.User.ID }}"><img src="{{ .Illust.User.Avatar }}"

@@ -88,6 +88,9 @@ func DefineRoutes() *mux.Router {
 		http.Redirect(w, r, "/artworks/"+routes.GetQueryParam(r, "illust_id"), http.StatusPermanentRedirect)
 	}).Methods("GET")
 
+	// Manga related routes
+	router.HandleFunc("/user/{id}/series/{sid}", CatchError(routes.MangaSeriesPage)).Methods("GET")
+
 	// Novel related routes
 	router.HandleFunc("/novel/show.php", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/novel/"+routes.GetQueryParam(r, "id"), http.StatusPermanentRedirect)
