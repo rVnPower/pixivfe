@@ -28,11 +28,19 @@ test() {
     go test ./...
 }
 
-i18n() {
+i18n_error() {
     semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/error_strings.json
+}
+
+i18n_template() {
     go run ./i18n/crawler | jq > i18n/template_strings.json
     echo "Malformed:"
     jq '.[] | select(.msg | contains("\n"))' < i18n/template_strings.json
+}
+
+i18n() {
+    i18n_error
+    i18n_template
 }
 
 run() {
@@ -91,6 +99,8 @@ execute_command() {
         build) build ;;
         test) test ;;
         i18n) i18n ;;
+        i18n_error) i18n_error ;;
+        i18n_template) i18n_template ;;
         run)
             if [ "$2" = "--do-not-load-env-file" ]; then
                 run "--do-not-load-env-file"
