@@ -93,26 +93,6 @@
     </div>
   </div>
 
-  <!-- Series navigation, if present -->
-  {{- if .Novel.SeriesNavData }}
-  <div class="col-12 col-lg-9">
-    <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h2>Series</h2>
-        <div class="list-group">
-          {{- range i,v := .NovelSeriesContentTitles }}
-            {{- if v.ID == .Novel.ID  }}
-            <span class="list-group-item bg-charcoal-surface2 text-light">#{{ i + 1 }} {{ v.Title }}</span>
-            {{- else }}
-            <a href="/novel/{{ v.ID }}" class="list-group-item bg-charcoal-surface1 text-light">#{{ i + 1 }} {{ v.Title }}</a>
-            {{- end }}
-          {{- end }}
-        </div>
-      </div>
-    </div>
-  </div>
-  {{- end }}
-
   <div class="col-12 col-lg-9">
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 p-4">
@@ -192,22 +172,25 @@
     </div>
   </div>
 
+  <!-- Series navigation, if present -->
+  {{- if .Novel.SeriesNavData }}
   <div class="col-12 col-lg-9">
-    {{- if .Novel.SeriesNavData }}
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h2>Series Navigation</h2>
-        <p>Series: <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-decoration-none">{{ .Novel.SeriesNavData.Title }}</a></p>
-        {{- if .Novel.SeriesNavData.Next }}
-        <p>Next: <a href="/novel/{{.Novel.SeriesNavData.Next.ID}}" class="text-decoration-none">#{{- .Novel.SeriesNavData.Next.Order }} {{ .Novel.SeriesNavData.Next.Title }}</a></p>
-        {{- end}}
-        {{- if .Novel.SeriesNavData.Prev }}
-        <p>Prev: <a href="/novel/{{.Novel.SeriesNavData.Prev.ID}}" class="text-decoration-none">#{{- .Novel.SeriesNavData.Prev.Order }} {{ .Novel.SeriesNavData.Prev.Title }}</a></p>
-        {{- end}}
+        <h2>Series</h2>
+        <div class="list-group">
+          {{- range i,v := .NovelSeriesContentTitles }}
+            {{- if v.ID == .Novel.ID  }}
+            <span class="list-group-item bg-charcoal-surface2 text-light">#{{ i + 1 }} {{ v.Title }}</span>
+            {{- else }}
+            <a href="/novel/{{ v.ID }}" class="list-group-item bg-charcoal-surface1 text-light">#{{ i + 1 }} {{ v.Title }}</a>
+            {{- end }}
+          {{- end }}
+        </div>
       </div>
     </div>
-    {{- end}}
   </div>
+  {{- end }}
 
   <div class="col-12 col-lg-9">
     <div class="custom-card">
