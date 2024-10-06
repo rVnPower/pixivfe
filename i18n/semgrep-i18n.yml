@@ -1,0 +1,18 @@
+# semgrep scan -f i18n/semgrep-i18n.yml --json | jq '.results[].extra.metavars["$MSG"].abstract_content' > error_strings.json
+
+rules:
+- id: "i18n.error"
+  message: "i18n error message"
+  languages: [go]
+  severity: INFO
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        i18n.Error("$MSG")
+    - pattern: |
+        "$MSG"
+  - patterns:
+    - pattern-inside: |
+        i18n.Errorf("$MSG", $...ARGS)
+    - pattern: |
+        "$MSG"
