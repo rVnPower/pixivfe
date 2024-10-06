@@ -9,15 +9,7 @@
   },
   {
     "file": "assets/views/about.jet.html",
-    "msg": "This instance is hosted by the owner of {{ .DomainName }}. If you're interested in hosting PixivFE yourself, please visit"
-  },
-  {
-    "file": "assets/views/about.jet.html",
-    "msg": "the source repository"
-  },
-  {
-    "file": "assets/views/about.jet.html",
-    "msg": "for more information."
+    "msg": "This instance is hosted by the owner of {{ .DomainName }}. If you&#39;re interested in hosting PixivFE yourself, please visit <a href=\"{{ .RepoURL }}\">the source repository</a> for more information."
   },
   {
     "file": "assets/views/about.jet.html",
@@ -105,11 +97,7 @@
   },
   {
     "file": "assets/views/diagnostics.jet.html",
-    "msg": "Tip: Refresh page to see updated data."
-  },
-  {
-    "file": "assets/views/diagnostics.jet.html",
-    "msg": "Reset Data"
+    "msg": "Tip: Refresh page to see updated data. <a href=\"/diagnostics/reset\">Reset Data</a>"
   },
   {
     "file": "assets/views/discovery.jet.html",
@@ -157,15 +145,7 @@
   },
   {
     "file": "assets/views/error.jet.html",
-    "msg": "If you think this error should not occur, you can help us by submitting an issue to the"
-  },
-  {
-    "file": "assets/views/error.jet.html",
-    "msg": "upstream repository"
-  },
-  {
-    "file": "assets/views/error.jet.html",
-    "msg": "!"
+    "msg": "If you think this error should not occur, you can help us by submitting an issue to the <a href=\"https://codeberg.org/VnPower/PixivFE/issues/new\">upstream repository</a>!"
   },
   {
     "file": "assets/views/following.jet.html",
@@ -193,19 +173,11 @@
   },
   {
     "file": "assets/views/index.jet.html",
-    "msg": "Not logged in. You can login"
+    "msg": "Not logged in. You can login <a href=\"/settings\">here</a>."
   },
   {
     "file": "assets/views/index.jet.html",
-    "msg": "here"
-  },
-  {
-    "file": "assets/views/index.jet.html",
-    "msg": "."
-  },
-  {
-    "file": "assets/views/index.jet.html",
-    "msg": "Today's illustration rankings"
+    "msg": "Today&#39;s illustration rankings"
   },
   {
     "file": "assets/views/index.jet.html",
@@ -305,7 +277,7 @@
   },
   {
     "file": "assets/views/novel.jet.html",
-    "msg": "Don't force"
+    "msg": "Don&#39;t force"
   },
   {
     "file": "assets/views/novel.jet.html",
@@ -545,15 +517,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "PixivFE uses"
-  },
-  {
-    "file": "assets/views/settings.jet.html",
-    "msg": "cookies"
-  },
-  {
-    "file": "assets/views/settings.jet.html",
-    "msg": "to store your preferences, which you can change on this page to customize your experience on this instance."
+    "msg": "PixivFE uses <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies\">cookies</a> to store your preferences, which you can change on this page to customize your experience on this instance."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -581,15 +545,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Log in with your Pixiv account's cookie to access features above. To learn how to obtain your cookie, please see"
-  },
-  {
-    "file": "assets/views/settings.jet.html",
-    "msg": "the guide on obtaining your PixivFE token"
-  },
-  {
-    "file": "assets/views/settings.jet.html",
-    "msg": "."
+    "msg": "Log in with your Pixiv account&#39;s cookie to access features above. To learn how to obtain your cookie, please see <a href=\"https://pixivfe-docs.pages.dev/obtaining-pixivfe-token/\">the guide on obtaining your PixivFE token</a>."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -601,7 +557,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "To securely end your session, click the 'Logout!' button. This will immediately remove your session token."
+    "msg": "To securely end your session, click the &#39;Logout!&#39; button. This will immediately remove your session token."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -613,7 +569,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers. If you prefer, you can also specify a custom proxy server by entering its URL and clicking 'Use Custom Proxy'."
+    "msg": "Choose how images are loaded in PixivFE by selecting either the built-in proxy or one of the provided external proxy servers. If you prefer, you can also specify a custom proxy server by entering its URL and clicking &#39;Use Custom Proxy&#39;."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -721,7 +677,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "Don't force (default from Pixiv)"
+    "msg": "Don&#39;t force (default from Pixiv)"
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -741,7 +697,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance's cookies went expired."
+    "msg": "You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance&#39;s cookies went expired."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -829,15 +785,7 @@
   },
   {
     "file": "assets/views/unauthorized.jet.html",
-    "msg": "You need to"
-  },
-  {
-    "file": "assets/views/unauthorized.jet.html",
-    "msg": "log in"
-  },
-  {
-    "file": "assets/views/unauthorized.jet.html",
-    "msg": "to use this feature."
+    "msg": "You need to <a href=\"/settings#login\">log in</a> to use this feature."
   },
   {
     "file": "assets/views/user.jet.html",

@@ -1,3 +1,5 @@
+// unused
+
 package main
 
 import (
@@ -8,7 +10,7 @@ import (
 	"github.com/soluble-ai/go-jnode"
 )
 
-func ProcessFile_jet(filename string, result *jnode.Node) {
+func processFile_jet(filename string, result *jnode.Node) {
 	parser := jet.NewSet(jet.NewOSFileSystemLoader("."))
 	template, err := parser.GetTemplate(filename)
 	if err != nil {
