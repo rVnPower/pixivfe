@@ -539,6 +539,53 @@ edit style.scss
   .error.container {
     text-align: center;
   }
+  .manga-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(407px, 1fr));
+    align-items: center;
+    justify-items: center;
+  }
+  .manga-container .manga-card {
+    font-size: 1.5rem;
+    padding: 5px 15px;
+    padding-top: 1em;
+  }
+  .manga-container .manga-card .manga-detail {
+    display: flex;
+  }
+  .manga-container .manga-card .manga-detail .manga-cover img {
+    /* warning: hard-coded values */
+    width: 300px;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .manga-container .manga-card .manga-metadata {
+    margin-left: 1.5rem;
+  }
+  .manga-container .manga-card .manga-metadata .manga-title {
+    color: #fff;
+    font-size: 1.17em;
+    font-weight: bold;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  @media screen and (max-width: 950px) {
+    .manga-container .manga-card .manga-detail {
+      display: block;
+    }
+    .manga-container .manga-card .manga-detail .manga-cover img {
+      width: 100%;
+    }
+    .manga-container .manga-card .manga-metadata {
+      margin-left: 0;
+    }
+  }
   .artwork-container-header {
     display: flex;
     flex-wrap: wrap;

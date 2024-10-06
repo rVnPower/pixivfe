@@ -58,6 +58,8 @@ type User struct {
 	FrequentTags    []FrequentTag
 	Social          map[string]map[string]string
 	BackgroundImage string
+	NovelSeries     []NovelSeries
+	MangaSeries     []MangaSeries
 }
 
 func (s *User) ParseSocial() error {
@@ -165,23 +167,27 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 	return works, nil
 }
 
-func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, page int) (string, int, error) {
+func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCategory, page int) (string, int, json.RawMessage, error) {
 	URL := GetUserArtworksURL(id)
 
 	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
-		return "", -1, err
+		return "", -1, nil, err
 	}
 
+	resp = session.ProxyImageUrl(r, resp)
+
 	var body struct {
-		Illusts json.RawMessage `json:"illusts"`
-		Mangas  json.RawMessage `json:"manga"`
-		Novels  json.RawMessage `json:"novels"`
+		Illusts     json.RawMessage `json:"illusts"`
+		Mangas      json.RawMessage `json:"manga"`
+		MangaSeries json.RawMessage `json:"mangaSeries"`
+		Novels      json.RawMessage `json:"novels"`
+		NovelSeries json.RawMessage `json:"novelSeries"`
 	}
 
 	err = json.Unmarshal([]byte(resp), &body)
 	if err != nil {
-		return "", -1, err
+		return "", -1, nil, err
 	}
 
 	var ids []int
@@ -189,12 +195,13 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 
 	err = json.Unmarshal([]byte(resp), &body)
 	if err != nil {
-		return "", -1, err
+		return "", -1, nil, err
 	}
 
 	var illusts map[int]string
 	var mangas map[int]string
 	var novels map[int]string
+	var series json.RawMessage
 	count := 0
 
 	// Get the keys, because Pixiv only returns IDs (very evil)
@@ -216,6 +223,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 			ids = append(ids, k)
 			count++
 		}
+		series = body.MangaSeries
 	}
 	if category == UserArt_Novel {
 		if err = json.Unmarshal(body.Novels, &novels); err != nil {
@@ -225,6 +233,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 			ids = append(ids, k)
 			count++
 		}
+		series = body.NovelSeries
 
 	}
 
@@ -235,7 +244,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 	worksPerPage := 30.0
 
 	if page < 1 || float64(page) > math.Ceil(worksNumber/worksPerPage)+1.0 {
-		return "", -1, i18n.Error("No page available.")
+		return "", -1, nil, i18n.Error("No page available.")
 	}
 
 	start := (page - 1) * int(worksPerPage)
@@ -245,7 +254,7 @@ func GetUserArtworksID(r *http.Request, id string, category UserArtCategory, pag
 		idsString += fmt.Sprintf("&ids[]=%d", k)
 	}
 
-	return idsString, count, nil
+	return idsString, count, series, nil
 }
 
 func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
@@ -279,7 +288,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		// Public bookmarks count
 		user.ArtworksCount = count
 	} else if category == UserArt_Novel {
-		ids, count, err := GetUserArtworksID(r, id, category, page)
+		ids, count, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
@@ -307,10 +316,17 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 			}
 		}
 
+		var novelSeries []NovelSeries
+		if series != nil {
+			if err = json.Unmarshal(series, &novelSeries); err == nil {
+				user.NovelSeries = novelSeries
+			}
+		}
+
 		// Artworks count
 		user.ArtworksCount = count
 	} else {
-		ids, count, err := GetUserArtworksID(r, id, category, page)
+		ids, count, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
@@ -335,6 +351,13 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 				if err != nil {
 					return user, err
 				}
+			}
+		}
+
+		var mangaSeries []MangaSeries
+		if series != nil {
+			if err = json.Unmarshal(series, &mangaSeries); err == nil {
+				user.MangaSeries = mangaSeries
 			}
 		}
 

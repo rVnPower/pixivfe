@@ -1,0 +1,25 @@
+<div class="manga-card">
+    <div class="manga-detail">
+        <div class="manga-cover">
+            <a href="/user/{{ .UserID }}/series/{{ .ID }}">
+                <img src="{{ .URL }}" alt="{{ .Title }}" />
+            </a>
+        </div>
+        <div class="manga-metadata">
+            <a href="/user/{{ .UserID }}/series/{{ .ID }}">
+                <div class="manga-title">
+                    {{- .Title }}
+                </div>
+            </a>
+            <div>
+                <small>
+                    <span>{{ .Total }} Episode(s)</span>&nbsp;&nbsp;
+                    <span>Updated at {{ parseTime:.UpdateDate }}</span>
+                </small>
+            </div>
+            <a href="/artworks/{{ .FirstIllustID }}">
+                <div>Read from the beginning</div>
+            </a>
+        </div>
+    </div>
+</div>

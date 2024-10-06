@@ -29,11 +29,6 @@ func MangaSeriesPage(w http.ResponseWriter, r *http.Request) error {
 		return i18n.Errorf("Invalid Page")
 	}
 
-	user, err := core.GetUserBasicInformation(r, id)
-	if err != nil {
-		return err
-	}
-
 	// Must use token. because R-18 artwork could be included in an All-Age series.
 	seriesContent, err := core.GetMangaSeriesContentByID(r, seriesId, pageNum)
 	if err != nil {
@@ -58,6 +53,11 @@ func MangaSeriesPage(w http.ResponseWriter, r *http.Request) error {
 	// Pixiv display empty (not error page) if page id exceeds the total/12 +1
 	if pageNum > pageLimit {
 		return i18n.Errorf("Invalid Page")
+	}
+
+	user, err := core.GetUserBasicInformation(r, id)
+	if err != nil {
+		return err
 	}
 
 	title := fmt.Sprintf("%s / %s Series", seriesContent.Brief.Title, user.Name)
