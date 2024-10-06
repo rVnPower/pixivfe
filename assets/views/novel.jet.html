@@ -200,7 +200,6 @@
   <div class="col-12 col-lg-9">
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
-        <!-- TODO: clean this logic up -->
         {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
         <h2>0 Comments</h2>
         {{- else if .Novel.CommentCount == 1 }}
@@ -208,7 +207,6 @@
         {{- else }}
         <h2>{{ .Novel.CommentCount }} Comments</h2>
         {{- end }}
-        <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
         {{- if .Novel.CommentOff == 1  }}
         <p class="mb-4">The creator turned comments off</p>
         {{- else if .Novel.CommentCount == 1 }}
@@ -240,7 +238,6 @@
                 </div>
 
                 <!-- Stamp or emoji -->
-                <!-- TODO: .Stamp occasionally templates in text (which should be part of the main comment text) instead of an image, causing breakage in the layout. See the comment by "Unknown417" on /artworks/107442519 for an example -->
                 {{- if .Stamp }}
                 <img class="img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px" />
                 {{- else }}
@@ -252,7 +249,6 @@
           </div>
           {{- end }}
           <div class="d-flex justify-content-center">
-            <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
             <button type="button" class="custom-btn-secondary-flex bg-charcoal-surface2 mb-4" id="load-more-btn">Load more</button>
           </div>
         </div>
