@@ -8,24 +8,25 @@ import (
 	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 func MangaSeriesPage(w http.ResponseWriter, r *http.Request) error {
 	id := GetPathVar(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return fmt.Errorf("Invalid ID: %s", id)
+		return i18n.Errorf("Invalid ID: %s", id)
 	}
 
 	seriesId := GetPathVar(r, "sid")
 	if _, err := strconv.Atoi(seriesId); err != nil {
-		return fmt.Errorf("Invalid Series ID: %s", seriesId)
+		return i18n.Errorf("Invalid Series ID: %s", seriesId)
 	}
 
 	// No way to know total before the GetMangaSeriesContentByID request.
 	page := GetQueryParam(r, "p", "1")
 	pageNum, err := strconv.Atoi(page)
 	if err != nil || pageNum < 1 {
-		return fmt.Errorf("Invalid Page")
+		return i18n.Errorf("Invalid Page")
 	}
 
 	user, err := core.GetUserBasicInformation(r, id)
@@ -56,7 +57,7 @@ func MangaSeriesPage(w http.ResponseWriter, r *http.Request) error {
 
 	// Pixiv display empty (not error page) if page id exceeds the total/12 +1
 	if pageNum > pageLimit {
-		return fmt.Errorf("Invalid Page")
+		return i18n.Errorf("Invalid Page")
 	}
 
 	title := fmt.Sprintf("%s / %s Series", seriesContent.Brief.Title, user.Name)
