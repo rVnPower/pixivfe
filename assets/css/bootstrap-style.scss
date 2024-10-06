@@ -1,3 +1,79 @@
+$font-fallback-serif: "Yu Mincho",
+  YuMincho,
+  "Hiragino Mincho ProN",
+  "Hiragino Mincho Pro",
+  "Source Han Serif",
+  "BIZ UDMincho Medium",
+  "Source Serif Pro",
+  "Source Serif",
+  "Noto Serif",
+  "Times New Roman",
+  "Georgia Pro",
+  Georgia,
+  Simsun,
+  PMingLiu,
+  AppleMyungjo,
+  "Source Han Serif K",
+  "Source Han Serif KR",
+  "Noto Serif KR",
+  Batang,
+  serif;
+
+$font-fallback-sans: YuGothic,
+  "Hiragino Kaku Gothic Pro",
+  Meiryo,
+  "Source Han Sans",
+  "Source Han Sans JP",
+  "Noto Sans CJK JP",
+  "Avenir Next",
+  Avenir,
+  "Source Sans",
+  "Noto Sans",
+  Roboto,
+  Verdana,
+  "Pingfang TC",
+  "Pingfang HK",
+  "Hiragino Sans CNS",
+  "Lantinghei TC",
+  "Source Han Sans TW",
+  "Source Han Sans HK",
+  "Noto Sans CJK TC",
+  "Microsoft JhengHei",
+  "Pingfang SC",
+  "Hiragino Sans GB",
+  "Lantinghei SC",
+  "Source Han Sans CN",
+  "Noto Sans CJK SC",
+  "Microsoft Yahei",
+  DengXian,
+  "Apple SD Gothic Neo",
+  "Source Han Sans K",
+  "Source Han Sans KR",
+  "Noto Sans CJK KR",
+  "Malgun Gothic",
+  sans-serif;
+
+$font-fallback-serif: "Yu Mincho",
+  YuMincho,
+  "Hiragino Mincho ProN",
+  "Hiragino Mincho Pro",
+  "Source Han Serif",
+  "BIZ UDMincho Medium",
+  "Source Serif Pro",
+  "Source Serif",
+  "Noto Serif",
+  "Times New Roman",
+  "Georgia Pro",
+  Georgia,
+  Simsun,
+  PMingLiu,
+  AppleMyungjo,
+  "Source Han Serif K",
+  "Source Han Serif KR",
+  "Noto Serif KR",
+  Batang,
+  serif;
+
 /// Bootstrap limits grid-row-columns to 6 by default
 /// src: https://github.com/twbs/bootstrap/issues/36691
 $grid-row-columns: 7;
@@ -23,6 +99,8 @@ $custom-colors: (
   "custom-color": #7aa2f7,
   "charcoal-surface1": #1f1f1f,
   "charcoal-surface2": #3a3a3a,
+  "beige": #f5f5dc,
+  "off-white": #fff8eb,
 );
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
@@ -146,4 +224,50 @@ h6 {
   .js-required {
     display: none !important;
   }
+}
+
+/// Novel preference setup
+[data-font=mincho][data-font=jp] {
+  font-family:
+    "Source Han Serif JP",
+    "Noto Serif JP",
+    $font-fallback-serif;
+}
+
+[data-font=mincho][data-font=zh-cn],
+[data-font=mincho][data-font=zh-hans] {
+  font-family:
+    "Songti SC",
+    "Source Han Serif SC",
+    "Noto Serif SC",
+    "Source Han Serif CN",
+    $font-fallback-serif;
+}
+
+// TODO: technically, zh-hk > zh-hant > zh
+// Noto Sans have
+// CJK HK
+// CJK JP
+// CJK KR
+// CJK SC
+// CJK TC
+
+[data-font=mincho][data-font=zh-tw],
+[data-font=mincho][data-font=zh-hk],
+[data-font=mincho][data-font=zh-hant] {
+  font-family:
+    "Songti TC",
+    "Source Han Serif TC",
+    "Noto Serif TC",
+    "Source Han Serif TW",
+    "Source Han Serif HK",
+    $font-fallback-serif;
+}
+
+[data-font=mincho] {
+  font-family: $font-fallback-serif;
+}
+
+[data-font=gothic] {
+  font-family: $font-fallback-sans;
 }

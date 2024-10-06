@@ -1,10 +1,11 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center g-4">
 
   <div class="col-12 col-lg-9">
     <div class="custom-card">
-      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
         <div class="row g-4">
           <div class="col-12 col-md-4">
             <!-- Cover art -->
@@ -92,11 +93,12 @@
     </div>
   </div>
 
+  <!-- Series navigation, if present -->
   {{- if .Novel.SeriesNavData }}
   <div class="col-12 col-lg-9">
     <div class="custom-card">
-      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
-        <h3 class="mb-3">Series</h3>
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <h2>Series</h2>
         <div class="list-group">
           {{- range i,v := .NovelSeriesContentTitles }}
             {{- if v.ID == .Novel.ID  }}
@@ -114,48 +116,78 @@
   <div class="col-12 col-lg-9">
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h3 class="mb-3">Settings</h3>
-        <div class="d-flex justify-content-start align-items-center">
-          <div class="dropdown me-3">
-            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="fontTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-fonts me-2"></i>Font Type
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="fontTypeDropdown">
-              <li><a class="dropdown-item" href="/settings/novelFontType?font-type=gothic">Gothic</a></li>
-              <li><a class="dropdown-item" href="/settings/novelFontType?font-type=mincho">Mincho</a></li>
-            </ul>
-          </div>
-          <div class="dropdown me-3">
-            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="fontSizeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-text-size me-2"></i>Font Size
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="fontSizeDropdown">
-              <li><a class="dropdown-item" href="#">Small</a></li>
-              <li><a class="dropdown-item" href="#">Medium</a></li>
-              <li><a class="dropdown-item" href="#">Large</a></li>
-            </ul>
-          </div>
-          <div class="dropdown">
-            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="viewModeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-layout-text-window-reverse me-2"></i>View Mode
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="viewModeDropdown">
-              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=1">Horizontal</a></li>
-              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=2">Vertical</a></li>
-              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=">Don't force</a></li>
-            </ul>
-          </div>
-        </div>
+        <h2><i class="bi bi-gear-fill me-2"></i>Options</h2>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
+            <h3>Font family</h3>
+            <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
+            <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" />
+                <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
+                <div id="font-type-mincho-help" class="form-text">A serif font style that resembles traditional Japanese printing. It's often used for formal or literary content, providing a classic and elegant look.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" checked />
+                <label class="form-check-label fw-bold" for="font-type-gothic">Gothic</label>
+                <div id="font-type-gothic-help" class="form-text">A sans-serif font style that's clean and modern. It's commonly used for easy readability on digital screens, offering a contemporary appearance.</div>
+              </div>
+
+              <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
+            </form>
+            <div id="novel-font-response"></div>
+          </li>
+
+          <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
+            <h3>Force text orientation</h3>
+            <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
+            <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" />
+                <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
+                <div id="tx-ori-h-help" class="form-text">Forces the text to be displayed horizontally, left-to-right. This is common for most languages and easier to read on smaller screens or for those more accustomed to Western text layouts.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" />
+                <label class="form-check-label fw-bold" for="tx-ori-v">Vertical</label>
+                <div id="tx-ori-v-help" class="form-text">Forces the text to be displayed vertically, top-to-bottom and right-to-left. This is traditional for some East Asian languages and can provide a unique reading experience, especially for longer texts.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" checked />
+                <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
+                <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
+              </div>
+              <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Save</button>
+            </form>
+            <div id="novel-view-mode-response"></div>
+          </li>
+        </ul>
+
       </div>
     </div>
   </div>
 
   <div class="col-12 col-lg-9">
     <div class="custom-card">
-      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
-        <div id="content" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
-          {{- raw: renderNovel(.Novel.Content) }}
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+
+        <!-- The novel title and settings button -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-4" aria-label="Ranking options">
+          <h2 class="mb-0">{{ .Novel.Title }}</h2>
+          <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#NovelOptionsModal">
+            <i class="bi bi-gear-fill me-2"></i>Options
+          </button>
         </div>
+
+        <!-- The actual novel itself -->
+        <!-- TODO: make background color configurable (need to update backend source files etc) -->
+        <div id="content" class="card-body bg-off-white text-dark rounded">
+          <p data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+            {{- raw: renderNovel(.Novel.Content) }}
+          </p>
+        </div>
+
       </div>
     </div>
   </div>
@@ -163,8 +195,8 @@
   <div class="col-12 col-lg-9">
     {{- if .Novel.SeriesNavData }}
     <div class="custom-card">
-      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
-        <h3 class="mb-3">Series Navigation</h3>
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <h2>Series Navigation</h2>
         <p>Series: <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-decoration-none">{{ .Novel.SeriesNavData.Title }}</a></p>
         {{- if .Novel.SeriesNavData.Next }}
         <p>Next: <a href="/novel/{{.Novel.SeriesNavData.Next.ID}}" class="text-decoration-none">#{{- .Novel.SeriesNavData.Next.Order }} {{ .Novel.SeriesNavData.Next.Title }}</a></p>
@@ -179,7 +211,7 @@
 
   <div class="col-12 col-lg-9">
     <div class="custom-card">
-      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
         <div class="d-flex align-items-center">
           <a href="/users/{{ .User.ID }}" class="me-3">
             <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;" />
