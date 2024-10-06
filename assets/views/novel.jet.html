@@ -13,6 +13,7 @@
               <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }} cover" class="d-block img-fluid rounded mx-auto" />
             </a>
           </div>
+
           <div class="col-12 col-md-8 d-flex flex-column">
             <!-- Series name -->
             {{- if .Novel.SeriesNavData }}
@@ -86,8 +87,26 @@
                 <span>{{- parseTime: .Novel.CreateDate }}</span>
               </div>
             </div>
-
           </div>
+
+          <div class="col-12 px-0">
+            <!-- The novel title and settings button -->
+            <div class="d-flex flex-row align-items-center justify-content-between mb-4" aria-label="Ranking options">
+              <h2 class="mb-0">{{ .Novel.Title }}</h2>
+              <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#NovelOptionsModal">
+                <i class="bi bi-gear-fill me-2"></i>Options
+              </button>
+            </div>
+
+            <!-- The actual novel itself -->
+            <!-- TODO: make background color configurable (need to update backend source files etc) -->
+            <div id="content" class="card-body bg-off-white text-dark rounded">
+              <p data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+                {{- raw: renderNovel(.Novel.Content) }}
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
