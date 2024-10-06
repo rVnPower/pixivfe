@@ -18,7 +18,7 @@ func ProcessFile_jet(filename string, result *jnode.Node) {
 	jetutils.Walk(template, jetutils.VisitorFunc(func(vc jetutils.VisitorContext, node_ jet.Node) {
 		switch node := node_.(type) {
 		case *jet.TextNode:
-			if re_command.Match(node.Text) {
+			if re_command_fullmatch.Match(node.Text) {
 				// is command, skip
 			} else {
 				s := strings.TrimSpace(string(node.Text))

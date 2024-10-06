@@ -73,15 +73,7 @@
   },
   {
     "file": "assets/views/artwork.jet.html",
-    "msg": "#{{- .Illust.SeriesNavData.Next.Order }} {{ .Illust.SeriesNavData.Next.Title }}"
-  },
-  {
-    "file": "assets/views/artwork.jet.html",
     "msg": "Prev:"
-  },
-  {
-    "file": "assets/views/artwork.jet.html",
-    "msg": "#{{- .Illust.SeriesNavData.Prev.Order }} {{ .Illust.SeriesNavData.Prev.Title }}"
   },
   {
     "file": "assets/views/artwork.jet.html",
@@ -248,10 +240,6 @@
     "msg": "Recommended illustrations tagged"
   },
   {
-    "file": "assets/views/index.jet.html",
-    "msg": "#{{.Name}}"
-  },
-  {
     "file": "assets/views/mangaSeries.jet.html",
     "msg": "{{ .MangaSeriesContent.Brief.Total }} Works"
   },
@@ -281,10 +269,6 @@
   },
   {
     "file": "assets/views/novel.jet.html",
-    "msg": "{{- .Novel.SeriesNavData.Title }}#{{- .Novel.SeriesNavData.Order}}"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
     "msg": "{{ .Novel.WordCount }} word(s)"
   },
   {
@@ -301,19 +285,7 @@
   },
   {
     "file": "assets/views/novel.jet.html",
-    "msg": "#{{ .Name }}"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
     "msg": "Series"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
-    "msg": "{{- if v.ID == .Novel.ID  }}\n          # {{ i + 1 }} {{ v.Title }}\n          {{- else }}"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
-    "msg": "# {{ i + 1 }} {{ v.Title }}"
   },
   {
     "file": "assets/views/novel.jet.html",
@@ -345,15 +317,7 @@
   },
   {
     "file": "assets/views/novel.jet.html",
-    "msg": "#{{- .Novel.SeriesNavData.Next.Order }} {{ .Novel.SeriesNavData.Next.Title }}"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
     "msg": "Prev:"
-  },
-  {
-    "file": "assets/views/novel.jet.html",
-    "msg": "#{{- .Novel.SeriesNavData.Prev.Order }} {{ .Novel.SeriesNavData.Prev.Title }}"
   },
   {
     "file": "assets/views/novel.jet.html",
@@ -446,18 +410,6 @@
   {
     "file": "assets/views/novelSeries.jet.html",
     "msg": "Page {{ .Page }}/{{ .PageLimit }}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "#{{tag.Name}}"
-  },
-  {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "#{{tag.Name}}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "#{{tag.Name}}"
   },
   {
     "file": "assets/views/rank.jet.html",
@@ -601,7 +553,7 @@
   },
   {
     "file": "assets/views/settings.jet.html",
-    "msg": "to store your\n    preferences, which you can change on this page to customize your experience on this instance."
+    "msg": "to store your preferences, which you can change on this page to customize your experience on this instance."
   },
   {
     "file": "assets/views/settings.jet.html",
@@ -796,20 +748,8 @@
     "msg": "Invalid values will be ignored."
   },
   {
-    "file": "assets/views/settings.jet.html",
-    "msg": "{{range k, v := CookieList}}\n{{k}}={{v}}{{end}}"
-  },
-  {
-    "file": "assets/views/tag.jet.html",
-    "msg": "#{{ .Tag.Name }}"
-  },
-  {
     "file": "assets/views/tag.jet.html",
     "msg": "works"
-  },
-  {
-    "file": "assets/views/tag.jet.html",
-    "msg": "#{{ . }}"
   },
   {
     "file": "assets/views/tag.jet.html",
@@ -913,10 +853,6 @@
   },
   {
     "file": "assets/views/user.jet.html",
-    "msg": "#{{ .Name }}"
-  },
-  {
-    "file": "assets/views/user.jet.html",
     "msg": "Category"
   },
   {
@@ -1012,10 +948,6 @@
     "msg": "AI-generated"
   },
   {
-    "file": "assets/views/fragments/artwork.jet.html",
-    "msg": "#{{ .Name }}"
-  },
-  {
     "file": "assets/views/fragments/novel-tn.jet.html",
     "msg": "{{ .WordCount }} word(s)"
   },
@@ -1032,14 +964,6 @@
     "msg": "Original"
   },
   {
-    "file": "assets/views/fragments/novel-tn.jet.html",
-    "msg": "#{{ . }}"
-  },
-  {
-    "file": "assets/views/fragments/novelseriescontents-tn.jet.html",
-    "msg": "#{{ .Series.ContentOrder }} {{- .Title }}"
-  },
-  {
     "file": "assets/views/fragments/novelseriescontents-tn.jet.html",
     "msg": "{{ .CharacterCount }} character(s)"
   },
@@ -1054,10 +978,6 @@
   {
     "file": "assets/views/fragments/novelseriescontents-tn.jet.html",
     "msg": "Original"
-  },
-  {
-    "file": "assets/views/fragments/novelseriescontents-tn.jet.html",
-    "msg": "#{{ . }}"
   },
   {
     "file": "assets/views/fragments/thumbnail-dt.jet.html",

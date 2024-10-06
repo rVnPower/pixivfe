@@ -29,8 +29,7 @@ func ProcessFile_html(filename string, result *jnode.Node) {
 
 	recurse_html(body, func(node *html.Node) {
 		s := strings.TrimSpace(node.Data)
-		// s = strings.ReplaceAll(s, "\n", " ")
-		// println(s)
+
 		if s != "" {
 			object := jnode.NewObjectNode()
 			object.Put("msg", s)
@@ -44,7 +43,7 @@ func recurse_html(node *html.Node, record func(*html.Node)) {
 	for it := node.FirstChild; it != nil; it = it.NextSibling {
 		switch it.Type {
 		case html.TextNode:
-			if re_command.MatchString(it.Data) {
+			if re_command_fullmatch.MatchString(it.Data) {
 				// is command, skip
 				continue
 			}
