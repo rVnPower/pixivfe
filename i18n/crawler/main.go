@@ -9,7 +9,7 @@ import (
 )
 
 var re_command = regexp.MustCompile(`\A([\p{Zs}\n]*\{\{[^\{\}]*\}\})*[\p{Zs}\n]*\z`)
-var re_comment = regexp.MustCompile(`\{\*[^\}]*\*\}`)
+var re_comment = regexp.MustCompile(`\{\*[\s\S]*?\*\}`)
 
 func stripComments(s string) string {
 	return re_comment.ReplaceAllString(s, "")
