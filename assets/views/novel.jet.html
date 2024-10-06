@@ -185,8 +185,8 @@
 
         <!-- The actual novel itself -->
         <!-- TODO: make background color configurable (need to update backend source files etc) -->
-        <div id="content" class="card-body bg-off-white text-dark p-5">
-          <p class="lh-lg" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+        <div id="content" class="card-body bg-off-white text-dark overflow-x-scroll p-5">
+          <p class="fs-5 lh-lg" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
             {{- raw: renderNovel(.Novel.Content) }}
           </p>
         </div>

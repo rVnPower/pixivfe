@@ -271,3 +271,9 @@ h6 {
 [data-font=gothic] {
   font-family: $font-fallback-sans;
 }
+
+[data-view="2"] {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  direction: rtl;
+}
