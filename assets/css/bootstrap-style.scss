@@ -78,6 +78,13 @@ $utilities: map-merge(
   @extend .rounded-5;
 }
 
+.custom-novel-card {
+  @extend .card;
+  @extend .h-100;
+  @extend .border-0;
+  @extend .rounded;
+}
+
 /// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
 h1 {
   font-size: $h3-font-size;

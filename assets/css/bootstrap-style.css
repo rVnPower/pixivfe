@@ -4463,7 +4463,7 @@ textarea.form-control-lg {
   --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.card, .custom-card {
+.card, .custom-novel-card, .custom-card {
   --bs-card-spacer-y: 1rem;
   --bs-card-spacer-x: 1rem;
   --bs-card-title-spacer-y: 0.5rem;
@@ -4495,26 +4495,27 @@ textarea.form-control-lg {
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
 }
-.card > hr, .custom-card > hr {
+.card > hr, .custom-novel-card > hr, .custom-card > hr {
   margin-right: 0;
   margin-left: 0;
 }
-.card > .list-group, .custom-card > .list-group {
+.card > .list-group, .custom-novel-card > .list-group, .custom-card > .list-group {
   border-top: inherit;
   border-bottom: inherit;
 }
-.card > .list-group:first-child, .custom-card > .list-group:first-child {
+.card > .list-group:first-child, .custom-novel-card > .list-group:first-child, .custom-card > .list-group:first-child {
   border-top-width: 0;
   border-top-left-radius: var(--bs-card-inner-border-radius);
   border-top-right-radius: var(--bs-card-inner-border-radius);
 }
-.card > .list-group:last-child, .custom-card > .list-group:last-child {
+.card > .list-group:last-child, .custom-novel-card > .list-group:last-child, .custom-card > .list-group:last-child {
   border-bottom-width: 0;
   border-bottom-right-radius: var(--bs-card-inner-border-radius);
   border-bottom-left-radius: var(--bs-card-inner-border-radius);
 }
-.card > .card-header + .list-group, .custom-card > .card-header + .list-group,
+.card > .card-header + .list-group, .custom-novel-card > .card-header + .list-group, .custom-card > .card-header + .list-group,
 .card > .list-group + .card-footer,
+.custom-novel-card > .list-group + .card-footer,
 .custom-card > .list-group + .card-footer {
   border-top: 0;
 }
@@ -4609,7 +4610,7 @@ textarea.form-control-lg {
   border-bottom-left-radius: var(--bs-card-inner-border-radius);
 }
 
-.card-group > .card, .card-group > .custom-card {
+.card-group > .card, .card-group > .custom-novel-card, .card-group > .custom-card {
   margin-bottom: var(--bs-card-group-margin);
 }
 @media (min-width: 576px) {
@@ -4617,39 +4618,43 @@ textarea.form-control-lg {
     display: flex;
     flex-flow: row wrap;
   }
-  .card-group > .card, .card-group > .custom-card {
+  .card-group > .card, .card-group > .custom-novel-card, .card-group > .custom-card {
     flex: 1 0 0%;
     margin-bottom: 0;
   }
-  .card-group > .card + .card, .card-group > .custom-card + .card, .card-group > .card + .custom-card, .card-group > .custom-card + .custom-card {
+  .card-group > .card + .card, .card-group > .custom-novel-card + .card, .card-group > .card + .custom-novel-card, .card-group > .custom-novel-card + .custom-novel-card, .card-group > .custom-card + .card, .card-group > .custom-card + .custom-novel-card, .card-group > .card + .custom-card, .card-group > .custom-novel-card + .custom-card, .card-group > .custom-card + .custom-card {
     margin-left: 0;
     border-left: 0;
   }
-  .card-group > .card:not(:last-child), .card-group > .custom-card:not(:last-child) {
+  .card-group > .card:not(:last-child), .card-group > .custom-novel-card:not(:last-child), .card-group > .custom-card:not(:last-child) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
-  .card-group > .card:not(:last-child) .card-img-top, .card-group > .custom-card:not(:last-child) .card-img-top,
+  .card-group > .card:not(:last-child) .card-img-top, .card-group > .custom-novel-card:not(:last-child) .card-img-top, .card-group > .custom-card:not(:last-child) .card-img-top,
   .card-group > .card:not(:last-child) .card-header,
+  .card-group > .custom-novel-card:not(:last-child) .card-header,
   .card-group > .custom-card:not(:last-child) .card-header {
     border-top-right-radius: 0;
   }
-  .card-group > .card:not(:last-child) .card-img-bottom, .card-group > .custom-card:not(:last-child) .card-img-bottom,
+  .card-group > .card:not(:last-child) .card-img-bottom, .card-group > .custom-novel-card:not(:last-child) .card-img-bottom, .card-group > .custom-card:not(:last-child) .card-img-bottom,
   .card-group > .card:not(:last-child) .card-footer,
+  .card-group > .custom-novel-card:not(:last-child) .card-footer,
   .card-group > .custom-card:not(:last-child) .card-footer {
     border-bottom-right-radius: 0;
   }
-  .card-group > .card:not(:first-child), .card-group > .custom-card:not(:first-child) {
+  .card-group > .card:not(:first-child), .card-group > .custom-novel-card:not(:first-child), .card-group > .custom-card:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-  .card-group > .card:not(:first-child) .card-img-top, .card-group > .custom-card:not(:first-child) .card-img-top,
+  .card-group > .card:not(:first-child) .card-img-top, .card-group > .custom-novel-card:not(:first-child) .card-img-top, .card-group > .custom-card:not(:first-child) .card-img-top,
   .card-group > .card:not(:first-child) .card-header,
+  .card-group > .custom-novel-card:not(:first-child) .card-header,
   .card-group > .custom-card:not(:first-child) .card-header {
     border-top-left-radius: 0;
   }
-  .card-group > .card:not(:first-child) .card-img-bottom, .card-group > .custom-card:not(:first-child) .card-img-bottom,
+  .card-group > .card:not(:first-child) .card-img-bottom, .card-group > .custom-novel-card:not(:first-child) .card-img-bottom, .card-group > .custom-card:not(:first-child) .card-img-bottom,
   .card-group > .card:not(:first-child) .card-footer,
+  .card-group > .custom-novel-card:not(:first-child) .card-footer,
   .card-group > .custom-card:not(:first-child) .card-footer {
     border-bottom-left-radius: 0;
   }
@@ -7665,7 +7670,7 @@ textarea.form-control-lg {
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
 }
 
-.border-0, .custom-card-body, .custom-card, .custom-btn-secondary, .custom-btn-secondary-flex {
+.border-0, .custom-novel-card, .custom-card-body, .custom-card, .custom-btn-secondary, .custom-btn-secondary-flex {
   border: 0 !important;
 }
 
@@ -7882,7 +7887,7 @@ textarea.form-control-lg {
   height: 75% !important;
 }
 
-.h-100 {
+.h-100, .custom-novel-card {
   height: 100% !important;
 }
 
@@ -9153,7 +9158,7 @@ textarea.form-control-lg {
   pointer-events: auto !important;
 }
 
-.rounded {
+.rounded, .custom-novel-card {
   border-radius: var(--bs-border-radius) !important;
 }
 

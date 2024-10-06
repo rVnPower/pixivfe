@@ -1,25 +1,25 @@
 <div class="col">
-  <div class="card h-100 border-0 bg-charcoal-surface1 rounded p-3">
+  <div class="custom-novel-card bg-charcoal-surface1 p-3">
     <div class="row g-3">
-      <div class="col-4">
+      <div class="col-4 col-md-2">
         <a href="/novel/{{ .ID }}" class="text-decoration-none">
           <div class="ratio ratio-3x4">
             <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="img-fluid rounded object-fit-cover" loading="lazy" />
           </div>
         </a>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-md-10">
         <!-- Series name -->
         {{- if .SeriesID }}
-        <a href="/novel/series/{{ .SeriesID }}" class="text-decoration-none">
-          <p class="text-body-secondary small mb-1">{{ .SeriesTitle }}</p>
-        </a>
+        <p class="text-truncate mb-1">
+          <a href="/novel/series/{{ .SeriesID }}" class="fw-bold small text-body-secondary text-decoration-none">{{ .SeriesTitle }}</a>
+        </p>
         {{- end }}
 
         <!-- Novel title -->
-        <h3>
+        <h4 class="text-truncate">
           <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
-        </h3>
+        </h4>
 
         <!-- Word count and reading time -->
         <p class="card-text text-muted small mb-3"><span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></p>
@@ -28,29 +28,41 @@
           <span class="text-muted">{{ .UserName }}</span>
         </a>
 
+        {*
         <!-- Description -->
         <!-- TODO: figure this out -->
-        <!-- <p class="small mb-2">{{ raw: .Description }}</p> -->
+        <!-- <p class="text-truncate mb-1">
+          {{ raw: .Description }}
+        </p> -->
+        *}
 
         <!-- Tags -->
-        {{- if .AiType == 2 }}
-        <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
-        {{- end }}
-        {{- if .IsOriginal }}
-        <span class="badge bg-secondary me-2 mb-2">Original</span>
-        {{- end }}
-        {{- if .Genre != "0" }}
-        <span class="badge bg-light text-dark me-2 mb-2">{{ novelGenre: .Genre }}</span>
-        {{- end }}
-        {{- range .Tags }}
-          {{- if isEmphasize(.) }}
-          <span class="badge bg-danger me-2 mb-2">{{ . }}</span>
-          {{- else }}
-          <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
-            <a href="/tags/{{ escapeString(.) }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
-          </span>
+        <div class="d-flex flex-wrap align-items-center mb-2">
+          {{- if .AiType == 2 }}
+          <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
           {{- end }}
-        {{- end }}
+          <!-- NOTE: early block to catch the R-18 tag -->
+          {{- range .Tags }}
+            {{- if isEmphasize(.) }}
+            <span class="badge bg-danger me-2 mb-2">{{ . }}</span>
+            {{- end }}
+          {{- end }}
+          {{- if .IsOriginal }}
+          <span class="badge bg-primary me-2 mb-2">Original</span>
+          {{- end }}
+          {{- if .Genre != "0" }}
+          <span class="badge bg-secondary me-2 mb-2">{{ novelGenre: .Genre }}</span>
+          {{- end }}
+          {{- range .Tags }}
+            {{- if isEmphasize(.) }}
+            {* Intentionally empty to not render anything to avoid duplication *}
+            {{- else }}
+            <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+              <a href="/tags/{{ escapeString(.) }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
+            </span>
+            {{- end }}
+          {{- end }}
+        </div>
 
         <!-- Metadata (bookmarks and creation date) -->
         <div class="d-flex justify-content-between align-items-center">
