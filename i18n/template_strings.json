@@ -257,7 +257,7 @@
   },
   {
     "file": "assets/views/mangaSeries.jet.html",
-    "msg": "Read from the\n                    begining"
+    "msg": "Read from the begining"
   },
   {
     "file": "assets/views/mangaSeries.jet.html",
@@ -448,88 +448,16 @@
     "msg": "Page {{ .Page }}/{{ .PageLimit }}"
   },
   {
-    "file": "assets/views/pixivisionArticle.jet.html",
-    "msg": "{{- range _, desc := .Article.Description }}"
-  },
-  {
-    "file": "assets/views/pixivisionArticle.jet.html",
-    "msg": "{{- end }}\n\n\t{{- range _, item := .Article.Items }}"
-  },
-  {
-    "file": "assets/views/pixivisionArticle.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "{{- range _, article := .Category.Articles }}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "{{- article.Title}}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "{{- range _, tag := article.Tags }}"
-  },
-  {
     "file": "assets/views/pixivisionCategory.jet.html",
     "msg": "#{{tag.Name}}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionCategory.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "{{- range _, article := .Data }}"
-  },
-  {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "{{- article.Title}}"
-  },
-  {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "{{- range _, tag := article.Tags }}"
   },
   {
     "file": "assets/views/pixivisionIndex.jet.html",
     "msg": "#{{tag.Name}}"
   },
   {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionIndex.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "{{- range _, article := .Tag.Articles }}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "{{- article.Title}}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "{{- range _, tag := article.Tags }}"
-  },
-  {
     "file": "assets/views/pixivisionTag.jet.html",
     "msg": "#{{tag.Name}}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "{{- end }}"
-  },
-  {
-    "file": "assets/views/pixivisionTag.jet.html",
-    "msg": "{{- end }}"
   },
   {
     "file": "assets/views/rank.jet.html",
