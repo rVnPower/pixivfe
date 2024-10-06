@@ -1,29 +1,25 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container">
-	<div class="vision-container">
-		{{- range _, article := .Data }}
-		<div class="vision-preview vision-preview-large">
-			<div class="vision-thumbnail">
-				<img src="{{article.Thumbnail}}" alt="{{article.Title}}" />
-			</div>
-			<div class="vision-metadata">
-				<a class="vision-title" href="/pixivision/a/{{article.ID}}">
-					{{- article.Title}}
-				</a>
-				<div class="vision-metadata-other">
-					<div class="tag-list">
-						{{- range _, tag := article.Tags }}
-						<a href="/pixivision/t/{{tag.ID}}">#{{tag.Name}}</a>
-						{{- end }}
-					</div>
-					<div>
-						<div>{{parseTimeCustomFormat(article.Date, "2006-01-02")}}</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{{- end }}
-	</div>
+<div class="row justify-content-center g-4">
+    <div class="col-12">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 g-4 mt-0 row-gap-0">
+        {{- range _, article := .Data }}
+        <div class="card">
+            <img src="{{article.Thumbnail}}" class="card-img-top" alt="{{article.Title}}">
+            <div class="card-body">
+              <p class="card-text">
+                <a href="/pixivision/a/{{article.ID}}" class="text-reset text-decoration-none">{{article.Title}}</a>
+              </p>
+                {{- range _, tag := article.Tags }}
+                <a href="/pixivision/t/{{tag.ID}}" class="card-link">#{{tag.Name}}</a>
+                {{- end }}
+                <p class="card-text"><small class="text-body-secondary">{{parseTimeCustomFormat(article.Date, "2006-01-02")}}</small></p>
+            </div>
+        </div>
+        {{- end }}
+    </div>
 </div>
 {{- end }}
