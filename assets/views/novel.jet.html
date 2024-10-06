@@ -192,32 +192,66 @@
     </div>
   </div>
 
-  <div class="col-12 col-md-9">
+  <div class="col-12 col-lg-9">
     <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h3 class="mb-3">Comments</h3>
-        {{- if .Novel.CommentOff == 1 }}
-        <p>The creator turned comments off</p>
-        {{- else if .Novel.CommentCount == 0 }}
-        <p>There are no comments yet</p>
+      <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
+        <!-- TODO: clean this logic up -->
+        {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
+        <h2>0 Comments</h2>
+        {{- else if .Novel.CommentCount == 1 }}
+        <h2>1 Comment</h2>
         {{- else }}
-          {{- range .Novel.CommentsList }}
-          <div class="d-flex mb-3">
-            <a href="/users/{{ .AuthorID }}" class="me-3">
-              <img src="{{ .Avatar }}" alt="{{ .AuthorName }}" class="rounded-circle" style="width: 48px; height: 48px;" />
-            </a>
-            <div>
-              <h6 class="mb-1"><a href="/users/{{ .AuthorID }}" class="text-decoration-none">{{ .AuthorName }}</a></h6>
-              {{- if .Stamp }}
-              <img src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="Stamp" class="img-fluid mb-2" style="max-width: 100px;" />
-              {{- else }}
-              <p class="mb-1">{{ raw: parseEmojis(.Context) }}</p>
-              {{- end }}
-              <small class="text-muted">{{ .Date }}</small>
+        <h2>{{ .Novel.CommentCount }} Comments</h2>
+        {{- end }}
+        <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
+        {{- if .Novel.CommentOff == 1  }}
+        <p class="mb-4">The creator turned comments off</p>
+        {{- else if .Novel.CommentCount == 1 }}
+        <p class="mb-4">There are no comments yet</p>
+        {{- else }}
+        <div class="list-group" id="comments-container">
+          {{ range .Novel.CommentsList }}
+          <!-- Element for a single comment -->
+          <div class="list-group-item border-0 bg-charcoal-surface1 p-0 mb-4 comment-item">
+            <div class="row">
+              <!-- Comment author avatar image -->
+              <div class="col-auto">
+                <a href="/users/{{ .AuthorID }}">
+                  <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                </a>
+              </div>
+
+              <div class="col">
+                <!-- Comment author name and date -->
+                <div class="d-md-flex align-items-center mb-2">
+                  <div class="me-md-2">
+                    <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
+                      <h6 class="mb-0">{{- .AuthorName }}</h6>
+                    </a>
+                  </div>
+                  <div>
+                    <small class="text-muted">{{ .Date }}</small>
+                  </div>
+                </div>
+
+                <!-- Stamp or emoji -->
+                <!-- TODO: .Stamp occasionally templates in text (which should be part of the main comment text) instead of an image, causing breakage in the layout. See the comment by "Unknown417" on /artworks/107442519 for an example -->
+                {{- if .Stamp }}
+                <img class="img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" style="width: 96px; height: 96px" />
+                {{- else }}
+                <!-- Comment with emojis -->
+                <p class="m-0">{{ raw: parseEmojis(.Context) }}</p>
+                {{ end }}
+              </div>
             </div>
           </div>
           {{- end }}
-        {{- end }}
+          <div class="d-flex justify-content-center">
+            <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
+            <button type="button" class="custom-btn-secondary-flex bg-charcoal-surface2 mb-4" id="load-more-btn">Load more</button>
+          </div>
+        </div>
+        {{ end }}
       </div>
     </div>
   </div>
