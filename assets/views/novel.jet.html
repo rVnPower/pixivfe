@@ -1,206 +1,234 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container novel" id="checkpoint">
-  <div class="novel-detail">
-    <div class="novel-cover">
-      <a href="{{ .Novel.CoverURL }}">
-        <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }}" />
-      </a>
-    </div>
-    <div class="novel-metadata">
-      {{- if .Novel.SeriesNavData }}
-        <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
-          <div class="novel-series-title">
-              {{- .Novel.SeriesNavData.Title }}#{{- .Novel.SeriesNavData.Order}}
+<div class="row justify-content-center g-4">
+
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+        <div class="row g-4">
+          <div class="col-12 col-md-4">
+            <!-- Cover art -->
+            <a href="{{ .Novel.CoverURL }}">
+              <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }} cover" class="d-block img-fluid rounded mx-auto" />
+            </a>
           </div>
-        </a>
-      {{- end}}
-      <div class="novel-title">{{ .Novel.Title }}</div>
-      <small><span>{{ .Novel.WordCount }} word(s)</span>&nbsp;<span>{{ floor: .Novel.ReadingTime / 60 }} mins</span></small>
-      <p class="novel-description">{{ raw: parsePixivRedirect(.Novel.Description) }}</p>
+          <div class="col-12 col-md-8 d-flex flex-column">
+            <!-- Series name -->
+            {{- if .Novel.SeriesNavData }}
+              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-decoration-none">
+                <h3 class="text-muted mb-2">{{- .Novel.SeriesNavData.Title }} #{{- .Novel.SeriesNavData.Order}}</h3>
+              </a>
+            {{- end}}
 
-      <div class="illust-tags">
-        {{- if .Novel.AiType == 2 }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">AI-generated</span>
-        </span>
-        {{- end }}
-        {{- if .Novel.IsOriginal }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">Original</span>
-        </span>
-        {{- end }}
-        {{- if .Novel.Genre != "0" }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">{{ novelGenre: .Novel.Genre }}</span>
-        </span>
-        {{- end }}
-        {{- range .Novel.Tags.Tags }} {{ if isEmphasize(.Name) }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">{{ .Name }}</span>
-        </span>
-        {{- else }}
-        <span class="illust-tag">
-          <span class="illust-tag-translation"><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span>
-        </span>
-        {{- end }} {{ end }}
-      </div>
+            <!-- Title -->
+            <h1 class="mb-2">{{ .Novel.Title }}</h1>
 
-      <div class="illust-tags">
-        <span class="illust-tag-attr">
-          <img src="/img/eye.png" alt="Views" />
-          {{- .Novel.Views }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/heart-solid.png" alt="Bookmarks" />
-          {{- .Novel.Bookmarks }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/like.png" alt="Likes" />
-          {{- .Novel.Likes }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/calendar.png" alt="Date" />
-          {{- parseTime: .Novel.CreateDate }}
-        </span>
+            <!-- Word count and reading time -->
+            <p class="text-muted small mb-3">
+              <span>{{ .Novel.WordCount }} word(s)</span> &middot; <span>{{ floor: .Novel.ReadingTime / 60 }} mins</span>
+            </p>
+
+            <!-- View Pixiv original button -->
+            <div class="d-flex">
+              <a href="https://pixiv.net/novel/show.php?id={{ .Novel.ID }}" class="custom-btn-secondary bg-charcoal-surface2 btn-sm mb-3">
+                <i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net
+              </a>
+            </div>
+
+            <!-- Description -->
+            <p class="mb-3">{{ raw: .Novel.Description }}</p>
+
+            <!-- Tags -->
+            <div class="d-flex flex-wrap align-items-center mb-3">
+              {{- if .Novel.AiType == 2 }}
+              <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
+              {{- end }}
+              {{- range .Novel.Tags.Tags }}
+                {* NOTE: early block to catch the R-18 tag *}
+                {{- if isEmphasize(.Name) }}
+                <span class="badge bg-danger me-2 mb-2">{{ . }}</span>
+                {{- end }}
+              {{- end }}
+              {{- if .Novel.IsOriginal }}
+              <span class="badge bg-primary me-2 mb-2">Original</span>
+              {{- end }}
+              {{- if .Novel.Genre != "0" }}
+              <span class="badge bg-secondary me-2 mb-2">{{ novelGenre: .Novel.Genre }}</span>
+              {{- end }}
+              {{- range .Novel.Tags.Tags }}
+                {{- if isEmphasize(.Name) }}
+                {* Intentionally empty to not render anything to avoid duplication *}
+                {{- else }}
+                <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+                  <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+                </span>
+                {{- end }}
+              {{- end }}
+            </div>
+
+            <!-- Metadata -->
+            <div class="d-flex flex-wrap text-body-secondary small mt-auto me-2">
+              <div class="me-3 mb-2">
+                <i class="bi bi-eye me-1"></i>
+                <span>{{- .Novel.Views }}</span>
+              </div>
+              <div class="me-3 mb-2">
+                <i class="bi bi-heart-fill me-1"></i>
+                <span>{{- .Novel.Bookmarks }}</span>
+              </div>
+              <div class="me-3 mb-2">
+                <i class="bi bi-hand-thumbs-up me-1"></i>
+                <span>{{- .Novel.Likes }}</span>
+              </div>
+              <div class="me-3 mb-2">
+                <i class="bi bi-calendar me-1"></i>
+                <span>{{- parseTime: .Novel.CreateDate }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
-    {{- if .Novel.SeriesNavData }}
-    <div class="content-title-nav">
-      <div>Series</div>
-      <ol class="content-title-list">
-        {{- range i,v := .NovelSeriesContentTitles }}
-        <li>
-          {*TODO how to scroll the current one into the center and middle of the div ?*}
-          {{- if v.ID == .Novel.ID  }}
-          # {{ i + 1 }}&nbsp;{{ v.Title }}
-          {{- else }}
-          <a href="/novel/{{ v.ID }}" ># {{ i + 1 }}&nbsp;{{ v.Title }}</a>
-          {{- end }}
-        </li>
-        {{- end }}
-      </ol>
-    </div>
-    {{- end }}
   </div>
-  <!-- ----------- -->
-  <div class="novel-settings">
-    <div class="novel-settings-wrapper">
-      <span class="dropdown">
-        {{- url := "/settings/novelFontType" }}
-        <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
-        <label for="font-type-toggler" class="dropdown-toggler-label">
-          <img src="/img/font-family.png" alt="Font family" />
-        </label>
-        <div class="dropdown-content">
-          <div>Font type</div>
-          <form action="{{ url }}" method="post">
-            <input type="text" name="font-type" value="gothic" class="value-holder" />
-            <input type="submit" value="Gothic" />
-          </form>
-          <form action="{{ url }}" method="post">
-            <input type="text" name="font-type" value="mincho" class="value-holder" />
-            <input type="submit" value="Mincho" />
-          </form>
-        </div>
-      </span>
-      <img src="/img/font-size.png" alt="Font size" />
-      <span class="dropdown">
-        {{- url := "/settings/novelViewMode" }}
-        <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
-        <label for="view-mode-toggler" class="dropdown-toggler-label">
-          <img src="/img/orientation.png" alt="Orientation" />
-        </label>
-        <div class="dropdown-content">
-          <div>Text orientation</div>
-          <form action="{{ url }}" method="post">
-            <input id="vm-1" type="radio" name="view-mode" value="1" />
-            <label for="vm-1">Horizontal</label>
-            <br />
-            <input id="vm-2" type="radio" name="view-mode" value="2" />
-            <label for="vm-2">Vertical</label>
-            <br />
-            <input id="vm-d" type="radio" name="view-mode" value="" />
-            <label for="vm-d">Don't force</label>
-            <br />
-            <input type="submit" value="Submit!" />
-          </form>
-        </div>
-      </span>
-    </div>
-  </div>
-  <!-- ----------- -->
-  <div class="novel-content" id="content" data-font="{{ .FontType }}" data-lang="{{ .Language }}"
-    data-view="{{ .ViewMode }}">
-    <div class="novel-content-text">
-      {{- raw: renderNovel(.Novel.Content) }}
-    </div>
-  </div>
+
   {{- if .Novel.SeriesNavData }}
-  <div class="novel-series-nav">
-    <div>
-      Series: <a class="novel-series-title" href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
-        {{- .Novel.SeriesNavData.Title }}
-      </a>
-    </div>
-    {{- if .Novel.SeriesNavData.Next }}
-    <div class="prev">
-      Next:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Next.ID}}">
-        #{{- .Novel.SeriesNavData.Next.Order }}&nbsp;{{ .Novel.SeriesNavData.Next.Title }}</a>
-    </div>
-    {{- end}}
-    {{- if .Novel.SeriesNavData.Prev }}
-    <div class="next">
-      Prev:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Prev.ID}}">
-        #{{- .Novel.SeriesNavData.Prev.Order }}&nbsp;{{ .Novel.SeriesNavData.Prev.Title }}</a>
-    </div>
-    {{- end}}
-  </div>
-  {{- end}}
-  <div class="novel-attr">
-    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
-    </a>
-    <div class="attr-wrap">
-      <div class="novel-title">
-        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+        <h3 class="mb-3">Series</h3>
+        <div class="list-group">
+          {{- range i,v := .NovelSeriesContentTitles }}
+            {{- if v.ID == .Novel.ID  }}
+            <span class="list-group-item bg-charcoal-surface2 text-light">#{{ i + 1 }} {{ v.Title }}</span>
+            {{- else }}
+            <a href="/novel/{{ v.ID }}" class="list-group-item bg-charcoal-surface1 text-light">#{{ i + 1 }} {{ v.Title }}</a>
+            {{- end }}
+          {{- end }}
+        </div>
       </div>
     </div>
   </div>
-  <hr />
-  <details>
-    <summary>Comments</summary>
-    {{- if .Novel.CommentOff == 1 }}
-    <p>The creator turned comments off</p>
-    {{- else if .Novel.CommentCount == 0 }}
-    <p>There are no comments yet</p>
-    {{- else }} {{ range .Novel.CommentsList }}
-    <div class="comment">
-      <a href="/users/{{ .AuthorID }}" class="comment-author">
-        <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
-      </a>
-      <div class="comment-context">
-        <a href="/users/{{ .AuthorID }}" class="comment-author">
-          {{- .AuthorName }}
-        </a>
-        <p>
-          {{- if .Stamp }}
-          <img class="stamp" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-            alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" />
-          {{- else }} {{ raw: parseEmojis(.Context) }} {{ end }}
-        </p>
+  {{- end }}
 
-        <small>{{ .Date }}</small>
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <h3 class="mb-3">Settings</h3>
+        <div class="d-flex justify-content-start align-items-center">
+          <div class="dropdown me-3">
+            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="fontTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-fonts me-2"></i>Font Type
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="fontTypeDropdown">
+              <li><a class="dropdown-item" href="/settings/novelFontType?font-type=gothic">Gothic</a></li>
+              <li><a class="dropdown-item" href="/settings/novelFontType?font-type=mincho">Mincho</a></li>
+            </ul>
+          </div>
+          <div class="dropdown me-3">
+            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="fontSizeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-text-size me-2"></i>Font Size
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="fontSizeDropdown">
+              <li><a class="dropdown-item" href="#">Small</a></li>
+              <li><a class="dropdown-item" href="#">Medium</a></li>
+              <li><a class="dropdown-item" href="#">Large</a></li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <button class="custom-btn-secondary bg-charcoal-surface2 dropdown-toggle" type="button" id="viewModeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-layout-text-window-reverse me-2"></i>View Mode
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="viewModeDropdown">
+              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=1">Horizontal</a></li>
+              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=2">Vertical</a></li>
+              <li><a class="dropdown-item" href="/settings/novelViewMode?view-mode=">Don't force</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    {{- end }} {{ end }}
-  </details>
-</div>
-<div class="container">
-  <h2>Related works</h2>
-  <div class="novel-container">
-    {{- range .NovelRelated }}
-    {{- include "fragments/novel-tn" . }}
-    {{- end }}
+  </div>
+
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+        <div id="content" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+          {{- raw: renderNovel(.Novel.Content) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-9">
+    {{- if .Novel.SeriesNavData }}
+    <div class="custom-card">
+      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+        <h3 class="mb-3">Series Navigation</h3>
+        <p>Series: <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-decoration-none">{{ .Novel.SeriesNavData.Title }}</a></p>
+        {{- if .Novel.SeriesNavData.Next }}
+        <p>Next: <a href="/novel/{{.Novel.SeriesNavData.Next.ID}}" class="text-decoration-none">#{{- .Novel.SeriesNavData.Next.Order }} {{ .Novel.SeriesNavData.Next.Title }}</a></p>
+        {{- end}}
+        {{- if .Novel.SeriesNavData.Prev }}
+        <p>Prev: <a href="/novel/{{.Novel.SeriesNavData.Prev.ID}}" class="text-decoration-none">#{{- .Novel.SeriesNavData.Prev.Order }} {{ .Novel.SeriesNavData.Prev.Title }}</a></p>
+        {{- end}}
+      </div>
+    </div>
+    {{- end}}
+  </div>
+
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+        <div class="d-flex align-items-center">
+          <a href="/users/{{ .User.ID }}" class="me-3">
+            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;" />
+          </a>
+          <div>
+            <h3 class="mb-0"><a href="/users/{{ .User.ID }}" class="text-decoration-none">{{ .User.Name }}</a></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-9">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <h3 class="mb-3">Comments</h3>
+        {{- if .Novel.CommentOff == 1 }}
+        <p>The creator turned comments off</p>
+        {{- else if .Novel.CommentCount == 0 }}
+        <p>There are no comments yet</p>
+        {{- else }}
+          {{- range .Novel.CommentsList }}
+          <div class="d-flex mb-3">
+            <a href="/users/{{ .AuthorID }}" class="me-3">
+              <img src="{{ .Avatar }}" alt="{{ .AuthorName }}" class="rounded-circle" style="width: 48px; height: 48px;" />
+            </a>
+            <div>
+              <h6 class="mb-1"><a href="/users/{{ .AuthorID }}" class="text-decoration-none">{{ .AuthorName }}</a></h6>
+              {{- if .Stamp }}
+              <img src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="Stamp" class="img-fluid mb-2" style="max-width: 100px;" />
+              {{- else }}
+              <p class="mb-1">{{ raw: parseEmojis(.Context) }}</p>
+              {{- end }}
+              <small class="text-muted">{{ .Date }}</small>
+            </div>
+          </div>
+          {{- end }}
+        {{- end }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <h2>Related works</h2>
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+      {{- range .NovelRelated }}
+        {{- include "fragments/novel-tn" . }}
+      {{- end }}
+    </div>
   </div>
 </div>
 {{- end }}
