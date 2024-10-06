@@ -28,6 +28,10 @@ test() {
     go test ./...
 }
 
+scan() {
+    semgrep scan -q -f semgrep.yml
+}
+
 i18n_error() {
     semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/error_strings.json
 }
@@ -74,8 +78,9 @@ help() {
     echo "  all                - Run fmt, build, and test"
     echo "  fmt                - Format Go code"
     echo "  build              - Build the binary"
+    echo "  scan               - Scan Go code"
     echo "  test               - Run tests"
-    echo "  i18n               - Generate"
+    echo "  i18n               - Extract i18n strings"
     echo "  run [--do-not-load-env-file] - Build and run the binary"
     echo "  clean              - Remove the binary"
     echo "  install-pre-commit - Install testing pre-commit hook"
@@ -98,6 +103,7 @@ execute_command() {
         fmt) fmt ;;
         build) build ;;
         test) test ;;
+        scan) scan ;;
         i18n) i18n ;;
         i18n_error) i18n_error ;;
         i18n_template) i18n_template ;;

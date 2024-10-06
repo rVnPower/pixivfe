@@ -33,6 +33,8 @@ Prerequisites:
 
 - [Go](https://go.dev/doc/install) (to build PixivFE from source)
 - [Sass](https://github.com/sass/dart-sass/) (will be run by PixivFE in development mode)
+- [jq](https://jqlang.github.io/jq/) (needed to generate i18n strings)
+- [semgrep](https://semgrep.dev/) (needed to generate i18n strings and scan the source code for errors)
 
 To install Dart Sass, you can choose any of the following methods.
 
