@@ -62,6 +62,7 @@
 </head>
 
 <body class="bg-black">
+  <div id="loading-indicator" class="fixed-top z-3"></div>
   <!-- mb-4 for spacing between the navbar and main content -->
   <nav class="navbar bg-charcoal-surface1 py-3 mb-4" id="main-navbar">
     <div class="container">
@@ -200,7 +201,7 @@
 
   <script src="/js/on-page-load.js"></script>
   <!-- mb-5 for spacing at the bottom of the page -->
-  <main class="container mb-5" hx-boost="true" hx-swap="outerHTML">
+  <main class="container mb-5" hx-boost="true" hx-swap="outerHTML" data-hx-indicator="#loading-indicator">
     {{- yield body() }}
   </main>
   <div id="site-config" class="d-none">
