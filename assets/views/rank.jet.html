@@ -104,13 +104,27 @@
 
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Content types">
+
+      <!--
+      TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
+            e.g. selecting the "Ugoira" button hides the buttons under
+                "Specialized rankings" as well as the "Monthly" and "Rookie"
+                options under "Time frame", but this doesn't occur vice versa
+                with the "Ugoira" button still visible if either of the latter
+                buttons are selected, thus allowing the user to generate an invalid
+                URL even when there is no UX indication that this is the case
+      -->
+      {*
+      Currently resetting Mode to "daily" upon Content switch as an easy (if inadequate) workaround for the TODO above
+      *}
+
       {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
       {{- Content := isset(Queries.content) ? Queries.content : "all" }}
       {{- url := "" }}
       {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
         {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
       {{- else }}
-        {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+        {{- url = "/ranking?mode=" + "daily" + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
       {{- end }}
       {{- path := slice("all", "illust", "ugoira", "manga") }}
       {{- name := slice("Overall", "Illustrations", "Ugoira", "Manga")}}
@@ -157,14 +171,6 @@
         <!--
         TODO: figure out how to import this a block or fragment to avoid duplication in the noscript element
               see also rankingoptions.jet.html
-
-        TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
-              e.g. selecting the "Ugoira" button hides the buttons under
-                  "Specialized rankings" as well as the "Monthly" and "Rookie"
-                  options under "Time frame", but this doesn't occur vice versa
-                  with the "Ugoira" button still visible if either of the latter
-                  buttons are selected, thus allowing the user to generate an invalid
-                  URL even when there is no UX indication that this is the case
         -->
         {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
         {{- Content := isset(Queries.content) ? Queries.content : "all" }}
