@@ -3,6 +3,10 @@
 {{- import "blocks/underlinenav" }}
 {{- import "blocks/rankingnav" }}
 {{- block body() }}
+
+{{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+{{- Content := isset(Queries.content) ? Queries.content : "all" }}
+
 <div class="row justify-content-center g-4">
   <h1 class="text-center"><i class="bi bi-bar-chart-line-fill me-2"></i>{{ .Title }}</h1>
 
@@ -13,8 +17,6 @@
     <div class="custom-card bg-charcoal-surface1 p-4">
       <h2><i class="bi bi-gear-fill me-2"></i>Ranking options</h2>
       <div class="custom-card-body bg-charcoal-surface1 p-0">
-        {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-        {{- Content := isset(Queries.content) ? Queries.content : "all" }}
         {{- url := "" }}
         {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
           {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
@@ -118,8 +120,6 @@
       Currently resetting Mode to "daily" upon Content switch as an easy (if inadequate) workaround for the TODO above
       *}
 
-      {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-      {{- Content := isset(Queries.content) ? Queries.content : "all" }}
       {{- url := "" }}
       {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
         {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
@@ -172,15 +172,7 @@
         TODO: figure out how to import this a block or fragment to avoid duplication in the noscript element
               see also rankingoptions.jet.html
         -->
-        {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-        {{- Content := isset(Queries.content) ? Queries.content : "all" }}
-        {{- url := "" }}
-        {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
-          {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
-        {{- else }}
-          {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
-        {{- end }}
-        {{- if Content == "all" || Content == "illust" || Content == "manga" }}
+        {{- if Content == "all" }}
         <div class="row border-bottom border-2 mb-4">
         {{- else }}
         <div class="row">
@@ -211,7 +203,7 @@
               {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
             </div>
             {{- end }}
-            {{- if Content == "all" || Content == "illust" || Content == "manga" }}
+            {{- if Content == "all" }}
             <p class="small text-body-secondary mb-4">
             {{- else }}
             <p class="small text-body-secondary mb-0">
@@ -223,11 +215,10 @@
 
         <div class="row mb-4">
           <!-- NOTE: still rendering the row element when Content == ugoira to keep things simple for margin -->
-          {{- if Content != "ugoira" }}
+          {{- if Content == "all" }}
           <div class="col-12">
             <h3><i class="bi bi-star-fill me-2"></i>Specialized rankings</h3>
             <!-- Options for Overall -->
-            {{- if Content == "all" }}
               <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
                 {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
                 {{- path := slice("original", "daily_ai", "male", "female") }}
@@ -240,17 +231,7 @@
                 {{- name := slice("AI-generated (R-18)", "Popular among males (R-18)", "Popular among females (R-18)")}}
                 {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
               </div>
-            {{- end }}
-            <!-- Options for Illustrations -->
-            {{- if Content == "illust" || Content == "manga" }}
-              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
-                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
-                {{- path := slice("male_r18", "female_r18") }}
-                {{- name := slice("Popular among males (R-18)", "Popular among females (R-18)")}}
-                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
-              </div>
-            {{- end }}
-            <p class="small text-body-secondary mb-0">Specialized ranking categories.</p>
+            <p class="small text-body-secondary mb-0">Choose specialized ranking categories. Only available when filtering for <b>Overall</b>.</p>
             </div>
             {{- end }}
           </div>
