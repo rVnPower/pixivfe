@@ -1,6 +1,7 @@
 package i18n
 
-func Lookup(text string) string {
-	// todo
+// translate string
+func Tr(text string) string {
+	// todo: load text from database, then translate
 	return text
 }

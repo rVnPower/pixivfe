@@ -43,7 +43,7 @@ func NovelSeriesPage(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	title := fmt.Sprintf("%s / %s Series", series.Title, series.UserName)
+	title := fmt.Sprintf("%s | %s", series.Title, series.UserName)
 
 	return RenderHTML(w, r, Data_novelSeries{NovelSeries: series, NovelSeriesContents: seriesContents, Title: title, User: user, Page: pageNum, PageLimit: pageLimit})
 }

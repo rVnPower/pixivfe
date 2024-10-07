@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 type HTML = core.HTML
@@ -201,42 +202,42 @@ func CreatePaginator(base, ending string, current_page, max_page int) HTML {
 func GetNovelGenre(s string) string {
 	switch s {
 	case "1":
-		return "Romance"
+		return i18n.Tr("Romance")
 	case "2":
-		return "Isekai fantasy"
+		return i18n.Tr("Isekai fantasy")
 	case "3":
-		return "Contemporary fantasy"
+		return i18n.Tr("Contemporary fantasy")
 	case "4":
-		return "Mystery"
+		return i18n.Tr("Mystery")
 	case "5":
-		return "Horror"
+		return i18n.Tr("Horror")
 	case "6":
-		return "Sci-fi"
+		return i18n.Tr("Sci-fi")
 	case "7":
-		return "Literature"
+		return i18n.Tr("Literature")
 	case "8":
-		return "Drama"
+		return i18n.Tr("Drama")
 	case "9":
-		return "Historical pieces"
+		return i18n.Tr("Historical pieces")
 	case "10":
-		return "BL (yaoi)"
+		return i18n.Tr("BL (yaoi)")
 	case "11":
-		return "Yuri"
+		return i18n.Tr("Yuri")
 	case "12":
-		return "For kids"
+		return i18n.Tr("For kids")
 	case "13":
-		return "Poetry"
+		return i18n.Tr("Poetry")
 	case "14":
-		return "Essays/non-fiction"
+		return i18n.Tr("Essays/non-fiction")
 	case "15":
-		return "Screenplays/scripts"
+		return i18n.Tr("Screenplays/scripts")
 	case "16":
-		return "Reviews/opinion pieces"
+		return i18n.Tr("Reviews/opinion pieces")
 	case "17":
-		return "Other"
+		return i18n.Tr("Other")
 	}
 
-	return fmt.Sprintf("(Unknown Genre %s)", s)
+	return i18n.Sprintf("(Unknown Genre: %s)", s)
 }
 
 func SwitchButtonAttributes(baseURL, selection, currentSelection string) string {

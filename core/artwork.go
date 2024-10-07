@@ -4,15 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
-	"net/http"
-
-	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 )
 
 // Pixiv returns 0, 1, 2 to filter SFW and/or NSFW artworks.
@@ -31,11 +32,11 @@ const (
 func (x XRestrict) String() string {
 	switch x {
 	case Safe:
-		return ""
+		return i18n.Tr("Safe")
 	case R18:
-		return "R18"
+		return i18n.Tr("R18")
 	case R18G:
-		return "R18G"
+		return i18n.Tr("R18G")
 	}
 	log.Panicf("invalid value: %#v", int(x))
 	return ""
@@ -58,11 +59,11 @@ const (
 func (x AiType) String() string {
 	switch x {
 	case Unrated:
-		return "Unrated"
+		return i18n.Tr("Unrated")
 	case NotAI:
-		return "Not AI"
+		return i18n.Tr("Not AI")
 	case AI:
-		return "AI"
+		return i18n.Tr("AI")
 	}
 	log.Panicf("invalid value: %#v", int(x))
 	return ""

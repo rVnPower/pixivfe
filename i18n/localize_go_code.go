@@ -6,11 +6,16 @@ import (
 )
 
 func Error(text string) error {
-	text = Lookup(text)
+	text = Tr(text)
 	return errors.New(text)
 }
 
 func Errorf(format string, a ...any) error {
-	format = Lookup(format)
+	format = Tr(format)
 	return fmt.Errorf(format, a...)
+}
+
+func Sprintf(format string, a ...any) string {
+	format = Tr(format)
+	return fmt.Sprintf(format, a...)
 }
