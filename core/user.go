@@ -62,6 +62,23 @@ type User struct {
 	MangaSeries     []MangaSeries
 }
 
+// Utility function to compute slice bounds safely
+func computeSliceBounds(page int, worksPerPage float64, totalItems int) (start, end int, err error) {
+	if totalItems == 0 {
+		return 0, 0, i18n.Error("No items available.")
+	}
+
+	maxPages := int(math.Ceil(float64(totalItems) / worksPerPage))
+	if page < 1 || page > maxPages {
+		return 0, 0, i18n.Error("Invalid page number.")
+	}
+
+	start = (page - 1) * int(worksPerPage)
+	end = min(start+int(worksPerPage), totalItems)
+
+	return start, end, nil
+}
+
 func (s *User) ParseSocial() error {
 	if string(s.SocialRaw[:]) == "[]" {
 		// Fuck Pixiv
@@ -193,6 +210,7 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 	var ids []int
 	var idsString string
 
+	// TODO: is this necessary
 	err = json.Unmarshal([]byte(resp), &body)
 	if err != nil {
 		return "", -1, nil, err
@@ -234,21 +252,16 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 			count++
 		}
 		series = body.NovelSeries
-
 	}
 
 	// Reverse sort the ids
 	sort.Sort(sort.Reverse(sort.IntSlice(ids)))
 
-	worksNumber := float64(count)
 	worksPerPage := 30.0
-
-	if page < 1 || float64(page) > math.Ceil(worksNumber/worksPerPage)+1.0 {
-		return "", -1, nil, i18n.Error("No page available.")
+	start, end, err := computeSliceBounds(page, worksPerPage, len(ids))
+	if err != nil {
+		return "", -1, nil, err
 	}
-
-	start := (page - 1) * int(worksPerPage)
-	end := int(min(float64(page)*worksPerPage, worksNumber)) // no overflow
 
 	for _, k := range ids[start:end] {
 		idsString += fmt.Sprintf("&ids[]=%d", k)
