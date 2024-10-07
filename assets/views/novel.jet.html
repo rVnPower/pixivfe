@@ -168,8 +168,10 @@
   <div class="col-12">
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 py-4 px-0">
-        <div class="row">
-          <div class="col-12">
+        <!-- NOTE: mx-0 because the row element overflows the card horizontally without it -->
+        <div class="row mx-0">
+          <!-- NOTE: px-0 to undo the extra spacing caused by mx-0 -->
+          <div class="col-12 px-0">
             <div class="d-flex flex-column align-items-center position-relative mx-4 mb-4 justify-content-center">
               <div class="d-flex flex-column text-center">
                 <h2 class="mb-2">{{ .Novel.Title }}</h2>
@@ -222,7 +224,7 @@
               </a>
             </h3>
 
-            <div class="custom-novel-nav overflow-scroll bg-charcoal-surface2 rounded mx-4 px-3 py-3">
+            <!-- <div class="container custom-novel-nav overflow-scroll bg-charcoal-surface2 rounded mx-4 px-3 py-3"> -->
               {{ activeState := .Novel.ID }}
               {{ yield NovelNav(
                   baseURL="/novel/",
@@ -230,12 +232,7 @@
                   names=.NovelSeriesTitles,
                   activeState=activeState
               ) }}
-            </div>
-
-            <!-- Grid layout for series chapters -->
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-
-            </div>
+            <!-- </div> -->
           {{- end }}
           </div>
 
