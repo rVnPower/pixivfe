@@ -28,8 +28,8 @@
 <ul class="nav nav-underline">
     {{- range i, k := paths }}
         <li class="nav-item">
-            <a class="fs-6 nav-link fw-bold
-                {{ activeState == k ? "active border-custom-color" : "text-muted" }}
+            <a class="fs-6 nav-link
+                {{ activeState == k ? "active border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}
                 border-4 px-3"
                 {{ activeState == k ? `aria-current="page"` : "" }}
                 href="{{ baseURL }}{{k}}">

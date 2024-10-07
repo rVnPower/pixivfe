@@ -1,0 +1,15 @@
+{{- block NovelNav(baseURL, paths, names, activeState="") }}
+<ul class="nav nav-underline justify-content-center">
+    {{- range i, k := paths }}
+    <li class="nav-item">
+        <a class="fs-6 nav-link
+            {{ activeState == k ? "active border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}
+            border-4 px-3"
+            {{ activeState == k ? `aria-current="page"` : "" }}
+            href="{{ baseURL }}{{k}}">
+            {{ names[i] }}
+        </a>
+    </li>
+    {{- end }}
+</ul>
+{{- end }}

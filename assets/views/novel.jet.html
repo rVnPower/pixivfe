@@ -1,5 +1,5 @@
 {{- extends "layout/default" }}
-{{- import "blocks/underlinenav" }}
+{{- import "blocks/novelnav" }}
 {{- block body() }}
 
 {{ fontType := .FontType }}
@@ -211,21 +211,30 @@
           <!-- NOTE: col element unconditionally for spacing -->
           <div class="col-12 my-4">
           {{- if .Novel.SeriesNavData }}
-            <h2 class="text-center mb-2">{{- .Novel.SeriesNavData.Title }}</h2>
-            <h3 class="text-body-secondary text-center mb-5">{{ len(.NovelSeriesContentTitles) }} works</h3>
+            <h2 class="text-center mb-2">
+              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
+                {{- .Novel.SeriesNavData.Title }}
+              </a>
+            </h2>
+            <h3 class="text-body-secondary text-center mb-4">
+              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }} works in this series
+              </a>
+            </h3>
+
+            <div class="custom-novel-nav overflow-scroll bg-charcoal-surface2 rounded mx-4 px-3 py-3">
+              {{ activeState := .Novel.ID }}
+              {{ yield NovelNav(
+                  baseURL="/novel/",
+                  paths=.NovelSeriesIDs,
+                  names=.NovelSeriesTitles,
+                  activeState=activeState
+              ) }}
+            </div>
+
             <!-- Grid layout for series chapters -->
             <div class="row row-cols-1 row-cols-md-3 g-4">
-              {{ range i, v := .NovelSeriesContentTitles }}
-                <div class="col">
-                  {{ if v.ID == .Novel.ID }}
-                    <h3 class="text-center mb-0">#{{ i + 1 }} {{ v.Title }}</h3>
-                  {{ else }}
-                    <a href="/novel/{{ v.ID }}" class="text-decoration-none">
-                      <h3 class="fw-medium text-body-secondary text-center mb-0">#{{ i + 1 }} {{ v.Title }}</h3>
-                    </a>
-                  {{ end }}
-                </div>
-              {{ end }}
+
             </div>
           {{- end }}
           </div>

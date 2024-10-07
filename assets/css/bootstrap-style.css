@@ -12929,6 +12929,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.custom-novel-nav {
+  max-height: 40vh;
+}
+
 h1, .h1 {
   font-size: 1.75rem;
   font-weight: 700;

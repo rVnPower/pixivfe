@@ -80,6 +80,8 @@ type Data_novel struct {
 	Novel                    core.Novel
 	NovelRelated             []core.NovelBrief
 	NovelSeriesContentTitles []core.NovelSeriesContentTitle
+	NovelSeriesIDs           []string
+	NovelSeriesTitles        []string
 	User                     core.UserBrief
 	Title                    string
 	FontType                 string

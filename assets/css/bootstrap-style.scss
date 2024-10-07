@@ -163,6 +163,10 @@ $utilities: map-merge(
   @extend .rounded;
 }
 
+.custom-novel-nav {
+  max-height: 40vh;
+}
+
 /// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
 h1 {
   font-size: $h3-font-size;
