@@ -91,27 +91,44 @@ func run_sass() {
 }
 
 func chooseListener() net.Listener {
-	var l net.Listener
+	var listener net.Listener
+
+	// Check if we should use a Unix domain socket
 	if config.GlobalConfig.UnixSocket != "" {
-		ln, err := net.Listen("unix", config.GlobalConfig.UnixSocket)
+		unixAddr := config.GlobalConfig.UnixSocket
+		unixListener, err := net.Listen("unix", unixAddr)
 		if err != nil {
-			panic(err)
+			// Panic with the error description if unable to listen on Unix socket
+			panic(i18n.Errorf("failed to listen on Unix socket %q: %w", unixAddr, err))
 		}
-		l = ln
-		log.Printf("Listening on domain socket %v", config.GlobalConfig.UnixSocket)
+
+		// Assign the listener and log where we are listening
+		listener = unixListener
+		log.Print(i18n.Sprintf("Listening on Unix domain socket: %v", unixAddr))
+
 	} else {
-		addr := config.GlobalConfig.Host + ":" + config.GlobalConfig.Port
-		ln, err := net.Listen("tcp", addr)
+		// Otherwise, fall back to TCP listener
+		addr := net.JoinHostPort(config.GlobalConfig.Host, config.GlobalConfig.Port)
+		tcpListener, err := net.Listen("tcp", addr)
 		if err != nil {
-			log.Panicf("failed to listen: %v", err)
+			// Panic with the error description if unable to listen on TCP
+			log.Panic(i18n.Sprintf("Failed to start TCP listener on %v: %v", addr, err))
 		}
-		l = ln
-		addr = ln.Addr().String()
+
+		// Assign the TCP listener
+		listener = tcpListener
+		addr = tcpListener.Addr().String()
+
+		// Extract the host and port for logging
 		_, port, err := net.SplitHostPort(addr)
 		if err != nil {
-			panic(err)
+			// Panic in case of invalid split into host and port
+			panic(i18n.Errorf("error parsing listener address %q: %w", addr, err))
 		}
-		log.Printf("Listening on %v  http://pixivfe.localhost:%v/", addr, port)
+
+		// Log the address and convenient URL for local development
+		log.Print(i18n.Sprintf("Listening on %v. Accessible at: http://pixivfe.localhost:%v/", addr, port))
 	}
-	return l
+
+	return listener
 }
