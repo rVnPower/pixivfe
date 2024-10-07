@@ -62,23 +62,6 @@ type User struct {
 	MangaSeries     []MangaSeries
 }
 
-// Utility function to compute slice bounds safely
-func computeSliceBounds(page int, worksPerPage float64, totalItems int) (start, end int, err error) {
-	if totalItems == 0 {
-		return 0, 0, i18n.Error("No items available.")
-	}
-
-	maxPages := int(math.Ceil(float64(totalItems) / worksPerPage))
-	if page < 1 || page > maxPages {
-		return 0, 0, i18n.Error("Invalid page number.")
-	}
-
-	start = (page - 1) * int(worksPerPage)
-	end = min(start+int(worksPerPage), totalItems)
-
-	return start, end, nil
-}
-
 func (s *User) ParseSocial() error {
 	if string(s.SocialRaw[:]) == "[]" {
 		// Fuck Pixiv
@@ -115,45 +98,19 @@ func GetFrequentTags(r *http.Request, ids string, category UserArtCategory) ([]F
 	return tags, nil
 }
 
-func GetUserArtworks(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
-	var works []ArtworkBrief
-
-	URL := GetUserFullArtworkURL(id, ids)
-
-	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
-	if err != nil {
-		return nil, err
-	}
-	resp = session.ProxyImageUrl(r, resp)
-
-	var body struct {
-		Illusts map[int]json.RawMessage `json:"works"`
-	}
-
-	err = json.Unmarshal([]byte(resp), &body)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, v := range body.Illusts {
-		var illust ArtworkBrief
-		err = json.Unmarshal(v, &illust)
-
-		if err != nil {
-			return nil, err
-		}
-
-		works = append(works, illust)
-	}
-
-	return works, nil
+type Work interface {
+	GetID() string
 }
 
-func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
-	// VnPower: we can merge this function into GetUserArtworks, but I want to make things simple for now
-	var works []NovelBrief
+func GetUserWorks(r *http.Request, id, ids string, category UserArtCategory) ([]Work, error) {
+	var works []Work
 
-	URL := GetUserFullNovelURL(id, ids)
+	var URL string
+	if category == UserArt_Novel {
+		URL = GetUserFullNovelURL(id, ids)
+	} else {
+		URL = GetUserFullArtworkURL(id, ids)
+	}
 
 	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
 	if err != nil {
@@ -162,7 +119,7 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 	resp = session.ProxyImageUrl(r, resp)
 
 	var body struct {
-		Novels map[int]json.RawMessage `json:"works"`
+		Works map[int]json.RawMessage `json:"works"`
 	}
 
 	err = json.Unmarshal([]byte(resp), &body)
@@ -170,15 +127,22 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 		return nil, err
 	}
 
-	for _, v := range body.Novels {
-		var novel NovelBrief
-		err = json.Unmarshal(v, &novel)
-
-		if err != nil {
-			return nil, err
+	for _, v := range body.Works {
+		if category == UserArt_Novel {
+			var novel NovelBrief
+			err = json.Unmarshal(v, &novel)
+			if err != nil {
+				return nil, err
+			}
+			works = append(works, novel)
+		} else {
+			var illust ArtworkBrief
+			err = json.Unmarshal(v, &illust)
+			if err != nil {
+				return nil, err
+			}
+			works = append(works, illust)
 		}
-
-		works = append(works, novel)
 	}
 
 	return works, nil
@@ -300,44 +264,6 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 
 		// Public bookmarks count
 		user.ArtworksCount = count
-	} else if category == UserArt_Novel {
-		ids, count, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
-		if err != nil {
-			return user, err
-		}
-
-		if count > 0 {
-			// Check if the user has artworks available or not
-			works, err := GetUserNovels(r, id, ids)
-			if err != nil {
-				return user, err
-			}
-
-			// IDK but the order got shuffled even though Pixiv sorted the IDs in the response
-			sort.Slice(works[:], func(i, j int) bool {
-				left := works[i].ID
-				right := works[j].ID
-				return numberGreaterThan(left, right)
-			})
-			user.Novels = works
-
-			if getTags {
-				user.FrequentTags, err = GetFrequentTags(r, ids, category)
-				if err != nil {
-					return user, err
-				}
-			}
-		}
-
-		var novelSeries []NovelSeries
-		if series != nil {
-			if err = json.Unmarshal(series, &novelSeries); err == nil {
-				user.NovelSeries = novelSeries
-			}
-		}
-
-		// Artworks count
-		user.ArtworksCount = count
 	} else {
 		ids, count, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
@@ -345,19 +271,30 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		}
 
 		if count > 0 {
-			// Check if the user has artworks available or not
-			works, err := GetUserArtworks(r, id, ids)
+			// Check if the user has works available or not
+			works, err := GetUserWorks(r, id, ids, category)
 			if err != nil {
 				return user, err
 			}
 
 			// IDK but the order got shuffled even though Pixiv sorted the IDs in the response
 			sort.Slice(works[:], func(i, j int) bool {
-				left := works[i].ID
-				right := works[j].ID
+				left := works[i].GetID()
+				right := works[j].GetID()
 				return numberGreaterThan(left, right)
 			})
-			user.Artworks = works
+
+			if category == UserArt_Novel {
+				user.Novels = make([]NovelBrief, len(works))
+				for i, w := range works {
+					user.Novels[i] = w.(NovelBrief)
+				}
+			} else {
+				user.Artworks = make([]ArtworkBrief, len(works))
+				for i, w := range works {
+					user.Artworks[i] = w.(ArtworkBrief)
+				}
+			}
 
 			if getTags {
 				user.FrequentTags, err = GetFrequentTags(r, ids, category)
@@ -367,10 +304,19 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 			}
 		}
 
-		var mangaSeries []MangaSeries
-		if series != nil {
-			if err = json.Unmarshal(series, &mangaSeries); err == nil {
-				user.MangaSeries = mangaSeries
+		if category == UserArt_Novel {
+			var novelSeries []NovelSeries
+			if series != nil {
+				if err = json.Unmarshal(series, &novelSeries); err == nil {
+					user.NovelSeries = novelSeries
+				}
+			}
+		} else {
+			var mangaSeries []MangaSeries
+			if series != nil {
+				if err = json.Unmarshal(series, &mangaSeries); err == nil {
+					user.MangaSeries = mangaSeries
+				}
 			}
 		}
 
@@ -439,4 +385,30 @@ func numberGreaterThan(l, r string) bool {
 		return false
 	}
 	return l > r
+}
+
+// Utility function to compute slice bounds safely
+func computeSliceBounds(page int, worksPerPage float64, totalItems int) (start, end int, err error) {
+	if totalItems == 0 {
+		return 0, 0, i18n.Error("No items available.")
+	}
+
+	maxPages := int(math.Ceil(float64(totalItems) / worksPerPage))
+	if page < 1 || page > maxPages {
+		return 0, 0, i18n.Error("Invalid page number.")
+	}
+
+	start = (page - 1) * int(worksPerPage)
+	end = min(start+int(worksPerPage), totalItems)
+
+	return start, end, nil
+}
+
+// Methods to satisfy the Work interface
+func (a ArtworkBrief) GetID() string {
+	return a.ID
+}
+
+func (n NovelBrief) GetID() string {
+	return n.ID
 }
