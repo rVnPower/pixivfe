@@ -33,7 +33,7 @@ scan() {
 }
 
 i18n_error() {
-    semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/error_strings.json
+    semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/code_strings.json
 }
 
 i18n_template() {

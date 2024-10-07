@@ -5,14 +5,8 @@ rules:
   message: "i18n error message"
   languages: [go]
   severity: INFO
-  pattern-either:
-  - patterns:
-    - pattern-inside: |
-        i18n.Error("$MSG")
-    - pattern: |
-        "$MSG"
-  - patterns:
-    - pattern-inside: |
-        i18n.Errorf("$MSG", $...ARGS)
-    - pattern: |
-        "$MSG"
+  patterns:
+  - pattern-inside: |
+      i18n.$FUNC("$MSG", $...ARGS)
+  - pattern: |
+      "$MSG"

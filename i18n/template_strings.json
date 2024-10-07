@@ -825,11 +825,19 @@
   },
   {
     "file": "assets/views/user.jet.html",
+    "msg": "Series"
+  },
+  {
+    "file": "assets/views/user.jet.html",
     "msg": "Illustrations and Mangas"
   },
   {
     "file": "assets/views/user.jet.html",
     "msg": "View all art on this page"
+  },
+  {
+    "file": "assets/views/user.jet.html",
+    "msg": "Series"
   },
   {
     "file": "assets/views/user.jet.html",
@@ -896,6 +904,18 @@
     "msg": "AI-generated"
   },
   {
+    "file": "assets/views/fragments/mangaseries-tn.jet.html",
+    "msg": "{{ .Total }} Episode(s)"
+  },
+  {
+    "file": "assets/views/fragments/mangaseries-tn.jet.html",
+    "msg": "Updated at {{ parseTime:.UpdateDate }}"
+  },
+  {
+    "file": "assets/views/fragments/mangaseries-tn.jet.html",
+    "msg": "Read from the beginning"
+  },
+  {
     "file": "assets/views/fragments/novel-tn.jet.html",
     "msg": "{{ .WordCount }} word(s)"
   },
@@ -910,6 +930,34 @@
   {
     "file": "assets/views/fragments/novel-tn.jet.html",
     "msg": "Original"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "{{ .Total }} Episode(s)"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "{{ .PublishedTotalCharacterCount }} character(s)"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "{{ floor: .PublishedReadingTime / 60 }} mins"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "{{ if .XRestrict == 1 }}R-18{{ else }}R-18G{{ end }}"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "AI-generated"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "Original"
+  },
+  {
+    "file": "assets/views/fragments/novelseries-tn.jet.html",
+    "msg": "Read from the beginning"
   },
   {
     "file": "assets/views/fragments/novelseriescontents-tn.jet.html",
