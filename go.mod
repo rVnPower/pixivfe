@@ -1,10 +1,12 @@
 module codeberg.org/vnpower/pixivfe/v2
 
-go 1.22.5
+go 1.23
+
+toolchain go1.23.1
 
 require (
 	github.com/CloudyKit/jet/v6 v6.2.0
-	github.com/PuerkitoBio/goquery v1.9.2
+	github.com/PuerkitoBio/goquery v1.10.0
 	github.com/andybalholm/cascadia v1.3.2
 	github.com/go-faker/faker/v4 v4.5.0
 	github.com/goccy/go-json v0.10.3
@@ -15,9 +17,9 @@ require (
 	github.com/sethvargo/go-envconfig v1.1.0
 	github.com/sethvargo/go-limiter v1.0.0
 	github.com/soluble-ai/go-jnode v0.1.11
-	github.com/tidwall/gjson v1.17.3
+	github.com/tidwall/gjson v1.18.0
 	github.com/yargevad/filepathx v1.0.0
-	golang.org/x/net v0.28.0
+	golang.org/x/net v0.30.0
 )
 
 require (
@@ -26,6 +28,6 @@ require (
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 )

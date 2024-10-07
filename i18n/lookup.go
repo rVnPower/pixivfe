@@ -1,7 +1,12 @@
 package i18n
 
+import "runtime"
+
 // translate string
-func Tr(text string) string {
-	// todo: load text from database, then translate
+func lookup(text string) string {
+	pc, file, line, ok := runtime.Caller(2) // user function -> i18n.XXX("...") -> lookup
+
+	println("recorded stackframe:", pc, file, line, ok, text)
+
 	return text
 }
