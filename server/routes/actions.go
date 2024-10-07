@@ -14,7 +14,7 @@ import (
 
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
-		return errors.New("Method not allowed")
+		return i18n.Error("Method not allowed")
 	}
 
 	token := session.GetUserToken(r)
@@ -46,7 +46,7 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
-		return errors.New("Method not allowed")
+		return i18n.Error("Method not allowed")
 	}
 
 	token := session.GetUserToken(r)
@@ -74,7 +74,7 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 
 func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
-		return errors.New("Method not allowed")
+		return i18n.Error("Method not allowed")
 	}
 
 	token := session.GetUserToken(r)
