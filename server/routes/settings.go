@@ -131,7 +131,7 @@ func setCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 	for _, cookie_name := range session.AllCookieNames {
 		if string(cookie_name) == key {
 			session.SetCookie(w, cookie_name, value)
-			return i18n.Sprintff("Cookie %s set successfully.", key), nil
+			return i18n.Sprintf("Cookie %s set successfully.", key), nil
 		}
 	}
 	return "", i18n.Errorf("Invalid Cookie Name: %s", key)
@@ -142,7 +142,7 @@ func clearCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 	for _, cookie_name := range session.AllCookieNames {
 		if string(cookie_name) == key {
 			session.ClearCookie(w, cookie_name)
-			return i18n.Sprintff("Cookie %s cleared successfully.", key), nil
+			return i18n.Sprintf("Cookie %s cleared successfully.", key), nil
 		}
 	}
 	return "", i18n.Errorf("Invalid Cookie Name: %s", key)
