@@ -9,7 +9,7 @@
     </div>
     <div class="novel-metadata">
       <div class="novel-title">{{ .NovelSeries.Title }}</div>
-      <p class="novel-description">{{ raw: .NovelSeries.Caption }}</p>
+      <p class="novel-description">{{ raw: parsePixivRedirect(.NovelSeries.Caption) }}</p>
       <small><span>{{ .NovelSeries.Total }} Episode(s)</span>&nbsp;&nbsp;
         <span>Updated on {{parseTime: .NovelSeries.UpdateDate }}</span></span>&nbsp;&nbsp;
         <span>{{ .NovelSeries.PublishedTotalCharacterCount }} character(s)</span>&nbsp;&nbsp;

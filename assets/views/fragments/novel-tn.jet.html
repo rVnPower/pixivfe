@@ -26,7 +26,7 @@
                         <span>{{ .UserName }}</span>
                 </div>
             </a>
-            <p class="novel-description">{{ raw: .Description }}</p>
+            <p class="novel-description">{{ raw: parsePixivRedirect(.Description) }}</p>
 
             <div class="illust-tags">
                 {{- if .AiType == 2 }}

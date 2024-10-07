@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -124,6 +125,16 @@ func DefineRoutes() *mux.Router {
 	router.HandleFunc("/tags/{name}", CatchError(routes.TagPage)).Methods("POST")
 	router.HandleFunc("/tags", CatchError(routes.TagPage)).Methods("GET")
 	router.HandleFunc("/tags", CatchError(routes.AdvancedTagPost)).Methods("POST")
+
+	// Although we have ParsePixivRedirect for template. here's a fallback to catch all
+	router.HandleFunc("/jump.php", func(w http.ResponseWriter, r *http.Request) {
+		escaped, err := url.QueryUnescape(r.URL.RawQuery)
+		if err != nil {
+			routes.ErrorPage(w, r, i18n.Errorf("Failed to redirect to %s", r.URL.RawQuery), http.StatusNotFound)
+		} else {
+			http.Redirect(w, r, escaped, http.StatusPermanentRedirect)
+		}
+	}).Methods("GET")
 
 	// Diagnostic routes for monitoring and debugging
 	router.HandleFunc("/diagnostics", CatchError(routes.Diagnostics)).Methods("GET")
