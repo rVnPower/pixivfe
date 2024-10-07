@@ -63,5 +63,14 @@ func NovelPage(w http.ResponseWriter, r *http.Request) error {
 		title = fmt.Sprintf("#%d %s | %s", novel.SeriesNavData.Order, novel.Title, novel.SeriesNavData.Title)
 	}
 
-	return RenderHTML(w, r, Data_novel{Novel: novel, NovelRelated: related, User: user, NovelSeriesContentTitles: contentTitles, Title: title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
+	return RenderHTML(w, r, Data_novel{
+		Novel:                    novel,
+		NovelRelated:             related,
+		User:                     user,
+		NovelSeriesContentTitles: contentTitles,
+		Title:                    title,
+		FontType:                 fontType,
+		ViewMode:                 viewMode,
+		Language:                 strings.ToLower(novel.Language),
+	})
 }
