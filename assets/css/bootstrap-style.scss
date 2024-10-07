@@ -279,16 +279,16 @@ h6 {
 }
 
 /// Loading indicator for hx-requests
-/// ref (old): https://stackoverflow.com/questions/63787241/css-how-to-create-an-infinitely-moving-repeating-linear-gradient/63787567#63787567
+/// ref: https://stackoverflow.com/questions/63787241/css-how-to-create-an-infinitely-moving-repeating-linear-gradient/63787567#63787567
 #loading-indicator {
-  height: 0.5rem;
+  height: 4px;
 
   /// background-size: 200px auto;
-  animation: wave-motion 3s ease-in-out infinite;
-  background-image: linear-gradient(90deg, transparent, var(--bs-custom-color), transparent);
-  background-size: 200% 100%;
+  animation: rolling-something 1s linear infinite;
+  background-image: repeating-linear-gradient(-0.25turn, #118bee 0vw, transparent 40vw);
+  background-size: 80vw auto;
 
-  will-change: opacity, background-position;
+  will-change: opacity;
   transition: opacity 0.3s;
   opacity: 0;
 
@@ -297,49 +297,14 @@ h6 {
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  // Responsive adjustments
-  @media (max-width: 576px) {
-    height: 0.3rem;
-    animation-duration: 2s;
-    background-size: 150% 100%;
-
-    &.htmx-request {
-      transition-duration: 0.5s;
-    }
-  }
-
-  @media (min-width: 577px) and (max-width: 992px) {
-    height: 0.4rem;
-    animation-duration: 2.5s;
-    background-size: 175% 100%;
-
-    &.htmx-request {
-      transition-duration: 0.75s;
-    }
-  }
-
-  @media (min-width: 993px) {
-    height: 0.5rem;
-    animation-duration: 3s;
-    background-size: 200% 100%;
-
-    &.htmx-request {
-      transition-duration: 1s;
-    }
-  }
 }
 
-@keyframes wave-motion {
+@keyframes rolling-something {
   0% {
-    background-position: 100% 0;
-  }
-
-  50% {
-    background-position: 0% 0;
+    background-position-x: 0vw
   }
 
   100% {
-    background-position: -100% 0;
+    background-position-x: 40vw
   }
 }
