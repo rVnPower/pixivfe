@@ -21,7 +21,7 @@
       <span class="badge bg-warning small text-dark mb-1">AI</span>
       {{- end }}
     </div>
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-column align-items-end z-3">
       <!-- When an artwork has multiple images -->
       {{- if .Pages > 1 }}
       <span class="badge bg-secondary"><i class="bi bi-image"></i> {{ .Pages }}</span>
@@ -43,8 +43,8 @@
     <!-- Creates a centered, circular overlay (60x60px) with semi-transparent black background.
          The play icon is centered within this overlay and appears on top of the thumbnail. -->
     {{- if .IllustType == 2 }}
-    <div class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center bg-dark bg-opacity-50 rounded-circle w-25 h-25">
-      <i class="bi bi-play-fill text-white fs-1"></i>
+    <div class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center bg-dark bg-opacity-75 rounded-circle w-25 h-25 p-4">
+      <i class="bi bi-play-fill text-white fs-2"></i>
     </div>
     {{- end }}
   </a>
