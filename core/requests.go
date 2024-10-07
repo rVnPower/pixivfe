@@ -73,12 +73,17 @@ Please refer the following documentation for additional information:
 		end := time.Now()
 		// Unwrap the body here so that we could log stuff correctly
 		if err != nil {
-			return nil, err
+			return nil, i18n.Errorf("failed to make request: %w", err)
+		}
+		// Validate response isn't nil
+		if resp == nil {
+			lastErr = i18n.Errorf("Received nil response after request: %w", err)
+			continue
 		}
 		defer resp.Body.Close()
 
 		body, err := io.ReadAll(resp.Body)
-		if err != nil {
+		if err != nil || resp.Body == nil {
 			return nil, err
 		}
 
