@@ -65,7 +65,7 @@ type User struct {
 // Utility function to compute slice bounds safely
 func computeSliceBounds(page int, worksPerPage float64, totalItems int) (start, end int, err error) {
 	if totalItems == 0 {
-		return 0, 0, i18n.Error("No items available.")
+		return 0, 0, nil
 	}
 
 	maxPages := int(math.Ceil(float64(totalItems) / worksPerPage))
