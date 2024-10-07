@@ -50,7 +50,7 @@ func setToken(w http.ResponseWriter, r *http.Request) (string, error) {
 		session.SetCookie(w, session.Cookie_Token, token)
 		session.SetCookie(w, session.Cookie_CSRF, csrf)
 
-		return i18n.Log("Successfully logged in."), nil
+		return i18n.Sprintf("Successfully logged in."), nil
 	}
 	return "", i18n.Error("You submitted an empty/invalid form.")
 }
@@ -59,10 +59,10 @@ func setImageServer(w http.ResponseWriter, r *http.Request) (string, error) {
 	token := r.FormValue("image-proxy")
 	if token != "" {
 		session.SetCookie(w, session.Cookie_ImageProxy, token)
-		return i18n.Log("Image proxy server updated successfully."), nil
+		return i18n.Sprintf("Image proxy server updated successfully."), nil
 	} else {
 		session.ClearCookie(w, session.Cookie_ImageProxy)
-		return i18n.Log("Image proxy server cleared."), nil
+		return i18n.Sprintf("Image proxy server cleared."), nil
 	}
 }
 
@@ -70,7 +70,7 @@ func setNovelFontType(w http.ResponseWriter, r *http.Request) (string, error) {
 	fontType := r.FormValue("font-type")
 	if fontType != "" {
 		session.SetCookie(w, session.Cookie_NovelFontType, fontType)
-		return i18n.Log("Novel font type updated successfully."), nil
+		return i18n.Sprintf("Novel font type updated successfully."), nil
 	}
 
 	return "", i18n.Error("Invalid font type.")
@@ -80,7 +80,7 @@ func setNovelViewMode(w http.ResponseWriter, r *http.Request) (string, error) {
 	viewMode := r.FormValue("view-mode")
 	if viewMode == "1" || viewMode == "2" || viewMode == "" {
 		session.SetCookie(w, session.Cookie_NovelViewMode, viewMode)
-		return i18n.Log("Novel view mode updated successfully."), nil
+		return i18n.Sprintf("Novel view mode updated successfully."), nil
 	}
 
 	return "", i18n.Error("Invalid view mode.")
@@ -90,10 +90,10 @@ func setThumbnailToNewTab(w http.ResponseWriter, r *http.Request) (string, error
 	ttnt := r.FormValue("ttnt")
 	if ttnt == "_blank" {
 		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, ttnt)
-		return i18n.Log("Thumbnails will now open in a new tab."), nil
+		return i18n.Sprintf("Thumbnails will now open in a new tab."), nil
 	} else {
 		session.SetCookie(w, session.Cookie_ThumbnailToNewTab, "_self")
-		return i18n.Log("Thumbnails will now open in the same tab."), nil
+		return i18n.Sprintf("Thumbnails will now open in the same tab."), nil
 	}
 }
 
@@ -101,7 +101,7 @@ func setArtworkPreview(w http.ResponseWriter, r *http.Request) (string, error) {
 	value := r.FormValue("app")
 	if value == "cover" || value == "button" || value == "" {
 		session.SetCookie(w, session.Cookie_ArtworkPreview, value)
-		return i18n.Log("Artwork preview setting updated successfully."), nil
+		return i18n.Sprintf("Artwork preview setting updated successfully."), nil
 	}
 
 	return "", i18n.Error("Invalid artwork preview setting.")
@@ -116,13 +116,13 @@ func setFilter(w http.ResponseWriter, r *http.Request) (string, error) {
 	session.SetCookie(w, session.Cookie_HideArtR18G, r18g)
 	session.SetCookie(w, session.Cookie_HideArtAI, ai)
 
-	return i18n.Log("Filter settings updated successfully."), nil
+	return i18n.Sprintf("Filter settings updated successfully."), nil
 }
 
 func setLogout(w http.ResponseWriter, _ *http.Request) (string, error) {
 	session.ClearCookie(w, session.Cookie_Token)
 	session.ClearCookie(w, session.Cookie_CSRF)
-	return i18n.Log("Successfully logged out."), nil
+	return i18n.Sprintf("Successfully logged out."), nil
 }
 
 func setCookie(w http.ResponseWriter, r *http.Request) (string, error) {
@@ -131,7 +131,7 @@ func setCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 	for _, cookie_name := range session.AllCookieNames {
 		if string(cookie_name) == key {
 			session.SetCookie(w, cookie_name, value)
-			return i18n.Logf("Cookie %s set successfully.", key), nil
+			return i18n.Sprintff("Cookie %s set successfully.", key), nil
 		}
 	}
 	return "", i18n.Errorf("Invalid Cookie Name: %s", key)
@@ -142,7 +142,7 @@ func clearCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 	for _, cookie_name := range session.AllCookieNames {
 		if string(cookie_name) == key {
 			session.ClearCookie(w, cookie_name)
-			return i18n.Logf("Cookie %s cleared successfully.", key), nil
+			return i18n.Sprintff("Cookie %s cleared successfully.", key), nil
 		}
 	}
 	return "", i18n.Errorf("Invalid Cookie Name: %s", key)
@@ -177,12 +177,12 @@ func setRawCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 
 		session.SetCookie(w, name, value)
 	}
-	return i18n.Log("Raw settings applied successfully."), nil
+	return i18n.Sprintf("Raw settings applied successfully."), nil
 }
 
 func resetAll(w http.ResponseWriter, _ *http.Request) (string, error) {
 	session.ClearAllCookies(w)
-	return i18n.Log("All preferences have been reset to default values."), nil
+	return i18n.Sprintf("All preferences have been reset to default values."), nil
 }
 
 func SettingsPage(w http.ResponseWriter, r *http.Request) error {
@@ -199,10 +199,10 @@ func handleAjaxResponse(w http.ResponseWriter, message string, err error) {
 	w.Header().Set("Content-Type", "text/html")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(i18n.Logf(`<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">%s<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`, err.Error())))
+		w.Write([]byte(i18n.Sprintf(`<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">%s<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`, err.Error())))
 	} else {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(i18n.Logf(`<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">%s<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`, message)))
+		w.Write([]byte(i18n.Sprintf(`<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">%s<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`, message)))
 	}
 }
 
