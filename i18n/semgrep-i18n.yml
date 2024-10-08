@@ -5,8 +5,14 @@ rules:
   message: "i18n error message"
   languages: [go]
   severity: INFO
-  patterns:
-  - pattern-inside: |
-      i18n.$FUNC("$MSG", $...ARGS)
-  - pattern: |
-      "$MSG"
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        l.Tr("$MSG")
+    - pattern: |
+        "$MSG"
+  - patterns:
+    - pattern-inside: |
+        i18n.$FUNC("$MSG", $...ARGS)
+    - pattern: |
+        "$MSG"

@@ -46,6 +46,7 @@ i18n() {
     i18n_code
     i18n_template
     mkdir -p i18n/locale/en
+    rm -f i18n/locale/en/code.json i18n/locale/en/template.json
     go run ./i18n/converter < i18n/code_strings.json > i18n/locale/en/code.json
     go run ./i18n/converter < i18n/template_strings.json > i18n/locale/en/template.json
     chmod -w i18n/locale/en/code.json i18n/locale/en/template.json
