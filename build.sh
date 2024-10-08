@@ -52,6 +52,14 @@ i18n() {
     chmod -w i18n/locale/en/code.json i18n/locale/en/template.json
 }
 
+i18n_upload() {
+    crowdin upload
+}
+
+i18n_download() {
+    crowdin download
+}
+
 run() {
     build
     echo "Running ${BINARY_NAME}..."
@@ -86,6 +94,8 @@ help() {
     echo "  scan               - Scan Go code"
     echo "  test               - Run tests"
     echo "  i18n               - Extract i18n strings"
+    echo "  i18n_upload        - Upload strings to Crowdin"
+    echo "  i18n_download      - Download strings from Crowdin"
     echo "  run [--do-not-load-env-file] - Build and run the binary"
     echo "  clean              - Remove the binary"
     echo "  install-pre-commit - Install testing pre-commit hook"
@@ -112,6 +122,8 @@ execute_command() {
         i18n) i18n ;;
         i18n_code) i18n_code ;;
         i18n_template) i18n_template ;;
+        i18n_upload) i18n_upload ;;
+        i18n_download) i18n_download ;;
         run)
             if [ "$2" = "--do-not-load-env-file" ]; then
                 run "--do-not-load-env-file"
