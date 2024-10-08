@@ -175,11 +175,29 @@ $utilities: map-merge(
   max-height: 40vh;
 }
 
-.thumbnail-hover-dark img {
-  transition: opacity 0.2s;  // Smooth transition when hovering
+/// TODO: need usability tests to determine whether these variables are ok; can also cause weird moire/pixel level scaling issues with novel thumbnails (especially the default cover which has intricate details)
+.thumbnail-hover-dark {
+  overflow: hidden;
 
-  &:hover {
-    opacity: 0.8;  // Apply darkening effect
+  /// Wrapper to maintain rounded corners during zoom effect
+  /// The wrapper hides overflow and applies rounded corners,
+  /// while allowing the image inside to scale without breaking the rounded shape
+  .thumbnail-wrapper {
+    overflow: hidden;
+
+    img {
+      transition: all 0.3s ease;
+
+      &:hover {
+        filter: brightness(0.85);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        &:hover {
+          transform: scale(1.005);
+        }
+      }
+    }
   }
 }
 

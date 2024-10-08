@@ -12938,11 +12938,22 @@ textarea.form-control-lg {
   max-height: 40vh;
 }
 
-.thumbnail-hover-dark img {
-  transition: opacity 0.2s;
+.thumbnail-hover-dark {
+  overflow: hidden;
 }
-.thumbnail-hover-dark img:hover {
-  opacity: 0.8;
+.thumbnail-hover-dark .thumbnail-wrapper {
+  overflow: hidden;
+}
+.thumbnail-hover-dark .thumbnail-wrapper img {
+  transition: all 0.3s ease;
+}
+.thumbnail-hover-dark .thumbnail-wrapper img:hover {
+  filter: brightness(0.85);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .thumbnail-hover-dark .thumbnail-wrapper img:hover {
+    transform: scale(1.005);
+  }
 }
 
 h1, .h1 {

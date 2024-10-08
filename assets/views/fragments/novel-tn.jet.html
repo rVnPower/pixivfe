@@ -5,7 +5,9 @@
       <div class="col-4 col-md-2">
         <a href="/novel/{{ .ID }}" class="text-decoration-none">
           <div class="ratio ratio-3x4">
-            <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="img-fluid rounded object-fit-cover" loading="lazy" />
+            <div class="thumbnail-wrapper rounded overflow-hidden">
+              <img src="{{ .CoverURL }}" alt="{{ .Title }}" class="img-fluid rounded object-fit-cover w-100 h-100" loading="lazy" />
+            </div>
           </div>
         </a>
       </div>
