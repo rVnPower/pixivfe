@@ -142,7 +142,7 @@ $utilities: map-merge(
   &:hover,
   &:focus,
   &:active {
-    background-color: darken(map-get($custom-colors, charcoal-surface2), 5%) !important;
+    background-color: darken(map-get($custom-colors, charcoal-surface2), 2.5%) !important;
     color: white;  // Ensure text remains white on hover
   }
 }

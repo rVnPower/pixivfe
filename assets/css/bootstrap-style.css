@@ -12930,7 +12930,7 @@ textarea.form-control-lg {
   }
 }
 .custom-btn-secondary:hover, .custom-btn-secondary-flex:hover, .custom-btn-secondary:focus, .custom-btn-secondary-flex:focus, .custom-btn-secondary:active, .custom-btn-secondary-flex:active {
-  background-color: #2d2d2d !important;
+  background-color: #343434 !important;
   color: white;
 }
 
