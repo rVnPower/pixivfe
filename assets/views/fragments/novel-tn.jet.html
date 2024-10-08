@@ -20,7 +20,7 @@
         <!-- Series name -->
         {{- if .SeriesID }}
         <p class="text-truncate mb-1">
-          <a href="/novel/series/{{ .SeriesID }}" class="fw-bold small text-body-secondary text-decoration-none">{{ .SeriesTitle }}</a>
+          <a href="/novel/series/{{ .SeriesID }}" class="small text-body-secondary text-decoration-none">{{ .SeriesTitle }}</a>
         </p>
         {{- end }}
 
@@ -30,7 +30,7 @@
         <!-- Author info -->
         <a href="/users/{{ .UserID }}" class="text-decoration-none d-flex align-items-center mb-3">
           <img src="{{ .UserAvatar }}" alt="{{ .UserName }}" class="rounded-circle me-2" style="width: 24px; height: 24px" />
-          <span class="text-muted">{{ .UserName }}</span>
+          <span class="text-body-secondary">{{ .UserName }}</span>
         </a>
 
         {*
@@ -77,5 +77,6 @@
       </div>
     </div>
   </div>
+  <!-- TODO: don't display a horizontal rule for the last two novels on a page -->
   <hr class="my-0">
 </div>
