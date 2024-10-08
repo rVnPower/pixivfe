@@ -22,7 +22,7 @@ A release version will be published when all features assigned with that version
 |-----------------------------------------------------------|---------|
 | AI/R15/R18/R18-G filtering                                | 2.9     |
 | Novel series                                              | 2.9     |
-|     > We are here     (move me down on every release)     | current |
+|     > We are here <    (move me down on new release)      | current |
 | Testing                                                   | 2.10    |
 | Git version display                                       | 2.10    |
 | Pixivision (articles, tags, categories, RSS)              | 2.11    |
@@ -34,7 +34,8 @@ A release version will be published when all features assigned with that version
 | Pixiv Request (pixiv.net/request)                         |         |
 | User discovery                                            |         |
 | Semi-popular artworks                                     |         |
-| Localization (l10n)                                       |         |
+| [Localization](features/i18n.md)                          |         |
+| Rehaul [user settings](features/user-customization.md)    |         |
 | App API (mobile API) support                              |         |
 | Native Ugoira support                                     |         |
 | Search page / Search suggestions                          |         |
