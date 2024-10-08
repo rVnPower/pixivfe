@@ -23,11 +23,13 @@ nav:
     - "Roadmap": "dev/roadmap.md"
     - "Testing": "dev/testing.md"
     - "Features":
-      - "Exponential Backoff in PixivFE": "dev/features/exponential_backoff.md"
+      - "Exponential backoff in PixivFE": "dev/features/exponential_backoff.md"
       - "Caching": "dev/features/caching.md"
       - "Novels": "dev/features/novels.md"
       - "Tracing flamegraph": "dev/features/tracing-flamegraph.md"
       - "User customization": "dev/features/user-customization.md"
+      - "Pixiv app API": "dev/features/app-api.md"
+      - "Internationalization": "dev/features/i18n.md"
     - "Archive":
       - "Framework migration": "dev/archive/framework-migration.md"
 repo_name: VnPower/PixivFE
@@ -114,7 +116,7 @@ theme:
     - content.code.annotate
 
 plugins:
-  # -- The search plugin adds a search bar to the header, allowing users to search your documentation. 
+  # -- The search plugin adds a search bar to the header, allowing users to search your documentation.
   # src: https://squidfunk.github.io/mkdocs-material/plugins/search/
   - search:
       enabled: true
