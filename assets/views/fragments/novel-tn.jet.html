@@ -10,17 +10,17 @@
         </a>
       </div>
       <div class="col-8 col-md-10 d-flex flex-column">
+        <!-- Novel title -->
+        <h4 class="text-truncate">
+          <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
+        </h4>
+
         <!-- Series name -->
         {{- if .SeriesID }}
         <p class="text-truncate mb-1">
           <a href="/novel/series/{{ .SeriesID }}" class="fw-bold small text-body-secondary text-decoration-none">{{ .SeriesTitle }}</a>
         </p>
         {{- end }}
-
-        <!-- Novel title -->
-        <h4 class="text-truncate">
-          <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
-        </h4>
 
         <!-- Word count and reading time -->
         <p class="card-text text-muted small mb-2"><span>{{ .WordCount }} word(s)</span>&nbsp;<span>{{ floor: .ReadingTime / 60 }} mins</span></p>
