@@ -7,10 +7,12 @@
   <div class="col-12">
 
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
-      {{- Type := "/discovery/novel" }}
-      {{- path := slice("/discovery", "/discovery/novel") }}
-      {{- name := slice("Artworks", "Novels")}}
-      {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+      <div class="mb-2 mb-md-0">
+        {{- Type := "/discovery/novel" }}
+        {{- path := slice("/discovery", "/discovery/novel") }}
+        {{- name := slice("Artworks", "Novels")}}
+        {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+      </div>
 
       <!-- TODO: is it actually set to "safe" by default? -->
       {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
