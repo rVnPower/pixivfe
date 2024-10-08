@@ -137,7 +137,7 @@ $utilities: map-merge(
   @extend .border-0;
   @extend .py-2;
   @extend .px-3;
-  background-color: map-get($custom-colors, charcoal-surface2);
+  @extend .bg-charcoal-surface2;
 
   &:hover,
   &:focus,

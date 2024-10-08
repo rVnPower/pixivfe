@@ -9225,7 +9225,7 @@ textarea.form-control-lg {
   background-color: rgba(var(--bs-charcoal-surface1-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-charcoal-surface2 {
+.bg-charcoal-surface2, .custom-btn-secondary, .custom-btn-secondary-flex {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-charcoal-surface2-rgb), var(--bs-bg-opacity)) !important;
 }
@@ -12928,9 +12928,6 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
-}
-.custom-btn-secondary, .custom-btn-secondary-flex {
-  background-color: #3a3a3a;
 }
 .custom-btn-secondary:hover, .custom-btn-secondary-flex:hover, .custom-btn-secondary:focus, .custom-btn-secondary-flex:focus, .custom-btn-secondary:active, .custom-btn-secondary-flex:active {
   background-color: #2d2d2d !important;
