@@ -21,15 +21,12 @@
         <!-- Tag information -->
         <div class="col-md-8">
           <div class="custom-card-body p-4">
-            <div class="d-flex flex-wrap justify-content-between align-items-start">
-              <div class="d-flex flex-column flex-sm-row align-items-center">
-                <h1 class="display-6 fw-bold me-2">#{{ .Tag.Name }}</h1>
-                <span class="h4 text-muted">{{ .Tag.Metadata.Name }}</span>
+            <!-- <div class="d-flex flex-wrap justify-content-between align-items-start"> -->
+              <div class="d-flex flex-column flex-md-row justify-content-start align-items-start align-items-md-center">
+                <h2 class="display-6 fw-bold me-2 mb-0">#{{ .Tag.Name }}</h2>
+                <span class="h3 text-muted mb-0">{{ .Tag.Metadata.Name }}</span>
               </div>
-              <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#SearchOptionsModal">
-                <i class="bi bi-gear-fill me-2"></i>Options
-              </button>
-            </div>
+            <!-- </div> -->
             <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
             <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
             <p class="lead">{{ .Tag.Metadata.Detail }}</p>
@@ -51,48 +48,58 @@
       <div class="custom-card bg-charcoal-surface1">
         <div class="custom-card-body p-4">
           <h2 class="mb-4"><i class="bi bi-gear-fill me-2"></i> Search settings</h2>
+          <!-- The first row represents Category, Ratio, Filter, and Order -->
           <div class="row">
-            <div class="col-md-4 mb-4">
+            <!-- Category: Always first on both large and small screens -->
+            <div class="col-lg-7 mb-5 order-1 order-lg-1">
               <h3><i class="bi bi-grid-fill me-2"></i>Category</h3>
               {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
               {{- URL := unfinishedQuery(.QueriesC, "category") }}
-              {{- path := slice("artworks", "illustrations", "manga")}}
-              {{- name := slice("Artworks", "Illustrations", "Manga")}}
+              {{- path := slice("artworks", "illustrations", "manga") }}
+              {{- name := slice("Artworks", "Illustrations", "Manga") }}
               {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
             </div>
-            <div class="col-md-4 mb-4">
-              <h3><i class="bi bi-sort-down me-2"></i>Order</h3>
-              {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
-              {{- URL := unfinishedQuery(.QueriesC, "order") }}
-              {{- path := slice("date_d", "date")}}
-              {{- name := slice("Newest", "Oldest")}}
-              {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
-            </div>
-            <div class="col-md-4 mb-4">
-              <h3><i class="bi bi-funnel-fill me-2"></i>Filter</h3>
-              {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
-              {{- URL := unfinishedQuery(.QueriesC, "mode") }}
-              {{- path := slice("all", "safe", "r18")}}
-              {{- name := slice("All", "Safe", "R-18")}}
-              {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-4">
+            <!-- Ratio: Second in small screens, but third in large screens -->
+            <div class="col-lg-7 mb-5 order-2 order-lg-3">
               <h3><i class="bi bi-aspect-ratio-fill me-2"></i>Ratio</h3>
               {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
               {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
-              {{- path := slice("", "-0.5", "0", "0.5")}}
-              {{- name := slice("All", "Portrait", "Square", "Landscape")}}
+              {{- path := slice("", "-0.5", "0", "0.5") }}
+              {{- name := slice("All", "Portrait", "Square", "Landscape") }}
               {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
             </div>
-            <div class="col-md-6 mb-4">
+
+            <!-- Filter: Third in small screens, but second in large screens -->
+            <div class="col-lg-5 mb-5 order-3 order-lg-2">
+              <h3><i class="bi bi-funnel-fill me-2"></i>Filter</h3>
+              {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
+              {{- URL := unfinishedQuery(.QueriesC, "mode") }}
+              {{- path := slice("all", "safe", "r18") }}
+              {{- name := slice("All", "Safe", "R-18") }}
+              {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
+            </div>
+
+            <!-- Order: Fourth in both large and small screens -->
+            <div class="col-lg-5 mb-5 order-4 order-lg-4">
+              <h3><i class="bi bi-sort-down me-2"></i>Order</h3>
+              {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
+              {{- URL := unfinishedQuery(.QueriesC, "order") }}
+              {{- path := slice("date_d", "date") }}
+              {{- name := slice("Newest", "Oldest") }}
+              {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
+            </div>
+          </div>
+
+          <!-- The second row represents Search Mode which is always last -->
+          <div class="row">
+            <!-- Search Mode: Always last on both large and small screens -->
+            <div class="col-lg-12 mb-5 order-5 order-lg-5">
               <h3><i class="bi bi-search me-2"></i>Search mode</h3>
               {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
               {{- URL := unfinishedQuery(.QueriesC, "smode") }}
-              {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-              {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+              {{- path := slice("", "s_tag_full", "s_tag", "s_tc") }}
+              {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption") }}
               {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveSearchMode) }}
             </div>
           </div>
@@ -151,6 +158,14 @@
   </noscript>
 
   <div class="col-12">
+    <div class="d-flex flex-row align-items-center justify-content-between mb-4">
+      <!-- TODO: use the actual mode and content names instead of variables, and make weekly and monthly show a date range -->
+      <h1 class="text-capitalize mb-0"><i class="bi bi-tag-fill me-2"></i>Results for #{{ .Tag.Name }}</h1>
+      <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#SearchOptionsModal">
+        <i class="bi bi-gear-fill me-2"></i>Options
+      </button>
+    </div>
+
     <!-- Popular artworks -->
     {{- if .Data.Popular.Recent }}
     <h2>Popular artworks</h2>
@@ -184,54 +199,64 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">
+        <!-- The first row represents Category, Ratio, Filter, and Order -->
         <div class="row">
-          <div class="col-md-4 mb-4">
+          <!-- Category: Always first on both large and small screens -->
+          <div class="col-lg-7 mb-5 order-1 order-lg-1">
             <h3><i class="bi bi-grid-fill me-2"></i>Category</h3>
             {{- Category := isset(.Queries.category) ? .Queries.category : "artworks" }}
             {{- URL := unfinishedQuery(.QueriesC, "category") }}
-            {{- path := slice("artworks", "illustrations", "manga")}}
-            {{- name := slice("Artworks", "Illustrations", "Manga")}}
+            {{- path := slice("artworks", "illustrations", "manga") }}
+            {{- name := slice("Artworks", "Illustrations", "Manga") }}
             {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveCategory) }}
           </div>
-          <div class="col-md-4 mb-4">
-            <h3><i class="bi bi-sort-down me-2"></i>Order</h3>
-            {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
-            {{- URL := unfinishedQuery(.QueriesC, "order") }}
-            {{- path := slice("date_d", "date")}}
-            {{- name := slice("Newest", "Oldest")}}
-            {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
-          </div>
-          <div class="col-md-4 mb-4">
-            <h3><i class="bi bi-funnel-fill me-2"></i>Filter</h3>
-            {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
-            {{- URL := unfinishedQuery(.QueriesC, "mode") }}
-            {{- path := slice("all", "safe", "r18")}}
-            {{- name := slice("All", "Safe", "R-18")}}
-            {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-md-6 mb-4">
+          <!-- Ratio: Second in small screens, but third in large screens -->
+          <div class="col-lg-7 mb-5 order-2 order-lg-3">
             <h3><i class="bi bi-aspect-ratio-fill me-2"></i>Ratio</h3>
             {{- Ratio := isset(.Queries.ratio) ? .Queries.ratio : "" }}
             {{- URL := unfinishedQuery(.QueriesC, "ratio") }}
-            {{- path := slice("", "-0.5", "0", "0.5")}}
-            {{- name := slice("All", "Portrait", "Square", "Landscape")}}
+            {{- path := slice("", "-0.5", "0", "0.5") }}
+            {{- name := slice("All", "Portrait", "Square", "Landscape") }}
             {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveRatio) }}
           </div>
-          <div class="col-md-6 mb-4">
+
+          <!-- Filter: Third in small screens, but second in large screens -->
+          <div class="col-lg-5 mb-5 order-3 order-lg-2">
+            <h3><i class="bi bi-funnel-fill me-2"></i>Filter</h3>
+            {{- Mode := isset(.Queries.mode) ? .Queries.mode : "safe" }}
+            {{- URL := unfinishedQuery(.QueriesC, "mode") }}
+            {{- path := slice("all", "safe", "r18") }}
+            {{- name := slice("All", "Safe", "R-18") }}
+            {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveMode) }}
+          </div>
+
+          <!-- Order: Fourth in both large and small screens -->
+          <div class="col-lg-5 mb-5 order-4 order-lg-4">
+            <h3><i class="bi bi-sort-down me-2"></i>Order</h3>
+            {{- Order := isset(.Queries.order) ? .Queries.order : "date_d" }}
+            {{- URL := unfinishedQuery(.QueriesC, "order") }}
+            {{- path := slice("date_d", "date") }}
+            {{- name := slice("Newest", "Oldest") }}
+            {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveOrder) }}
+          </div>
+        </div>
+
+        <!-- The second row represents Search Mode which is always last -->
+        <div class="row">
+          <!-- Search Mode: Always last on both large and small screens -->
+          <div class="col-lg-12 mb-5 order-5 order-lg-5">
             <h3><i class="bi bi-search me-2"></i>Search mode</h3>
             {{- SearchMode := isset(.Queries.smode) ? .Queries.smode : "" }}
             {{- URL := unfinishedQuery(.QueriesC, "smode") }}
-            {{- path := slice("", "s_tag_full", "s_tag", "s_tc")}}
-            {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption")}}
+            {{- path := slice("", "s_tag_full", "s_tag", "s_tc") }}
+            {{- name := slice("None", "Exact (tags)", "Partial (tags)", "Title/Caption") }}
             {{- yield UnderlineNav(baseURL=URL, paths=path, names=name, activeState=.ActiveSearchMode) }}
           </div>
         </div>
 
         <!-- Advanced settings -->
-        <div class="accordion mb-4" id="advancedSettingsModal">
+        <div class="accordion mb-5" id="advancedSettingsModal">
           <div class="accordion-item">
             <div class="accordion-header rounded-2" id="headingAdvancedModal">
               <button class="accordion-button bg-charcoal-surface2 text-body collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvancedModal" aria-expanded="false" aria-controls="collapseAdvancedModal">
