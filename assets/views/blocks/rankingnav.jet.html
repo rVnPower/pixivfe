@@ -15,16 +15,16 @@
 {{- block RankingNav() }}
   {{ url := "/ranking?content=" + Content + "&mode=" + Mode + "&page=1" }}
   {{- if .Data.PrevDate != "false" }}
-  <a href="{{ url }}&date={{.Data.PrevDate}}" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+  <a href="{{ url }}&date={{.Data.PrevDate}}" class="custom-btn-secondary me-2">
     <span>
       <i class="bi bi-arrow-left-circle-fill me-2"></i>Past
     </span>
   </a>
   {{- end }}
-  <a href="{{ url }}" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+  <a href="{{ url }}" class="custom-btn-secondary me-2">
     <span>Latest</span>
   </a>
-  <a href="{{ url }}&date={{.Data.NextDate}}" class="custom-btn-secondary bg-charcoal-surface2{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
+  <a href="{{ url }}&date={{.Data.NextDate}}" class="custom-btn-secondary{{ .Data.NextDate == "false" ? " disabled" : "" }}"{{ .Data.NextDate == "false" ? " aria-disabled=\"true\"" : "" }}>
     <span>
       Next<i class="bi bi-arrow-right-circle-fill ms-2"></i>
     </span>

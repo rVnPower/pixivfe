@@ -145,7 +145,7 @@
                       <input type="text" class="form-control" id="tool" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
                     </div>
                     <div class="col-12">
-                      <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Set</button>
+                      <button type="submit" class="custom-btn-secondary">Set</button>
                     </div>
                   </form>
                 </div>
@@ -161,7 +161,7 @@
     <div class="d-flex flex-row align-items-center justify-content-between mb-4">
       <!-- TODO: use the actual mode and content names instead of variables, and make weekly and monthly show a date range -->
       <h1 class="text-capitalize mb-0"><i class="bi bi-tag-fill me-2"></i>Results for #{{ .Tag.Name }}</h1>
-      <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#SearchOptionsModal">
+      <button class="js-required custom-btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#SearchOptionsModal">
         <i class="bi bi-gear-fill me-2"></i>Options
       </button>
     </div>
@@ -296,7 +296,7 @@
                     <input type="text" class="form-control" id="tool-modal" name="tool" value="{{ .QueriesC.Query[" Tool"] }}" />
                   </div>
                   <div class="col-12">
-                    <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Set</button>
+                    <button type="submit" class="custom-btn-secondary">Set</button>
                   </div>
                 </form>
               </div>
@@ -307,7 +307,7 @@
         <div class="row">
           <div class="col-12 d-flex justify-content-between">
             <a href="{{ unfinishedQuery(.QueriesC, "") }}" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
-            <button type="button" class="custom-btn-secondary bg-charcoal-surface2" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="custom-btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

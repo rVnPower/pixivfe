@@ -12929,6 +12929,9 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.custom-btn-secondary, .custom-btn-secondary-flex {
+  background-color: #3a3a3a;
+}
 .custom-btn-secondary:hover, .custom-btn-secondary-flex:hover, .custom-btn-secondary:focus, .custom-btn-secondary-flex:focus, .custom-btn-secondary:active, .custom-btn-secondary-flex:active {
   background-color: #2d2d2d !important;
   color: white;

@@ -80,7 +80,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="mb-0">Illustrations and Manga</h2>
       {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
-      <a href="{{combinedUrl}}" class="custom-btn-secondary bg-charcoal-surface2">View all</a>
+      <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .User.Artworks }}

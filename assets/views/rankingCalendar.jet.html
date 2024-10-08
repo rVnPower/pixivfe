@@ -72,12 +72,12 @@
                   <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="custom-btn-secondary bg-charcoal-surface2">Go</button>
+                  <button type="submit" class="custom-btn-secondary">Go</button>
                 </div>
               </div>
             </form>
           </div>
-          <button class="js-required custom-btn-secondary bg-charcoal-surface2" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
+          <button class="js-required custom-btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
             <i class="bi bi-gear-fill me-2"></i>Options
           </button>
         </div>
@@ -87,16 +87,16 @@
         <div class="d-flex flex-row align-items-center justify-content-between mb-3" aria-label="Month navigation">
           {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
           {{- if .MonthBefore.Link != "false" }}
-          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
             <span>
               <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
             </span>
           </a>
           {{- end }}
-          <a href="{{ url }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
             <span>Current month</span>
           </a>
-          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
             <span>
               Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
             </span>
@@ -140,16 +140,16 @@
         <div class="d-flex flex-row align-items-center justify-content-between" aria-label="Month navigation">
           {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
           {{- if .MonthBefore.Link != "false" }}
-          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
             <span>
               <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
             </span>
           </a>
           {{- end }}
-          <a href="{{ url }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2 me-2">
+          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
             <span>Current month</span>
           </a>
-          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary bg-charcoal-surface2{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
             <span>
               Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
             </span>
@@ -211,7 +211,7 @@
         <div class="row">
           <div class="col-12 d-flex justify-content-between">
             <a href="/rankingCalendar" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
-            <button type="button" class="custom-btn-secondary bg-charcoal-surface2" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="custom-btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

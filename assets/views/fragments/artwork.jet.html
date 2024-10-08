@@ -63,7 +63,7 @@
         <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
         <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
           {{- if isset(.BookmarkData) && LoggedIn }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body" hx-indicator="#bookmark-spinner">
+          <button type="button" class="btn custom-btn-secondary text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body" hx-indicator="#bookmark-spinner">
             <div class="d-flex">
               <div class="bookmark-text"><i class="bi bi-heart-fill me-2"></i>Bookmarked</div>
               <div class="bookmark-spinner ms-2" id="bookmark-spinner">
@@ -74,7 +74,7 @@
             </div>
           </button>
           {{- else }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body" hx-indicator="#bookmark-spinner">
+          <button type="button" class="btn custom-btn-secondary text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body" hx-indicator="#bookmark-spinner">
           <div class="d-flex">
             <div class="bookmark-text"><i class="bi bi-heart me-2"></i>Bookmark</div>
             <div class="bookmark-spinner ms-2" id="bookmark-spinner">
@@ -87,7 +87,7 @@
 
           {{- if .Liked && LoggedIn}}
           <!-- NOTE: /self/unlike isn't a real URI path, just keeping it here for consistency -->
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" disabled>
+          <button type="button" class="btn custom-btn-secondary text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" disabled>
             <div class="d-flex">
               <div class="like-text"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked</div>
               <div class="like-spinner ms-2" id="like-spinner">
@@ -98,7 +98,7 @@
             </div>
           </button>
           {{- else }}
-          <button type="button" class="btn custom-btn-secondary bg-charcoal-surface2 text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner">
+          <button type="button" class="btn custom-btn-secondary text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner">
             <div class="d-flex">
               <div class="like-text"><i class="bi bi-hand-thumbs-up me-2"></i>Like</div>
               <div class="like-spinner ms-2" id="like-spinner">
@@ -113,7 +113,7 @@
       </div>
 
       <!-- View Pixiv original button -->
-      <a href="https://pixiv.net/i/{{ .ID }}" class="custom-btn-secondary bg-charcoal-surface2 btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net</a>
+      <a href="https://pixiv.net/i/{{ .ID }}" class="custom-btn-secondary btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net</a>
 
       <!-- Artwork description -->
       <!-- Rendered conditionally to avoid a weird empty p element that messes with spacing -->

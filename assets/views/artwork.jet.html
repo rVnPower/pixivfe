@@ -17,7 +17,7 @@
               <h2 class="m-0">{{ .Illust.User.Name }}</h2>
             </a>
             {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
-            <a href="{{combinedUrl}}" class="custom-btn-secondary bg-charcoal-surface2">View all</a>
+            <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
           </div>
         </div>
         <div class="card-body pb-0 p-lg-3">
@@ -102,7 +102,7 @@
             {{- end }}
             <div class="d-flex justify-content-center">
               <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
-              <button type="button" class="custom-btn-secondary-flex bg-charcoal-surface2 mb-4" id="load-more-btn">Load more</button>
+              <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
             </div>
           </div>
           {{ end }}
