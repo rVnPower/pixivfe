@@ -1,0 +1,70 @@
+variables:
+  - &alpine_image 'alpine:3.19'
+  - &git_image 'woodpeckerci/plugin-git:latest'
+  - &crowdin_image 'crowdin/cli:latest'
+  - &pr_plugin 'johnwalkerx/gitea-pull-request-create-plugin:latest'
+  - path: &i18n_path
+      include: ['i18n/locale/**']
+
+when:
+  - event: [ manual ]
+  # - event: [ cron ]
+  #   cron: '0 0 * * 0'  # Run weekly on Sunday at 00:00
+  # - event: push
+  #   path: *i18n_path
+
+clone:
+  git:
+    image: *git_image
+    settings:
+      depth: 1
+
+steps:
+  download-translations:
+    image: *crowdin_image
+    environment:
+      CROWDIN_PERSONAL_TOKEN:
+        from_secret: CROWDIN_PERSONAL_TOKEN
+    commands:
+      - crowdin init --token "${CROWDIN_PERSONAL_TOKEN}" --project-id "724667" --base-path "." --base-url "https://api.crowdin.com" --source "/i18n/locale/en/*.json" --translation "/i18n/locale/%locale%/%original_file_name%
+      - crowdin download
+
+  commit-changes:
+    image: *alpine_image
+    commands:
+      - apk add --no-cache git openssh
+      - mkdir -p ~/.ssh/
+      - echo "$${SSH_PRIVATE_KEY}" > ~/.ssh/id_ed25519
+      - chmod 600 ~/.ssh/id_ed25519
+      - git config --global user.email "pixivfe-bot@email.invalid"
+      - git config --global user.name "pixivfe-bot"
+      - git config --global init.defaultBranch main
+      - ssh-keyscan codeberg.org >> ~/.ssh/known_hosts  # Add server's SSH key to known hosts
+      - git remote set-url origin "git@codeberg.org:pixivfe-bot/PixivFE.git"
+      - git remote set-url upstream "git@codeberg.org:VnPower/PixivFE.git"
+      - if git status | grep -q modified; then git add i18n/locale && git commit -m "Update translations from Crowdin" && git push --force origin main:ci_crowdin-update; fi
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
+
+  create-pr:
+    image: *pr_plugin
+    pull: true
+    settings:
+      gitea_address: https://codeberg.org
+      gitea_token:
+        from_secret: GITEA_TOKEN
+      owner: VnPower
+      repo: PixivFE
+      branch: ci_crowdin-update
+      base_branch: upstream/v2
+      pr_title: "Update translations from Crowdin"
+      pr_body: "This PR updates translations pulled from Crowdin."
+      skip_on_missing_branch: true
+      close_pr_if_empty: true
+      delete_branch_if_pr_empty: true
+      merge_when_checks_succeed: false
+      delete_branch_after_merge: true
+    when:
+      status:
+        - success
