@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -13,7 +14,6 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
-	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/middleware"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
@@ -86,7 +86,7 @@ func run_sass() {
 	runtime.LockOSThread() // Go quirk https://github.com/golang/go/issues/27505
 	err := cmd.Run()
 	if err != nil {
-		log.Print(i18n.Errorf("when running sass: %w", err), err)
+		log.Print(fmt.Errorf("when running sass: %w", err), err)
 	}
 }
 
@@ -99,12 +99,12 @@ func chooseListener() net.Listener {
 		unixListener, err := net.Listen("unix", unixAddr)
 		if err != nil {
 			// Panic with the error description if unable to listen on Unix socket
-			panic(i18n.Errorf("failed to listen on Unix socket %q: %w", unixAddr, err))
+			panic(fmt.Errorf("failed to listen on Unix socket %q: %w", unixAddr, err))
 		}
 
 		// Assign the listener and log where we are listening
 		listener = unixListener
-		log.Print(i18n.Sprintf("Listening on Unix domain socket: %v", unixAddr))
+		log.Print(fmt.Sprintf("Listening on Unix domain socket: %v", unixAddr))
 
 	} else {
 		// Otherwise, fall back to TCP listener
@@ -112,7 +112,7 @@ func chooseListener() net.Listener {
 		tcpListener, err := net.Listen("tcp", addr)
 		if err != nil {
 			// Panic with the error description if unable to listen on TCP
-			log.Panic(i18n.Sprintf("Failed to start TCP listener on %v: %v", addr, err))
+			log.Panic(fmt.Sprintf("Failed to start TCP listener on %v: %v", addr, err))
 		}
 
 		// Assign the TCP listener
@@ -123,11 +123,11 @@ func chooseListener() net.Listener {
 		_, port, err := net.SplitHostPort(addr)
 		if err != nil {
 			// Panic in case of invalid split into host and port
-			panic(i18n.Errorf("error parsing listener address %q: %w", addr, err))
+			panic(fmt.Errorf("error parsing listener address %q: %w", addr, err))
 		}
 
 		// Log the address and convenient URL for local development
-		log.Print(i18n.Sprintf("Listening on %v. Accessible at: http://pixivfe.localhost:%v/", addr, port))
+		log.Print(fmt.Sprintf("Listening on %v. Accessible at: http://pixivfe.localhost:%v/", addr, port))
 	}
 
 	return listener

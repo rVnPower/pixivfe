@@ -29,14 +29,14 @@ const (
 	R18G XRestrict = 2
 )
 
-func (x XRestrict) String() string {
+func (x XRestrict) Localize(l i18n.Localizer) string {
 	switch x {
 	case Safe:
-		return i18n.Tr("Safe")
+		return l.Tr("Safe")
 	case R18:
-		return i18n.Tr("R18")
+		return l.Tr("R18")
 	case R18G:
-		return i18n.Tr("R18G")
+		return l.Tr("R18G")
 	}
 	log.Panicf("invalid value: %#v", int(x))
 	return ""
@@ -56,14 +56,14 @@ const (
 	AI      AiType = 2
 )
 
-func (x AiType) String() string {
+func (x AiType) Localize(l i18n.Localizer) string {
 	switch x {
 	case Unrated:
-		return i18n.Tr("Unrated")
+		return l.Tr("Unrated")
 	case NotAI:
-		return i18n.Tr("Not AI")
+		return l.Tr("Not AI")
 	case AI:
-		return i18n.Tr("AI")
+		return l.Tr("AI")
 	}
 	log.Panicf("invalid value: %#v", int(x))
 	return ""

@@ -4,6 +4,9 @@ go 1.23
 
 toolchain go1.23.1
 
+// for go-jnode
+replace encoding/json => github.com/goccy/go-json v0.10.3
+
 require (
 	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/PuerkitoBio/goquery v1.10.0
@@ -19,6 +22,7 @@ require (
 	github.com/soluble-ai/go-jnode v0.1.11
 	github.com/tidwall/gjson v1.18.0
 	github.com/yargevad/filepathx v1.0.0
+	github.com/zeebo/xxh3 v1.0.2
 	golang.org/x/net v0.30.0
 )
 
@@ -27,6 +31,7 @@ require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
+	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	golang.org/x/text v0.19.0 // indirect

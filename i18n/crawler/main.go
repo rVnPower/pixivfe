@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"regexp"
 	"strings"
@@ -26,7 +27,10 @@ func main() {
 		// processFile_jet(file, result)
 	}
 
-	os.Stdout.WriteString(result.String())
+
+	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(result)
 }
 
 var re_command_fullmatch = regexp.MustCompile(`\A([\s\n# =]*\{\{[^\{\}]*\}\})*[\s\n]*\z`)

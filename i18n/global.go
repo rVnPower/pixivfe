@@ -5,23 +5,24 @@ import (
 	"fmt"
 )
 
+var GlobalLocale string = "en"
+
 func Error(text string) error {
-	text = lookup(text)
+	text = LocalizerOf(GlobalLocale).lookup(text)
 	return errors.New(text)
 }
 
 func Errorf(format string, a ...any) error {
-	format = lookup(format)
+	format = LocalizerOf(GlobalLocale).lookup(format)
 	return fmt.Errorf(format, a...)
 }
 
 func Sprintf(format string, a ...any) string {
-	format = lookup(format)
+	format = LocalizerOf(GlobalLocale).lookup(format)
 	return fmt.Sprintf(format, a...)
 }
 
 // translate string
 func Tr(text string) string {
-	return lookup(text)
+	return LocalizerOf(GlobalLocale).lookup(text)
 }
-
