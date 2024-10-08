@@ -210,7 +210,7 @@
           </div>
 
           <!-- Series navigation, if present -->
-          <!-- NOTE: col element unconditionally for spacing -->
+          <!-- NOTE: col element rendered unconditionally for spacing -->
           <div class="col-12 my-4">
           {{- if .Novel.SeriesNavData }}
             <h2 class="text-center mb-2">
@@ -219,8 +219,14 @@
               </a>
             </h2>
             <h3 class="text-body-secondary text-center mb-4">
+              <!-- NOTE: the logic below is necessary because some series consist of only a single work, and "1 works" would be incorrect -->
               <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
-                <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }} works in this series
+                <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
+                {{- if len(.NovelSeriesContentTitles) == 1 }}
+                  work in this series
+                {{- else }}
+                  works in this series
+                {{- end }}
               </a>
             </h3>
 

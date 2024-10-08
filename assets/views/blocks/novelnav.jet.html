@@ -1,22 +1,35 @@
 {{- block NovelNav(baseURL, paths, names, activeState="") }}
-  <div class="row nav nav-underline justify-content-center bg-charcoal-surface2 rounded py-4 mx-4">
+  <!-- NOTE: Border or no border? cant decide -->
+  <div class="row nav nav-underline justify-content-center border border-1 rounded py-4 mx-4">
+      {{- activeIndex := -1 }}
       {{- range i, k := paths }}
-      <div class="col-12 col-lg-3">
-          {{ if k == activeState }}
-          <span class="nav-link text-center
-              {{ activeState == k ? "active border-bottom border-4 border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}"
-              {{ activeState == k ? `aria-current="page"` : "" }}
-              >
-              {{ names[i] }}
-          </span>
-          {{- else }}
-          <a class="nav-link text-center
-              {{ activeState == k ? "active border-bottom border-4 border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}"
-              {{ activeState == k ? `aria-current="page"` : "" }}
-              href="{{ baseURL }}{{k}}">
-              {{ names[i] }}
-          </a>
+          {{- if k == activeState }}
+              {{- activeIndex = i }}
           {{- end }}
+      {{- end }}
+
+      {{- if activeIndex > 0 }}
+      <div class="col-12 col-lg-3">
+          <a class="nav-link text-center text-body-secondary fw-semibold"
+             href="{{ baseURL }}{{paths[activeIndex-1]}}">
+             {{ names[activeIndex-1] }}
+          </a>
+      </div>
+      {{- end }}
+
+      <div class="col-12 col-lg-3">
+          <span class="nav-link text-center active border-bottom border-4 border-custom-color fw-bold"
+                aria-current="page">
+              {{ names[activeIndex] }}
+          </span>
+      </div>
+
+      {{- if activeIndex < len(paths) - 1 }}
+      <div class="col-12 col-lg-3">
+          <a class="nav-link text-center text-body-secondary fw-semibold"
+             href="{{ baseURL }}{{paths[activeIndex+1]}}">
+             {{ names[activeIndex+1] }}
+          </a>
       </div>
       {{- end }}
   </div>
