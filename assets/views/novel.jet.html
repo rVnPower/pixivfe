@@ -54,7 +54,7 @@
             <p class="mb-3">{{ raw: .Novel.Description }}</p>
 
             <!-- Tags -->
-            <div class="d-flex flex-wrap align-items-center mb-3">
+            <div class="d-flex flex-wrap align-items-center mb-2">
               {{- if .Novel.AiType == 2 }}
               <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
               {{- end }}
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Metadata -->
-            <div class="d-flex flex-wrap text-body-secondary small mt-auto me-2 mb-4">
+            <div class="d-flex flex-wrap text-body-secondary small me-2">
               <div class="me-3 mb-2 mb-lg-0">
                 <i class="bi bi-eye me-1"></i>
                 <span>{{- .Novel.Views }}</span>
@@ -101,8 +101,10 @@
               </div>
             </div>
 
+            <!-- Series navigation, if present -->
+            <!-- NOTE: using mt-4 as this element is rendered conditionally  -->
             {{- if .Novel.SeriesNavData }}
-            <div class="custom-card">
+            <div class="custom-card mt-4">
               <div class="custom-card-body bg-charcoal-surface2">
                 <h3 class="text-center mb-2">
                   <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
