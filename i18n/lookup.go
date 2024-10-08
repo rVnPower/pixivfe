@@ -22,7 +22,7 @@ func LocalizerOf(locale string) Localizer {
 	return Localizer{locale: locale}
 }
 
-// translate string
+// lookup string in the database
 func (l Localizer) lookup(text string) string {
 	translation_map, exist := locales[l.locale]
 	if !exist {

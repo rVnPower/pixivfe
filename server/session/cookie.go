@@ -21,6 +21,7 @@ const ( // the __Host thing force it to be secure and same-origin (no subdomain)
 	Cookie_HideArtR18        CookieName = "pixivfe-HideArtR18"
 	Cookie_HideArtR18G       CookieName = "pixivfe-HideArtR18G"
 	Cookie_HideArtAI         CookieName = "pixivfe-HideArtAI"
+	Cookie_Locale            CookieName = "pixivfe-Locale"
 )
 
 // Go can't make this a const...
@@ -35,6 +36,7 @@ var AllCookieNames []CookieName = []CookieName{
 	Cookie_HideArtR18,
 	Cookie_HideArtR18G,
 	Cookie_HideArtAI,
+	Cookie_Locale,
 }
 
 func GetCookie(r *http.Request, name CookieName) string {

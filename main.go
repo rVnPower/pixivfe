@@ -30,28 +30,30 @@ func main() {
 
 	// Conditionally initialize and start the proxy checker
 	if config.GlobalConfig.ProxyCheckEnabled {
-		var wg_firstCheck sync.WaitGroup
-		wg_firstCheck.Add(1)
-
 		go func() {
-			ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
-			proxy_checker.CheckProxies(ctx)
-			cancel()
-			wg_firstCheck.Done()
-			if config.GlobalConfig.ProxyCheckInterval != 0 {
-				for {
-					time.Sleep(config.GlobalConfig.ProxyCheckInterval)
-					ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
-					proxy_checker.CheckProxies(ctx)
-					cancel()
-				}
-			}
-		}()
+			var wg_firstCheck sync.WaitGroup
+			wg_firstCheck.Add(1)
 
-		// Wait for the first proxy check to complete
-		log.Println("Waiting for initial proxy check to complete...")
-		wg_firstCheck.Wait()
-		log.Println("Initial proxy check completed.")
+			go func() {
+				ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
+				proxy_checker.CheckProxies(ctx)
+				cancel()
+				wg_firstCheck.Done()
+				if config.GlobalConfig.ProxyCheckInterval != 0 {
+					for {
+						time.Sleep(config.GlobalConfig.ProxyCheckInterval)
+						ctx, cancel := context.WithTimeout(context.Background(), config.GlobalConfig.ProxyCheckTimeout)
+						proxy_checker.CheckProxies(ctx)
+						cancel()
+					}
+				}
+			}()
+
+			// Wait for the first proxy check to complete
+			log.Println("Waiting for initial proxy check to complete...")
+			wg_firstCheck.Wait()
+			log.Println("Initial proxy check completed.")
+		}()
 	} else {
 		log.Println("Skipping proxy checker initialization.")
 	}
@@ -60,10 +62,11 @@ func main() {
 
 	router := middleware.DefineRoutes()
 	// the first middleware is the most outer / first executed one
-	router.Use(middleware.ProvideUserContext) // needed for everything else
-	router.Use(middleware.LogRequest)         // all pages need this
-	router.Use(middleware.SetPrivacyHeaders)  // all pages need this
-	router.Use(middleware.HandleError)        // if the inner handler fails, this shows the error page instead
+	router.Use(middleware.ProvideUserContext)  // needed for everything else
+	router.Use(middleware.SetLocaleFromCookie) // needed for i18n.*()
+	router.Use(middleware.LogRequest)          // all pages need this
+	router.Use(middleware.SetPrivacyHeaders)   // all pages need this
+	router.Use(middleware.HandleError)         // if the inner handler fails, this shows the error page instead
 	router.Use(middleware.InitializeRateLimiter())
 
 	// watch and compile sass when in development mode

@@ -21,6 +21,7 @@ require (
 	github.com/sethvargo/go-limiter v1.0.0
 	github.com/soluble-ai/go-jnode v0.1.11
 	github.com/tidwall/gjson v1.18.0
+	github.com/timandy/routine v1.1.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/zeebo/xxh3 v1.0.2
 	golang.org/x/net v0.30.0
