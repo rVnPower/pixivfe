@@ -4,29 +4,32 @@
   <!-- The actual artwork itself, if not a ugoira -->
   <!-- NOTE: tried using a carousel, but doesn't really work that well -->
     {{- range index := .Images }}
-        <!-- This anchor element provides the link to the full size artwork  -->
-        <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
         <!-- Bootstrap + Jet wizardry to dynamically scale artwork -->
         {{- if .Width != 0 && .Height != 0 }}
         <!-- Display artwork at full width (col-12) if it is in landscape orientation -->
             {{- if .Width > .Height }}
             <div class="row justify-content-center mb-4">
                 <div class="col-12 p-0">
-                    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                    <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+                      <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                    </a>
                 </div>
             </div>
             <!-- Otherwise, display artwork at reduced width (col-8) if viewing on a device ≥768px in width (on small screens, the artwork is still displayed at full width) -->
             {{- else }}
             <div class="row justify-content-center mb-4">
                 <div class="col-sm-12 col-md-8 p-0">
-                <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+                    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                  </a>
                 </div>
             </div>
             {{- end }}
         {{- else }}
-            <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" />
+            <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+              <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" />
+            </a>
         {{- end }}
-        </a>
     {{- end }}
   {{- else }}
   <!-- The actual artwork itself, if a ugoira -->
