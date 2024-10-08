@@ -137,6 +137,12 @@ $utilities: map-merge(
   @extend .border-0;
   @extend .py-2;
   @extend .px-3;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: darken(map-get($custom-colors, charcoal-surface2), 5%) !important;
+    color: white;  // Ensure text remains white on hover
+  }
 }
 
 .custom-btn-secondary-flex {
