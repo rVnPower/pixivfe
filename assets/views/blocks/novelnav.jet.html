@@ -2,12 +2,21 @@
   <div class="row nav nav-underline justify-content-center">
       {{- range i, k := paths }}
       <div class="col-12 col-lg-3">
-          <a class="nav-link fs-6 text-center
+          {{ if k == activeState }}
+          <span class="nav-link text-center
+              {{ activeState == k ? "active border-bottom border-4 border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}"
+              {{ activeState == k ? `aria-current="page"` : "" }}
+              >
+              {{ names[i] }}
+          </span>
+          {{- else }}
+          <a class="nav-link text-center
               {{ activeState == k ? "active border-bottom border-4 border-custom-color fw-bold" : "text-body-secondary fw-semibold" }}"
               {{ activeState == k ? `aria-current="page"` : "" }}
               href="{{ baseURL }}{{k}}">
               {{ names[i] }}
           </a>
+          {{- end }}
       </div>
       {{- end }}
   </div>
