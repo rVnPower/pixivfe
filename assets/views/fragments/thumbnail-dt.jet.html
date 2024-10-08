@@ -3,7 +3,7 @@
 {{- hideR18G := CookieList["pixivfe-HideArtR18G"] }}
 {{- hideAi := CookieList["pixivfe-HideArtAI"] }}
 {{- AiType := isset(.AiType) ? .AiType : 0}}
-<div class="position-relative h-100">
+<div class="position-relative h-100 thumbnail-hover-dark">
   <!-- Placing the anchor element out here so that the div that contains the tags acts as a hyperlink -->
   <a target="{{ target }}" href="/artworks/{{ .ID }}" class="d-block h-100">
   <div class="position-absolute top-0 start-0 p-2 d-flex justify-content-between w-100">

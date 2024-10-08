@@ -12938,6 +12938,13 @@ textarea.form-control-lg {
   max-height: 40vh;
 }
 
+.thumbnail-hover-dark img {
+  transition: opacity 0.2s;
+}
+.thumbnail-hover-dark img:hover {
+  opacity: 0.8;
+}
+
 h1, .h1 {
   font-size: 1.75rem;
   font-weight: 700;

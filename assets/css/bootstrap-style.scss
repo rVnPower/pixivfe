@@ -175,6 +175,14 @@ $utilities: map-merge(
   max-height: 40vh;
 }
 
+.thumbnail-hover-dark img {
+  transition: opacity 0.2s;  // Smooth transition when hovering
+
+  &:hover {
+    opacity: 0.8;  // Apply darkening effect
+  }
+}
+
 /// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
 h1 {
   font-size: $h3-font-size;
