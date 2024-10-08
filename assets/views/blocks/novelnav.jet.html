@@ -1,36 +1,33 @@
 {{- block NovelNav(baseURL, paths, names, activeState="") }}
-  <!-- NOTE: Border or no border? cant decide -->
-  <div class="row nav nav-underline justify-content-center border border-1 rounded py-4 mx-4">
-      {{- activeIndex := -1 }}
-      {{- range i, k := paths }}
-          {{- if k == activeState }}
-              {{- activeIndex = i }}
-          {{- end }}
-      {{- end }}
+    {{- activeIndex := -1 }}
+    {{- range i, k := paths }}
+        {{- if k == activeState }}
+            {{- activeIndex = i }}
+        {{- end }}
+    {{- end }}
 
-      {{- if activeIndex > 0 }}
-      <div class="col-12 col-lg-3">
-          <a class="nav-link text-center text-body-secondary fw-semibold"
-             href="{{ baseURL }}{{paths[activeIndex-1]}}">
-             {{ names[activeIndex-1] }}
-          </a>
-      </div>
-      {{- end }}
+    {{- if activeIndex > 0 }}
+    <div class="col-12 col-lg-3">
+        <a class="nav-link text-center text-body-secondary fw-semibold"
+            href="{{ baseURL }}{{paths[activeIndex-1]}}">
+            {{ names[activeIndex-1] }}
+        </a>
+    </div>
+    {{- end }}
 
-      <div class="col-12 col-lg-3">
-          <span class="nav-link text-center active border-bottom border-4 border-custom-color fw-bold"
-                aria-current="page">
-              {{ names[activeIndex] }}
-          </span>
-      </div>
+    <div class="col-12 col-lg-3">
+        <span class="nav-link text-center active border-bottom border-4 border-custom-color fw-bold"
+              aria-current="page">
+            {{ names[activeIndex] }}
+        </span>
+    </div>
 
-      {{- if activeIndex < len(paths) - 1 }}
-      <div class="col-12 col-lg-3">
-          <a class="nav-link text-center text-body-secondary fw-semibold"
-             href="{{ baseURL }}{{paths[activeIndex+1]}}">
-             {{ names[activeIndex+1] }}
-          </a>
-      </div>
-      {{- end }}
-  </div>
+    {{- if activeIndex < len(paths) - 1 }}
+    <div class="col-12 col-lg-3">
+        <a class="nav-link text-center text-body-secondary fw-semibold"
+            href="{{ baseURL }}{{paths[activeIndex+1]}}">
+            {{ names[activeIndex+1] }}
+        </a>
+    </div>
+    {{- end }}
 {{- end }}
