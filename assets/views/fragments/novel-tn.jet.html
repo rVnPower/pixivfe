@@ -2,7 +2,7 @@
   <!-- NOTE: bg-charcoal-surface1 doesn't look that nice, but the inconsistent content of the cards means that we need a way to visually group them -->
   <div class="custom-novel-card bg-charcoal-surface1 p-3 d-flex flex-column thumbnail-hover-dark">
     <div class="row g-3 flex-grow-1">
-      <div class="col-4 col-md-2">
+      <div class="col-4 col-md-3">
         <a href="/novel/{{ .ID }}" class="text-decoration-none">
           <div class="ratio ratio-3x4">
             <div class="thumbnail-wrapper rounded overflow-hidden">
@@ -11,7 +11,7 @@
           </div>
         </a>
       </div>
-      <div class="col-8 col-md-10 d-flex flex-column">
+      <div class="col-8 col-md-9 d-flex flex-column">
         <!-- Novel title -->
         <h4 class="text-truncate">
           <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
