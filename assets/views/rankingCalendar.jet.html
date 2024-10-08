@@ -2,7 +2,7 @@
 {{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center g-4">
-  <h1 class="text-center"><i class="bi bi-calendar3 me-2"></i>Ranking calendar</h1>
+  <h1 class="text-center"><i class="bi bi-calendar me-2"></i>Ranking calendar</h1>
 
   <noscript>
     <div class="col-12">
@@ -63,7 +63,7 @@
         <!-- TODO: make the Options button appear in the same block as the form at sm breakpoint and below -->
         <div class="d-flex flex-column flex-sm-row align-items-start justify-content-start justify-content-sm-between mb-4" aria-label="Ranking options">
           <div class="d-flex flex-column mb-3 mb-sm-0">
-            <h2><i class="bi bi-calendar3 me-2"></i>Calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h2>
+            <h2><i class="bi bi-calendar me-2"></i>Ranking Calendar for {{ .ThisMonth.MonthLiteral }} {{ .Year }}</h2>
             <form action="/rankingCalendar" method="post">
               <input type="hidden" name="mode" value="{{ .Mode }}" />
               <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy)</label>
