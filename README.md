@@ -12,6 +12,7 @@ A open source alternative frontend for Pixiv.
 
 [![CI badge](https://ci.codeberg.org/api/badges/12556/status.svg)](https://ci.codeberg.org/repos/12556)
 [![Go Report Card](https://goreportcard.com/badge/codeberg.org/vnpower/pixivfe/v2)](https://goreportcard.com/report/codeberg.org/vnpower/pixivfe)
+[![Crowdin](https://badges.crowdin.net/pixivfe/localized.svg)](https://crowdin.com/project/pixivfe)
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
 [![Docker Stars](https://img.shields.io/docker/stars/vnpower/pixivfe)](https://hub.docker.com/r/vnpower/pixivfe)
