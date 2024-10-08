@@ -1,12 +1,11 @@
 package core
 
 import (
-	"log"
 	"strings"
 	"time"
 
-	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
+	"codeberg.org/vnpower/pixivfe/v2/server/session"
 
 	"github.com/goccy/go-json"
 	"net/http"
