@@ -12,10 +12,12 @@
       <div class="row g-0">
         {{- if .Tag.Metadata.ID }}
         <!-- Tag artwork -->
-        <div class="col-md-4">
-          <a href="/artworks/{{ .Tag.Metadata.ID }}">
-            <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid h-100 object-fit-cover card-img-top rounded-top-5 rounded-start-md-5 rounded-end-md-0" />
-          </a>
+        <div class="col-md-4 thumbnail-hover-dark">
+          <div class="thumbnail-wrapper rounded-top-5 rounded-start-md-5 rounded-end-md-0 overflow-hidden">
+            <a href="/artworks/{{ .Tag.Metadata.ID }}">
+              <img src="{{ .Tag.Metadata.Image }}" alt="{{ .Tag.Name }}" class="img-fluid w-100 h-100 object-fit-cover" />
+            </a>
+          </div>
         </div>
         {{- end }}
         <!-- Tag information -->
