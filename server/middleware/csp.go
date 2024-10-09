@@ -20,6 +20,7 @@ func SetPrivacyHeaders(h http.Handler) http.Handler {
 		// use this if need iframe: `frame-ancestors 'self'`
 		header.Add("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()")
 		// TODO: remove style-src 'unsafe-inline'
+		// NOTE: default-src 'self' is required for rel="prefetch" to work on Firefox
 		if !strings.HasPrefix(r.URL.Path, "/diagnostics") {
 			header.Add("Content-Security-Policy", fmt.Sprintf("base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: %s; media-src 'self' %s; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none';", session.GetImageProxyOrigin(r), session.GetImageProxyOrigin(r)))
 		}

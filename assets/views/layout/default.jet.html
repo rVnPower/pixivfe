@@ -47,6 +47,14 @@
     <meta property="og:image" content="{{ .MetaImage }}" />
     {{- end }}
 
+    <!-- Prefetch rules -->
+    <!-- NOTE: not using Speculation Rules API due to being unavailable in Firefox -->
+    <!-- <link rel="prefetch" href="/" />
+    <link rel="prefetch" href="/discovery" />
+    <link rel="prefetch" href="/ranking" />
+    <link rel="prefetch" href="/rankingCalendar" />
+    <link rel="prefetch" href="/newest" /> -->
+
     <!-- Hide elements that require JS when scripting is disabled; only works when inline styling is allowed -->
     <noscript>
       <style>
