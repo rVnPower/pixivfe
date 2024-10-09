@@ -12,7 +12,11 @@
 
 # Main server block for caddy.localhost
 caddy.localhost {
-  tls internal  # Use Caddy's automatic HTTPS with internal CA
+  # Use Caddy's automatic HTTPS with internal CA
+  tls internal
+
+  # Enable encoding, prefer zstd
+  encode zstd gzip
 
   # Reverse proxy configuration (pick one or the other)
   ## With Varnish as a caching layer (recommended if using PixivFE's internal image proxy)
