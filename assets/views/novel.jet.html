@@ -301,7 +301,7 @@
           <div class="overflow-auto" id="horizontal-scroll">
             <div class="row flex-nowrap flex-lg-wrap">
               {{- range .Novel.UserNovels }}
-              <div class="col mt-1">
+              <div class="col-12 mt-1">
                 <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
                 {{- include "fragments/novel-tn" . }}
                 </div>
@@ -330,7 +330,7 @@
             {{- end }}
             {{- if .Novel.CommentOff == 1  }}
             <p class="mb-4">The creator turned comments off</p>
-            {{- else if .Novel.CommentCount == 1 }}
+            {{- else if .Novel.CommentCount == 0 }}
             <p class="mb-4">There are no comments yet</p>
             {{- else }}
             <div class="list-group" id="comments-container">
@@ -381,7 +381,7 @@
     </div>
   </div>
 
-  <div class="col-12">
+  <div class="col-12 mt-5">
     <h2>Related works</h2>
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .NovelRelated }}
