@@ -55,9 +55,11 @@ func GetTemplatingVariables(r *http.Request) jet.VarMap {
 	pageURL := r.URL.String()
 
 	cookies := map[string]string{}
+	cookies_ordered := []struct{k string; v string}{}
 	for _, name := range session.AllCookieNames {
 		value := session.GetCookie(r, name)
 		cookies[string(name)] = value
+		cookies_ordered = append(cookies_ordered, struct{k string; v string}{string(name), value})
 	}
 
 	queries := make(map[string]string)
@@ -71,5 +73,6 @@ func GetTemplatingVariables(r *http.Request) jet.VarMap {
 		Set("PageURL", pageURL).
 		Set("LoggedIn", token != "").
 		Set("Queries", queries).
-		Set("CookieList", cookies)
+		Set("CookieList", cookies).
+		Set("CookieListOrdered", cookies_ordered)
 }

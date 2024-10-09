@@ -162,29 +162,29 @@
 
   <!-- End of general settings -->
   <h2>Current cookie values</h2>
-  <div>
-    <h3>Cookie list</h3>
-  </div>
-  {{- range k, v := CookieList }}
+
+  {{- range CookieListOrdered }}
   <div class="settings-set-cookie">
-    <h3>{{k}}</h3>
+    <h3>{{.k}}</h3>
     <form action="/settings/set-cookie" method="post">
-      <input type="hidden" name="key" value="{{k}}" />
-      <input type="text" name="value" value="{{v}}" />
+      <input type="hidden" name="key" value="{{.k}}" />
+      <input type="text" name="value" value="{{.v}}" />
       <input type="submit" value="Set" />
     </form>
-
   </div>
   {{- end }}
-  <div>
 
-    <h3>Raw settings</h3>
+  <div>
+    <h3>Batch operation</h3>
     <p>
       You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance's cookies went expired.
     </p>
     <p>Invalid values will be ignored.</p>
     <form action="/settings/raw" method="post">
-      <textarea name="raw" rows="10" cols="80">{{range k, v := CookieList}}&#10;{{k}}={{v}}{{end}}
+      <textarea name="raw" rows="10" cols="80">
+{{- range CookieListOrdered -}}
+{{.k}}={{.v}}
+{{end -}}
       </textarea>
       <input type="submit" value="Set raw settings" />
     </form>
