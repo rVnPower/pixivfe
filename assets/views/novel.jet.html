@@ -297,7 +297,7 @@
       </div>
       <div class="overflow-auto p-4 pb-0" id="horizontal-scroll">
         <div class="row flex-nowrap">
-          {{- range .NovelRelated }}
+          {{- range .Novel.UserNovels }}
             {{- include "fragments/novel-tn" . }}
           {{- end }}
         </div>

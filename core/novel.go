@@ -94,6 +94,7 @@ type Novel struct {
 		} `json:"urls"`
 	} `json:"textEmbeddedImages"`
 	CommentsList []Comment
+	UserNovels   map[string]*NovelBrief `json:"userNovels"`
 }
 
 type NovelBrief struct {
@@ -146,6 +147,20 @@ func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	if err != nil {
 		return novel, err
 	}
+
+	// Clean up UserNovels map by removing null entries
+	if novel.UserNovels != nil {
+		cleanedUserNovels := make(map[string]*NovelBrief)
+		for id, novelBrief := range novel.UserNovels {
+			if novelBrief != nil {
+				cleanedUserNovels[id] = novelBrief
+			}
+		}
+		novel.UserNovels = cleanedUserNovels
+	}
+
+	// Debug logging
+	// fmt.Printf("UserNovels populated with %d entries after cleanup\n", len(novel.UserNovels))
 
 	novel.Content = re_r.ReplaceAllStringFunc(novel.Content, func(s string) string {
 		illustid := re_d.FindString(s)
