@@ -122,7 +122,7 @@
                   </a>
                 </h4>
                 <hr class="my-3">
-                <div class="row nav nav-underline justify-content-center pb-2">
+                <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
                   {{ activeState := .Novel.ID }}
                   {{ yield NovelNav(
                       baseURL="/novel/",
@@ -270,7 +270,7 @@
           </a>
         </h3>
         <hr class="my-4">
-        <div class="row nav nav-underline justify-content-center pb-2">
+        <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
           {{ activeState := .Novel.ID }}
           {{ yield NovelNav(
               baseURL="/novel/",

@@ -7,7 +7,7 @@
     {{- end }}
 
     {{- if activeIndex > 0 }}
-    <div class="col-12 col-lg-3">
+    <div class="col">
         <a class="nav-link text-center text-body-secondary fw-semibold"
             href="{{ baseURL }}{{paths[activeIndex-1]}}">
             {{ names[activeIndex-1] }}
@@ -15,7 +15,7 @@
     </div>
     {{- end }}
 
-    <div class="col-12 col-lg-3">
+    <div class="col">
         <span class="nav-link text-center active border-bottom border-4 border-custom-color fw-bold"
               aria-current="page">
             {{ names[activeIndex] }}
@@ -23,7 +23,7 @@
     </div>
 
     {{- if activeIndex < len(paths) - 1 }}
-    <div class="col-12 col-lg-3">
+    <div class="col">
         <a class="nav-link text-center text-body-secondary fw-semibold"
             href="{{ baseURL }}{{paths[activeIndex+1]}}">
             {{ names[activeIndex+1] }}
