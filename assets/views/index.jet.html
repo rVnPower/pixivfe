@@ -34,12 +34,18 @@
   </div>
 
   <div class="col-12">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2>Newest works by users you follow</h2>
+    <div class="d-flex flex-row justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Latest works by followed</h2>
       <a href="/self/followingWorks" class="custom-btn-secondary">See more</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-      {{- include "fragments/small-tn" .Data.Following }}
+      {{- if len(.Data.Following) > 0 }}
+        {{- include "fragments/small-tn" .Data.Following }}
+      {{- else }}
+      <div class="alert alert-light w-25 mx-auto" role="alert">
+        <p class="text-center mb-0">Nothing here yet&#8212;find a user to follow!</p>
+      </div>
+      {{- end }}
     </div>
   </div>
 
