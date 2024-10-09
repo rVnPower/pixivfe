@@ -1,0 +1,31 @@
+{
+  # General options
+  http_port 80
+  https_port 443
+
+  # Logging configuration
+  log {
+    output stdout
+    format console
+  }
+}
+
+# Main server block for caddy.localhost
+caddy.localhost {
+  tls internal  # Use Caddy's automatic HTTPS with internal CA
+
+  # Reverse proxy configuration (pick one or the other)
+  ## With Varnish as a caching layer (recommended if using PixivFE's internal image proxy)
+  reverse_proxy varnish:80
+
+  ## Bypass Varnish and send requests directly to PixivFE on port 8282
+  #reverse_proxy pixivfe:8282
+
+  # Header manipulation
+  header {
+    # Cross-Origin isolation headers
+    Cross-Origin-Embedder-Policy "require-corp"
+    Cross-Origin-Opener-Policy "same-origin"
+    Cross-Origin-Resource-Policy "same-origin"
+  }
+}
