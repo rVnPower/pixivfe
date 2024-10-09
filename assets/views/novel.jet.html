@@ -289,7 +289,7 @@
       <!-- Author information -->
       <div class="col-12 col-lg-6">
         <div class="custom-card">
-          <div class="custom-card-body bg-charcoal-surface1 p-4">
+          <div class="custom-card-body bg-charcoal-surface1 py-3 px-4">
             <div class="d-flex align-items-center">
               <a href="/users/{{ .User.ID }}" class="me-3">
                 <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;" />
@@ -325,7 +325,8 @@
             <div class="list-group" id="comments-container">
               {{ range .Novel.CommentsList }}
               <!-- Element for a single comment -->
-              <div class="list-group-item border-0 bg-charcoal-surface1 p-0 mb-4 comment-item">
+              <!-- NOTE: py-1 to give each comment a bit more breathing space -->
+              <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
                 <div class="row">
                   <!-- Comment author avatar image -->
                   <div class="col-auto">
@@ -334,7 +335,7 @@
                     </a>
                   </div>
 
-                  <div class="col">
+                  <div class="col px-2">
                     <!-- Comment author name and date -->
                     <div class="d-md-flex align-items-center mb-2">
                       <div class="me-md-2">
