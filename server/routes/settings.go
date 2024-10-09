@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"bufio"
+	"io"
 	"net/http"
 	"regexp"
 	"slices"
@@ -131,10 +133,20 @@ func setCookie(w http.ResponseWriter, r *http.Request) error {
 
 func setRawCookie(w http.ResponseWriter, r *http.Request) error {
 	raw := r.FormValue("raw")
-	lines := strings.Split(raw, "\n")
+	reader := bufio.NewReader(strings.NewReader(raw))
+	for {
+		line, isPrefix, err := reader.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		if isPrefix {
+			return bufio.ErrBufferFull
+		}
+		if err != nil {
+			return err
+		}
 
-	for _, line := range lines {
-		sub := strings.Split(line, "=")
+		sub := strings.Split(string(line), "=")
 		if len(sub) != 2 {
 			continue
 		}

@@ -24,7 +24,7 @@ type cacheKey = struct {
 	file   string
 }
 
-var tm map[cacheKey]*strings.Replacer
+var tm = map[cacheKey]*strings.Replacer{}
 
 // returns nil when nothing need to be replaced
 func Replacer(locale string, file string) *strings.Replacer {

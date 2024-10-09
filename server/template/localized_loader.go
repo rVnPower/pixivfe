@@ -31,10 +31,10 @@ func (l *LocalizedFSLoader) Exists(templatePath string) bool {
 
 func (l *LocalizedFSLoader) Open(templatePath string) (io.ReadCloser, error) {
 	locale := i18n.GetLocale()
-	templatePath = filepath.Join(l.Dir, filepath.FromSlash(templatePath))
 	i18n_path := path.Join(l.Dir, templatePath)
+	templatePath = filepath.Join(l.Dir, filepath.FromSlash(templatePath))
 
-	// println("load replacer:", locale, i18n_path)
+	//println("load replacer:", i18n_path)
 
 	replacer := i18n.Replacer(locale, i18n_path)
 	if replacer == nil {

@@ -24,7 +24,7 @@ var RecordedSpans = []Span{}
 // It manages the RecordedSpans slice to maintain a maximum number of recorded spans.
 func LogAndRecord(span Span) {
 	// Log the span with a formatted timestamp, duration, and log line
-	Logger.Printf("%v +%-5.3f %s", span.GetStartTime().Format("2006-01-02 15:04:05.000"), float64(Duration(span))/float64(time.Second), span.LogLine())
+	Logger.Printf("%v +%-5.3f %s locale=%s", span.GetStartTime().Format("2006-01-02 15:04:05.000"), float64(Duration(span))/float64(time.Second), span.LogLine(), i18n.GetLocale())
 
 	// If MaxRecordedCount is set, manage the RecordedSpans slice
 	if MaxRecordedCount != 0 {
