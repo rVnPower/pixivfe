@@ -27,7 +27,6 @@ func main() {
 		// processFile_jet(file, result)
 	}
 
-
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "  ")
 	encoder.Encode(result)

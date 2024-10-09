@@ -19,12 +19,12 @@ var views *jet.Set
 func Init(DisableCache bool, assetsLocation string) {
 	if DisableCache {
 		views = jet.NewSet(
-			jet.NewOSFileSystemLoader(assetsLocation),
+			NewLocalizedFSLoader(assetsLocation),
 			jet.InDevelopmentMode(), // disable cache
 		)
 	} else {
 		views = jet.NewSet(
-			jet.NewOSFileSystemLoader(assetsLocation),
+			NewLocalizedFSLoader(assetsLocation),
 		)
 	}
 	for fn_name, fn := range GetTemplateFunctions() {

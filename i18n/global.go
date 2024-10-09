@@ -7,32 +7,38 @@ import (
 	"github.com/timandy/routine"
 )
 
-var Locale = routine.NewInheritableThreadLocal[string]()
+var goroutine_locale = routine.NewInheritableThreadLocal[string]()
 
-func getLocalizer() Localizer {
-	locale := Locale.Get()
+const BaseLocale = "en"
+
+func GetLocale() string {
+	locale := goroutine_locale.Get()
 	if locale == "" {
-		locale = "en"
+		locale = BaseLocale
 	}
-	return LocalizerOf(locale)
+	return locale
+}
+
+func SetLocale(locale string) {
+	goroutine_locale.Set(locale)
 }
 
 func Error(text string) error {
-	text = getLocalizer().lookup(text)
+	text = __lookup_skip_stack_2(GetLocale(), text)
 	return errors.New(text)
 }
 
 func Errorf(format string, a ...any) error {
-	format = getLocalizer().lookup(format)
+	format = __lookup_skip_stack_2(GetLocale(), format)
 	return fmt.Errorf(format, a...)
 }
 
 func Sprintf(format string, a ...any) string {
-	format = getLocalizer().lookup(format)
+	format = __lookup_skip_stack_2(GetLocale(), format)
 	return fmt.Sprintf(format, a...)
 }
 
 // translate string
 func Tr(text string) string {
-	return getLocalizer().lookup(text)
+	return __lookup_skip_stack_2(GetLocale(), text)
 }

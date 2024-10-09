@@ -60,17 +60,14 @@ func loadLocale_helper(fs_i18n fs.FS, locale string, filename string) (map[strin
 	return translated_strings, nil
 }
 
-type Localizer struct {
-	locale string
-}
+// (internal, do not use directly) lookup string in the database
+// call stack should look like this: caller (in the correct file) -> another function -> __lookup_skip_stack_2
+func __lookup_skip_stack_2(locale string, text string) string {
+	if locale == BaseLocale {
+		return text
+	}
 
-func LocalizerOf(locale string) Localizer {
-	return Localizer{locale: locale}
-}
-
-// lookup string in the database
-func (l Localizer) lookup(text string) string {
-	translation_map, exist := locales[l.locale]
+	translation_map, exist := locales[locale]
 	if !exist {
 		return text
 	}
@@ -88,11 +85,6 @@ func (l Localizer) lookup(text string) string {
 	}
 
 	return translation
-}
-
-// pad stack frame by 1
-func (l Localizer) Tr(text string) string {
-	return l.lookup(text)
 }
 
 func SuccintId(file string, text string) string {
