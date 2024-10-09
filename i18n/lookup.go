@@ -3,6 +3,12 @@ package i18n
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"encoding/json"
+	"io/fs"
+	"log"
+	"maps"
+	"os"
+	"path"
 	"runtime"
 
 	"github.com/zeebo/xxh3"
@@ -11,7 +17,47 @@ import (
 var locales = map[string]map[string]string{}
 
 func init() {
-	// todo: load locales into into `locales`
+	fs_i18n := os.DirFS("i18n/locale")
+	entries, err := fs.ReadDir(fs_i18n, ".")
+	if err != nil {
+		panic(err)
+	}
+	for _, entry := range entries {
+		if !entry.Type().IsDir() {
+			continue
+		}
+		locales[entry.Name()], err = loadLocale(fs_i18n, entry.Name())
+		if err != nil {
+			panic(err)
+		}
+		log.Printf("Loaded locale %s", entry.Name())
+	}
+}
+
+func loadLocale(fs_i18n fs.FS, locale string) (map[string]string, error) {
+	m0, err := loadLocale_helper(fs_i18n, locale, "code.json")
+	if err != nil {
+		return nil, err
+	}
+	m1, err := loadLocale_helper(fs_i18n, locale, "template.json")
+	if err != nil {
+		return nil, err
+	}
+	maps.Copy(m0, m1)
+	return m0, nil
+}
+func loadLocale_helper(fs_i18n fs.FS, locale string, filename string) (map[string]string, error) {
+	file, err := fs_i18n.Open(path.Join(locale, filename))
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	var translated_strings map[string]string
+	err = json.NewDecoder(file).Decode(&translated_strings)
+	if err != nil {
+		return nil, err
+	}
+	return translated_strings, nil
 }
 
 type Localizer struct {
