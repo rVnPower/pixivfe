@@ -284,89 +284,99 @@
     </div>
   </div>
 
-  <div class="col-12 col-lg-9">
-    <!-- Author information -->
-    <div class="custom-card bg-black mb-4 mb-lg-0">
-      <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
-        <div class="d-flex justify-content-between align-items-center">
-          <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .User.ID }}/novels#checkpoint">
-            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px" />
-            <h2 class="m-0">{{ .User.Name }}</h2>
-          </a>
-        </div>
-      </div>
-      <div class="overflow-auto p-4 pb-0" id="horizontal-scroll">
-        <div class="row flex-nowrap">
-          {{- range .Novel.UserNovels }}
-            {{- include "fragments/novel-tn" . }}
-          {{- end }}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Comments section -->
-  <!--
-  TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
-        Need to extract this out to a block that takes parameters
-  -->
-  <div class="col-12 col-lg-9">
-    <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
-        {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
-        <h2>0 Comments</h2>
-        {{- else if .Novel.CommentCount == 1 }}
-        <h2>1 Comment</h2>
-        {{- else }}
-        <h2>{{ .Novel.CommentCount }} Comments</h2>
-        {{- end }}
-        {{- if .Novel.CommentOff == 1  }}
-        <p class="mb-4">The creator turned comments off</p>
-        {{- else if .Novel.CommentCount == 1 }}
-        <p class="mb-4">There are no comments yet</p>
-        {{- else }}
-        <div class="list-group" id="comments-container">
-          {{ range .Novel.CommentsList }}
-          <!-- Element for a single comment -->
-          <!-- NOTE: py-1 to give each comment a bit more breathing space -->
-          <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
-            <div class="row">
-              <!-- Comment author avatar image -->
-              <div class="col-auto">
-                <a href="/users/{{ .AuthorID }}">
-                  <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
-                </a>
-              </div>
-
-              <div class="col px-2">
-                <!-- Comment author name and date -->
-                <div class="d-md-flex align-items-center mb-2">
-                  <div class="me-md-2">
-                    <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
-                      <h6 class="mb-0">{{- .AuthorName }}</h6>
-                    </a>
-                  </div>
-                  <div>
-                    <small class="text-muted">{{ .Date }}</small>
-                  </div>
-                </div>
-
-                <!-- Stamp or emoji -->
-                {{- if .Stamp }}
-                <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
-                {{- else }}
-                <!-- Comment with emojis -->
-                <p class="d-flex align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
-                {{ end }}
-              </div>
+  <div class="col-12">
+    <div class="row">
+      <!-- Recent works -->
+      <div class="col-12 col-lg-6">
+        <!-- Author information -->
+        <div class="custom-card bg-black mb-4 mb-lg-0">
+          <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .User.ID }}/novels#checkpoint">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px" />
+                <h2 class="m-0">Works by {{ .User.Name }}</h2>
+              </a>
             </div>
           </div>
-          {{- end }}
-          <div class="d-flex justify-content-center">
-            <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+          <div class="overflow-auto" id="horizontal-scroll">
+            <div class="row flex-nowrap flex-lg-wrap">
+              {{- range .Novel.UserNovels }}
+              <div class="col mt-1">
+                <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+                {{- include "fragments/novel-tn" . }}
+                </div>
+                <hr class="d-none d-lg-block my-0">
+              </div>
+              {{- end }}
+            </div>
           </div>
         </div>
-        {{ end }}
+      </div>
+
+      <!-- Comments section -->
+      <!--
+      TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
+            Need to extract this out to a block that takes parameters
+      -->
+      <div class="col-12 col-lg-6">
+        <div class="custom-card">
+          <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
+            {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
+            <h2>0 Comments</h2>
+            {{- else if .Novel.CommentCount == 1 }}
+            <h2>1 Comment</h2>
+            {{- else }}
+            <h2>{{ .Novel.CommentCount }} Comments</h2>
+            {{- end }}
+            {{- if .Novel.CommentOff == 1  }}
+            <p class="mb-4">The creator turned comments off</p>
+            {{- else if .Novel.CommentCount == 1 }}
+            <p class="mb-4">There are no comments yet</p>
+            {{- else }}
+            <div class="list-group" id="comments-container">
+              {{ range .Novel.CommentsList }}
+              <!-- Element for a single comment -->
+              <!-- NOTE: py-1 to give each comment a bit more breathing space -->
+              <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
+                <div class="row">
+                  <!-- Comment author avatar image -->
+                  <div class="col-auto">
+                    <a href="/users/{{ .AuthorID }}">
+                      <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                    </a>
+                  </div>
+
+                  <div class="col px-2">
+                    <!-- Comment author name and date -->
+                    <div class="d-md-flex align-items-center mb-2">
+                      <div class="me-md-2">
+                        <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
+                          <h6 class="mb-0">{{- .AuthorName }}</h6>
+                        </a>
+                      </div>
+                      <div>
+                        <small class="text-muted">{{ .Date }}</small>
+                      </div>
+                    </div>
+
+                    <!-- Stamp or emoji -->
+                    {{- if .Stamp }}
+                    <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
+                    {{- else }}
+                    <!-- Comment with emojis -->
+                    <p class="d-flex align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
+                    {{ end }}
+                  </div>
+                </div>
+              </div>
+              {{- end }}
+              <div class="d-flex justify-content-center">
+                <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+              </div>
+            </div>
+            {{ end }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

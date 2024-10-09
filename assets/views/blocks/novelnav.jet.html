@@ -6,25 +6,29 @@
         {{- end }}
     {{- end }}
 
+    <!--
+    NOTE: d-flex justify-content-center required here,
+    otherwise nav the underline spans the enitre width of the parent row element
+    -->
     {{- if activeIndex > 0 }}
-    <div class="col">
-        <a class="nav-link text-center text-body-secondary fw-semibold"
+    <div class="col-12 d-flex justify-content-center">
+        <a class="nav-link d-inline text-center text-body-secondary fw-semibold"
             href="{{ baseURL }}{{paths[activeIndex-1]}}">
             {{ names[activeIndex-1] }}
         </a>
     </div>
     {{- end }}
 
-    <div class="col">
-        <span class="nav-link text-center active border-bottom border-4 border-custom-color fw-bold"
+    <div class="col-12 d-flex justify-content-center">
+        <span class="nav-link d-inline text-center active border-bottom border-4 border-custom-color fw-bold"
               aria-current="page">
             {{ names[activeIndex] }}
         </span>
     </div>
 
     {{- if activeIndex < len(paths) - 1 }}
-    <div class="col">
-        <a class="nav-link text-center text-body-secondary fw-semibold"
+    <div class="col-12 d-flex justify-content-center">
+        <a class="nav-link d-inline text-center text-body-secondary fw-semibold"
             href="{{ baseURL }}{{paths[activeIndex+1]}}">
             {{ names[activeIndex+1] }}
         </a>
