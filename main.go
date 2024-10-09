@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/middleware"
 	"codeberg.org/vnpower/pixivfe/v2/server/proxy_checker"
@@ -26,6 +27,7 @@ func main() {
 	}
 
 	audit.Init(config.GlobalConfig.InDevelopment)
+	i18n.Init()
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 
 	// Conditionally initialize and start the proxy checker

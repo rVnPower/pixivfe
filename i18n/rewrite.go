@@ -4,7 +4,6 @@ package i18n
 
 import (
 	"slices"
-	"sort"
 	"strings"
 )
 

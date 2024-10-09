@@ -64,13 +64,24 @@ func processFile(filename string, result *jnode.Node) {
 		}
 		s := strings.TrimSpace(builder.String())
 
-		if s != "" {
+		if !shouldIgnore(s) {
 			object := jnode.NewObjectNode()
 			object.Put("msg", s)
 			object.Put("file", filename)
 			result.Append(object)
 		}
 	})
+}
+
+// manual filter
+func shouldIgnore(msg string) bool {
+	if msg == "" {
+		return true
+	}
+	if msg == "»" {
+		return true
+	}
+	return false
 }
 
 func visit(node *html.Node, record func([]*html.Node)) {

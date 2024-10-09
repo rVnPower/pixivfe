@@ -16,7 +16,7 @@ import (
 
 var locales = map[string]map[string]string{}
 
-func init() {
+func Init() {
 	fs_i18n := os.DirFS("i18n/locale")
 	entries, err := fs.ReadDir(fs_i18n, ".")
 	if err != nil {
