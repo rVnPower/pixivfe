@@ -341,7 +341,7 @@
                 <div class="row">
                   <!-- Comment author avatar image -->
                   <div class="col-auto">
-                    <a href="/users/{{ .AuthorID }}">
+                    <a href="/users/{{ .AuthorID }}/bookmarks">
                       <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
                     </a>
                   </div>
@@ -350,7 +350,7 @@
                     <!-- Comment author name and date -->
                     <div class="d-md-flex align-items-center mb-2">
                       <div class="me-md-2">
-                        <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
+                        <a href="/users/{{ .AuthorID }}/bookmarks" class="text-body text-decoration-none">
                           <h6 class="mb-0">{{- .AuthorName }}</h6>
                         </a>
                       </div>
