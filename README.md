@@ -30,15 +30,17 @@ You can keep track of this project's development using the [Roadmap](https://pix
 
 ## Development
 
+Use our build tool: `./build.sh help`.
+
 Here are the build prerequisites. You may only install some of them.
 
 | Name | What for | Recommended way to install |
 | - | - | - |
 | [Go](https://go.dev/doc/install) | To build PixivFE from source | Use system package manager (`go`) |
-| [Sass](https://github.com/sass/dart-sass/) | Will be run by PixivFE in development mode | Use system package manager (`dart-sass`), or see below |
-| [jq](https://jqlang.github.io/jq/) | Needed to generate i18n strings | Use system package manager (`jq`) |
-| [semgrep](https://semgrep.dev/) | Needed to generate i18n strings and scan the source code for errors | [See official instructions](https://github.com/semgrep/semgrep/blob/develop/README.md#option-2-getting-started-from-the-cli) |
-| Crowdin CLI | Needed to upload and download i18n strings. Only core developers need this | [See our documentation](./doc/dev/features/i18n.md) |
+| [Sass](https://github.com/sass/dart-sass/) | To build CSS stylesheets from SCSS. Will be run by PixivFE in development mode | Use system package manager (`dart-sass`), or see below |
+| [jq](https://jqlang.github.io/jq/) | To extract i18n strings | Use system package manager (`jq`) |
+| [semgrep](https://semgrep.dev/) | To extract i18n strings and scan the source code for errors | [See official instructions](https://github.com/semgrep/semgrep/blob/develop/README.md#option-2-getting-started-from-the-cli) |
+| Crowdin CLI | To upload and download i18n strings. Only core developers need this | [See our documentation](./doc/dev/features/i18n.md) |
 
 To install Dart Sass, you can choose any of the following methods.
 
