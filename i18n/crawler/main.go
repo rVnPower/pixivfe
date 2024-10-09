@@ -10,6 +10,8 @@ import (
 	"github.com/soluble-ai/go-jnode"
 	"github.com/yargevad/filepathx"
 	"golang.org/x/net/html"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 func main() {
@@ -75,13 +77,7 @@ func processFile(filename string, result *jnode.Node) {
 
 // manual filter
 func shouldIgnore(msg string) bool {
-	if msg == "" {
-		return true
-	}
-	if msg == "»" {
-		return true
-	}
-	return false
+	return i18n.IgnoreTheseStrings[msg]
 }
 
 func visit(node *html.Node, record func([]*html.Node)) {
