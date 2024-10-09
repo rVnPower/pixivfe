@@ -9615,6 +9615,18 @@ textarea.form-control-lg {
   .object-fit-sm-none {
     object-fit: none !important;
   }
+  .overflow-sm-auto {
+    overflow: auto !important;
+  }
+  .overflow-sm-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-sm-visible {
+    overflow: visible !important;
+  }
+  .overflow-sm-scroll {
+    overflow: scroll !important;
+  }
   .d-sm-inline {
     display: inline !important;
   }
@@ -10272,6 +10284,18 @@ textarea.form-control-lg {
   }
   .object-fit-md-none {
     object-fit: none !important;
+  }
+  .overflow-md-auto {
+    overflow: auto !important;
+  }
+  .overflow-md-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-md-visible {
+    overflow: visible !important;
+  }
+  .overflow-md-scroll {
+    overflow: scroll !important;
   }
   .d-md-inline {
     display: inline !important;
@@ -10931,6 +10955,18 @@ textarea.form-control-lg {
   .object-fit-lg-none {
     object-fit: none !important;
   }
+  .overflow-lg-auto {
+    overflow: auto !important;
+  }
+  .overflow-lg-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-lg-visible {
+    overflow: visible !important;
+  }
+  .overflow-lg-scroll {
+    overflow: scroll !important;
+  }
   .d-lg-inline {
     display: inline !important;
   }
@@ -11589,6 +11625,18 @@ textarea.form-control-lg {
   .object-fit-xl-none {
     object-fit: none !important;
   }
+  .overflow-xl-auto {
+    overflow: auto !important;
+  }
+  .overflow-xl-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-xl-visible {
+    overflow: visible !important;
+  }
+  .overflow-xl-scroll {
+    overflow: scroll !important;
+  }
   .d-xl-inline {
     display: inline !important;
   }
@@ -12246,6 +12294,18 @@ textarea.form-control-lg {
   }
   .object-fit-xxl-none {
     object-fit: none !important;
+  }
+  .overflow-xxl-auto {
+    overflow: auto !important;
+  }
+  .overflow-xxl-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-xxl-visible {
+    overflow: visible !important;
+  }
+  .overflow-xxl-scroll {
+    overflow: scroll !important;
   }
   .d-xxl-inline {
     display: inline !important;

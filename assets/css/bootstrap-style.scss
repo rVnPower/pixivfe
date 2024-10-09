@@ -124,6 +124,10 @@ $utilities: map-merge(
       map-get($utilities, "rounded-end"),
       ( responsive: true ),
     ),
+    "overflow": map-merge(
+      map-get($utilities, "overflow"),
+      ( responsive: true ),
+    ),
   )
 );
 
