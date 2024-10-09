@@ -22,6 +22,7 @@ FROM scratch
 # Copy necessary files from the builder stage
 COPY --from=builder /app/pixivfe /app/pixivfe
 COPY --from=builder /app/assets /app/assets
+COPY --from=builder /app/i18n /app/i18n
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy passwd file for the non-privileged user from the user-stage
