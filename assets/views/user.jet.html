@@ -90,7 +90,12 @@
     <h2>Novels</h2>
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .User.Novels }}
-      {{- include "fragments/novel-tn" . }}
+      <div class="col mt-1">
+        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          {{- include "fragments/novel-tn" . }}
+        </div>
+        <hr class="my-0">
+      </div>
       {{- end }}
     </div>
     {{- end }}

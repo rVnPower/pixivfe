@@ -30,7 +30,7 @@
 
             <!-- Author -->
             <div class="d-flex align-items-center mb-2">
-            <a href="/users/{{ .User.ID }}" class="text-decoration-none">
+            <a href="/users/{{ .User.ID }}/novels#checkpoint" class="text-decoration-none">
               <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
             </a>
             <a href="/users/{{ .User.ID }}" class="text-decoration-none">
@@ -204,7 +204,7 @@
     <div class="custom-card">
       <div class="custom-card-body bg-charcoal-surface1 py-4 px-0">
         <!-- NOTE: mx-0 because the row element overflows the card horizontally without it -->
-        <div class="row mx-0">
+        <div class="row justify-content-center mx-0">
           <!-- NOTE: px-0 to undo the extra spacing caused by mx-0 -->
           <div class="col-12 px-0">
             <div class="d-flex flex-column align-items-center position-relative mx-4 mb-4 justify-content-center">
@@ -244,128 +244,129 @@
               </p>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Series navigation, if present -->
-  {{- if .Novel.SeriesNavData }}
-  <div class="col-12 col-lg-9">
-    <div class="custom-card">
-      <div class="custom-card-body bg-charcoal-surface1 p-4">
-        <h2 class="text-center mb-2">
-          <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
-            {{- .Novel.SeriesNavData.Title }}
-          </a>
-        </h2>
-        <h3 class="text-body-secondary text-center">
-          <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
-            <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
-            {{- if len(.NovelSeriesContentTitles) == 1 }}
-              work in this series
-            {{- else }}
-              works in this series
-            {{- end }}
-          </a>
-        </h3>
-        <hr class="my-4">
-        <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
-          {{ activeState := .Novel.ID }}
-          {{ yield NovelNav(
-              baseURL="/novel/",
-              paths=.NovelSeriesIDs,
-              names=.NovelSeriesTitles,
-              activeState=activeState
-          ) }}
-        </div>
-      </div>
-    </div>
-  </div>
-  {{- end }}
-
-  <div class="col-12 col-lg-9">
-    <div class="row">
-      <!-- Author information -->
-      <div class="col-12 col-lg-6">
-        <div class="custom-card">
-          <div class="custom-card-body bg-charcoal-surface1 py-3 px-4">
-            <div class="d-flex align-items-center">
-              <a href="/users/{{ .User.ID }}" class="me-3">
-                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle" style="width: 64px; height: 64px;" />
-              </a>
-              <div>
-                <h3 class="mb-0"><a href="/users/{{ .User.ID }}" class="text-decoration-none">{{ .User.Name }}</a></h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Comments section -->
-      <!--
-      TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
-            Need to extract this out to a block that takes parameters
-      -->
-      <div class="col-12 col-lg-6">
-        <div class="custom-card">
-          <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
-            {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
-            <h2>0 Comments</h2>
-            {{- else if .Novel.CommentCount == 1 }}
-            <h2>1 Comment</h2>
-            {{- else }}
-            <h2>{{ .Novel.CommentCount }} Comments</h2>
-            {{- end }}
-            {{- if .Novel.CommentOff == 1  }}
-            <p class="mb-4">The creator turned comments off</p>
-            {{- else if .Novel.CommentCount == 1 }}
-            <p class="mb-4">There are no comments yet</p>
-            {{- else }}
-            <div class="list-group" id="comments-container">
-              {{ range .Novel.CommentsList }}
-              <!-- Element for a single comment -->
-              <!-- NOTE: py-1 to give each comment a bit more breathing space -->
-              <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
-                <div class="row">
-                  <!-- Comment author avatar image -->
-                  <div class="col-auto">
-                    <a href="/users/{{ .AuthorID }}">
-                      <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
-                    </a>
-                  </div>
-
-                  <div class="col px-2">
-                    <!-- Comment author name and date -->
-                    <div class="d-md-flex align-items-center mb-2">
-                      <div class="me-md-2">
-                        <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
-                          <h6 class="mb-0">{{- .AuthorName }}</h6>
-                        </a>
-                      </div>
-                      <div>
-                        <small class="text-muted">{{ .Date }}</small>
-                      </div>
-                    </div>
-
-                    <!-- Stamp or emoji -->
-                    {{- if .Stamp }}
-                    <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
+          <!-- Series navigation, if present -->
+          {{- if .Novel.SeriesNavData }}
+          <div class="col-9 px-0">
+            <div class="custom-card">
+              <div class="custom-card-body bg-charcoal-surface2 p-4">
+                <h2 class="text-center mb-2">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
+                    {{- .Novel.SeriesNavData.Title }}
+                  </a>
+                </h2>
+                <h3 class="text-body-secondary text-center">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                    <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
+                    {{- if len(.NovelSeriesContentTitles) == 1 }}
+                      work in this series
                     {{- else }}
-                    <!-- Comment with emojis -->
-                    <p class="d-flex align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
-                    {{ end }}
-                  </div>
+                      works in this series
+                    {{- end }}
+                  </a>
+                </h3>
+                <hr class="my-4">
+                <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
+                  {{ activeState := .Novel.ID }}
+                  {{ yield NovelNav(
+                      baseURL="/novel/",
+                      paths=.NovelSeriesIDs,
+                      names=.NovelSeriesTitles,
+                      activeState=activeState
+                  ) }}
                 </div>
               </div>
-              {{- end }}
-              <div class="d-flex justify-content-center">
-                <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+            </div>
+          </div>
+          {{- end }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-9">
+    <!-- Author information -->
+    <div class="custom-card bg-black mb-4 mb-lg-0">
+      <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .User.ID }}/novels#checkpoint">
+            <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px" />
+            <h2 class="m-0">{{ .User.Name }}</h2>
+          </a>
+        </div>
+      </div>
+      <div class="overflow-auto p-4 pb-0" id="horizontal-scroll">
+        <div class="row flex-nowrap">
+          {{- range .NovelRelated }}
+            {{- include "fragments/novel-tn" . }}
+          {{- end }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments section -->
+  <!--
+  TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
+        Need to extract this out to a block that takes parameters
+  -->
+  <div class="col-12 col-lg-9">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
+        {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
+        <h2>0 Comments</h2>
+        {{- else if .Novel.CommentCount == 1 }}
+        <h2>1 Comment</h2>
+        {{- else }}
+        <h2>{{ .Novel.CommentCount }} Comments</h2>
+        {{- end }}
+        {{- if .Novel.CommentOff == 1  }}
+        <p class="mb-4">The creator turned comments off</p>
+        {{- else if .Novel.CommentCount == 1 }}
+        <p class="mb-4">There are no comments yet</p>
+        {{- else }}
+        <div class="list-group" id="comments-container">
+          {{ range .Novel.CommentsList }}
+          <!-- Element for a single comment -->
+          <!-- NOTE: py-1 to give each comment a bit more breathing space -->
+          <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
+            <div class="row">
+              <!-- Comment author avatar image -->
+              <div class="col-auto">
+                <a href="/users/{{ .AuthorID }}">
+                  <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                </a>
+              </div>
+
+              <div class="col px-2">
+                <!-- Comment author name and date -->
+                <div class="d-md-flex align-items-center mb-2">
+                  <div class="me-md-2">
+                    <a href="/users/{{ .AuthorID }}" class="text-body text-decoration-none">
+                      <h6 class="mb-0">{{- .AuthorName }}</h6>
+                    </a>
+                  </div>
+                  <div>
+                    <small class="text-muted">{{ .Date }}</small>
+                  </div>
+                </div>
+
+                <!-- Stamp or emoji -->
+                {{- if .Stamp }}
+                <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
+                {{- else }}
+                <!-- Comment with emojis -->
+                <p class="d-flex align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
+                {{ end }}
               </div>
             </div>
-            {{ end }}
+          </div>
+          {{- end }}
+          <div class="d-flex justify-content-center">
+            <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
           </div>
         </div>
+        {{ end }}
       </div>
     </div>
   </div>
@@ -374,7 +375,12 @@
     <h2>Related works</h2>
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .NovelRelated }}
-        {{- include "fragments/novel-tn" . }}
+      <div class="col mt-1">
+        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          {{- include "fragments/novel-tn" . }}
+        </div>
+        <hr class="my-0">
+      </div>
       {{- end }}
     </div>
   </div>
