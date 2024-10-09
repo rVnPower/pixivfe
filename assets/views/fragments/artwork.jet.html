@@ -64,9 +64,10 @@
 
         <!-- Bookmark and like buttons -->
         <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
+        <!-- NOTE: hx-push-url used to update the URL in the user's address bar correctly, otherwise pressing back will return the user one level further than intended -->
         <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
           {{- if isset(.BookmarkData) && LoggedIn }}
-          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body" hx-indicator="#bookmark-spinner">
+          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body" hx-indicator="#bookmark-spinner" hx-push-url="true">
             <div class="d-flex">
               <div class="bookmark-text"><i class="bi bi-heart-fill me-2"></i>Bookmarked</div>
               <div class="bookmark-spinner ms-2" id="bookmark-spinner">
@@ -77,7 +78,7 @@
             </div>
           </button>
           {{- else }}
-          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body" hx-indicator="#bookmark-spinner">
+          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body" hx-indicator="#bookmark-spinner" hx-push-url="true">
           <div class="d-flex">
             <div class="bookmark-text"><i class="bi bi-heart me-2"></i>Bookmark</div>
             <div class="bookmark-spinner ms-2" id="bookmark-spinner">
@@ -90,7 +91,7 @@
 
           {{- if .Liked && LoggedIn}}
           <!-- NOTE: /self/unlike isn't a real URI path, just keeping it here for consistency -->
-          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" disabled>
+          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" hx-push-url="true" disabled>
             <div class="d-flex">
               <div class="like-text"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked</div>
               <div class="like-spinner ms-2" id="like-spinner">
@@ -101,7 +102,7 @@
             </div>
           </button>
           {{- else }}
-          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner">
+          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" hx-push-url="true">
             <div class="d-flex">
               <div class="like-text"><i class="bi bi-hand-thumbs-up me-2"></i>Like</div>
               <div class="like-spinner ms-2" id="like-spinner">
