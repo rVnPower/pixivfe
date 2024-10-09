@@ -175,6 +175,18 @@ $utilities: map-merge(
   max-height: 40vh;
 }
 
+.stamp {
+  width: 96px;
+  height: 96px;
+}
+
+.emoji {
+  width: 1.5rem;
+  height: 1.5rem;
+  @extend .mx-1;
+}
+
+
 /// TODO: need usability tests to determine whether these variables are ok; can also cause weird moire/pixel level scaling issues with novel thumbnails (especially the default cover which has intricate details)
 .thumbnail-hover-dark {
   overflow: hidden;

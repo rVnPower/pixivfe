@@ -8270,7 +8270,7 @@ textarea.form-control-lg {
   margin-left: 0 !important;
 }
 
-.mx-1 {
+.mx-1, .emoji {
   margin-right: 0.25rem !important;
   margin-left: 0.25rem !important;
 }
@@ -12936,6 +12936,16 @@ textarea.form-control-lg {
 
 .custom-novel-nav {
   max-height: 40vh;
+}
+
+.stamp {
+  width: 96px;
+  height: 96px;
+}
+
+.emoji {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .thumbnail-hover-dark {
