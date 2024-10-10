@@ -29,19 +29,14 @@ type LandingArtworks struct {
 	Newest          []ArtworkBrief
 	Rankings        []ArtworkBrief
 	Users           []ArtworkBrief
-	// NOTE: a Pixivision field *does* exist in the GetLandingURL response, but it is incomplete,
-	// containing only the id, title, thumbnailUrl, and url fields
-	// As such, we need to retrieve the full-fat Pixivision field by calling PixivisionGetHomepage
-	// Pixivision      []Pixivision
-	Pixivision      []PixivisionArticle
+	Pixivision      []Pixivision
 	RecommendByTags []RecommendedTags
 }
 
 func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 	var pages struct {
-		// NOTE: commented out for the reason above
-		// Pixivision  []Pixivision `json:"pixivision"`
-		Follow      []int               `json:"follow"`
+		Pixivision  []Pixivision `json:"pixivision"`
+		Follow      []int        `json:"follow"`
 		Recommended struct {
 			IDs []string `json:"ids"`
 		} `json:"recommend"`
@@ -100,20 +95,7 @@ func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 	}
 
 	// Parse everything
-	// Fetch full pixivision data
-  pixivisionArticles, err := PixivisionGetHomepage(r, "1") // Fetch the first page
-  if err != nil {
-      return &landing, err
-  }
-
-  // Apply ProxyImageUrl to each Thumbnail
-  for i := range pixivisionArticles {
-      pixivisionArticles[i].Thumbnail = session.ProxyImageUrl(r, pixivisionArticles[i].Thumbnail)
-  }
-
-  // Assign the fetched pixivision articles to the landing struct
-  landing.Pixivision = pixivisionArticles
-	fmt.Println("Pixivision JSON:", gjson.Get(pagesStr, "pixivision"))
+	landing.Pixivision = pages.Pixivision
 
 	landing.Following = make([]ArtworkBrief, len(pages.Follow))
 	for _, i := range pages.Follow {
