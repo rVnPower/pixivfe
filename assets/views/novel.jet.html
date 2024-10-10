@@ -364,7 +364,7 @@
                     <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
                     {{- else }}
                     <!-- Comment with emojis -->
-                    <p class="d-flex align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
+                    <p class="d-flex flex-wrap align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
                     {{ end }}
                   </div>
                 </div>
