@@ -75,18 +75,27 @@
               <div class="row">
                 <!-- Comment author avatar image -->
                 <div class="col-auto">
+                  {* checks whether .AuthorName is empty, indicating a deleted user *}
+                  {{- if .AuthorName != "" }}
                   <a href="/users/{{ .AuthorID }}/bookmarks">
                     <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
                   </a>
+                  {{- else }}
+                  <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                  {{- end }}
                 </div>
 
                 <div class="col px-2">
                   <!-- Comment author name and date -->
                   <div class="d-md-flex align-items-center mb-2">
                     <div class="me-md-2">
+                      {{- if .AuthorName != "" }}
                       <a href="/users/{{ .AuthorID }}/bookmarks" class="fw-bold text-body text-decoration-none">
                         {{- .AuthorName }}
                       </a>
+                      {{- else }}
+                      <p class="fw-bold mb-0">Deleted user</p>
+                      {{- end }}
                     </div>
                     <small class="text-muted">{{ .Date }}</small>
                   </div>
