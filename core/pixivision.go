@@ -2,13 +2,14 @@ package core
 
 import (
 	"fmt"
+	"github.com/PuerkitoBio/goquery"
 	"html"
 	"io"
 	"net/http"
 	"regexp"
+	"strconv"
+	"strings"
 	"time"
-
-	"github.com/PuerkitoBio/goquery"
 
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
@@ -86,6 +87,7 @@ type PixivisionTag struct {
 	Title       string
 	Description string
 	Articles    []PixivisionArticle
+	Total       int // The total number of articles
 }
 
 // PixivisionCategory represents a category page on Pixivision
@@ -195,7 +197,20 @@ func PixivisionGetTag(r *http.Request, id string, page string, lang ...string) (
 	}
 
 	tag.Title = doc.Find(".tdc__header h1").Text()
-	tag.Description = doc.Find(".tdc__description").Text()
+
+	// Extract and process the description
+	fullDescription := doc.Find(".tdc__description").Text()
+	parts := strings.Split(fullDescription, "pixivision") // split once the boilerplate about "pixivision currently has ..." starts
+	tag.Description = strings.TrimSpace(parts[0])
+
+	// Extract total number of articles if available
+	if len(parts) > 1 {
+		re := regexp.MustCompile(`(\d+)\s+article\(s\)`)
+		matches := re.FindStringSubmatch(parts[1])
+		if len(matches) > 1 {
+			tag.Total, _ = strconv.Atoi(matches[1])
+		}
+	}
 
 	// Parse each article in the tag page
 	doc.Find("._article-card").Each(func(i int, s *goquery.Selection) {
