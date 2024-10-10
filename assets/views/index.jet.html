@@ -2,30 +2,10 @@
 {{- import "blocks/underlinenav" }}
 {{- block body() }}
 <div class="row justify-content-center g-4">
-  {{- if !.LoggedIn }}
-  <div class="col-9">
-    <div class="alert alert-info" role="alert">
-      <p class="text-center mb-0"><i class="bi bi-person-circle me-2"></i>You are not logged in. You can log in on the <a href="/settings" class="alert-link">settings page</a>.
-      </p>
-    </div>
-  </div>
-
-  <div class="col-12">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
-      <a href="/ranking" class="custom-btn-secondary">See more</a>
-    </div>
-
-    <!-- mt-0 to remove the margin that g-4 adds to the top of the element -->
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mt-0">
-      {{- include "fragments/ranking-tn" .NoTokenData.Contents }}
-    </div>
-  </div>
-  {{- else }}
-
   <h1 class="display-6 fw-semibold text-center">PixivFE</h1>
   <span class="text-center text-body-secondary mt-0">An open-source alternative frontend for Pixiv that doesn't suck.</span>
 
+  <!-- Mode switcher -->
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
       {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
@@ -33,6 +13,73 @@
       {{- path := slice("all", "r18") }}
       {{- name := slice("All", "R-18")}}
       {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+    </div>
+  </div>
+
+  <!-- If the user is not logged in, only show the following non-personalised content -->
+
+  {{- if !.LoggedIn }}
+  <div class="alert alert-light w-50 mx-auto" role="alert">
+    <p class="text-center mb-0"><i class="bi bi-person-circle me-2"></i>You are not logged in. You can log in on the <a href="/settings" class="alert-link">settings page</a>.
+    </p>
+  </div>
+
+  <!-- Today's illustration rankings -->
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
+      <a href="/ranking" class="custom-btn-secondary">See more</a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/ranking-tn" .Data.Rankings.Contents }}
+    </div>
+  </div>
+
+  <!-- pixivision content -->
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h2 class="mb-3 mb-md-0">Newest articles on pixivision</h2>
+      <a href="/pixivision" class="custom-btn-secondary">See more</a>
+    </div>
+
+    <div class="overflow-scroll" id="horizontal-scroll">
+      <div class="row flex-nowrap">
+        {{- range .Data.Pixivision }}
+        {* TODO: make the entire pixivision card clickable while preserving the text underline effect *}
+        {* NOTE: intentionally choosing indivisible col widths to create a visible affordance *}
+        <div class="col-11 col-md-9 col-lg-5">
+          <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
+            <a href="/pixivision/a/{{.ID}}">
+              <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
+                <img src="{{.Thumbnail}}" class="card-img-top rounded-top-5" alt="{{.Title}}" />
+              </div>
+            </a>
+            <div class="custom-card-body">
+              <!-- Title -->
+              <h4 class="text-center lh-lg mb-0">
+                <a href="/pixivision/a/{{.ID}}" class="text-body text-decoration-none">{{.Title}} </a>
+              </h4>
+            </div>
+          </div>
+        </div>
+        {{- end }}
+      </div>
+    </div>
+  </div>
+  {{- else }}
+
+  <!-- Otherwise, the user is logged in, show the full landing page -->
+
+  <!-- Today's illustration rankings -->
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
+      <a href="/ranking" class="custom-btn-secondary">See more</a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/ranking-tn" .Data.Rankings.Contents }}
     </div>
   </div>
 
@@ -44,7 +91,7 @@
       {{- if len(.Data.Following) > 0 }}
         {{- include "fragments/small-tn" .Data.Following }}
       {{- else }}
-      <div class="alert alert-light w-25 mx-auto" role="alert">
+      <div class="alert alert-light w-50 mx-auto" role="alert">
         <p class="text-center mb-0">Nothing here yet&#8212;find a user to follow!</p>
       </div>
       {{- end }}

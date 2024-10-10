@@ -33,6 +33,11 @@ type LandingArtworks struct {
 	RecommendByTags []RecommendedTags
 }
 
+var landingToRankingMode = map[string]string{
+	"all": "daily",
+	"r18": "daily_r18",
+}
+
 func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks, error) {
 	var pages struct {
 		Pixivision  []Pixivision `json:"pixivision"`
@@ -117,8 +122,14 @@ func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks
 		}
 	}
 
+	// Map the landing mode to the ranking mode
+	rankingMode, ok := landingToRankingMode[mode]
+	if !ok {
+		rankingMode = "daily" // Default to "daily" if no mapping is found
+	}
+
 	// Get rankings for both logged-in and non-logged-in users
-	rankings, err := GetRanking(r, "daily", "illust", "", "1")
+	rankings, err := GetRanking(r, rankingMode, "illust", "", "1")
 	if err != nil {
 		return &landing, err
 	}
