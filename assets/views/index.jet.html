@@ -23,6 +23,9 @@
   </div>
   {{- else }}
 
+  <h1 class="display-6 fw-semibold text-center">PixivFE</h1>
+  <span class="text-center text-body-secondary mt-0">An open-source alternative frontend for Pixiv that doesn't suck.</span>
+
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
       {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
@@ -34,11 +37,10 @@
   </div>
 
   <div class="col-12">
-    <div class="d-flex flex-row justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
       <h2 class="mb-0">Latest works by followed</h2>
       <a href="/self/followingWorks" class="custom-btn-secondary">See more</a>
-    </div>
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+    </div>    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- if len(.Data.Following) > 0 }}
         {{- include "fragments/small-tn" .Data.Following }}
       {{- else }}
@@ -56,6 +58,40 @@
     </div>
   </div>
 
+  <!-- pixivision content -->
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Newest articles on pixivision</h2>
+      <a href="/pixivision" class="custom-btn-secondary">See more</a>
+    </div>
+
+    <div class="overflow-scroll" id="horizontal-scroll">
+      <div class="row flex-nowrap">
+      {{- range .Data.Pixivision }}
+      <!-- NOTE: col-5 to create an visible affordance -->
+      <div class="col-5">
+        <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
+          <a href="/pixivision/a/{{.ID}}">
+            <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
+              <img src="{{.Thumbnail}}" class="card-img-top rounded-top-5" alt="{{.Title}}" />
+            </div>
+          </a>
+          <div class="custom-card-body">
+            <!-- Title -->
+            <h4 class="lh-lg mb-0">
+              <a href="/pixivision/a/{{.ID}}" class="text-body text-decoration-none">
+                {{.Title}}
+              </a>
+            </h4>
+          </div>
+        </div>
+      </div>
+      {{- end }}
+    </div>
+    </div>
+  </div>
+
+  <!-- Recommended works by tag -->
   {{- range .Data.RecommendByTags }}
   <div class="col-12">
     <h2>Recommended illustrations tagged <a href="/tags/{{ .Name }}" class="text-decoration-none">#{{ .Name }}</a></h2>
