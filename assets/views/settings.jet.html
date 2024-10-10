@@ -284,24 +284,21 @@
 
                 <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
                   <h3 class="mb-3">Cookie values</h3>
-                  <p>
-                    Please note that some cookies here such as ShowArtR18, ShowArtR18G, and ShowArtAI are for features still under development.
-                  </p>
                   <p>View and edit individual cookie values. This is useful for fine-tuning specific preferences or troubleshooting issues.</p>
-                  {{- range k, v := CookieList }}
+                  {{- range CookieListOrdered }}
                   <div class="mb-3">
-                    <h4>{{k}}</h4>
+                    <h4>{{ .k }}</h4>
 
                     <div class="d-flex">
                       <!-- Start Set Cookie Form -->
-                      <form id="set-cookie-form-{{k}}" hx-post="/settings/set-cookie" hx-target="#set-cookie-response-{{k}}" hx-swap="outerHTML" class="row g-2 me-2">
+                      <form id="set-cookie-form-{{ .k }}" hx-post="/settings/set-cookie" hx-target="#set-cookie-response-{{ .k }}" hx-swap="outerHTML" class="row g-2 me-2">
                         <!-- Hidden Input for Cookie Key -->
-                        <input type="hidden" name="key" value="{{k}}" />
+                        <input type="hidden" name="key" value="{{ .k }}" />
 
                         <!-- Input Field for Cookie Value -->
                         <div class="col-auto">
-                          <label class="visually-hidden" for="cookieValue-{{k}}">Cookie Value</label>
-                          <input id="cookieValue-{{k}}" type="text" class="form-control" name="value" value="{{v}}" />
+                          <label class="visually-hidden" for="cookieValue-{{ .k }}">Cookie Value</label>
+                          <input id="cookieValue-{{ .k }}" type="text" class="form-control" name="value" value="{{- .v }}" />
                         </div>
 
                         <!-- Set Button -->
@@ -312,8 +309,8 @@
                       <!-- End Set Cookie Form -->
 
                       <!-- Start Clear Cookie Form -->
-                      <form id="clear-cookie-form-{{k}}" hx-post="/settings/clear-cookie" hx-target="#clear-cookie-response-{{k}}" hx-swap="outerHTML" class="row g-2">
-                        <input type="hidden" name="key" value="{{k}}" />
+                      <form id="clear-cookie-form-{{ .k }}" hx-post="/settings/clear-cookie" hx-target="#clear-cookie-response-{{ .k }}" hx-swap="outerHTML" class="row g-2">
+                        <input type="hidden" name="key" value="{{ .k }}" />
 
                         <!-- Clear Button -->
                         <div class="col-auto">
@@ -322,8 +319,8 @@
                       </form>
                       <!-- End Clear Cookie Form -->
                     </div>
-                    <div id="set-cookie-response-{{k}}"></div>
-                    <div id="clear-cookie-response-{{k}}"></div>
+                    <div id="set-cookie-response-{{ .k }}"></div>
+                    <div id="clear-cookie-response-{{ .k }}"></div>
                   </div>
                   {{- end }}
                 </li>
@@ -340,7 +337,12 @@
                   <!-- Save raw settings -->
                   <form id="raw-settings-form" hx-post="/settings/raw" hx-target="#raw-settings-response" hx-swap="outerHTML">
                     <div class="mb-3">
-                      <textarea class="form-control" name="raw" rows="10">{{range k, v := CookieList}}&#10;{{k}}={{v}}{{end}}</textarea>
+                      <textarea class="form-control" name="raw" rows="10">
+                        <!-- TODO: fix the weird whitespace in the rendered version -->
+                        {{- range CookieListOrdered -}}
+                        {{ .k }}={{ .v }}
+                        {{end -}}
+                      </textarea>
                     </div>
                     <button type="submit" class="custom-btn-secondary">Set raw settings</button>
                     <div id="set-raw-settings-help" class="form-text">Applies the raw settings entered above. This action will overwrite your current configuration with the provided values.</div>
@@ -373,38 +375,5 @@
       </div>
     </div>
   </div>
-
-  <!-- End of general settings -->
-  <h2>Current cookie values</h2>
-
-  {{- range CookieListOrdered }}
-  <div class="settings-set-cookie">
-    <h3>{{.k}}</h3>
-    <form action="/settings/set-cookie" method="post">
-      <input type="hidden" name="key" value="{{.k}}" />
-      <input type="text" name="value" value="{{.v}}" />
-      <input type="submit" value="Set" />
-    </form>
-  </div>
-  {{- end }}
-
-  <div>
-    <h3>Batch operation</h3>
-    <p>
-      You can save your current cookie values to quickly set your settings on other compatible instances, or if the current instance's cookies went expired.
-    </p>
-    <p>Invalid values will be ignored.</p>
-    <form action="/settings/raw" method="post">
-      <textarea name="raw" rows="10" cols="80">
-{{- range CookieListOrdered -}}
-{{.k}}={{.v}}
-{{end -}}
-      </textarea>
-      <input type="submit" value="Set raw settings" />
-    </form>
-  </div>
-  <form action="/settings/reset-all" method="post">
-    <input class="critical" type="submit" value="Reset all cookies/preferences" />
-  </form>
 </div>
 {{- end }}
