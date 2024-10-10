@@ -71,15 +71,10 @@
 
   <!-- Otherwise, the user is logged in, show the full landing page -->
 
-  <!-- Today's illustration rankings -->
   <div class="col-12">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
-      <a href="/ranking" class="custom-btn-secondary">See more</a>
-    </div>
-
+    <h2>Recommended works</h2>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-      {{- include "fragments/ranking-tn" .Data.Rankings.Contents }}
+      {{- include "fragments/small-tn" .Data.Recommended }}
     </div>
   </div>
 
@@ -98,10 +93,15 @@
     </div>
   </div>
 
+  <!-- Today's illustration rankings -->
   <div class="col-12">
-    <h2>Recommended works</h2>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h2 class="mb-3 mb-md-0">Today's illustration rankings</h2>
+      <a href="/ranking" class="custom-btn-secondary">See more</a>
+    </div>
+
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-      {{- include "fragments/small-tn" .Data.Recommended }}
+      {{- include "fragments/ranking-tn" .Data.Rankings.Contents }}
     </div>
   </div>
 
