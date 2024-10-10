@@ -1,8 +1,10 @@
 {{- target := CookieList["pixivfe-ThumbnailToNewTab"] }}
 <!-- The thumbnail-at.jet.html fragment templates in the artist's avatar and name -->
 <div class="d-flex align-items-center">
-  <a href="/users/{{ .ArtistID }}" class="align-items-center text-decoration-none text-truncate">
+  <a href="/users/{{ .ArtistID }}">
     <img src="{{ .ArtistAvatar }}" alt="{{ .ArtistName }}" class="rounded-circle object-fit-cover me-1" style="width: 24px; height: 24px;" />
-    <span class="text-muted">{{ .ArtistName }}</span>
+  </a>
+  <a href="/users/{{ .ArtistID }}" class="text-body-secondary text-truncate">
+    {{ .ArtistName }}
   </a>
 </div>
