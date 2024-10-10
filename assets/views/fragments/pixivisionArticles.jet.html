@@ -1,0 +1,35 @@
+{{- range _, article := . }}
+<div class="col">
+  <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
+    <a href="/pixivision/a/{{article.ID}}">
+      <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
+        <img src="{{article.Thumbnail}}" class="card-img-top rounded-top-5" alt="{{article.Title}}" />
+      </div>
+    </a>
+    <div class="custom-card-body">
+      <!-- Title -->
+      <h4 class="lh-lg">
+        <a href="/pixivision/a/{{article.ID}}" class="text-body text-decoration-none">
+          {{article.Title}}
+        </a>
+      </h4>
+      <!-- NOTE: would not have figured out the following classes without referring to the actual pixivision web site -->
+      <div class="d-flex align-content-between align-items-baseline">
+          <!-- Tags -->
+          <div>
+              {{- range _, tag := article.Tags }}
+              <span class="badge fw-normal me-2 mb-2 p-0">
+                  <a href="/pixivision/t/{{tag.ID}}" class="text-decoration-none">#{{ tag.Name }}</a>
+              </span>
+              {{- end }}
+          </div>
+          <!-- Publication Date -->
+          <!-- NOTE: d-inline-flex required for the child elements to not wrap weirdly when there are a lot of tags -->
+          <p class="d-inline-flex text-body-secondary small mb-0 ms-auto">
+              <i class="bi bi-calendar me-2"></i>{{parseTimeCustomFormat(article.Date, "2006-01-02")}}
+          </p>
+      </div>
+    </div>
+  </div>
+</div>
+{{- end }}
