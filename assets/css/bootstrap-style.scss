@@ -166,13 +166,6 @@ $utilities: map-merge(
   @extend .card-body;
   @extend .border-0;
   @extend .rounded-5;
-
-  a {
-    &:hover {
-      text-decoration: underline !important;
-    }
-  }
-
 }
 
 .custom-novel-card {
@@ -184,6 +177,26 @@ $utilities: map-merge(
 
 .custom-novel-nav {
   max-height: 40vh;
+}
+
+/// Use the `:has()` pseudo-class to select anchor elements that:
+/// do not contain an image; are not buttons; and are not navigation links
+a:not(:has(img)):not([class*="btn"]):not(.nav-link) {
+  position: relative;
+  text-decoration: none; // remove default underline
+
+  background-image: linear-gradient(currentColor, currentColor); // solid bottom underline
+  background-size: 0% .1em; // Start with no visible underline (width: 0%)
+  background-position: 0 100%; // Position at the bottom
+  background-repeat: no-repeat; // Ensure no repetition of the background line
+  transition: background-size 0.2s ease-in-out; // Smooth transition of background width
+
+  @extend .link-offset-2; // Apply link-offset to all links globally
+
+  &:hover {
+    background-size: 100% .1em; // On hover, expand the underline from 0 to 100%
+    text-decoration: none; // Ensure that browser's native underline isn't used
+  }
 }
 
 .stamp {

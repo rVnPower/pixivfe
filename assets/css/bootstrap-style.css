@@ -9041,7 +9041,7 @@ textarea.form-control-lg {
   text-underline-offset: 0.125em !important;
 }
 
-.link-offset-2 {
+.link-offset-2, a:not(:has(img)):not([class*=btn]):not(.nav-link) {
   text-underline-offset: 0.25em !important;
 }
 
@@ -12994,12 +12994,22 @@ textarea.form-control-lg {
   color: white;
 }
 
-.custom-card-body a:hover {
-  text-decoration: underline !important;
-}
-
 .custom-novel-nav {
   max-height: 40vh;
+}
+
+a:not(:has(img)):not([class*=btn]):not(.nav-link) {
+  position: relative;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 0.1em;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.2s ease-in-out;
+}
+a:not(:has(img)):not([class*=btn]):not(.nav-link):hover {
+  background-size: 100% 0.1em;
+  text-decoration: none;
 }
 
 .stamp {
