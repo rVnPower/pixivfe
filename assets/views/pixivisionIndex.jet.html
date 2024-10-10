@@ -20,21 +20,21 @@
                 {{article.Title}}
               </a>
             </h4>
-            <div class="d-flex align-items-start justify-content-between">
-              <div>
+            <div class="row">
                 <!-- Tags -->
-                {{- range _, tag := article.Tags }}
-                  <span class="badge fw-normal me-2 mb-2 p-0 text-wrap text-break text-start">
-                    <a href="/pixivision/t/{{tag.ID}}" class="text-decoration-none text-wrap text-break">#{{ tag.Name }}</a>
-                  </span>
-                {{- end }}
-              </div>
-              <div>
-                <!-- Publication date  -->
-                <p class="text-body-secondary small mb-0">
-                  {{parseTimeCustomFormat(article.Date, "2006-01-02")}}
-                </p>
-              </div>
+                <div class="col">
+                    {{- range _, tag := article.Tags }}
+                    <span class="badge fw-normal me-2 mb-2 p-0">
+                        <a href="/pixivision/t/{{tag.ID}}" class="text-decoration-none">#{{ tag.Name }}</a>
+                    </span>
+                    {{- end }}
+                </div>
+                <!-- Publication Date -->
+                <div class="col-auto d-flex align-items-center">
+                    <p class="text-body-secondary small mb-0">
+                        <i class="bi bi-calendar me-2"></i>{{parseTimeCustomFormat(article.Date, "2006-01-02")}}
+                    </p>
+                </div>
             </div>
           </div>
         </div>
