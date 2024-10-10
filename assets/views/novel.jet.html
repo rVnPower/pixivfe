@@ -23,9 +23,11 @@
 
             <!-- Series name -->
             {{- if .Novel.SeriesNavData }}
-              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-decoration-none">
-                <h3 class="fw-medium text-muted mb-2">{{- .Novel.SeriesNavData.Title }} #{{- .Novel.SeriesNavData.Order}}</h3>
+            <h3 class="fw-medium mb-2">
+              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                {{- .Novel.SeriesNavData.Title }} #{{- .Novel.SeriesNavData.Order}}
               </a>
+            </h3>
             {{- end}}
 
             <!-- Author -->
@@ -33,9 +35,13 @@
             <a href="/users/{{ .User.ID }}/novels" class="text-decoration-none">
               <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
             </a>
-            <a href="/users/{{ .User.ID }}" class="text-decoration-none">
-              <h4 class="text-body-secondary mb-0">{{ .User.Name }}</h4>
-            </a>
+
+            <h4 class="mb-0">
+              <a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">
+                {{ .User.Name }}
+              </a>
+            </h4>
+
             </div>
 
             <!-- Word count and reading time -->
@@ -291,10 +297,12 @@
         <!-- Author information -->
         <div class="custom-card bg-black mb-4 mb-lg-0">
           <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
-            <div class="d-flex justify-content-between align-items-center">
-              <a class="text-decoration-none text-light d-flex align-items-center" href="/users/{{ .User.ID }}/novels">
-                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px" />
-                <h2 class="m-0">Works by {{ .User.Name }}</h2>
+            <div class="d-flex align-items-center">
+              <a href="/users/{{ .User.ID }}/novels">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px;">
+              </a>
+              <a href="/users/{{ .User.ID }}/novels" class="text-body">
+                <h2 class="m-0">{{ .User.Name }}</h2>
               </a>
             </div>
           </div>
@@ -350,13 +358,11 @@
                     <!-- Comment author name and date -->
                     <div class="d-md-flex align-items-center mb-2">
                       <div class="me-md-2">
-                        <a href="/users/{{ .AuthorID }}/bookmarks" class="text-body text-decoration-none">
-                          <h6 class="mb-0">{{- .AuthorName }}</h6>
+                        <a href="/users/{{ .AuthorID }}/bookmarks" class="fw-bold text-body text-decoration-none">
+                          {{- .AuthorName }}
                         </a>
                       </div>
-                      <div>
-                        <small class="text-muted">{{ .Date }}</small>
-                      </div>
+                      <small class="text-muted">{{ .Date }}</small>
                     </div>
 
                     <!-- Stamp or emoji -->
