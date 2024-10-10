@@ -23,7 +23,7 @@
 
             <!-- Series name -->
             {{- if .Novel.SeriesNavData }}
-            <h3 class="fw-medium mb-2">
+            <h3 class="fw-normal mb-2">
               <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
                 {{- .Novel.SeriesNavData.Title }} #{{- .Novel.SeriesNavData.Order}}
               </a>
@@ -32,20 +32,18 @@
 
             <!-- Author -->
             <div class="d-flex align-items-center mb-2">
-            <a href="/users/{{ .User.ID }}/novels" class="text-decoration-none">
-              <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
-            </a>
-
-            <h4 class="mb-0">
-              <a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">
-                {{ .User.Name }}
+              <a href="/users/{{ .User.ID }}/novels" class="text-decoration-none">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
               </a>
-            </h4>
-
+              <h4 class="mb-0">
+                <a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">
+                  {{ .User.Name }}
+                </a>
+              </h4>
             </div>
 
             <!-- Word count and reading time -->
-            <p class="text-muted small mb-3">
+            <p class="small text-body-secondary">
               <span>{{ .Novel.WordCount }} word(s)</span> &middot; <span>{{ floor: .Novel.ReadingTime / 60 }} mins</span>
             </p>
 
@@ -57,7 +55,7 @@
             </div>
 
             <!-- Description -->
-            <p class="mb-3">{{ raw: .Novel.Description }}</p>
+            <p>{{ raw: .Novel.Description }}</p>
 
             <!-- Tags -->
             <div class="d-flex flex-wrap align-items-center mb-2">
@@ -67,7 +65,7 @@
               {{- range .Novel.Tags.Tags }}
                 {* NOTE: early block to catch the R-18 tag *}
                 {{- if isEmphasize(.Name) }}
-                <span class="badge bg-danger me-2 mb-2">{{ . }}</span>
+                <span class="badge bg-danger me-2 mb-2">{{ .Name }}</span>
                 {{- end }}
               {{- end }}
               {{- if .Novel.IsOriginal }}
@@ -90,20 +88,16 @@
             <!-- Metadata -->
             <div class="d-flex flex-wrap text-body-secondary small me-2">
               <div class="me-3 mb-2 mb-lg-0">
-                <i class="bi bi-eye me-1"></i>
-                <span>{{- .Novel.Views }}</span>
+                <i class="bi bi-eye me-2"></i>{{- .Novel.Views }}
               </div>
               <div class="me-3 mb-2 mb-lg-0">
-                <i class="bi bi-heart-fill me-1"></i>
-                <span>{{- .Novel.Bookmarks }}</span>
+                <i class="bi bi-heart-fill me-2"></i>{{- .Novel.Bookmarks }}
               </div>
               <div class="me-3 mb-2 mb-lg-0">
-                <i class="bi bi-hand-thumbs-up-fill me-1"></i>
-                <span>{{- .Novel.Likes }}</span>
+                <i class="bi bi-hand-thumbs-up-fill me-2"></i>{{- .Novel.Likes }}
               </div>
               <div>
-                <i class="bi bi-calendar me-1"></i>
-                <span>{{- parseTime: .Novel.CreateDate }}</span>
+                <i class="bi bi-calendar me-2"></i>{{- parseTime: .Novel.CreateDate }}
               </div>
             </div>
 
