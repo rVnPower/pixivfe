@@ -12,6 +12,16 @@ if [ -n "$UNCOMMITTED_CHANGES" ]; then
     REVISION="${REVISION}+dirty"
 fi
 
+# Check for .env file and load it unless explicitly told not to
+if [ "$1" != "--no-env-file" ] && [ -f .env ]; then
+    echo ".env file found, loading environment variables"
+    set -a
+    . ./.env
+    set +a
+else
+    echo "Not loading .env file"
+fi
+
 fmt() {
     echo "Formatting Go code..."
     go fmt ./...
@@ -63,14 +73,6 @@ i18n_download() {
 run() {
     build
     echo "Running ${BINARY_NAME}..."
-    if [ "$1" != "--do-not-load-env-file" ] && [ -f .env ]; then
-        echo ".env file found, loading environment variables"
-        set -a
-        . ./.env
-        set +a
-    else
-        echo "Not loading .env file"
-    fi
     ./"${BINARY_NAME}"
 }
 
@@ -96,13 +98,13 @@ help() {
     echo "  i18n               - Extract i18n strings"
     echo "  i18n_upload        - Upload strings to Crowdin"
     echo "  i18n_download      - Download strings from Crowdin"
-    echo "  run [--do-not-load-env-file] - Build and run the binary"
+    echo "  run                - Build and run the binary"
     echo "  clean              - Remove the binary"
     echo "  install-pre-commit - Install testing pre-commit hook"
     echo "  help               - Show this help message"
     echo ""
     echo "Options:"
-    echo "  --do-not-load-env-file - Do not load the .env file when running"
+    echo "  --no-env-file - Do not load the .env file (must be the first argument if used)"
 }
 
 all() {
@@ -124,13 +126,7 @@ execute_command() {
         i18n_template) i18n_template ;;
         i18n_upload) i18n_upload ;;
         i18n_download) i18n_download ;;
-        run)
-            if [ "$2" = "--do-not-load-env-file" ]; then
-                run "--do-not-load-env-file"
-            else
-                run
-            fi
-            ;;
+        run) run ;;
         clean) clean ;;
         install-pre-commit) install_pre_commit ;;
         help) help ;;
@@ -146,6 +142,13 @@ execute_command() {
 # Main execution
 if [ $# -eq 0 ]; then
     build
+elif [ "$1" = "--no-env-file" ]; then
+    shift
+    if [ $# -eq 0 ]; then
+        build
+    else
+        execute_command "$@"
+    fi
 else
     execute_command "$@"
 fi
