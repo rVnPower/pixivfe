@@ -199,6 +199,10 @@ a:not(:has(img)):not([class*="btn"]):not(.nav-link) {
   }
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 .stamp {
   width: 96px;
   height: 96px;

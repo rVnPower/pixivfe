@@ -38,7 +38,7 @@
 
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Latest works by followed</h2>
+      <h2 class="mb-3 mb-md-0">Latest works by followed</h2>
       <a href="/self/followingWorks" class="custom-btn-secondary">See more</a>
     </div>    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- if len(.Data.Following) > 0 }}
@@ -61,33 +61,32 @@
   <!-- pixivision content -->
   <div class="col-12">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Newest articles on pixivision</h2>
+      <h2 class="mb-3 mb-md-0">Newest articles on pixivision</h2>
       <a href="/pixivision" class="custom-btn-secondary">See more</a>
     </div>
 
     <div class="overflow-scroll" id="horizontal-scroll">
       <div class="row flex-nowrap">
-      {{- range .Data.Pixivision }}
-      <!-- NOTE: col-5 to create an visible affordance -->
-      <div class="col-5">
-        <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
-          <a href="/pixivision/a/{{.ID}}">
-            <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
-              <img src="{{.Thumbnail}}" class="card-img-top rounded-top-5" alt="{{.Title}}" />
+        {{- range .Data.Pixivision }}
+        {* TODO: make the entire pixivision card clickable while preserving the text underline effect *}
+        {* NOTE: intentionally choosing indivisible col widths to create a visible affordance *}
+        <div class="col-11 col-md-9 col-lg-5">
+          <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
+            <a href="/pixivision/a/{{.ID}}">
+              <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
+                <img src="{{.Thumbnail}}" class="card-img-top rounded-top-5" alt="{{.Title}}" />
+              </div>
+            </a>
+            <div class="custom-card-body">
+              <!-- Title -->
+              <h4 class="text-center lh-lg mb-0">
+                <a href="/pixivision/a/{{.ID}}" class="text-body text-decoration-none">{{.Title}} </a>
+              </h4>
             </div>
-          </a>
-          <div class="custom-card-body">
-            <!-- Title -->
-            <h4 class="lh-lg mb-0">
-              <a href="/pixivision/a/{{.ID}}" class="text-body text-decoration-none">
-                {{.Title}}
-              </a>
-            </h4>
           </div>
         </div>
+        {{- end }}
       </div>
-      {{- end }}
-    </div>
     </div>
   </div>
 
