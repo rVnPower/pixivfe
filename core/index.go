@@ -27,13 +27,13 @@ type LandingArtworks struct {
 	Following       []ArtworkBrief
 	Recommended     []ArtworkBrief
 	Newest          []ArtworkBrief
-	Rankings        []ArtworkBrief
+	Rankings        Ranking
 	Users           []ArtworkBrief
 	Pixivision      []Pixivision
 	RecommendByTags []RecommendedTags
 }
 
-func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
+func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks, error) {
 	var pages struct {
 		Pixivision  []Pixivision `json:"pixivision"`
 		Follow      []int        `json:"follow"`
@@ -97,23 +97,32 @@ func GetLanding(r *http.Request, mode string) (*LandingArtworks, error) {
 	// Parse everything
 	landing.Pixivision = pages.Pixivision
 
-	landing.Following = make([]ArtworkBrief, len(pages.Follow))
-	for _, i := range pages.Follow {
-		landing.Following = append(landing.Following, artworks[fmt.Sprint(i)])
-	}
-
-	for _, i := range pages.RecommendedByTags {
-		temp := make([]ArtworkBrief, 0)
-		for _, j := range i.IDs {
-			temp = append(temp, artworks[j])
+	if isLoggedIn {
+		landing.Following = make([]ArtworkBrief, len(pages.Follow))
+		for _, i := range pages.Follow {
+			landing.Following = append(landing.Following, artworks[fmt.Sprint(i)])
 		}
-		landing.RecommendByTags = append(landing.RecommendByTags, RecommendedTags{Name: i.Name, Artworks: temp})
+
+		for _, i := range pages.RecommendedByTags {
+			temp := make([]ArtworkBrief, 0)
+			for _, j := range i.IDs {
+				temp = append(temp, artworks[j])
+			}
+			landing.RecommendByTags = append(landing.RecommendByTags, RecommendedTags{Name: i.Name, Artworks: temp})
+		}
+
+		landing.Recommended = make([]ArtworkBrief, 0)
+		for _, i := range pages.Recommended.IDs {
+			landing.Recommended = append(landing.Recommended, artworks[i])
+		}
 	}
 
-	landing.Recommended = make([]ArtworkBrief, 0)
-	for _, i := range pages.Recommended.IDs {
-		landing.Recommended = append(landing.Recommended, artworks[i])
+	// Get rankings for both logged-in and non-logged-in users
+	rankings, err := GetRanking(r, "daily", "illust", "", "1")
+	if err != nil {
+		return &landing, err
 	}
+	landing.Rankings = rankings
 
 	return &landing, nil
 }
