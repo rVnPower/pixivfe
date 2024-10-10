@@ -157,10 +157,10 @@ func setRawCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 			break
 		}
 		if isPrefix {
-			return bufio.ErrBufferFull
+			return "", bufio.ErrBufferFull
 		}
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		sub := strings.Split(string(line), "=")
