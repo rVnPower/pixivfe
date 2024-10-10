@@ -1,0 +1,22 @@
+<div class="col">
+  <div class="custom-card bg-charcoal-surface1 h-100 thumbnail-hover-dark">
+    <div class="custom-card-body">
+      <div class="col-12 col-xl-8 mb-3 mb-xl-0">
+        <div class="d-flex align-items-center">
+          <a href="/users/{{.UserID}}" class="me-3">
+            <img src="{{.Avatar}}" alt="{{.Username}}" class="rounded-circle object-fit-cover" style="width: 64px; height: 64px;">
+          </a>
+          <div>
+            <h4 class="mb-1">{{.Title}}</h2>
+              <p class="mb-0"><a href="/users/{{.UserID}}" class="text-muted text-decoration-none">{{.Username}}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="/artworks/{{.ID}}">
+      <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">
+        <img src="{{.Image}}" class="card-img-top rounded-top-5" alt="{{.Title}}" />
+      </div>
+    </a>
+  </div>
+</div>

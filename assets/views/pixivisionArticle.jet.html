@@ -1,30 +1,34 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container illust">
-	<h2>{{.Article.Title}}</h2>
-	{{- range _, desc := .Article.Description }}
-	<p>{{desc}}</p>
-	{{- end }}
+<div class="row justify-content-center g-4">
+  <div class="col-12 mb-5">
+    <!-- Tag header -->
+    <div class="custom-card bg-charcoal-surface1">
+      <div class="row g-0">
+        <!-- Tag information -->
+        <div class="col-md-8">
+          <div class="custom-card-body p-4">
+            <!-- <div class="d-flex flex-wrap justify-content-between align-items-start"> -->
+              <h2 class="display-6 fw-bold me-2">{{ .Article.Title }}</h2>
 
-	{{- range _, item := .Article.Items }}
-	<div class="illust-images">
+              {{- range _, desc := .Article.Description }}
+                <p class="lead mb-0">{{desc}}</p>
+              {{- end }}
+            <!-- </div> -->
+            <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-		<div class="illust-attr">
-			<div class="illust-author-attr">
-				<a href="/users/{{ item.UserID }}"><img src="{{ item.Avatar }}"
-						alt="{{ item.Username }}" class="illust-avatar" />
-				</a>
-				<div class="attr-wrap">
-					<div class="illust-title"><a href="/artworks/{{ item.ID }}">{{ item.Title }}</a>
-					</div>
-					<div class="illust-author">
-						<a href="/users/{{ item.UserID }}">{{ item.Username }}</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<img src="{{item.Image}}" alt="{{item.Title}}" />
-	</div>
-	{{- end }}
+
+  <div class="col-12">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {{- range .Article.Items }}
+        {{- include "fragments/pixivisionArticleItem" . }}
+      {{- end }}
+    </div>
+  </div>
 </div>
 {{- end }}
