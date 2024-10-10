@@ -12994,6 +12994,10 @@ textarea.form-control-lg {
   color: white;
 }
 
+.custom-card-body a:hover {
+  text-decoration: underline !important;
+}
+
 .custom-novel-nav {
   max-height: 40vh;
 }

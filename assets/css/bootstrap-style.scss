@@ -166,6 +166,13 @@ $utilities: map-merge(
   @extend .card-body;
   @extend .border-0;
   @extend .rounded-5;
+
+  a {
+    &:hover {
+      text-decoration: underline !important;
+    }
+  }
+
 }
 
 .custom-novel-card {
