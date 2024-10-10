@@ -337,11 +337,9 @@
                   <!-- Save raw settings -->
                   <form id="raw-settings-form" hx-post="/settings/raw" hx-target="#raw-settings-response" hx-swap="outerHTML">
                     <div class="mb-3">
+                      <!-- NOTE: do not modify this <textarea> - weird whitespace will appear -->
                       <textarea class="form-control" name="raw" rows="10">
-                        <!-- TODO: fix the weird whitespace in the rendered version -->
-                        {{- range CookieListOrdered -}}
-                        {{ .k }}={{ .v }}
-                        {{end -}}
+                        {{- range CookieListOrdered -}}{{v := .v + "\n"}}{{ .k }}={{ v }}{{end -}}
                       </textarea>
                     </div>
                     <button type="submit" class="custom-btn-secondary">Set raw settings</button>
