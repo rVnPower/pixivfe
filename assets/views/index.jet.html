@@ -5,18 +5,8 @@
   <h1 class="display-6 fw-semibold text-center">PixivFE</h1>
   <span class="text-center text-body-secondary mt-0">An open-source alternative frontend for Pixiv that doesn't suck.</span>
 
-  <!-- Mode switcher -->
-  <div class="col-12">
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
-      {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
-      {{- url := replaceQuery(.Queries, "mode", "") }}
-      {{- path := slice("all", "r18") }}
-      {{- name := slice("All", "R-18")}}
-      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
-    </div>
-  </div>
-
   <!-- If the user is not logged in, only show the following non-personalised content -->
+  <!-- NOTE: the lack of the mode switcher for !.LoggedIn is intentional -->
 
   {{- if !.LoggedIn }}
   <div class="alert alert-light w-50 mx-auto" role="alert">
@@ -70,6 +60,17 @@
   {{- else }}
 
   <!-- Otherwise, the user is logged in, show the full landing page -->
+
+  <!-- Mode switcher -->
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end mx-auto">
+      {{- Mode := isset(Queries.mode) ? Queries.mode : "all" }}
+      {{- url := replaceQuery(.Queries, "mode", "") }}
+      {{- path := slice("all", "r18") }}
+      {{- name := slice("All", "R-18")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+    </div>
+  </div>
 
   <div class="col-12">
     <h2>Recommended works</h2>
