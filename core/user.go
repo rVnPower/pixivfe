@@ -52,6 +52,8 @@ type User struct {
 	Webpage           string          `json:"webpage"`
 	SocialRaw         json.RawMessage `json:"social"`
 	Artworks          []ArtworkBrief  `json:"artworks"`
+	Illustrations     []ArtworkBrief
+	Manga             []ArtworkBrief
 	Novels            []NovelBrief    `json:"novels"`
 	Background        map[string]any  `json:"background"`
 	CategoryItemCount int
@@ -124,6 +126,8 @@ func GetFrequentTags(r *http.Request, ids string, category UserArtCategory) ([]F
 
 func GetUserArtworkList(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
 	var works []ArtworkBrief
+	var illustrations []ArtworkBrief
+	var manga []ArtworkBrief
 
 	URL := GetUserFullArtworkURL(id, ids)
 
@@ -151,6 +155,12 @@ func GetUserArtworkList(r *http.Request, id, ids string) ([]ArtworkBrief, error)
 		}
 
 		works = append(works, illust)
+
+		if illust.IllustType == 0 {
+			illustrations = append(illustrations, illust)
+		} else if illust.IllustType == 1 {
+			manga = append(manga, illust)
+		}
 	}
 
 	return works, nil
@@ -400,6 +410,15 @@ func GetUserProfile(r *http.Request, id string, category UserArtCategory, page i
 				user.Novels = novels
 			} else {
 				user.Artworks = artworks
+				user.Illustrations = make([]ArtworkBrief, 0)
+				user.Manga = make([]ArtworkBrief, 0)
+				for _, artwork := range artworks {
+					if artwork.IllustType == 0 {
+						user.Illustrations = append(user.Illustrations, artwork)
+					} else if artwork.IllustType == 1 {
+						user.Manga = append(user.Manga, artwork)
+					}
+				}
 			}
 
 			if getTags {
