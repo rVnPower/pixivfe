@@ -43,30 +43,30 @@ type FrequentTag struct {
 }
 
 type User struct {
-	ID              string          `json:"userId"`
-	Name            string          `json:"name"`
-	Avatar          string          `json:"imageBig"`
-	Following       int             `json:"following"`
-	MyPixiv         int             `json:"mypixivCount"`
-	Comment         HTML            `json:"commentHtml"`
-	Webpage         string          `json:"webpage"`
-	SocialRaw       json.RawMessage `json:"social"`
-	Artworks        []ArtworkBrief  `json:"artworks"`
-	Novels          []NovelBrief    `json:"novels"`
-	Background      map[string]any  `json:"background"`
-	CategoryItemCount   int
-	FrequentTags    []FrequentTag
-	Social          map[string]map[string]string
-	BackgroundImage string
-	NovelSeries     []NovelSeries
-	MangaSeries     []MangaSeries
+	ID                string          `json:"userId"`
+	Name              string          `json:"name"`
+	Avatar            string          `json:"imageBig"`
+	Following         int             `json:"following"`
+	MyPixiv           int             `json:"mypixivCount"`
+	Comment           HTML            `json:"commentHtml"`
+	Webpage           string          `json:"webpage"`
+	SocialRaw         json.RawMessage `json:"social"`
+	Artworks          []ArtworkBrief  `json:"artworks"`
+	Novels            []NovelBrief    `json:"novels"`
+	Background        map[string]any  `json:"background"`
+	CategoryItemCount int
+	FrequentTags      []FrequentTag
+	Social            map[string]map[string]string
+	BackgroundImage   string
+	NovelSeries       []NovelSeries
+	MangaSeries       []MangaSeries
 
 	// The following fields are internal to PixivFE, used to display the number of works for a given category
 	AllCount       int
-  IllustCount    int
-  MangaCount     int
-  NovelCount     int
-  BookmarksCount int
+	IllustCount    int
+	MangaCount     int
+	NovelCount     int
+	BookmarksCount int
 }
 
 // Utility function to compute slice bounds safely
@@ -283,8 +283,20 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 	return idsString, count, illustCount, mangaCount, novelCount, series, nil
 }
 
+func initializeUserCounts(user *User) {
+	user.AllCount = 0
+	user.IllustCount = 0
+	user.MangaCount = 0
+	user.NovelCount = 0
+	user.BookmarksCount = 0
+	user.CategoryItemCount = 0
+}
+
 func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
+
+	// Initialize all count fields
+	initializeUserCounts(&user)
 
 	token := session.GetUserToken(r)
 
@@ -302,20 +314,34 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		return user, err
 	}
 
+	// Get counts for all categories
+	_, allCount, illustCount, mangaCount, novelCount, _, err := GetUserArtworksIDAndSeries(r, id, UserArt_Any, 1)
+	if err != nil {
+		return user, err
+	}
+	user.AllCount = allCount
+	user.IllustCount = illustCount
+	user.MangaCount = mangaCount
+	user.NovelCount = novelCount
+
+	// Get bookmarks count
+	_, bookmarksCount, err := GetUserBookmarks(r, id, "show", 1)
+	if err != nil {
+		return user, err
+	}
+	user.BookmarksCount = bookmarksCount
+
 	if category == UserArt_Bookmarks {
 		// Bookmarks
-		works, count, err := GetUserBookmarks(r, id, "show", page)
+		works, _, err := GetUserBookmarks(r, id, "show", page)
 		if err != nil {
 			return user, err
 		}
 
 		user.Artworks = works
-
-		// Public bookmarks count
-		user.CategoryItemCount = count
-		user.BookmarksCount = count
+		user.CategoryItemCount = bookmarksCount
 	} else if category == UserArt_Novel {
-		ids, count, illustCount, mangaCount, novelCount, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
+		ids, count, _, _, _, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
@@ -350,14 +376,9 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 			}
 		}
 
-		// Artworks count
 		user.CategoryItemCount = count
-		user.AllCount = illustCount + mangaCount + novelCount
-		user.IllustCount = illustCount
-		user.MangaCount = mangaCount
-		user.NovelCount = novelCount
 	} else {
-		ids, count, illustCount, mangaCount, novelCount, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
+		ids, count, _, _, _, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
 			return user, err
 		}
@@ -392,12 +413,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 			}
 		}
 
-		// Artworks count
 		user.CategoryItemCount = count
-		user.AllCount = illustCount + mangaCount + novelCount
-		user.IllustCount = illustCount
-		user.MangaCount = mangaCount
-		user.NovelCount = novelCount
 	}
 
 	err = user.ParseSocial()
