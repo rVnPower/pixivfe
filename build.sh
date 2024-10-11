@@ -132,7 +132,6 @@ help() {
 
 all() {
     fmt
-    i18n
     build
     test
 }
