@@ -72,7 +72,8 @@
       {{- baseURL := "/users/" + .User.ID + "/" }}
       {{- paths := slice("" + "#checkpoint", "illustrations" + "#checkpoint", "manga" + "#checkpoint", "novels" + "#checkpoint", "bookmarks" + "#checkpoint") }}
       {{- names := slice("All", "Illustrations", "Manga", "Novels", "Bookmarks") }}
-      {{- yield UnderlineNav(baseURL=baseURL, paths=paths, names=names, activeState=.Category + "#checkpoint") }}
+      {{- categoryCounts := slice(.User.AllCount, .User.IllustCount, .User.MangaCount, .User.NovelCount, .User.BookmarksCount) }}
+      {{- yield UnderlineNav(baseURL=baseURL, paths=paths, names=names, categoryCounts=categoryCounts, activeState=.Category + "#checkpoint") }}
     </div>
 
     <!-- User content -->
