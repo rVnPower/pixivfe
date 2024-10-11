@@ -33,7 +33,7 @@ func fetchData(r *http.Request, getTags bool) (userPageData, error) {
 		return userPageData{}, err
 	}
 
-	user, err := core.GetUserArtwork(r, id, category, page, getTags)
+	user, err := core.GetUserProfile(r, id, category, page, getTags)
 	if err != nil {
 		return userPageData{}, err
 	}

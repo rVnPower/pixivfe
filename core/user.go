@@ -336,7 +336,7 @@ func handleSeriesData(series json.RawMessage, category UserArtCategory) ([]Novel
 	return novelSeries, mangaSeries
 }
 
-func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
+func GetUserProfile(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
 
 	// Initialize all count fields
