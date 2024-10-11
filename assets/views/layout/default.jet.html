@@ -1,114 +1,226 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Read this on PixivFE" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Read this on PixivFE" />
+    {{ title := "PixivFE" }}
+    {{- if isset(.Title) -}}
+    {{ title = .Title + " - PixivFE" }}
+    {{ end -}}
+    <title>{{ title }}</title>
 
-  {{ title := "PixivFE" }}
-  {{- if isset(.Title) -}}
-  {{ title = .Title + " - PixivFE" }}
-  {{ end -}}
-  <title>{{ title }}</title>
+    <link href="/img/favicon.png" rel="icon" />
 
-  <link href="/img/favicon.png" rel="icon" />
-  <link href="/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/bootstrap-icons-1.11.3/bootstrap-icons.min.css" />
 
-  <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
-  <script src="/js/htmx@1.9.10.min.js"
-    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
+    <!-- TODO: figure out custom themes (e.g. charcoal theme) -->
+    <link href="/css/bootstrap-style.css" rel="stylesheet" />
 
-  <script src="/js/illust-preview.js" defer></script>
+    <script src="/js/htmx@1.9.10.min.js" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"></script>
+    <script src="/js/on-page-load.js"></script>
+    <script src="/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"></script>
+    <!-- TODO: load these JS files only on pages that require them -->
+    <script src="/js/illust-preview.js" defer></script>
+    <!-- TODO: can be annoying when you accidentally scroll inside a horizontal scroll area instead of the main content -->
+    <!-- <script src="/js/horizontal-scroll.js" defer></script> -->
+    <script src="/js/comment-pagination.js" defer></script>
+    <script src="/js/proxy-toggle.js" defer></script>
 
-  <meta content="summary_large_image" name="twitter:card" />
+    <meta content="summary_large_image" name="twitter:card" />
 
-  <meta property="og:title" content="{{ title }}" />
-  <meta property="og:site_name" content="PixivFE" />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="{{ PageURL }}" />
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:site_name" content="PixivFE" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ PageURL }}" />
 
-  {{- if isset(.MetaAuthor) }}
-  <link rel="alternate" type="application/json+oembed"
-    href="{{ BaseURL }}/oembed?a={{ .MetaAuthor }}&u={{ BaseURL }}/users/{{ .MetaAuthorID }}">
-  {{- else }}
-  <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed">
-  {{- end -}}
+    {{- if isset(.MetaAuthor) }}
+    <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed?a={{ .MetaAuthor }}&u={{ BaseURL }}/users/{{ .MetaAuthorID }}" />
+    {{- else }}
+    <link rel="alternate" type="application/json+oembed" href="{{ BaseURL }}/oembed" />
+    {{- end -}}
+    {{- if isset(.MetaDescription) }}
+    <meta property="og:description" content="{{.MetaDescription}}" />
+    {{- end -}}
+    {{- if isset(.MetaImage) }}
+    <meta property="og:image" content="{{ .MetaImage }}" />
+    {{- end }}
 
-  {{- if isset(.MetaDescription) }}
-  <meta property="og:description" content="{{.MetaDescription}}" />
-  {{- end -}}
+    <!-- Prefetch rules -->
+    <!-- NOTE: not using Speculation Rules API due to being unavailable in Firefox -->
+    <!-- <link rel="prefetch" href="/" />
+    <link rel="prefetch" href="/discovery" />
+    <link rel="prefetch" href="/ranking" />
+    <link rel="prefetch" href="/rankingCalendar" />
+    <link rel="prefetch" href="/newest" /> -->
 
-  {{- if isset(.MetaImage) }}
-  <meta property="og:image" content="{{ .MetaImage }}" />
-  {{- end }}
-</head>
+    <!-- Hide elements that require JS when scripting is disabled; only works when inline styling is allowed -->
+    <noscript>
+      <style>
+        .js-required {
+          display: none !important;
+        }
+      </style>
+    </noscript>
+  </head>
 
-<body data-hx-boost="true" data-hx-swap="outerHTML" data-hx-target="main" data-hx-select="main"
-  data-hx-indicator="#loading-indicator">
-  <div id="loading-indicator"></div>
-  <nav>
-    <div class="navigation-wrapper">
-      <span class="navbar-entry">
-        <span class="sidebar-container">
-          <input type="checkbox" class="sidebar-toggler" id="sidebar-toggler" />
-          <label for="sidebar-toggler" class="sidebar-label">
-            <img src="/img/menu-thin.png" alt="Menu" width="30" height="30" />
-          </label>
-          <div class="sidebar">
-            <ul class="sidebar-list">
-              <a class="sidebar-item" href="/discovery">
-                <img src="/img/compass.png" alt="compass" />Discovery</a>
-              <a class="sidebar-item" href="/ranking">
-                <img src="/img/crown.png" alt="crown" />Ranking</a>
-              <a class="sidebar-item" href="/rankingCalendar">
-                <img src="/img/calendar.png" alt="calendar" />Ranking history</a>
-              <a class="sidebar-item" href="/newest">
-                <img src="/img/sparkling.png" alt="sparkling" />Newest</a>
-              <br />
-              <a class="sidebar-item" href="/self/followingWorks">
-                <img src="/img/users.png" alt="users" />Latest by followed</a>
-              <a class="sidebar-item" href="/self/bookmarks">
-                <img src="/img/heart.png" alt="heart" />Your bookmarks</a>
-              <a class="sidebar-item" href="/self">
-                <img src="/img/user.png" alt="user" />Your profile</a>
-              <br />
-              <a class="sidebar-item" href="/settings">
-                <img src="/img/settings.png" alt="settings" />Settings</a>
-              <a class="sidebar-item" href="/about">
-                <img src="/img/about.svg" alt="about" />About</a>
-              <br />
-              <a class="sidebar-item" href="https://codeberg.org/vnpower/pixivfe">
-                <img src="/img/globe.png" alt="globe" />Source code</a>
-            </ul>
+  <body class="bg-black">
+    <div id="loading-indicator" class="fixed-top z-3"></div>
+    <!-- mb-4 for spacing between the navbar and main content -->
+    <nav class="navbar bg-charcoal-surface1 py-3 mb-4" id="main-navbar">
+      <div class="container">
+        <div class="d-flex">
+          <!-- Offcanvas menu for navigation items -->
+          <button class="navbar-toggler border-0 p-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- Icon and title -->
+          <a href="/">
+            <img src="/img/favicon.svg" alt="PixivFE icon" width="30" height="30" class="d-inline-block me-2" />
+          </a>
+          <span class="h2 m-0">
+            <a class="text-body text-decoration-none mb-0" href="/">PixivFE</a>
+          </span>
+        </div>
+        <!-- Search bar (visible on md and larger devices) -->
+        <div class="position-absolute top-50 start-50 translate-middle d-none d-md-block">
+          <form class="d-flex" action="/tags" method="post" autocomplete="off">
+            <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="🔍 Search artworks" aria-label="Search" />
+          </form>
+        </div>
+        <!-- Search icon (visible on smaller devices) -->
+        <div class="d-md-none ms-auto">
+          <button class="btn btn-link text-body p-0 me-1" type="button" data-bs-toggle="modal" data-bs-target="#searchModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+          </button>
+        </div>
+        <!-- TODO: figure out how to have the logged in user's avatar and name in the navbar -->
+        <!-- <a class="h5 text-decoration-none mb-0 d-flex align-items-center" href="/">
+            <img src=" .User.Avatar " width="30" height="30" class="d-inline-block rounded-circle object-fit-cover me-2">
+            <p class="m-0"> .User.Name </p>
+          </a> -->
+      </div>
+
+      <!-- Offcanvas navigation -->
+      <!-- NOTE: located under the nav element otherwise some of the default styling doesn't apply (e.g. hover state for nav-link) -->
+      <div class="offcanvas offcanvas-start bg-charcoal-surface1 border-0" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <!-- Offcanvas header -->
+        <div class="offcanvas-header d-flex align-items-start">
+          <div class="d-flex flex-column w-75">
+            <h2 class="display-6 offcanvas-title mb-0" id="offcanvasNavbarLabel"><a class="text-body text-decoration-none" href="/">PixivFE</a></h2>
+            <span class="text-body-secondary mb-0">An open-source alternative frontend for Pixiv that doesn't suck.</span>
           </div>
-        </span>
-        <a class="navbar-brand" href="/">
-          <img src="/img/favicon.png" alt="PixivFE icon" />
-          <span>PixivFE</span>
-        </a>
-      </span>
+          <!-- TODO: p-4 is a dirty hack to 'align' the close button with the title; inconsistent across devices -->
+          <button type="button" class="btn-close text-reset p-4" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <!-- Offcanvas body -->
+        <div class="offcanvas-body">
+          <ul class="navbar-nav me-auto">
+            <div class="mb-4">
+              <h3>Explore</h3>
+              <li class="nav-item">
+                <a class="nav-link" href="/discovery"><i class="bi bi-compass me-2" title="compass"></i>Discovery</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/ranking"><i class="bi bi-bar-chart-line me-2" title="crown"></i>Ranking</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/rankingCalendar"><i class="bi bi-calendar me-2" title="calendar"></i>Ranking calendar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/newest"><i class="bi bi-stars me-2" title="sparkling"></i>Newest</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/pixivision"><i class="bi bi-palette me-2"></i>pixivision</a>
+              </li>
+            </div>
+            <div class="mb-4">
+              <h3>Your profile</h3>
+              <li class="nav-item">
+                <a class="nav-link" href="/self/followingWorks"><i class="bi bi-people me-2" title="users"></i>Latest works by followed</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/self"><i class="bi bi-person me-2" title="user"></i>Your profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/self/bookmarks"><i class="bi bi-heart me-2" title="heart"></i>Your bookmarks</a>
+              </li>
+            </div>
+            <div class="mb-4">
+              <h3>Settings & info</h3>
+              <li class="nav-item">
+                <a class="nav-link" href="/settings"><i class="bi bi-gear me-2" title="settings"></i>Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/about"><i class="bi bi-info-circle me-2" title="about"></i>About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://codeberg.org/vnpower/pixivfe"><i class="bi bi-globe me-2" title="globe"></i>Source code</a>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-      <span class="navbar-entry">
-        <form action="/tags" method="post" class="search-form" autocomplete="off">
-          <input type="text" name="name" required="true" class="search-form-text" placeholder="⌕ Search artworks..." />
-          <label class="navbar-entry"><img src="/img/search.svg" alt="Search" /><input type="submit" hidden /></label>
-        </form>
-      </span>
+    <!-- <noscript>
+      <nav class="navbar bg-charcoal-surface1 py-3 mb-4" id="noscript-navbar">
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-between align-items-center w-100">
+            <a class="text-decoration-none fw-bold mb-0 d-flex align-items-center" href="/">
+              <img src="/img/favicon.svg" alt="PixivFE icon" width="30" height="30" class="d-inline-block me-2">
+              <p class="h2 text-body m-0">PixivFE</p>
+            </a>
 
-      <a class="navbar-entry" href="/settings">
-        <img src="/img/cog.svg" alt="Settings" />
-      </a>
+            <ul class="nav">
+              <li class="nav-item"><a class="nav-link" href="/discovery">Discovery</a></li>
+              <li class="nav-item"><a class="nav-link" href="/ranking">Ranking</a></li>
+              <li class="nav-item"><a class="nav-link" href="/rankingCalendar">Ranking calendar</a></li>
+              <li class="nav-item"><a class="nav-link" href="/newest">Newest</a></li>
+              <li class="nav-item"><a class="nav-link" href="/self/followingWorks">Following</a></li>
+              <li class="nav-item"><a class="nav-link" href="/self/bookmarks">Bookmarks</a></li>
+              <li class="nav-item"><a class="nav-link" href="/self">Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="/settings">Settings</a></li>
+              <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+            </ul>
+
+            <form class="d-flex" action="/tags" method="post" autocomplete="off">
+              <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="⌕ Search artworks" aria-label="Search">
+            </form>
+          </div>
+        </div>
+      </nav>
+    </noscript> -->
+
+    <!-- mb-5 for spacing at the bottom of the page -->
+    <main class="container mb-5" hx-boost="true" hx-swap="outerHTML" data-hx-indicator="#loading-indicator">
+      {{- yield body() }}
+    </main>
+    <div id="site-config" class="d-none">
+      <span id="artworkPreview">{{CookieList["pixivfe-ArtworkPreview"]}}</span>
     </div>
-    <div class="navbar-shadow"></div>
-  </nav>
-  <script src="/js/on-page-load.js"></script>
-  <main>
-    {{- yield body() }}
-  </main>
-  <div id="site-config">
-    <span id="artworkPreview">{{CookieList["pixivfe-ArtworkPreview"]}}</span>
-  </div>
-</body>
 
+    <!-- End of main content -->
+
+    <!-- Search modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content bg-charcoal-surface1 rounded-5 border-0 p-4">
+          <div class="modal-header border-0 p-0 mb-3">
+            <h2 class="modal-title" id="searchModalLabel">Search</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <form action="/tags" method="post" autocomplete="off">
+              <input class="form-control bg-charcoal-surface2 rounded-pill border-0" type="search" name="name" required placeholder="🔍 Search artworks" aria-label="Search" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
 </html>

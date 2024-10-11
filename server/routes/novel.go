@@ -63,5 +63,23 @@ func NovelPage(w http.ResponseWriter, r *http.Request) error {
 		title = fmt.Sprintf("#%d %s | %s", novel.SeriesNavData.Order, novel.Title, novel.SeriesNavData.Title)
 	}
 
-	return RenderHTML(w, r, Data_novel{Novel: novel, NovelRelated: related, User: user, NovelSeriesContentTitles: contentTitles, Title: title, FontType: fontType, ViewMode: viewMode, Language: strings.ToLower(novel.Language)})
+	novelSeriesIDs := make([]string, len(contentTitles))
+	novelSeriesTitles := make([]string, len(contentTitles))
+	for i, ct := range contentTitles {
+		novelSeriesIDs[i] = ct.ID
+		novelSeriesTitles[i] = fmt.Sprintf("#%d %s", i+1, ct.Title)
+	}
+
+	return RenderHTML(w, r, Data_novel{
+		Novel:                    novel,
+		NovelRelated:             related,
+		User:                     user,
+		NovelSeriesContentTitles: contentTitles,
+		NovelSeriesIDs:           novelSeriesIDs,
+		NovelSeriesTitles:        novelSeriesTitles,
+		Title:                    title,
+		FontType:                 fontType,
+		ViewMode:                 viewMode,
+		Language:                 strings.ToLower(novel.Language),
+	})
 }

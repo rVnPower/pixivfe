@@ -1,0 +1,79 @@
+### compose.stack.yaml
+## Intended to provide replicate a production environment by placing a reverse proxy in front of PixivFE,
+## with Varnish as caching layer (optional)
+
+### Instructions:
+## To run using a fresh build (this is probably what you want during development):
+# docker compose -f compose.stack.yaml up --build
+
+## To run using a cached build:
+# docker compose -f compose.stack.yaml up
+
+## To reload Caddy configuration without downtime:
+# docker exec -w /etc/caddy caddy caddy reload
+
+## To access pixivfe:
+# Visit https://caddy.localhost/ in your browser
+# and accept any security warnings shown (expected as Caddy uses self-signed certs by default)
+
+services:
+  caddy:
+    container_name: caddy
+    image: caddy:2.8.4-alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      internal: {}
+    volumes:
+      - type: bind
+        source: ./Caddyfile
+        target: /etc/caddy/Caddyfile
+        read_only: true
+      - caddy_data:/data
+      - caddy_config:/config
+
+  varnish:
+    container_name: varnish
+    image: varnish:7.5.0
+    restart: unless-stopped
+    networks:
+      internal: {}
+    volumes:
+      - type: bind
+        source: ./default.vcl
+        target: /etc/varnish/default.vcl
+        read_only: true
+
+  pixivfe:
+    container_name: pixivfe
+    hostname: pixivfe
+    image: vnpower/pixivfe:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    networks:
+      internal: {}
+    env_file:
+      - path: .env
+        required: true
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    read_only: true
+    user: 10001:10001
+    security_opt:
+      - no-new-privileges:true
+
+# Named volumes for persistent data
+volumes:
+  caddy_data: {}
+  caddy_config: {}
+
+# Network configuration
+# Required for internal communication between the web server and PixivFE.
+networks:
+  internal:
+    driver: bridge

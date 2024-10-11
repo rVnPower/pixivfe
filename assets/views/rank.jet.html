@@ -1,84 +1,254 @@
 {{- extends "layout/default" }}
-{{- import "blocks/switcher" }}
+{{- import "blocks/pagination" }}
+{{- import "blocks/underlinenav" }}
+{{- import "blocks/rankingnav" }}
 {{- block body() }}
 
-<div class="container">
-  <h1>{{ .Title }}</h1>
+{{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+{{- Content := isset(Queries.content) ? Queries.content : "all" }}
 
+<div class="row justify-content-center g-4">
+  <h1 class="text-center"><i class="bi bi-bar-chart-line me-2"></i>{{ .Title }}</h1>
 
-  <div class="switcher">
-    {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
-    {{- Content := isset(Queries.content) ? Queries.content : "all" }}
+  {*
+  TODO: noscript version causing issues with the underlinenav (blank page on Content switch), disabling it for now
 
-    {{- url := "" }}
-    {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
-    {{ url = "/ranking?date=" + .Data.CurrentDate +
-    "&page=1&content=" }}
-    {{- else }}
-    {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
-    {{- end }}
-    <div class="switch-title">Content</div>
-    {{- path := slice("all", "illust", "manga", "ugoira") }}
-    {{- name := slice("Overall", "Illustrations", "Mangas", "Ugoira")}}
-    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Content)}}
+  <noscript>
+    <div class="custom-card bg-charcoal-surface1 p-4">
+      <h2><i class="bi bi-gear-fill me-2"></i>Ranking options</h2>
+      <div class="custom-card-body bg-charcoal-surface1 p-0">
+        {{- url := "" }}
+        {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
+          {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
+        {{- else }}
+          {{- url = "/ranking?mode=" + Mode + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+        {{- end }}
+        <div class="row mb-4">
+          <div class="col-12">
+            <h3><i class="bi bi-calendar3 me-2"></i>Time frame</h3>
+            {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+            {{- if Content != "ugoira" }}
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+              {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+              {{- name := slice("Daily (R-18)", "Weekly (R-18)", "Weekly (R-18G)")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            {{- else }}
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily", "weekly") }}
+              {{- name := slice("Daily", "Weekly")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+              {{- name := slice("Daily (R-18)", "Weekly (R-18)", "Weekly (R-18G)")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            {{- end }}
+            {{- if Content == "all" || Content == "illust" || Content == "manga" }}
+            <p class="small text-body-secondary mb-4">
+            {{- else }}
+            <p class="small text-body-secondary mb-0">
+            {{- end }}
+              Choose the time frame for the rankings.
+            </p>
+          </div>
+
+        <div class="row mb-4">
+          <!-- NOTE: still rendering the row element when Content == ugoira to keep things simple for margin -->
+          {{- if Content != "ugoira" }}
+          <div class="col-12">
+            <h3><i class="bi bi-star-fill me-2"></i>Specialized rankings</h3>
+            <!-- Options for Overall -->
+            {{- if Content == "all" }}
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("original", "daily_ai", "male", "female") }}
+                {{- name := slice("Original", "AI-generated", "Popular among males", "Popular among females")}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("daily_r18_ai", "male_r18", "female_r18") }}
+                {{- name := slice("AI-generated (R-18)", "Popular among males (R-18)", "Popular among females (R-18)")}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+            {{- end }}
+            <!-- Options for Illustrations -->
+            {{- if Content == "illust" || Content == "manga" }}
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("male_r18", "female_r18") }}
+                {{- name := slice("Popular among males (R-18)", "Popular among females (R-18)")}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+            {{- end }}
+            <p class="small text-body-secondary mb-0">Specialized ranking categories.</p>
+            </div>
+            {{- end }}
+          </div>
+
+        <div class="row">
+          <div class="col-12 d-flex justify-content-between">
+            <a href="/ranking" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
+            <button type="button" class="custom-btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </noscript>
+  *}
+
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Content types">
+
+      <!--
+      TODO: add additional checks to these UnderlineNav buttons to ensure only valid URLs can be generated
+            e.g. selecting the "Ugoira" button hides the buttons under
+                "Specialized rankings" as well as the "Monthly" and "Rookie"
+                options under "Time frame", but this doesn't occur vice versa
+                with the "Ugoira" button still visible if either of the latter
+                buttons are selected, thus allowing the user to generate an invalid
+                URL even when there is no UX indication that this is the case
+      -->
+      {*
+      Currently resetting Mode to "daily" upon Content switch as an easy (if inadequate) workaround for the TODO above
+      *}
+
+      {{- url := "" }}
+      {{- if Mode == "original" || Mode == "male" || Mode == "female" || Mode == ""}}
+        {{ url = "/ranking?date=" + .Data.CurrentDate + "&page=1&content=" }}
+      {{- else }}
+        {{- url = "/ranking?mode=" + "daily" + "&date=" + .Data.CurrentDate + "&page=1&content=" }}
+      {{- end }}
+      {{- path := slice("all", "illust", "ugoira", "manga") }}
+      {{- name := slice("Overall", "Illustrations", "Ugoira", "Manga")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Content)}}
+    </div>
+    <div class="d-flex flex-row align-items-center justify-content-between mb-4" aria-label="Ranking options">
+      <!-- TODO: use the actual mode and content names instead of variables, and make weekly and monthly show a date range -->
+      {{- if isset(Queries.mode) && isset(Queries.content) }}
+      <h2 class="text-capitalize mb-0"><i class="bi bi-bar-chart-line me-2"></i>{{ Queries.mode }} {{ Queries.content }} rankings for {{ .Data.CurrentDate }}</h2>
+      {{- else }}
+      <h2 class="text-capitalize mb-0"><i class="bi bi-bar-chart-line me-2"></i>Daily All Rankings for {{ .Data.CurrentDate }}</h2>
+      {{- end }}
+      <button class="js-required custom-btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
+        <i class="bi bi-gear-fill me-0 me-md-2"></i>Options
+      </button>
+    </div>
+
+    <div class="d-flex flex-row align-items-center justify-content-between mb-4" aria-label="Date navigation">
+      {{- yield RankingNav()}}
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 mb-4">
+      {{- include "fragments/ranking-tn" .Data.Contents }}
+    </div>
+
+    <div class="d-flex flex-row align-items-center justify-content-between" aria-label="Date navigation">
+      {{- yield RankingNav()}}
+    </div>
   </div>
-  <br />
 
-  <div class="switcher">
-    {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
-    + "&page=1&mode=" }}
-    <div class="switch-title">Modes</div>
+  <!-- Pagination -->
+  {{- url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&mode=" + Mode + "&page=" }}
+  {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
+  {{- yield pagination(data=paginationData) }}
+</div>
 
-    {{- path := slice("daily", "weekly") }}
-    {{- name := slice("Daily", "Weekly")}}
-    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+<!-- End of main content -->
 
-    {{- if Content != "ugoira" }}
+<!-- Ranking options modal -->
+<div class="modal fade" id="RankingOptionsModal" tabindex="-1" aria-labelledby="RankingOptionsModalLabel" aria-hidden="true" hx-boost="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-charcoal-surface1 rounded-5 border-0 p-4">
+      <div class="modal-header border-0 p-0 mb-4">
+        <h2 class="modal-title" id="RankingOptionsModalLabel"><i class="bi bi-gear-fill me-2"></i>Ranking options</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <!--
+        TODO: figure out how to import this a block or fragment to avoid duplication in the noscript element
+              see also rankingoptions.jet.html
+        -->
+        {{- if Content == "all" }}
+        <div class="row border-bottom border-2 mb-4">
+        {{- else }}
+        <div class="row">
+        {{- end }}
+          <div class="col-12">
+            <h3><i class="bi bi-calendar3 me-2"></i>Time frame</h3>
+            {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+            {{- if Content != "ugoira" }}
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+              {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+              {{- name := slice("Daily (R-18)", "Weekly (R-18)", "Weekly (R-18G)")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            {{- else }}
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily", "weekly") }}
+              {{- name := slice("Daily", "Weekly")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+              {{- name := slice("Daily (R-18)", "Weekly (R-18)", "Weekly (R-18G)")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            {{- end }}
+            {{- if Content == "all" }}
+            <p class="small text-body-secondary mb-4">
+            {{- else }}
+            <p class="small text-body-secondary mb-0">
+            {{- end }}
+              Choose the time frame for the rankings.
+            </p>
+          </div>
+        </div>
 
-    {{- path := slice("monthly", "rookie") }}
-    {{- name := slice("Monthly", "Rookie")}}
-    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
+        <div class="row mb-4">
+          <!-- NOTE: still rendering the row element when Content == ugoira to keep things simple for margin -->
+          {{- if Content == "all" }}
+          <div class="col-12">
+            <h3><i class="bi bi-star-fill me-2"></i>Specialized rankings</h3>
+            <!-- Options for Overall -->
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("original", "daily_ai", "male", "female") }}
+                {{- name := slice("Original", "AI-generated", "Popular among males", "Popular among females")}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{ specUrl := "/ranking?content=all&date=" + .Data.CurrentDate + "&page=1&mode=" }}
+                {{- path := slice("daily_r18_ai", "male_r18", "female_r18") }}
+                {{- name := slice("AI-generated (R-18)", "Popular among males (R-18)", "Popular among females (R-18)")}}
+                {{- yield UnderlineNav(baseURL=specUrl, paths=path, names=name, activeState=Mode)}}
+              </div>
+            <p class="small text-body-secondary mb-0">Choose specialized ranking categories. Only available when filtering for <b>Overall</b>.</p>
+            </div>
+            {{- end }}
+          </div>
 
-    {{- end }}
-
-    <span class="switch-seperator"></span>
-    {{- path := slice("daily_r18", "weekly_r18") }}
-    {{- name := slice("Daily (R-18)", "Weekly (R-18)")}}
-    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
-    <br />
-    {{- if Content == "all" }}
-    {{- path := slice("original", "male", "female") }}
-    {{- name := slice("Original", "Popular among males", "Popular among females")}}
-    {{- yield Switcher(baseURL=url, paths=path, names=name, currentPath=Mode)}}
-    {{- end }}
-  </div>
-  <br />
-
-  <div class="switcher">
-    {{ url := "/ranking?content=" + Content + "&mode=" + Mode +
-    "&page=1" }}
-    <div class="switch-title">Date (current: {{ .Data.CurrentDate }})</div>
-    {{- if .Data.PrevDate != "false" }}
-    <a href="{{ url }}&date={{.Data.PrevDate}}" class="switch-button">Yesterday</a>
-    {{- end }} {{ if .Data.NextDate != "false" }}
-    <a href="{{ url }}&date={{.Data.NextDate}}" class="switch-button">Next day</a>
-    {{- end }}
-    <a href="{{ url }}" class="switch-button">Latest</a>
-    <span class="switch-seperator"></span>
-    <a href="/rankingCalendar">Ranking calendar</a>
-  </div>
-  <br />
-
-  <div class="artwork-container">
-    {{- include "fragments/ranking-tn" .Data.Contents }}
-  </div>
-
-  <div class="pagination">
-    {{ url := "/ranking?content=" + Content +"&date=" + .Data.CurrentDate
-    + "&mode=" + Mode + "&page=" }}
-    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
-    <br />
-    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
+        <div class="row">
+          <div class="col-12 d-flex justify-content-between">
+            <a href="/ranking" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
+            <button type="button" class="custom-btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 {{- end }}

@@ -10,7 +10,13 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
+// NOTE: is the csrf protection by the upstream Pixiv API itself good enough, or do we need to implement our own?
+
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != http.MethodPost {
+		return i18n.Error("Method not allowed")
+	}
+
 	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
@@ -39,6 +45,10 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != http.MethodPost {
+		return i18n.Error("Method not allowed")
+	}
+
 	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 
@@ -63,6 +73,10 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LikeRoute(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != http.MethodPost {
+		return i18n.Error("Method not allowed")
+	}
+
 	token := session.GetUserToken(r)
 	csrf := session.GetCookie(r, session.Cookie_CSRF)
 

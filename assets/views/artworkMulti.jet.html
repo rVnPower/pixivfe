@@ -1,8 +1,10 @@
 {{- extends "layout/default" }}
 {{- block body() }}
 {{- range .Artworks }}
-<div class="container illust">
-{{- include "fragments/artwork" . }}
+<div class="row justify-content-center g-4">
+  <div class="col-12 col-md-9">
+    {{- include "fragments/artwork" . }}
+  </div>
 </div>
 {{- end }}
 {{- end }}

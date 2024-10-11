@@ -13,10 +13,12 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
+// HTML is an alias for the HTML type from the core package
 type HTML = core.HTML
 
+// GetRandomColor returns a randomly selected color from a predefined list of color shades
 func GetRandomColor() string {
-	// Some color shade I stole
+	// VnPower: Some color shade I stole
 	colors := []string{
 		// Green
 		"#C8847E",
@@ -40,13 +42,13 @@ func GetRandomColor() string {
 		"#C87EA5",
 	}
 
-	// Randomly choose one and return
+	// Randomly choose one color and return it
 	return colors[rand.Intn(len(colors))]
 }
 
-var re_emoji = regexp.MustCompile(`\(([^)]+)\)`)
-
+// ParseEmojis replaces emoji shortcodes in a string with corresponding image tags
 func ParseEmojis(s string) HTML {
+	// Map of emoji shortcodes to their corresponding image IDs
 	emojiList := map[string]string{
 		"normal":        "101",
 		"surprise":      "102",
@@ -88,8 +90,12 @@ func ParseEmojis(s string) HTML {
 		"star":          "503",
 	}
 
-	parsedString := re_emoji.ReplaceAllStringFunc(s, func(s string) string {
-		s = s[1 : len(s)-1] // Get the string inside
+	// Regular expression to match emoji shortcodes
+	regex := regexp.MustCompile(`\(([^)]+)\)`)
+
+	// Replace shortcodes with corresponding image tags
+	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
+		s = s[1 : len(s)-1] // Get the string inside parentheses
 		id := emojiList[s]
 
 		return fmt.Sprintf(`<img src="/proxy/s.pximg.net/common/images/emoji/%s.png" alt="(%s)" class="emoji" />`, id, s)
@@ -97,13 +103,40 @@ func ParseEmojis(s string) HTML {
 	return HTML(parsedString)
 }
 
-var re_jump = regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
+// PageInfo represents information about a single page in pagination
+type PageInfo struct {
+	Number int
+	URL    string
+}
 
+// PaginationData contains all necessary information for rendering pagination controls
+type PaginationData struct {
+	CurrentPage   int
+	MaxPage       int
+	Pages         []PageInfo
+	HasPrevious   bool
+	HasNext       bool
+	PreviousURL   string
+	NextURL       string
+	FirstURL      string
+	LastURL       string
+	HasMaxPage    bool
+	LastPage      int
+	DropdownPages []PageInfo
+}
+
+// ParsePixivRedirect extracts and unescapes URLs from Pixiv's redirect links
 func ParsePixivRedirect(s string) HTML {
-	parsedString := re_jump.ReplaceAllStringFunc(s, func(s string) string {
+	// Regular expression to match Pixiv's redirect URLs
+	regex := regexp.MustCompile(`\/jump\.php\?(http[^"]+)`)
+
+	// Extract the actual URL from the redirect link
+	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
 		s = s[10:]
 		return s
 	})
+
+	// Unescape the URL
 	escaped, err := url.QueryUnescape(parsedString)
 	if err != nil {
 		return HTML(s)
@@ -111,94 +144,125 @@ func ParsePixivRedirect(s string) HTML {
 	return HTML(escaped)
 }
 
+// EscapeString escapes a string for use in a URL query
 func EscapeString(s string) string {
 	escaped := url.QueryEscape(s)
 	return escaped
 }
 
+// ParseTime formats a time.Time value as a string in the format "2006-01-02 15:04"
 func ParseTime(date time.Time) string {
 	return date.Format("2006-01-02 15:04")
 }
 
+// ParseTimeCustomFormat formats a time.Time value as a string using a custom format
 func ParseTimeCustomFormat(date time.Time, format string) string {
 	return date.Format(format)
 }
 
-func CreatePaginator(base, ending string, current_page, max_page int) HTML {
+// CreatePaginator generates pagination data based on the current page and maximum number of pages.
+// It returns a PaginationData struct containing all necessary information for rendering pagination controls.
+//
+// Parameters:
+// - base: The base part of the pagination URL
+// - ending: The ending part of the pagination URL
+// - current_page: The current page being displayed
+// - max_page: Maximum number of pages (-1 if unknown)
+// - page_margin: Number of pages to display before and after the current page
+// - dropdown_offset: Number of pages to include in dropdown before and after current page
+func CreatePaginator(base, ending string, current_page, max_page, page_margin, dropdown_offset int) (PaginationData, error) {
+	// Validate input parameters
+	if current_page < 1 {
+		return PaginationData{}, fmt.Errorf("current_page must be greater than or equal to 1, got %d", current_page)
+	}
+	if page_margin < 0 {
+		return PaginationData{}, fmt.Errorf("page_margin must be non-negative, got %d", page_margin)
+	}
+	if dropdown_offset < 0 {
+		return PaginationData{}, fmt.Errorf("dropdown_offset must be non-negative, got %d", dropdown_offset)
+	}
+
+	// Validation for users that don't have any artworks
+	// NOTE: the following breaks the current max_page implementation, commenting it out for now
+	// if max_page < 1 {
+	// 	max_page = 1
+	// }
+
+	// Validation for max_page in relation to current_page
+	// if max_page < current_page {
+	// 	return PaginationData{}, fmt.Errorf("max_page (%d) must be greater than or equal to current_page (%d) when specified", max_page, current_page)
+	// }
+
+	hasMaxPage := max_page != -1
+
 	pageUrl := func(page int) string {
 		return fmt.Sprintf(`%s%d%s`, base, page, ending)
 	}
 
-	const (
-		peek  = 5          // this can be changed freely
-		limit = peek*2 + 1 // tied to the algorithm below, do not change
-	)
-	hasMaxPage := max_page != -1
-	count := 0
-	pages := ""
-
-	pages += `<div class="pagination-buttons">`
-	{ // "jump to page" <form>
-		hidden_section := ""
-		urlParsed, err := url.Parse(base)
-		if err != nil {
-			panic(err)
+	// Helper function to generate a range of pages
+	generatePageRange := func(start, end int) []PageInfo {
+		if start > end {
+			return []PageInfo{}
 		}
-		for k, vs := range urlParsed.Query() {
-			if k == "page" {
-				continue
-			}
-			for _, v := range vs {
-				hidden_section += fmt.Sprintf(`<input type="hidden" name="%s" value="%s"/>`, k, v)
-			}
+		pages := make([]PageInfo, 0, end-start+1)
+		for i := start; i <= end; i++ {
+			pages = append(pages, PageInfo{Number: i, URL: pageUrl(i)})
 		}
-
-		max_section := ""
-		if hasMaxPage {
-			max_section = fmt.Sprintf(`max="%d"`, max_page)
-		}
-
-		pages += fmt.Sprintf(`<form action="%s">%s<input name="page" type="number" required value="%d" min="%d" %s placeholder="Page№" title="Jump To Page Number"/></form>`, pageUrl(current_page), hidden_section, current_page, 1, max_section)
-		pages += `<br />`
+		return pages
 	}
-	{
-		// previous,first (two buttons)
-		pages += `<span>`
-		{
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&laquo;</a>`, pageUrl(1))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&lsaquo;</a>`, pageUrl(max(1, current_page-1)))
-		}
-		pages += `</span>`
 
-		// page number buttons
-		for i := current_page - peek; (i <= max_page || max_page == -1) && count < limit; i++ {
-			if i < 1 {
-				continue
-			}
-			if i == current_page {
-				pages += fmt.Sprintf(`<a href="%s" class="pagination-button" id="highlight">%d</a>`, pageUrl(i), i)
-			} else {
-				pages += fmt.Sprintf(`<a href="%s" class="pagination-button">%d</a>`, pageUrl(i), i)
-			}
-			count++
-		}
-
-		// next,last (two buttons)
-		pages += `<span>`
-		if hasMaxPage {
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&rsaquo;</a>`, pageUrl(min(max_page, current_page+1)))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&raquo;</a>`, pageUrl(max_page))
-		} else {
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button">&rsaquo;</a>`, pageUrl(current_page+1))
-			pages += fmt.Sprintf(`<a href="%s" class="pagination-button" class="disabled">&raquo;</a>`, pageUrl(max_page))
-		}
-		pages += `</span>`
+	// Calculate the range of pages to display
+	start := max(1, current_page-page_margin)
+	end := current_page + page_margin
+	if hasMaxPage {
+		end = min(max_page, end)
 	}
-	pages += `</div>`
 
-	return HTML(pages)
+	// Generate page information for the range
+	pages := generatePageRange(start, end)
+
+	var lastPage int
+	if len(pages) > 0 {
+		lastPage = pages[len(pages)-1].Number
+	} else {
+		lastPage = current_page
+	}
+
+	// Generate dropdown pages
+	dropdownStart := max(1, current_page-dropdown_offset)
+	dropdownEnd := current_page + dropdown_offset
+	if hasMaxPage {
+		dropdownEnd = min(max_page, dropdownEnd)
+	}
+	dropdownPages := generatePageRange(dropdownStart, dropdownEnd)
+
+	// Calculate previous and next URLs
+	var previousURL, nextURL string
+	if current_page > 1 {
+		previousURL = pageUrl(current_page - 1)
+	}
+	if !hasMaxPage || current_page < max_page {
+		nextURL = pageUrl(current_page + 1)
+	}
+
+	// Create and return the PaginationData struct
+	return PaginationData{
+		CurrentPage:   current_page,
+		MaxPage:       max_page,
+		Pages:         pages,
+		HasPrevious:   current_page > 1,
+		HasNext:       !hasMaxPage || current_page < max_page,
+		PreviousURL:   previousURL,
+		NextURL:       nextURL,
+		FirstURL:      pageUrl(1),
+		LastURL:       pageUrl(max_page),
+		HasMaxPage:    hasMaxPage,
+		LastPage:      lastPage,
+		DropdownPages: dropdownPages,
+	}, nil
 }
 
+// GetNovelGenre returns the genre name for a given genre ID
 func GetNovelGenre(s string) string {
 	switch s {
 	case "1":
@@ -240,6 +304,7 @@ func GetNovelGenre(s string) string {
 	return i18n.Sprintf("(Unknown Genre: %s)", s)
 }
 
+// SwitchButtonAttributes generates HTML attributes for a switch button based on the current selection
 func SwitchButtonAttributes(baseURL, selection, currentSelection string) string {
 	var cur string = "false"
 	if selection == currentSelection {
@@ -255,6 +320,7 @@ var jumpUriPattern = regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]
 var jumpPagePattern = regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
 var newPagePattern = regexp.MustCompile(`\s*\[newpage\]\s*`)
 
+// GetTemplateFunctions returns a map of custom template functions for use in HTML templates
 func GetTemplateFunctions() map[string]any {
 	return map[string]any{
 		"parseEmojis": func(s string) HTML {
@@ -297,8 +363,14 @@ func GetTemplateFunctions() map[string]any {
 		"parseTimeCustomFormat": func(date time.Time, format string) string {
 			return ParseTimeCustomFormat(date, format)
 		},
-		"createPaginator": func(base, ending string, current_page, max_page int) HTML {
-			return CreatePaginator(base, ending, current_page, max_page)
+		"createPaginator": func(base, ending string, current_page, max_page, page_margin, dropdown_offset int) PaginationData {
+			paginationData, err := CreatePaginator(base, ending, current_page, max_page, page_margin, dropdown_offset)
+			if err != nil {
+				fmt.Printf("Error creating paginator: %v", err)
+				// Return an empty PaginationData in case of error
+				return PaginationData{}
+			}
+			return paginationData
 		},
 		"joinArtworkIds": func(artworks []core.ArtworkBrief) string {
 			ids := []string{}
@@ -308,24 +380,29 @@ func GetTemplateFunctions() map[string]any {
 			return strings.Join(ids, ",")
 		},
 		"stripEmbed": func(s string) string {
-			// this is stupid
+			// Remove the last 6 characters from the string (assumes "_embed" suffix)
 			return s[:len(s)-6]
 		},
 		"renderNovel": func(s string) HTML {
+			// Replace furigana markup with HTML ruby tags
 			furiganaTemplate := `<ruby>$1<rp>(</rp><rt>$2</rt><rp>)</rp></ruby>`
 			s = furiganaPattern.ReplaceAllString(s, furiganaTemplate)
 
+			// Replace chapter markup with HTML h2 tags
 			chapterTemplate := `<h2>$1</h2>`
 			s = chapterPattern.ReplaceAllString(s, chapterTemplate)
 
+			// Replace jump URI markup with HTML anchor tags
 			jumpUriTemplate := `<a href="$2" target="_blank">$1</a>`
 			s = jumpUriPattern.ReplaceAllString(s, jumpUriTemplate)
 
+			// Replace jump page markup with HTML anchor tags
 			jumpPageTemplate := `<a href="#$1">To page $1</a>`
 			s = jumpPagePattern.ReplaceAllString(s, jumpPageTemplate)
 
+			// Handle newpage markup
 			if strings.Contains(s, "[newpage]") {
-				// if [newpage] in content , then prepend <hr id="1"/> to the page
+				// Prepend <hr id="1"/> to the page if [newpage] is present
 				s = `<hr id="1"/>` + s
 				pageIdx := 1
 
@@ -335,6 +412,8 @@ func GetTemplateFunctions() map[string]any {
 					return fmt.Sprintf(`<br /><hr id="%d"/>`, pageIdx)
 				})
 			}
+
+			// Replace newlines with HTML line breaks
 			s = strings.ReplaceAll(s, "\n", "<br />")
 			return HTML(s)
 		},
@@ -344,6 +423,7 @@ func GetTemplateFunctions() map[string]any {
 		},
 		"unfinishedQuery": UnfinishedQuery,
 		"replaceQuery":    ReplaceQuery,
+		// TODO: what is AttrGen for
 		// "AttrGen": SwitchButtonAttributes,
 	}
 }

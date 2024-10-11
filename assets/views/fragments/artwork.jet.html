@@ -1,102 +1,173 @@
-{{- if !.IsUgoira }}
-<div class="illust-images">
-  {{- range index := .Images }}
-  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}">
-    {{- if .Width != 0 && .Height != 0 }}
-    {* todo: do not reflow the page because of loading image *}
-    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" data-width="{{.Width}}" data-height="{{.Height}}" />
-    {{- else }}
-    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" />
+<!-- Container for the artworks -->
+<div class="container mb-4">
+  {{- if !.IsUgoira }}
+  <!-- The actual artwork itself, if not a ugoira -->
+  <!-- NOTE: tried using a carousel, but doesn't really work that well -->
+    {{- range index := .Images }}
+        <!-- Bootstrap + Jet wizardry to dynamically scale artwork -->
+        {{- if .Width != 0 && .Height != 0 }}
+        <!-- Display artwork at full width (col-12) if it is in landscape orientation -->
+            {{- if .Width > .Height }}
+            <div class="row justify-content-center mb-4">
+                <div class="col-12 p-0">
+                    <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+                      <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                    </a>
+                </div>
+            </div>
+            <!-- Otherwise, display artwork at reduced width (col-8) if viewing on a device ≥768px in width (on small screens, the artwork is still displayed at full width) -->
+            {{- else }}
+            <div class="row justify-content-center mb-4">
+                <div class="col-sm-12 col-md-8 p-0">
+                  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+                    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                  </a>
+                </div>
+            </div>
+            {{- end }}
+        {{- else }}
+            <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
+              <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" />
+            </a>
+        {{- end }}
     {{- end }}
-  </a>
+  {{- else }}
+  <!-- The actual artwork itself, if a ugoira -->
+  <!-- TODO: also use dynamic resizing logic for ugoira; currently needs backend changes due to not having .Width and .Height to compare -->
+    <div class="row justify-content-center">
+      <div class="col-12 p-0">
+        <video class="w-100 rounded" autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
+          src="/proxy/ugoira.com/{{ .ID }}">
+          Unable to load ugoira.
+        </video>
+      </div>
+    </div>
   {{- end }}
 </div>
-{{- else }}
-<div class="illust-images">
-  <video autoplay loop muted disablepictureinpicture playsinline controls poster="{{ .Images[0].Large }}"
-    src="/proxy/ugoira.com/{{ .ID }}">
-    Unable to load ugoira.
-  </video>
-</div>
-<a href="/proxy/ugoira.com/{{ .ID }}">Download</a>
-<br />
-<a href="https://ugoira.com/i/{{ .ID }}">Go to ugoira.com for more options</a>
-{{- end }}
 
-<div class="illust-attr">
-  <div class="illust-author-attr">
-    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="illust-avatar" />
-    </a>
-    <div class="attr-wrap">
-      <div class="illust-title">{{ .Title }}</div>
-      <div class="illust-author">
-        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+  <!-- Artwork title and user information -->
+  <div class="custom-card bg-black mb-4">
+    <div class="card-body bg-charcoal-surface1 rounded-5 p-4">
+      <div class="row mb-3">
+        <!-- Artist avatar, artwork name, and artist name -->
+        <div class="col-12 col-xl-8 mb-3 mb-xl-0">
+          <div class="d-flex align-items-center">
+            <a href="/users/{{ .User.ID }}" class="me-3">
+              <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover" style="width: 64px; height: 64px;"/>
+            </a>
+            <div>
+              <h1 class="mb-1">{{ .Title }}</h1>
+              <h3 class="mb-0"><a href="/users/{{ .User.ID }}" class="text-muted text-decoration-none">{{ .User.Name }}</a></h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookmark and like buttons -->
+        <!-- TODO: there's probably a way to align these buttons along the top of the card *without breakage* -->
+        <!-- NOTE: hx-push-url used to update the URL in the user's address bar correctly, otherwise pressing back will return the user one level further than intended -->
+        <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center">
+          {{- if isset(.BookmarkData) && LoggedIn }}
+          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/deleteBookmark/{{ .BookmarkID }}" hx-target="body" hx-indicator="#bookmark-spinner" hx-push-url="true">
+            <div class="d-flex">
+              <div class="bookmark-text"><i class="bi bi-heart-fill me-2"></i>Bookmarked</div>
+              <div class="bookmark-spinner ms-2" id="bookmark-spinner">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </button>
+          {{- else }}
+          <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/addBookmark/{{ .ID }}" hx-target="body" hx-indicator="#bookmark-spinner" hx-push-url="true">
+          <div class="d-flex">
+            <div class="bookmark-text"><i class="bi bi-heart me-2"></i>Bookmark</div>
+            <div class="bookmark-spinner ms-2" id="bookmark-spinner">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </button>
+          {{- end }}
+
+          {{- if .Liked && LoggedIn}}
+          <!-- NOTE: /self/unlike isn't a real URI path, just keeping it here for consistency -->
+          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/unlike/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" hx-push-url="true" disabled>
+            <div class="d-flex">
+              <div class="like-text"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Liked</div>
+              <div class="like-spinner ms-2" id="like-spinner">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </button>
+          {{- else }}
+          <button type="button" class="custom-btn-secondary text-nowrap" hx-post="/self/like/{{ .ID }}" hx-target="body" hx-indicator="#like-spinner" hx-push-url="true">
+            <div class="d-flex">
+              <div class="like-text"><i class="bi bi-hand-thumbs-up me-2"></i>Like</div>
+              <div class="like-spinner ms-2" id="like-spinner">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </button>
+          {{- end }}
+        </div>
+      </div>
+
+      <!-- View Pixiv original button -->
+      <a href="https://pixiv.net/i/{{ .ID }}" class="custom-btn-secondary btn-sm mb-3"><i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net</a>
+
+      <!-- Artwork description -->
+      <!-- Rendered conditionally to avoid a weird empty p element that messes with spacing -->
+      {{- if .Description }}
+      <p class="card-text mb-3">{{- raw: parsePixivRedirect(.Description) }}</p>
+      {{- end }}
+
+      <!-- Tag information -->
+      <!-- text-start ensures that the content within non-emphasized tags is left-aligned while still maintaining proper wrapping behavior -->
+      <div class="d-flex flex-wrap align-items-center mb-3">
+        {{- if .AiType == 2 }}
+        <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
+        {{- end }}
+        {{- range .Tags }}
+          {* NOTE: early block to catch the R-18 tag *}
+          {{- if isEmphasize(.Name) }}
+          <span class="badge bg-danger me-2 mb-2">{{ .Name }}</span>
+          {{- end }}
+        {{- end }}
+        {{- range .Tags }}
+          {{- if isEmphasize(.Name) }}
+          {* Intentionally empty to not render anything to avoid duplication *}
+          {{- else }}
+          <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+            <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+            {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
+          </span>
+          {{- end }}
+        {{- end }}
+      </div>
+
+      <!-- Other artwork information (views, bookmarks, likes, creation date) -->
+      <div class="d-flex flex-wrap text-muted small me-2">
+        <div class="me-3 mb-2 mb-lg-0">
+            <i class="bi bi-eye me-2"></i>{{- .Views }}
+        </div>
+        <div class="me-3 mb-2 mb-lg-0">
+            <i class="bi bi-heart-fill me-2"></i>{{- .Bookmarks }}
+        </div>
+        <div class="me-3 mb-2 mb-lg-0">
+            <i class="bi bi-hand-thumbs-up-fill me-2"></i>{{- .Likes }}
+        </div>
+        <div class="me-3 mb-2 mb-lg-0">
+            <i class="bi bi-calendar me-2"></i>{{- parseTime: .Date }}
+        </div>
+        {{- if .Images[0].Width != 0 && .Images[0].Height != 0 }}
+        <div>
+            <i class="bi bi-arrows-angle-expand me-2"></i>{{ .Images[0].Width }}x{{ .Images[0].Height }}
+        </div>
+        {{- end }}
       </div>
     </div>
   </div>
-  <div class="artwork-actions">
-    {{- if isset(.BookmarkData) && LoggedIn }}
-    <a href="/self/deleteBookmark/{{ .BookmarkID }}">
-      <img src="/img/heart-red.png" alt="Bookmarked" />
-    </a>
-    {{- else }}
-    <a href="/self/addBookmark/{{ .ID }}">
-      <img src="/img/heart-outline.png" alt="Bookmark" />
-    </a>
-    {{- end }}
-
-    {{- if .Liked && LoggedIn}}
-    <img src="/img/like-blue.png" alt="Liked" />
-
-    {{- else }}
-    <a href="/self/like/{{ .ID }}">
-      <img src="/img/like-outline.png" alt="Like" />
-    </a>
-    {{- end }}
-  </div>
-</div>
-
-<div>
-  <a href="https://pixiv.net/i/{{ .ID }}">pixiv.net/i/{{ .ID }}</a>
-  <br />
-</div>
-<div class="illust-tags">
-  <span class="illust-tag-attr">
-    <img src="/img/eye.png" alt="Views" />
-    {{- .Views }}
-  </span>
-  <span class="illust-tag-attr">
-    <img src="/img/heart-solid.png" alt="Bookmarks" />
-    {{- .Bookmarks }}
-  </span>
-  <span class="illust-tag-attr">
-    <img src="/img/like.png" alt="Likes" />
-    {{- .Likes }}
-  </span>
-  <span class="illust-tag-attr">
-    <img src="/img/calendar.png" alt="Date" />
-    {{- parseTime: .Date }}
-  </span>
-</div>
-
-<div class="illust-tags">
-  {{- if .AiType == 2 }}
-  <span class="illust-tag">
-    <span class="illust-tag-name" id="highlight">AI-generated</span>
-  </span>
-  {{- end }} {{ range .Tags }} {{ if isEmphasize(.Name) }}
-  <span class="illust-tag">
-    <span class="illust-tag-name" id="highlight">{{ .Name }}</span>
-  </span>
-  {{- else }}
-  <span class="illust-tag">
-    <span class="illust-tag-name"><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span><span
-      class="illust-tag-translation">{{ .TranslatedName }}</span>
-  </span>
-  {{- end }} {{ end }}
-</div>
-<br />
-<div class="illust-description">
-  {{- raw: parsePixivRedirect(.Description) }}
-</div>
-<br />

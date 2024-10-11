@@ -1,206 +1,470 @@
 {{- extends "layout/default" }}
+{{- import "blocks/novelnav" }}
 {{- block body() }}
-<div class="container novel" id="checkpoint">
-  <div class="novel-detail">
-    <div class="novel-cover">
-      <a href="{{ .Novel.CoverURL }}">
-        <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }}" />
-      </a>
-    </div>
-    <div class="novel-metadata">
-      {{- if .Novel.SeriesNavData }}
-        <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
-          <div class="novel-series-title">
-              {{- .Novel.SeriesNavData.Title }}#{{- .Novel.SeriesNavData.Order}}
+
+{{ fontType := .FontType }}
+{{ viewMode := .ViewMode }}
+
+<div class="row justify-content-center g-4">
+
+  <div class="col-12 col-lg-9">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <div class="row g-4">
+          <div class="col-12 col-md-4">
+            <!-- Cover art -->
+            <a href="{{ .Novel.CoverURL }}">
+              <img src="{{ .Novel.CoverURL }}" alt="{{ .Novel.Title }} cover" class="d-block img-fluid rounded mx-auto" />
+            </a>
           </div>
-        </a>
-      {{- end}}
-      <div class="novel-title">{{ .Novel.Title }}</div>
-      <small><span>{{ .Novel.WordCount }} word(s)</span>&nbsp;<span>{{ floor: .Novel.ReadingTime / 60 }} mins</span></small>
-      <p class="novel-description">{{ raw: parsePixivRedirect(.Novel.Description) }}</p>
+          <div class="col-12 col-md-8 d-flex flex-column">
+            <!-- Title -->
+            <h1 class="mb-2">{{ .Novel.Title }}</h1>
 
-      <div class="illust-tags">
-        {{- if .Novel.AiType == 2 }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">AI-generated</span>
-        </span>
-        {{- end }}
-        {{- if .Novel.IsOriginal }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">Original</span>
-        </span>
-        {{- end }}
-        {{- if .Novel.Genre != "0" }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">{{ novelGenre: .Novel.Genre }}</span>
-        </span>
-        {{- end }}
-        {{- range .Novel.Tags.Tags }} {{ if isEmphasize(.Name) }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">{{ .Name }}</span>
-        </span>
-        {{- else }}
-        <span class="illust-tag">
-          <span class="illust-tag-translation"><a href="/tags/{{ escapeString(.Name) }}">#{{ .Name }}</a></span>
-        </span>
-        {{- end }} {{ end }}
-      </div>
+            <!-- Series name -->
+            {{- if .Novel.SeriesNavData }}
+            <h3 class="fw-normal mb-2">
+              <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                {{- .Novel.SeriesNavData.Title }} #{{- .Novel.SeriesNavData.Order}}
+              </a>
+            </h3>
+            {{- end}}
 
-      <div class="illust-tags">
-        <span class="illust-tag-attr">
-          <img src="/img/eye.png" alt="Views" />
-          {{- .Novel.Views }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/heart-solid.png" alt="Bookmarks" />
-          {{- .Novel.Bookmarks }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/like.png" alt="Likes" />
-          {{- .Novel.Likes }}
-        </span>
-        <span class="illust-tag-attr">
-          <img src="/img/calendar.png" alt="Date" />
-          {{- parseTime: .Novel.CreateDate }}
-        </span>
+            <!-- Author -->
+            <div class="d-flex align-items-center mb-2">
+              <a href="/users/{{ .User.ID }}/novels" class="text-decoration-none">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
+              </a>
+              <h4 class="mb-0">
+                <a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">
+                  {{ .User.Name }}
+                </a>
+              </h4>
+            </div>
+
+            <!-- Word count and reading time -->
+            <p class="small text-body-secondary">
+              <span>{{ .Novel.WordCount }} word(s)</span> &middot; <span>{{ floor: .Novel.ReadingTime / 60 }} mins</span>
+            </p>
+
+            <!-- View Pixiv original button -->
+            <div class="d-flex">
+              <a href="https://pixiv.net/novel/show.php?id={{ .Novel.ID }}" class="custom-btn-secondary btn-sm mb-3">
+                <i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net
+              </a>
+            </div>
+
+            <!-- Description -->
+            <p>{{ raw: .Novel.Description }}</p>
+
+            <!-- Tags -->
+            <div class="d-flex flex-wrap align-items-center mb-2">
+              {{- if .Novel.AiType == 2 }}
+              <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
+              {{- end }}
+              {{- range .Novel.Tags.Tags }}
+                {* NOTE: early block to catch the R-18 tag *}
+                {{- if isEmphasize(.Name) }}
+                <span class="badge bg-danger me-2 mb-2">{{ .Name }}</span>
+                {{- end }}
+              {{- end }}
+              {{- if .Novel.IsOriginal }}
+              <span class="badge bg-primary me-2 mb-2">Original</span>
+              {{- end }}
+              {{- if .Novel.Genre != "0" }}
+              <span class="badge bg-secondary me-2 mb-2">{{ novelGenre: .Novel.Genre }}</span>
+              {{- end }}
+              {{- range .Novel.Tags.Tags }}
+                {{- if isEmphasize(.Name) }}
+                {* Intentionally empty to not render anything to avoid duplication *}
+                {{- else }}
+                <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+                  <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+                </span>
+                {{- end }}
+              {{- end }}
+            </div>
+
+            <!-- Metadata -->
+            <div class="d-flex flex-wrap text-body-secondary small me-2">
+              <div class="me-3 mb-2 mb-lg-0">
+                <i class="bi bi-eye me-2"></i>{{- .Novel.Views }}
+              </div>
+              <div class="me-3 mb-2 mb-lg-0">
+                <i class="bi bi-heart-fill me-2"></i>{{- .Novel.Bookmarks }}
+              </div>
+              <div class="me-3 mb-2 mb-lg-0">
+                <i class="bi bi-hand-thumbs-up-fill me-2"></i>{{- .Novel.Likes }}
+              </div>
+              <div>
+                <i class="bi bi-calendar me-2"></i>{{- parseTime: .Novel.CreateDate }}
+              </div>
+            </div>
+
+            <!-- Series navigation, if present -->
+            <!-- NOTE: using mt-4 as this element is rendered conditionally  -->
+            {{- if .Novel.SeriesNavData }}
+            <div class="custom-card mt-4">
+              <div class="custom-card-body bg-charcoal-surface2">
+                <h3 class="text-center mb-2">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
+                    {{- .Novel.SeriesNavData.Title }}
+                  </a>
+                </h3>
+                <h4 class="text-body-secondary text-center">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                    <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
+                    {{- if len(.NovelSeriesContentTitles) == 1 }}
+                      work in this series
+                    {{- else }}
+                      works in this series
+                    {{- end }}
+                  </a>
+                </h4>
+                <hr class="my-3">
+                <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
+                  {{ activeState := .Novel.ID }}
+                  {{ yield NovelNav(
+                      baseURL="/novel/",
+                      paths=.NovelSeriesIDs,
+                      names=.NovelSeriesTitles,
+                      activeState=activeState
+                  ) }}
+                </div>
+              </div>
+            </div>
+            {{- end }}
+
+          </div>
+        </div>
       </div>
     </div>
-    {{- if .Novel.SeriesNavData }}
-    <div class="content-title-nav">
-      <div>Series</div>
-      <ol class="content-title-list">
-        {{- range i,v := .NovelSeriesContentTitles }}
-        <li>
-          {*TODO how to scroll the current one into the center and middle of the div ?*}
-          {{- if v.ID == .Novel.ID  }}
-          # {{ i + 1 }}&nbsp;{{ v.Title }}
-          {{- else }}
-          <a href="/novel/{{ v.ID }}" ># {{ i + 1 }}&nbsp;{{ v.Title }}</a>
+  </div>
+
+  <noscript>
+    <!-- col-12 because noscript forces d-inline which causes justify-content-center to break -->
+    <div class="col-12 col-lg-9">
+      <div class="custom-card">
+        <div class="custom-card-body bg-charcoal-surface1 p-4">
+          <h2><i class="bi bi-gear-fill me-2"></i>Options</h2>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
+              <h3>Font family</h3>
+              <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
+              <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" {{- if fontType == "mincho" }}checked{{- end }} />
+                  <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
+                  <div id="font-type-mincho-help" class="form-text">A serif font style that resembles traditional Japanese printing. It's often used for formal or literary content, providing a classic and elegant look.</div>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" {{- if fontType == "gothic" }}checked{{- end }} />
+                  <label class="form-check-label fw-bold" for="font-type-gothic">Gothic</label>
+                  <div id="font-type-gothic-help" class="form-text">A sans-serif font style that's clean and modern. It's commonly used for easy readability on digital screens, offering a contemporary appearance.</div>
+                </div>
+
+                <button type="submit" class="custom-btn-secondary">Save</button>
+              </form>
+              <div id="novel-font-response"></div>
+            </li>
+
+            <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
+              <h3>Force text orientation</h3>
+              <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
+              <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" {{- if viewMode == "1" }}checked{{- end }} />
+                  <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
+                  <div id="tx-ori-h-help" class="form-text">Forces the text to be displayed horizontally, left-to-right. This is common for most languages and easier to read on smaller screens or for those more accustomed to Western text layouts.</div>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" {{- if viewMode == "2" }}checked{{- end }} />
+                  <label class="form-check-label fw-bold" for="tx-ori-v">Vertical</label>
+                  <div id="tx-ori-v-help" class="form-text">Forces the text to be displayed vertically, top-to-bottom and right-to-left. This is traditional for some East Asian languages and can provide a unique reading experience, especially for longer texts.</div>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" {{- if viewMode == "" }}checked{{- end }} />
+                  <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
+                  <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
+                </div>
+                <button type="submit" class="custom-btn-secondary">Save</button>
+              </form>
+              <div id="novel-view-mode-response"></div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </noscript>
+
+  <!-- NOTE: col-12 to always display at full width, may tune down in the future -->
+  <div class="col-12">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 py-4 px-0">
+        <!-- NOTE: mx-0 because the row element overflows the card horizontally without it -->
+        <div class="row justify-content-center mx-0">
+          <!-- NOTE: px-0 to undo the extra spacing caused by mx-0 -->
+          <div class="col-12 px-0">
+            <div class="d-flex flex-column align-items-center position-relative mx-4 mb-4 justify-content-center">
+              <div class="d-flex flex-column text-center">
+                <h2 class="mb-2">{{ .Novel.Title }}</h2>
+                <h3><a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">{{ .User.Name }}</a></h3>
+                <p class="text-body-secondary small mb-0">
+                  <span>{{ .Novel.WordCount }} word(s)</span> &middot; <span>{{ floor: .Novel.ReadingTime / 60 }} mins</span>
+                </p>
+              </div>
+
+              <!-- Options button that will stay on the side for larger screens but 'move' to the bottom for smaller screens -->
+              <button
+                class="js-required custom-btn-secondary position-absolute top-50 end-0 translate-middle-y d-none d-lg-block"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#NovelOptionsModal">
+                <i class="bi bi-gear-fill me-2"></i>Options
+              </button>
+
+              <!-- The smaller version of the button for mobile that is displayed below the text -->
+              <button
+                class="js-required custom-btn-secondary mt-3 d-lg-none"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#NovelOptionsModal">
+                <i class="bi bi-gear"></i> Options
+              </button>
+            </div>
+
+            <!-- The actual novel itself -->
+            <!-- TODO: make background color configurable (need to update backend source files etc) -->
+            <!-- NOTE: mb-4 so that the parent card doesn't cut off suddenly right after the novel content -->
+            <div id="content" class="card-body bg-off-white text-dark overflow-x-scroll mb-4 p-5">
+              <p class="fs-5 lh-lg" data-font="{{ .FontType }}" data-lang="{{ .Language }}" data-view="{{ .ViewMode }}">
+                {{- raw: renderNovel(.Novel.Content) }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Series navigation, if present -->
+          {{- if .Novel.SeriesNavData }}
+          <div class="col-9 px-0">
+            <div class="custom-card">
+              <div class="custom-card-body bg-charcoal-surface2 p-4">
+                <h2 class="text-center mb-2">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body text-decoration-none">
+                    {{- .Novel.SeriesNavData.Title }}
+                  </a>
+                </h2>
+                <h3 class="text-body-secondary text-center">
+                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                    <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
+                    {{- if len(.NovelSeriesContentTitles) == 1 }}
+                      work in this series
+                    {{- else }}
+                      works in this series
+                    {{- end }}
+                  </a>
+                </h3>
+                <hr class="my-4">
+                <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
+                  {{ activeState := .Novel.ID }}
+                  {{ yield NovelNav(
+                      baseURL="/novel/",
+                      paths=.NovelSeriesIDs,
+                      names=.NovelSeriesTitles,
+                      activeState=activeState
+                  ) }}
+                </div>
+              </div>
+            </div>
+          </div>
           {{- end }}
-        </li>
-        {{- end }}
-      </ol>
-    </div>
-    {{- end }}
-  </div>
-  <!-- ----------- -->
-  <div class="novel-settings">
-    <div class="novel-settings-wrapper">
-      <span class="dropdown">
-        {{- url := "/settings/novelFontType" }}
-        <input type="checkbox" class="dropdown-toggler" id="font-type-toggler" />
-        <label for="font-type-toggler" class="dropdown-toggler-label">
-          <img src="/img/font-family.png" alt="Font family" />
-        </label>
-        <div class="dropdown-content">
-          <div>Font type</div>
-          <form action="{{ url }}" method="post">
-            <input type="text" name="font-type" value="gothic" class="value-holder" />
-            <input type="submit" value="Gothic" />
-          </form>
-          <form action="{{ url }}" method="post">
-            <input type="text" name="font-type" value="mincho" class="value-holder" />
-            <input type="submit" value="Mincho" />
-          </form>
         </div>
-      </span>
-      <img src="/img/font-size.png" alt="Font size" />
-      <span class="dropdown">
-        {{- url := "/settings/novelViewMode" }}
-        <input type="checkbox" class="dropdown-toggler" id="view-mode-toggler" />
-        <label for="view-mode-toggler" class="dropdown-toggler-label">
-          <img src="/img/orientation.png" alt="Orientation" />
-        </label>
-        <div class="dropdown-content">
-          <div>Text orientation</div>
-          <form action="{{ url }}" method="post">
-            <input id="vm-1" type="radio" name="view-mode" value="1" />
-            <label for="vm-1">Horizontal</label>
-            <br />
-            <input id="vm-2" type="radio" name="view-mode" value="2" />
-            <label for="vm-2">Vertical</label>
-            <br />
-            <input id="vm-d" type="radio" name="view-mode" value="" />
-            <label for="vm-d">Don't force</label>
-            <br />
-            <input type="submit" value="Submit!" />
-          </form>
-        </div>
-      </span>
-    </div>
-  </div>
-  <!-- ----------- -->
-  <div class="novel-content" id="content" data-font="{{ .FontType }}" data-lang="{{ .Language }}"
-    data-view="{{ .ViewMode }}">
-    <div class="novel-content-text">
-      {{- raw: renderNovel(.Novel.Content) }}
-    </div>
-  </div>
-  {{- if .Novel.SeriesNavData }}
-  <div class="novel-series-nav">
-    <div>
-      Series: <a class="novel-series-title" href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}">
-        {{- .Novel.SeriesNavData.Title }}
-      </a>
-    </div>
-    {{- if .Novel.SeriesNavData.Next }}
-    <div class="prev">
-      Next:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Next.ID}}">
-        #{{- .Novel.SeriesNavData.Next.Order }}&nbsp;{{ .Novel.SeriesNavData.Next.Title }}</a>
-    </div>
-    {{- end}}
-    {{- if .Novel.SeriesNavData.Prev }}
-    <div class="next">
-      Prev:<a class="novel-title" href="/novel/{{.Novel.SeriesNavData.Prev.ID}}">
-        #{{- .Novel.SeriesNavData.Prev.Order }}&nbsp;{{ .Novel.SeriesNavData.Prev.Title }}</a>
-    </div>
-    {{- end}}
-  </div>
-  {{- end}}
-  <div class="novel-attr">
-    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
-    </a>
-    <div class="attr-wrap">
-      <div class="novel-title">
-        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
       </div>
     </div>
   </div>
-  <hr />
-  <details>
-    <summary>Comments</summary>
-    {{- if .Novel.CommentOff == 1 }}
-    <p>The creator turned comments off</p>
-    {{- else if .Novel.CommentCount == 0 }}
-    <p>There are no comments yet</p>
-    {{- else }} {{ range .Novel.CommentsList }}
-    <div class="comment">
-      <a href="/users/{{ .AuthorID }}" class="comment-author">
-        <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
-      </a>
-      <div class="comment-context">
-        <a href="/users/{{ .AuthorID }}" class="comment-author">
-          {{- .AuthorName }}
-        </a>
-        <p>
-          {{- if .Stamp }}
-          <img class="stamp" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-            alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" />
-          {{- else }} {{ raw: parseEmojis(.Context) }} {{ end }}
-        </p>
 
-        <small>{{ .Date }}</small>
+  <div class="col-12">
+    <div class="row">
+      <!-- Recent works -->
+      <div class="col-12 col-lg-6">
+        <!-- Author information -->
+        <div class="custom-card bg-black mb-4 mb-lg-0">
+          <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
+            <div class="d-flex align-items-center">
+              <a href="/users/{{ .User.ID }}/novels">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px;">
+              </a>
+              <a href="/users/{{ .User.ID }}/novels" class="text-body">
+                <h2 class="m-0">{{ .User.Name }}</h2>
+              </a>
+            </div>
+          </div>
+          <div class="overflow-scroll overflow-lg-visible" id="horizontal-scroll">
+            <div class="row flex-nowrap flex-lg-wrap mx-0">
+              {{- range .Novel.UserNovels }}
+              <div class="col-12 mt-1">
+                <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+                {{- include "fragments/novel-tn" . }}
+                </div>
+                <hr class="d-none d-lg-block my-0">
+              </div>
+              {{- end }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments section -->
+      <!--
+      TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
+            Need to extract this out to a block that takes parameters
+      -->
+      <div class="col-12 col-lg-6">
+        <div class="custom-card">
+          <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
+            {{- if .Novel.CommentOff == 1 || .Novel.CommentCount == 0 }}
+            <h2>0 Comments</h2>
+            {{- else if .Novel.CommentCount == 1 }}
+            <h2>1 Comment</h2>
+            {{- else }}
+            <h2>{{ .Novel.CommentCount }} Comments</h2>
+            {{- end }}
+            {{- if .Novel.CommentOff == 1  }}
+            <p class="mb-4">The creator turned comments off</p>
+            {{- else if .Novel.CommentCount == 0 }}
+            <p class="mb-4">There are no comments yet</p>
+            {{- else }}
+            <div class="list-group" id="comments-container">
+              {{ range .Novel.CommentsList }}
+              <!-- Element for a single comment -->
+              <!-- NOTE: py-1 to give each comment a bit more breathing space -->
+              <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
+                <div class="row">
+                  <!-- Comment author avatar image -->
+                  <div class="col-auto">
+                    {* checks whether .AuthorName is empty, indicating a deleted user *}
+                    {{- if .AuthorName != "" }}
+                    <a href="/users/{{ .AuthorID }}/bookmarks">
+                      <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                    </a>
+                    {{- else }}
+                    <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                    {{- end }}
+                  </div>
+
+                  <div class="col px-2">
+                    <!-- Comment author name and date -->
+                    <div class="d-md-flex align-items-center mb-2">
+                      <div class="me-md-2">
+                        {{- if .AuthorName != "" }}
+                        <a href="/users/{{ .AuthorID }}/bookmarks" class="fw-bold text-body text-decoration-none">
+                          {{- .AuthorName }}
+                        </a>
+                        {{- else }}
+                        <p class="fw-bold mb-0">Deleted user</p>
+                        {{- end }}
+                      </div>
+                      <small class="text-muted">{{ .Date }}</small>
+                    </div>
+
+                    <!-- Stamp or emoji -->
+                    {{- if .Stamp }}
+                    <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
+                    {{- else }}
+                    <!-- Comment with emojis -->
+                    <p class="d-flex flex-wrap align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
+                    {{ end }}
+                  </div>
+                </div>
+              </div>
+              {{- end }}
+              <div class="d-flex justify-content-center">
+                <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+              </div>
+            </div>
+            {{ end }}
+          </div>
+        </div>
       </div>
     </div>
-    {{- end }} {{ end }}
-  </details>
+  </div>
+
+  <div class="col-12 mt-5">
+    <h2>Related works</h2>
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+      {{- range .NovelRelated }}
+      <div class="col mt-1">
+        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          {{- include "fragments/novel-tn" . }}
+        </div>
+        <hr class="my-0">
+      </div>
+      {{- end }}
+    </div>
+  </div>
 </div>
-<div class="container">
-  <h2>Related works</h2>
-  <div class="novel-container">
-    {{- range .NovelRelated }}
-    {{- include "fragments/novel-tn" . }}
-    {{- end }}
+
+<!-- End of main content -->
+
+<!-- Novel options modal -->
+<div class="modal fade" id="NovelOptionsModal" tabindex="-1" aria-labelledby="NovelOptionsModalLabel" aria-hidden="true" hx-boost="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-charcoal-surface1 rounded-5 border-0 p-4">
+      <div class="modal-header border-0 p-0 mb-4">
+        <h2 class="modal-title" id="NovelOptionsModalLabel"><i class="bi bi-gear-fill me-2"></i>Novel options</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-charcoal-surface1 pt-0 pb-4 px-0">
+            <h3>Font family</h3>
+            <p>Choose the font style for displaying novels. This affects the readability and aesthetic of the text.</p>
+            <form id="novel-font-form" hx-post="/settings/novelFontType" hx-target="#novel-font-response" hx-swap="outerHTML">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-mincho" value="mincho" {{- if fontType == "mincho" }}checked{{- end }} />
+                <label class="form-check-label fw-bold" for="font-type-mincho">Mincho</label>
+                <div id="font-type-mincho-help" class="form-text">A serif font style that resembles traditional Japanese printing. It's often used for formal or literary content, providing a classic and elegant look.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="font-type" id="font-type-gothic" value="gothic" {{- if fontType == "gothic" }}checked{{- end }} />
+                <label class="form-check-label fw-bold" for="font-type-gothic">Gothic</label>
+                <div id="font-type-gothic-help" class="form-text">A sans-serif font style that's clean and modern. It's commonly used for easy readability on digital screens, offering a contemporary appearance.</div>
+              </div>
+
+              <button type="submit" class="custom-btn-secondary">Save</button>
+            </form>
+            <div id="novel-font-response"></div>
+          </li>
+
+          <li class="list-group-item bg-charcoal-surface1 pt-4 pb-0 px-0">
+            <h3>Force text orientation</h3>
+            <p>Set the text orientation for novels. This affects how the text is displayed and read on the page.</p>
+            <form id="novel-view-mode-form" hx-post="/settings/novelViewMode" hx-target="#novel-view-mode-response" hx-swap="outerHTML">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-h" value="1" {{- if viewMode == "1" }}checked{{- end }} />
+                <label class="form-check-label fw-bold" for="tx-ori-h">Horizontal</label>
+                <div id="tx-ori-h-help" class="form-text">Forces the text to be displayed horizontally, left-to-right. This is common for most languages and easier to read on smaller screens or for those more accustomed to Western text layouts.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-v" value="2" {{- if viewMode == "2" }}checked{{- end }} />
+                <label class="form-check-label fw-bold" for="tx-ori-v">Vertical</label>
+                <div id="tx-ori-v-help" class="form-text">Forces the text to be displayed vertically, top-to-bottom and right-to-left. This is traditional for some East Asian languages and can provide a unique reading experience, especially for longer texts.</div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="view-mode" id="tx-ori-n" value="" {{- if viewMode == "" }}checked{{- end }} />
+                <label class="form-check-label fw-bold" for="tx-ori-n">Don't force (default from Pixiv)</label>
+                <div id="tx-ori-n-help" class="form-text">Uses the original text orientation as set by the author on Pixiv. This is the default option and respects the intended layout of the novel.</div>
+              </div>
+              <button type="submit" class="custom-btn-secondary">Save</button>
+            </form>
+            <div id="novel-view-mode-response"></div>
+          </li>
+        </ul>
+
+      </div>
+    </div>
   </div>
 </div>
 {{- end }}

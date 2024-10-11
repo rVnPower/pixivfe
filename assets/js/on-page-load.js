@@ -1,7 +1,7 @@
 // on network error when clicking on a link, navigate to the page anyway
 addEventListener('htmx:sendError', function (event) {
   if (event.target.tagName == "A") {
-    // if the server is down, this will show the browser's default "Unable to connect" page, which is familiar to the user  
+    // if the server is down, this will show the browser's default "Unable to connect" page, which is familiar to the user
     document.location = event.detail.pathInfo.requestPath
   }
 });
@@ -13,14 +13,14 @@ addEventListener('htmx:beforeOnLoad', function (event) {
   event.detail.isError = false;
 });
 
-function closeNavigationMenu() {
-  document.getElementById("sidebar-toggler").checked = false
-}
-// browser built-in navigation
-addEventListener("popstate", (event) => {
-  closeNavigationMenu()
-});
-// htmx triggered navigation
-addEventListener("htmx:pushedIntoHistory", (event) => {
-  closeNavigationMenu()
-});
+// function closeNavigationMenu() {
+//   document.getElementById("sidebar-toggler").checked = false
+// }
+// // browser built-in navigation
+// addEventListener("popstate", (event) => {
+//   closeNavigationMenu()
+// });
+// // htmx triggered navigation
+// addEventListener("htmx:pushedIntoHistory", (event) => {
+//   closeNavigationMenu()
+// });

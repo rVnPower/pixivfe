@@ -1,12 +1,28 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container error">
-    <h1>An error occured</h1>
-    <p>This is what you got instead ¯\_(ツ)_/¯</p>
-    <br />
-    {{- .Error }}
-    <hr />
-    <p>If you think this error should not occur, you can help us by submitting an issue to the <a href="https://codeberg.org/VnPower/PixivFE/issues/new">upstream repository</a>!
-    </p>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center">An unexpected error occurred ¯\_(ツ)_/¯</h1>
+
+  <div class="col-12 col-lg-9">
+
+    <div class="custom-card bg-black mb-4 mb-lg-0">
+      <div class="card-body border-0 rounded-5 bg-charcoal-surface1 p-4">
+        <p>This is what you got instead:</p>
+        <code>
+        <pre class="bg-dark-subtle rounded border border-1 p-3">
+        {{- .Error }}
+        </pre>
+        </code>
+        <p>If you think this error should not occur, you can help
+            us by submitting an issue to the <a href="https://codeberg.org/VnPower/PixivFE/issues/new">upstream repository</a>!
+        </p>
+        <a role="button" href="/" class="btn custom-btn-secondary">
+          <i class="bi bi-house-fill me-2"></i>Go back to the home page
+        </a>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 {{- end }}

@@ -1,78 +1,132 @@
 {{- extends "layout/default" }}
 {{- block body() }}
-<div class="container illust" id="checkpoint">
+<div class="row justify-content-center g-4">
+<!-- col-md-9 to ensure that artworks don't take forever to scroll past, especially if there are multiple, but col-12 to display artworks at full width on small devices -->
+<div class="col-12 col-md-9">
+  <!-- The artwork fragment -->
   {{- include "fragments/artwork" .Illust }}
-  {{- if .Illust.SeriesNavData }}
-  <div class="illust-series-nav">
-    <div>
-      Series: <a class="illust-series-title" href="/user/{{ .Illust.UserID }}/series/{{ .Illust.SeriesNavData.SeriesID }}">
-        {{- .Illust.SeriesNavData.Title }}
-      </a>
-    </div>
-    {{- if .Illust.SeriesNavData.Next }}
-    <div class="prev">
-      Next:<a class="illust-title" href="/artworks/{{.Illust.SeriesNavData.Next.ID}}">
-        #{{- .Illust.SeriesNavData.Next.Order }}&nbsp;{{ .Illust.SeriesNavData.Next.Title }}</a>
-    </div>
-    {{- end}}
-    {{- if .Illust.SeriesNavData.Prev }}
-    <div class="next">
-      Prev:<a class="illust-title" href="/artworks/{{.Illust.SeriesNavData.Prev.ID}}">
-        #{{- .Illust.SeriesNavData.Prev.Order }}&nbsp;{{ .Illust.SeriesNavData.Prev.Title }}</a>
-    </div>
-    {{- end}}
-  </div>
-  {{- end}}
-  <div class="illust-other-works">
-    <div class="artwork-container-header">
-      <a class="illust-other-works-author" href="/users/{{ .Illust.User.ID }}"><img src="{{ .Illust.User.Avatar }}"
-          alt="{{ .Illust.User.Name }}" /> Other works by {{ .Illust.User.Name }}
-        <span class="special-symbol">&raquo;</span>
-      </a>
-      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
-      <div class="artwork-actions"><a href="{{combinedUrl}}">View all</a></div>
-    </div>
-    <div class="artwork-container-scroll">
-      {{- range .Illust.RecentWorks }}
-      <div class="artwork-small artwork">
-        {{- include "fragments/thumbnail-dt" . }}
-      </div>
-      {{- end }}
-    </div>
-  </div>
-  <hr />
-  <details>
-    <summary>Comments</summary>
-    {{- if .Illust.CommentDisabled == 1 }}
-    <p>The creator turned comments off</p>
-    {{- else if .Illust.Comments == 0 }}
-    <p>There are no comments yet</p>
-    {{- else }} {{ range .Illust.CommentsList }}
-    <div class="comment">
-      <a href="/users/{{ .AuthorID }}" class="comment-author">
-        <img class="comment-avatar" src="{{ .Avatar }}" alt="{{ .AuthorName }}" />
-      </a>
-      <div class="comment-context">
-        <a href="/users/{{ .AuthorID }}" class="comment-author">
-          {{- .AuthorName }}
-        </a>
-        <p>
-          {{- if .Stamp }}
-          <img class="stamp" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"
-            alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" />
-          {{- else }} {{ raw: parseEmojis(.Context) }} {{ end }}
-        </p>
 
-        <small>{{ .Date }}</small>
+  <div class="row">
+    <!-- Recent works by artist -->
+    <div class="col-12 col-lg-6">
+      <div class="custom-card bg-charcoal-surface1 py-3 px-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <a href="/users/{{ .Illust.User.ID }}">
+              <img src="{{ .Illust.User.Avatar }}" alt="{{ .Illust.User.Name }}" class="rounded-circle object-fit-cover me-3" style="width: 48px; height: 48px;">
+            </a>
+            <a href="/users/{{ .Illust.User.ID }}" class="text-body">
+              <h2 class="m-0">{{ .Illust.User.Name }}</h2>
+            </a>
+          </div>
+          {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.Illust.RecentWorks) }}
+          <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
+        </div>
+        </div>
+        <div id="horizontal-scroll" class="row flex-nowrap flex-lg-wrap overflow-scroll overflow-lg-visible my-3 mx-0">
+          {{- range .Illust.RecentWorks }}
+          <div class="col-6 col-md-4 px-2">
+              <div class="card h-100 border-0">
+                {{ include "fragments/thumbnail-dt" . }}
+                <div class="card-body bg-black py-2 px-0">
+                  {{ include "fragments/thumbnail-tt" . }}
+                </div>
+              </div>
+          </div>
+          {{- end }}
+        </div>
+    </div>
+
+    <!-- Comments section -->
+    <!--
+    TODO: currently duplicated unnecessarily across artwork.jet.html and novel.jet.html
+          Need to extract this out to a block that takes parameters
+    -->
+    <div class="col-12 col-lg-6">
+      <div class="custom-card">
+        <div class="custom-card-body bg-charcoal-surface1 p-4 pb-0">
+          <!-- TODO: clean this logic up -->
+          {{- if .Illust.Comments == 0 }}
+          <h2>0 Comments</h2>
+          {{- else if .Illust.Comments == 1 }}
+          <h2>1 Comment</h2>
+          {{- else }}
+          <h2>{{ .Illust.Comments }} Comments</h2>
+          {{- end }}
+          <!-- NOTE: pb-0 otherwise the last comment will add extra spacing at the end of the card -->
+          {{- if .Illust.CommentDisabled == 1 }}
+          <p class="mb-4">The creator turned comments off</p>
+          {{- else if .Illust.Comments == 0 }}
+          <p class="mb-4">There are no comments yet</p>
+          {{- else }}
+          <div class="list-group" id="comments-container">
+            {{ range .Illust.CommentsList }}
+            <!-- Element for a single comment -->
+            <!-- NOTE: py-1 to give each comment a bit more breathing space -->
+            <div class="list-group-item border-0 bg-charcoal-surface1 py-1 px-0 mb-4 comment-item">
+              <div class="row">
+                <!-- Comment author avatar image -->
+                <div class="col-auto">
+                  {* checks whether .AuthorName is empty, indicating a deleted user *}
+                  {{- if .AuthorName != "" }}
+                  <a href="/users/{{ .AuthorID }}/bookmarks">
+                    <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                  </a>
+                  {{- else }}
+                  <img class="img-fluid rounded-circle object-fit-cover" src="{{ .Avatar }}" alt="{{ .AuthorName }}" style="width: 40px; height: 40px" />
+                  {{- end }}
+                </div>
+
+                <div class="col px-2">
+                  <!-- Comment author name and date -->
+                  <div class="d-md-flex align-items-center mb-2">
+                    <div class="me-md-2">
+                      {{- if .AuthorName != "" }}
+                      <a href="/users/{{ .AuthorID }}/bookmarks" class="fw-bold text-body text-decoration-none">
+                        {{- .AuthorName }}
+                      </a>
+                      {{- else }}
+                      <p class="fw-bold mb-0">Deleted user</p>
+                      {{- end }}
+                    </div>
+                    <small class="text-muted">{{ .Date }}</small>
+                  </div>
+
+                  <!-- Stamp or emoji -->
+                  <!-- TODO: .Stamp occasionally templates in text (which should be part of the main comment text) instead of an image, causing breakage in the layout. See the comment by "Unknown417" on /artworks/107442519 for an example -->
+                  {{- if .Stamp }}
+                  <img class="stamp img-fluid rounded object-fit-cover me-2" src="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg" alt="/proxy/s.pximg.net/common/images/stamp/generated-stamps/{{ .Stamp }}_s.jpg"/>
+                  {{- else }}
+                  <!-- Comment with emojis -->
+                  <p class="d-flex flex-wrap align-items-center m-0">{{ raw: parseEmojis(.Context) }}</p>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+            {{- end }}
+            <div class="d-flex justify-content-center">
+              <!-- TODO: figure out how to hide the parent div instead of applying mb-4 to the button itself -->
+              <button type="button" class="custom-btn-secondary-flex mb-4" id="load-more-btn">Load more</button>
+            </div>
+          </div>
+          {{ end }}
+        </div>
       </div>
     </div>
-    {{- end }} {{ end }}
-  </details>
-</div>
-<div class="container">
-  <h2>Related works</h2>
-  <div class="artwork-container">
-    {{- include "fragments/small-tn" .Illust.RelatedWorks }}
+
   </div>
+
+</div>
+
+<!-- TODO: check whether there actually are any related works before rendering this section -->
+<!-- col-12 to display Related works at full width -->
+<div class="col-12 mt-5">
+    <h2>Related works</h2>
+    <!-- Gradually increase the number of artworks shown per row along with device width -->
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+        {{- include "fragments/small-tn" .Illust.RelatedWorks }}
+    </div>
+</div>
+
 </div>
 {{- end }}

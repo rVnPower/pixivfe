@@ -1,107 +1,109 @@
 {{- extends "layout/default" }}
+{{- import "blocks/pagination" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-{{- if ! .User.BackgroundImage }}
-<div class="background-cover"></div>
-{{- else }}
-<div class="background-cover" id="hasbg">
-  <img src="{{ .User.BackgroundImage }}" alt="{{ .User.Name }}" />
-</div>
-{{- end }}
-<div class="container user">
-  <div class="user-avatar">
-    <img src="{{.User.Avatar}}" alt="Avatar Of User">
-  </div>
-  <div class="user-details">
-    <h1>{{ .User.Name }}</h1>
-    <div>
-      <a href="https://pixiv.net/u/{{ .User.ID }}">pixiv.net/u/{{ .User.ID }}</a>
-      <br />
-    </div>
-    <small> {{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv </small>
-    <div class="user-social">
-      {{- if .User.Webpage }}
-      <span><a href="{{ .User.Webpage }}"><img src="/img/globe.png" alt="Webpage" /></a></span>
-      {{- end }} {{ range index, item := .User.Social }}
-      <span>
-        <a href="{{ item.url }}">
-          <img src="/img/{{ index }}.svg" alt="{{ index }}" />
-        </a>
-      </span>
+<div class="row justify-content-center g-4">
+  <!-- NOTE: mb-5 used here to give the underlinenav a bit more space at the cost of some consistency -->
+  <div class="col-12 col-lg-9 mb-5">
+    <div class="custom-card bg-charcoal-surface1">
+      <!-- Profile background image -->
+      {{- if .User.BackgroundImage }}
+      <img src="{{ .User.BackgroundImage }}" alt="{{ .User.Name }} profile background image"
+           class="img-fluid w-100 rounded-bottom rounded-5 object-fit-cover mb-3"
+           style="max-height: 200px;" />
       {{- end }}
+      <div class="custom-card-body p-4">
+        <div class="row g-4">
+          <!-- User avatar and external link to pixiv.net -->
+          <!-- TODO: make these elements appear to the left alongside the user name and social media links -->
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center">
+              <img src="{{.User.Avatar}}" alt="User avatar" class="rounded-circle img-fluid object-fit-cover mb-3" style="width: 150px; height: 150px">
+
+              <a href="https://pixiv.net/u/{{ .User.ID }}" class="custom-btn-secondary btn-sm bg-charcoal-surface2 mb-3">
+                <i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net
+              </a>
+            </div>
+          </div>
+          <!-- User name and social media links -->
+          <div class="col-12 col-md-9">
+            <h1>{{ .User.Name }}</h1>
+            <p class="text-muted">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
+            <div class="mb-3">
+              {{- if .User.Webpage }}
+              <a href="{{ .User.Webpage }}" class="btn btn-custom-color text-body rounded-pill me-2">
+                <i class="bi bi-globe"></i>
+              </a>
+              {{- end }}
+              {{- range index, item := .User.Social }}
+                {{- if index == "pawoo" }}
+                <a href="{{ item.url }}" class="btn btn-custom-color text-body rounded-pill me-2">
+                  <i class="bi bi-mastodon"></i>
+                </a>
+                {{- else }}
+                <a href="{{ item.url }}" class="btn btn-custom-color text-body rounded-pill me-2">
+                  <i class="bi bi-{{ index }}"></i>
+                </a>
+                {{- end }}
+              {{- end }}
+            </div>
+            <!-- User bio and frequently used tags -->
+            <p class="mb-4">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
+            <div class="custom-card bg-charcoal-surface2 p-4">
+              <h3><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
+              <div class="d-flex flex-wrap">
+                {{- range .User.FrequentTags }}
+                  <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+                    <a href="/tags/{{ escapeString(.Name) }}" class="text-decoration-none text-wrap text-break">#{{ .Name }}</a>
+                    {{- if .TranslatedName }} <small>({{ .TranslatedName }})</small>{{- end }}
+                  </span>
+                {{- end }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <p>{{ raw: parsePixivRedirect(.User.Comment) }}</p>
   </div>
-  <div>Frequently Used Tags</div>
-  <div class="tag-list">
-    {{- range .User.FrequentTags }}
-    <a href="/tags/{{ .Name }}">
-      #{{ .Name }}
-      {* <div>
-        {{- if ! .TranslatedName }}
-        <div class="main">{{ .Name }}</div>
-        {{- else }}
-        <div class="main">{{ .TranslatedName }}</div>
-        <div class="sub">#{{ .Name }}</div>
-        {{- end }}
-      </div> *}
-    </a>
-    {{- end }}
-  </div>
-  <div class="switcher">
-    <div class="switch-title">Category</div>
-    <a href="/users/{{ .User.ID }}/#checkpoint" class="switch-button">All</a>
-    <a href="/users/{{ .User.ID }}/illustrations#checkpoint" class="switch-button">Illustrations</a>
-    <a href="/users/{{ .User.ID }}/manga#checkpoint" class="switch-button">Mangas</a>
-    <a href="/users/{{ .User.ID }}/novels#checkpoint" class="switch-button">Novels</a>
-    <a href="/users/{{ .User.ID }}/bookmarks#checkpoint" class="switch-button">Bookmarks</a>
-  </div>
-  <div>
+
+  <div class="col-12 mb-4" id="checkpoint">
+    <!-- Navigation -->
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
+      {{- baseURL := "/users/" + .User.ID + "/" }}
+      {{- paths := slice("" + "#checkpoint", "illustrations" + "#checkpoint", "manga" + "#checkpoint", "novels" + "#checkpoint", "bookmarks" + "#checkpoint") }}
+      {{- names := slice("All", "Illustrations", "Manga", "Novels", "Bookmarks") }}
+      {{- yield UnderlineNav(baseURL=baseURL, paths=paths, names=names, activeState=.Category + "#checkpoint") }}
+    </div>
+
+    <!-- User content -->
     {{- if .Category != "novels" }}
-      {{- if .Category == "manga" && .User.MangaSeries }}
-      <div class="artwork-container-header">
-        <h2 id="checkpoint">Series</h2>
-      </div>
-      <div class="manga-container">
-        {{- range .User.MangaSeries }}
-        {{- include "fragments/mangaseries-tn" . }}
-        {{- end }}
-      </div>
-      {{- end }}
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Illustrations and Mangas</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Illustrations and Manga</h2>
       {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
-      <div class="artwork-actions"><a href="{{combinedUrl}}">View all art on this page</a></div>
+      <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
     </div>
-    <div class="artwork-container">
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
       {{- include "fragments/small-tn" .User.Artworks }}
     </div>
     {{- else }}
-    {{- if .User.NovelSeries }}
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Series</h2>
-    </div>
-    <div class="novel-container">
-      {{- range .User.NovelSeries }}
-      {{- include "fragments/novelseries-tn" . }}
-      {{- end }}
-    </div>
-    {{- end }}
 
-    <div class="artwork-container-header">
-      <h2 id="checkpoint">Novels</h2>
-    </div>
-    <div class="novel-container">
+    <h2>Novels</h2>
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .User.Novels }}
-      {{- include "fragments/novel-tn" . }}
+      <div class="col mt-1">
+        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          {{- include "fragments/novel-tn" . }}
+        </div>
+        <hr class="my-0">
+      </div>
       {{- end }}
     </div>
     {{- end }}
   </div>
-  <div class="pagination">
-    {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
-    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
-    <br />
-    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
-  </div>
+
+  <!-- Pagination -->
+  {{- url := "/users/" + .User.ID + "/" + .Category + "?page="}}
+  {{- paginationData := createPaginator(url, "#checkpoint", .Page, -1, 1, 5) }}
+  {{- yield pagination(data=paginationData) }}
 </div>
 {{- end }}

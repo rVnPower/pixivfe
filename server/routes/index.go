@@ -5,36 +5,26 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
+	"codeberg.org/vnpower/pixivfe/v2/server/template"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
 func IndexPage(w http.ResponseWriter, r *http.Request) error {
-	// If token is set, do the landing request...
-	if token := session.GetUserToken(r); token != "" {
-		mode := GetQueryParam(r, "mode", "all")
+	mode := GetQueryParam(r, "mode", "all")
+	isLoggedIn := session.GetUserToken(r) != ""
 
-		works, err := core.GetLanding(r, mode)
-
-		if err != nil {
-			return err
-		}
-
-		return RenderHTML(w, r, Data_index{
-			Title:    "Landing",
-			Data:     *works,
-			LoggedIn: true,
-		})
-	}
-
-	// ...otherwise, default to today's illustration ranking
-	works, err := core.GetRanking(r, "daily", "illust", "", "1")
+	works, err := core.GetLanding(r, mode, isLoggedIn)
 	if err != nil {
 		return err
 	}
+
+	urlc := template.PartialURL{Path: "", Query: map[string]string{"mode": mode}}
+
 	return RenderHTML(w, r, Data_index{
-		Title:       "Landing",
-		NoTokenData: works,
-		LoggedIn:    false,
+		Title:    "Landing",
+		Data:     *works,
+		LoggedIn: isLoggedIn,
+		Queries:  urlc,
 	})
 }
 

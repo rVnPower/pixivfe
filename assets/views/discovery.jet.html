@@ -1,23 +1,37 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="container">
-  <h1>Discover artworks</h1>
-  <div class="switcher">
-    <div class="switch-title">Type</div>
-    <a href="/discovery" class="switch-button">Artworks</a>
-    <a href="/discovery/novel" class="switch-button">Novels</a>
+<div class="row justify-content-center g-4">
+  <h1 class="text-center"><i class="bi bi-compass me-2"></i>Discovery</h1>
+
+  <div class="col-12">
+
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
+      <div class="mb-2 mb-md-0">
+        {{- Type := "discovery" }}
+        {{- path := slice("discovery", "discovery/novel") }}
+        {{- name := slice("Artworks", "Novels")}}
+        {{- yield UnderlineNav(baseURL="", paths=path, names=name, activeState=Type)}}
+      </div>
+
+      <!-- TODO: is it actually set to "safe" by default? -->
+      {{- Mode := isset(Queries.mode) ? Queries.mode : "safe" }}
+      {{- url := replaceQuery(.Queries, "mode", "") }}
+      {{- path := slice("all", "safe", "r18") }}
+      {{- name := slice("All", "Safe", "R-18")}}
+      {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+    </div>
+
+    <!-- Main content -->
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .Artworks }}
+    </div>
+
   </div>
-  <div class="switcher">
-    <div class="switch-title">Filter</div>
-    <a href='{{replaceQuery(.Queries, "mode", "all")}}' class="switch-button">All</a>
-    <a href='{{replaceQuery(.Queries, "mode", "safe")}}' class="switch-button">Safe</a>
-    <a href='{{replaceQuery(.Queries, "mode", "r18")}}' class="switch-button">R-18</a>
+
+  <div class="d-flex justify-content-center">
+    <a href="" class="custom-btn-secondary-flex">Refresh</a>
   </div>
-  <div class="artwork-container">
-    {{- include "fragments/small-tn" .Artworks }}
-  </div>
-  <div class="pagination">
-    <a href="" class="pagination-button">Reload</a>
-  </div>
+
 </div>
 {{- end }}

@@ -6,6 +6,7 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
+	"time"
 )
 
 func RenderHTML[T any](w http.ResponseWriter, r *http.Request, data T) error {
@@ -69,6 +70,7 @@ type Data_index struct {
 	LoggedIn    bool
 	Data        core.LandingArtworks
 	NoTokenData core.Ranking
+	Queries     template.PartialURL
 }
 type Data_newest struct {
 	Items []core.ArtworkBrief
@@ -78,6 +80,8 @@ type Data_novel struct {
 	Novel                    core.Novel
 	NovelRelated             []core.NovelBrief
 	NovelSeriesContentTitles []core.NovelSeriesContentTitle
+	NovelSeriesIDs           []string
+	NovelSeriesTitles        []string
 	User                     core.UserBrief
 	Title                    string
 	FontType                 string
@@ -93,8 +97,9 @@ type Data_novelSeries struct {
 	PageLimit           int
 }
 type Data_novelDiscovery struct {
-	Novels []core.NovelBrief
-	Title  string
+	Novels  []core.NovelBrief
+	Title   string
+	Queries template.PartialURL
 }
 type Data_pixivisionIndex struct {
 	Data []core.PixivisionArticle
@@ -121,7 +126,7 @@ type Data_rank struct {
 }
 type Data_rankingCalendar struct {
 	Title       string
-	Render      core.HTML
+	Calendar    []core.DayCalendar
 	Mode        string
 	Year        int
 	MonthBefore DateWrap
@@ -129,16 +134,24 @@ type Data_rankingCalendar struct {
 	ThisMonth   DateWrap
 }
 type Data_settings struct {
-	ProxyList        []string
-	WorkingProxyList []string
+	ProxyList          []string
+	WorkingProxyList   []string
+	ProxyCheckEnabled  bool
+	ProxyCheckInterval time.Duration
+	DefaultProxyServer string
 }
 type Data_tag struct {
-	Title    string
-	Tag      core.TagDetail
-	Data     core.SearchResult
-	QueriesC template.PartialURL
-	TrueTag  string
-	Page     int
+	Title            string
+	Tag              core.TagDetail
+	Data             core.SearchResult
+	QueriesC         template.PartialURL
+	TrueTag          string
+	Page             int
+	ActiveCategory   string
+	ActiveOrder      string
+	ActiveMode       string
+	ActiveRatio      string
+	ActiveSearchMode string
 }
 type Data_unauthorized struct{}
 type Data_user struct {

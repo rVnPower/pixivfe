@@ -1,61 +1,221 @@
 {{- extends "layout/default" }}
+{{- import "blocks/underlinenav" }}
 {{- block body() }}
-<div class="container">
-    <h1>Ranking calendar ({{ .ThisMonth.MonthLiteral }} {{ .Year }})</h1>
-    <div class="switcher">
+<div class="row justify-content-center g-4">
+  <h1 class="text-center"><i class="bi bi-calendar me-2"></i>Ranking calendar</h1>
+
+  <noscript>
+    <div class="col-12">
+      <div class="custom-card bg-charcoal-surface1 p-4 mb-4">
+        <h2><i class="bi bi-gear-fill me-2"></i>Ranking options</h2>
+        <div class="custom-card-body bg-charcoal-surface1 p-0">
+          {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
+          {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
+          <div class="row border-bottom border-2 mb-4">
+            <div class="col-12">
+              <h3><i class="bi bi-calendar3 me-2"></i>Time frame</h3>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+                {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+                {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+                {{- name := slice("Daily (R-18)", "Weekly (R-18)", "R-18G")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <p class="small text-body-secondary mb-4">Choose the time frame for the rankings.</p>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-12">
+              <h3><i class="bi bi-star-fill me-2"></i>Specialized rankings</h3>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+                {{- path := slice("original", "male", "female") }}
+                {{- name := slice("Original", "Popular among males", "Popular among females")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="R-18 specialized ranking modes">
+                {{- path := slice("male_r18", "female_r18") }}
+                {{- name := slice("Popular among males (R-18)", "Popular among females (R-18)")}}
+                {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+              </div>
+              <p class="small text-muted mb-0">Specialized ranking categories.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 d-flex justify-content-between">
+              <a href="/rankingCalendar" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </noscript>
+
+  <div class="col-12" id="checkpoint">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+
+        <!-- Header items -->
+        <!-- TODO: make the Options button appear in the same block as the form at sm breakpoint and below -->
+        <div class="d-flex flex-column flex-sm-row align-items-start justify-content-start justify-content-sm-between mb-4" aria-label="Ranking options">
+          <div class="d-flex flex-column mb-3 mb-sm-0">
+            <h2><i class="bi bi-calendar me-2"></i>Ranking Calendar for {{ .ThisMonth.MonthLiteral }} {{ .Year }}</h2>
+            <form action="/rankingCalendar" method="post">
+              <input type="hidden" name="mode" value="{{ .Mode }}" />
+              <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy)</label>
+              <div class="d-flex">
+                <div class="col-auto me-2">
+                  <input type="date" id="date" name="date" class="form-control" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" />
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="custom-btn-secondary">Go</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <button class="js-required custom-btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
+            <i class="bi bi-gear-fill me-0 me-md-2"></i>Options
+          </button>
+        </div>
+
+        <!-- Navigation buttons -->
+        <!-- TODO: the checkpoint doesn't actually work as intended in most cases since there isn't enough 'page' when the images haven't loaded in yet -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-3" aria-label="Month navigation">
+          {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+          {{- if .MonthBefore.Link != "false" }}
+          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
+            <span>
+              <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
+            </span>
+          </a>
+          {{- end }}
+          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
+            <span>Current month</span>
+          </a>
+          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+            <span>
+              Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+            </span>
+          </a>
+        </div>
+
+        <!-- The ranking calendar itself -->
+        <div class="row text-center fw-bold mb-3">
+          <div class="col">Sun</div>
+          <div class="col">Mon</div>
+          <div class="col">Tue</div>
+          <div class="col">Wed</div>
+          <div class="col">Thu</div>
+          <div class="col">Fri</div>
+          <div class="col">Sat</div>
+        </div>
+        <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3 mb-3">
+          {{ range i, day := .Calendar }}
+          <div class="col">
+            <div class="card h-100 border-0 rounded bg-charcoal-surface2">
+              {{ if day.DayNumber > 0 }} {{ if day.ImageURL }}
+              <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
+                <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100 rounded" />
+                <div class="card-img-overlay d-flex align-items-start rounded p-2">
+                  <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
+                </div>
+              </a>
+              {{ else }}
+              <div class="card-body d-flex align-items-center justify-content-center">
+                <p class="card-text text-center fw-bold mb-0">{{ day.DayNumber }}</p>
+              </div>
+              {{ end }} {{ else }}
+              <div class="card h-100 border-0 bg-charcoal-surface2"></div>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="d-flex flex-row align-items-center justify-content-between" aria-label="Month navigation">
+          {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+          {{- if .MonthBefore.Link != "false" }}
+          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
+            <span>
+              <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
+            </span>
+          </a>
+          {{- end }}
+          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
+            <span>Current month</span>
+          </a>
+          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+            <span>
+              Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End of main content -->
+
+<!-- Ranking options modal -->
+<div class="modal fade" id="RankingOptionsModal" tabindex="-1" aria-labelledby="RankingOptionsModalLabel" aria-hidden="true" hx-boost="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-charcoal-surface1 rounded-5 border-0 p-4">
+      <div class="modal-header border-0 p-0 mb-3">
+        <h2 class="modal-title" id="RankingOptionsModalLabel"><i class="bi bi-gear-fill me-2"></i>Ranking options</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        {{- Mode := isset(Queries.mode) ? Queries.mode : "daily" }}
         {{- url := "/rankingCalendar?date=" + .ThisMonth.Link + "&mode=" }}
-        <span class="switch-title">Modes</span>
-        <a href="{{ url }}daily" class="switch-button">Daily</a>
-        <a href="{{ url }}weekly" class="switch-button">Weekly</a>
-        <a href="{{ url }}monthly" class="switch-button">Monthly</a>
-        <a href="{{ url }}rookie" class="switch-button">Rookie</a>
-        <span class="switch-seperator"></span>
-        <a href="{{ url }}daily_r18" class="switch-button">Daily (R-18)</a>
-        <a href="{{ url }}weekly_r18" class="switch-button">Weekly (R-18)</a>
-        <a href="{{ url }}r18g" class="switch-button">R-18G</a>
-        <br />
-        <a href="{{ url }}original" class="switch-button">Original</a>
-        <a href="{{ url }}male" class="switch-button">Popular among males</a>
-        <a href="{{ url }}female" class="switch-button">Popular among females</a>
-        <br />
-        <a href="{{ url }}male_r18" class="switch-button">Popular among males (R-18)</a>
-        <a href="{{ url }}female_r18" class="switch-button">Popular among females (R-18)</a>
-    </div>
-
-    <div>
-        <form action="/rankingCalendar" method="post">
-            <input type="hidden" name="mode" value="{{ .Mode }}" />
-            <label for="date">
-                Date picker (mm/dd/yyyy):
-            </label>
-            <span>
-                <input type="date" name="date" min="2007-09-01" max="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01" value="{{.Year}}-{{ .ThisMonth.MonthPadded }}-01"/>
-            </span>
-            <span>
-                <input type="submit" value="Go" />
-            </span>
-        </form>
-    </div>
-
-    <br>
-    <div id="calendar">
-        <div class="calendar-weeks">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
+        <div class="row border-bottom border-2 mb-4">
+          <div class="col-12">
+            <h3><i class="bi bi-calendar3 me-2"></i>Time frame</h3>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily", "weekly", "monthly", "rookie") }}
+              {{- name := slice("Daily", "Weekly", "Monthly", "Rookie")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3">
+              {{- path := slice("daily_r18", "weekly_r18", "r18g") }}
+              {{- name := slice("Daily (R-18)", "Weekly (R-18)", "R-18G")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <p class="small text-body-secondary mb-4">Choose the time frame for the rankings.</p>
+          </div>
         </div>
-        <div class="calendar-board">
-            {{- raw: .Render }}
+
+        <div class="row mb-4">
+          <div class="col-12">
+            <h3><i class="bi bi-star-fill me-2"></i>Specialized rankings</h3>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="Specialized ranking modes">
+              {{- path := slice("original", "male", "female") }}
+              {{- name := slice("Original", "Popular among males", "Popular among females")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-3" aria-label="R-18 specialized ranking modes">
+              {{- path := slice("male_r18", "female_r18") }}
+              {{- name := slice("Popular among males (R-18)", "Popular among females (R-18)")}}
+              {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
+            </div>
+            <p class="small text-muted mb-0">Specialized ranking categories.</p>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-12 d-flex justify-content-between">
+            <a href="/rankingCalendar" type="button" class="btn btn-danger fw-bold rounded-pill">Reset filters</a>
+            <button type="button" class="custom-btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="pagination">
-        {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-        <a href="{{ url }}{{ .MonthBefore.Link }}" class="pagination-button ">Last month</a>
-        <a href="{{ url }}{{ .MonthAfter.Link }}" class="pagination-button ">Next month</a>
-    </div>
+  </div>
 </div>
 {{- end }}

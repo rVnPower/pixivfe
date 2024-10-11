@@ -1,0 +1,388 @@
+$font-fallback-serif: "Yu Mincho",
+  YuMincho,
+  "Hiragino Mincho ProN",
+  "Hiragino Mincho Pro",
+  "Source Han Serif",
+  "BIZ UDMincho Medium",
+  "Source Serif Pro",
+  "Source Serif",
+  "Noto Serif",
+  "Times New Roman",
+  "Georgia Pro",
+  Georgia,
+  Simsun,
+  PMingLiu,
+  AppleMyungjo,
+  "Source Han Serif K",
+  "Source Han Serif KR",
+  "Noto Serif KR",
+  Batang,
+  serif;
+
+$font-fallback-sans: YuGothic,
+  "Hiragino Kaku Gothic Pro",
+  Meiryo,
+  "Source Han Sans",
+  "Source Han Sans JP",
+  "Noto Sans CJK JP",
+  "Avenir Next",
+  Avenir,
+  "Source Sans",
+  "Noto Sans",
+  Roboto,
+  Verdana,
+  "Pingfang TC",
+  "Pingfang HK",
+  "Hiragino Sans CNS",
+  "Lantinghei TC",
+  "Source Han Sans TW",
+  "Source Han Sans HK",
+  "Noto Sans CJK TC",
+  "Microsoft JhengHei",
+  "Pingfang SC",
+  "Hiragino Sans GB",
+  "Lantinghei SC",
+  "Source Han Sans CN",
+  "Noto Sans CJK SC",
+  "Microsoft Yahei",
+  DengXian,
+  "Apple SD Gothic Neo",
+  "Source Han Sans K",
+  "Source Han Sans KR",
+  "Noto Sans CJK KR",
+  "Malgun Gothic",
+  sans-serif;
+
+$font-fallback-serif: "Yu Mincho",
+  YuMincho,
+  "Hiragino Mincho ProN",
+  "Hiragino Mincho Pro",
+  "Source Han Serif",
+  "BIZ UDMincho Medium",
+  "Source Serif Pro",
+  "Source Serif",
+  "Noto Serif",
+  "Times New Roman",
+  "Georgia Pro",
+  Georgia,
+  Simsun,
+  PMingLiu,
+  AppleMyungjo,
+  "Source Han Serif K",
+  "Source Han Serif KR",
+  "Noto Serif KR",
+  Batang,
+  serif;
+
+/// Bootstrap limits grid-row-columns to 6 by default
+/// src: https://github.com/twbs/bootstrap/issues/36691
+$grid-row-columns: 7;
+
+/// custom aspect ratio for novels (currently using 3x4)
+/// NOTE: "1x1" needs to be specified here even though it's not custom
+$aspect-ratios: (
+  "1x1": 100%,
+  "1x2": calc(2 / 1 * 100%),
+  "3x4": calc(4 / 3 * 100%),
+  "9x16": calc(16 / 9 * 100%),
+);
+
+/// Base twbs imports
+@import "./bootstrap/functions";
+@import "./bootstrap/variables";
+@import "./bootstrap/variables-dark";
+
+/// Define custom colors
+
+// Add a custom color to $theme-colors
+$custom-colors: (
+  "custom-color": #7aa2f7,
+  "charcoal-surface1": #1f1f1f,
+  "charcoal-surface2": #3a3a3a,
+  "beige": #f5f5dc,
+  "off-white": #fff8eb,
+);
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+@import "./bootstrap/maps";
+@import "./bootstrap/mixins";
+@import "./bootstrap/utilities";
+
+/// Enable responsive border classes
+/// ref: https://getbootstrap.com/docs/5.3/utilities/api/#enable-responsive
+$utilities: map-merge(
+  $utilities, (
+    "rounded-start": map-merge(
+      map-get($utilities, "rounded-start"),
+      ( responsive: true ),
+    ),
+    "rounded-top": map-merge(
+      map-get($utilities, "rounded-top"),
+      ( responsive: true ),
+    ),
+    "rounded-end": map-merge(
+      map-get($utilities, "rounded-end"),
+      ( responsive: true ),
+    ),
+    "overflow": map-merge(
+      map-get($utilities, "overflow"),
+      ( responsive: true ),
+    ),
+  )
+);
+
+@import "./bootstrap/bootstrap";
+
+/// Custom classes to reduce boilerplate
+.custom-btn-secondary {
+  @extend .btn;
+  @extend .fw-bold;
+  @extend .rounded-pill;
+  @extend .border-0;
+  @extend .py-2;
+  @extend .px-3;
+  @extend .bg-charcoal-surface2;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: darken(map-get($custom-colors, charcoal-surface2), 2.5%) !important;
+    color: white;  // Ensure text remains white on hover
+  }
+}
+
+.custom-btn-secondary-flex {
+  @extend .custom-btn-secondary;
+  @extend .flex-fill;
+}
+
+.custom-card {
+  @extend .card;
+  @extend .border-0;
+  @extend .rounded-5;
+}
+
+.custom-card-body {
+  @extend .card-body;
+  @extend .border-0;
+  @extend .rounded-5;
+}
+
+.custom-novel-card {
+  @extend .card;
+  @extend .h-100;
+  @extend .border-0;
+  @extend .rounded;
+}
+
+.custom-novel-nav {
+  max-height: 40vh;
+}
+
+/// Use the `:has()` pseudo-class to select anchor elements that:
+/// do not contain an image; are not buttons; and are not navigation links
+a:not(:has(img)):not([class*="btn"]):not(.nav-link) {
+  position: relative;
+  text-decoration: none; // remove default underline
+
+  background-image: linear-gradient(currentColor, currentColor); // solid bottom underline
+  background-size: 0% .1em; // Start with no visible underline (width: 0%)
+  background-position: 0 100%; // Position at the bottom
+  background-repeat: no-repeat; // Ensure no repetition of the background line
+  transition: background-size 0.2s ease-in-out; // Smooth transition of background width
+
+  @extend .link-offset-2; // Apply link-offset to all links globally
+
+  &:hover {
+    background-size: 100% .1em; // On hover, expand the underline from 0 to 100%
+    text-decoration: none; // Ensure that browser's native underline isn't used
+  }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.stamp {
+  width: 96px;
+  height: 96px;
+}
+
+.emoji {
+  width: 1.5rem;
+  height: 1.5rem;
+  @extend .mx-1;
+}
+
+
+/// TODO: need usability tests to determine whether these variables are ok; can also cause weird moire/pixel level scaling issues with novel thumbnails (especially the default cover which has intricate details)
+.thumbnail-hover-dark {
+  overflow: hidden;
+
+  /// Wrapper to maintain rounded corners during zoom effect
+  /// The wrapper hides overflow and applies rounded corners,
+  /// while allowing the image inside to scale without breaking the rounded shape
+  .thumbnail-wrapper {
+    overflow: hidden;
+
+    img {
+      transition: all 0.3s ease;
+
+      &:hover {
+        filter: brightness(0.85);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        &:hover {
+          transform: scale(1.005);
+        }
+      }
+    }
+  }
+}
+
+/// Custom heading sizes (e.g., h1 gets h3 size, h2 gets h4 size, etc.)
+h1 {
+  font-size: $h3-font-size;
+  font-weight: $font-weight-bold;
+}
+
+h2 {
+  font-size: $h4-font-size;
+  font-weight: $font-weight-bold;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: $h5-font-size;
+  font-weight: $font-weight-bold;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: $h6-font-size;
+  font-weight: $font-weight-bold;
+}
+
+h5 {
+  font-weight: $font-weight-bold;
+}
+
+h6 {
+  font-weight: $font-weight-bold;
+}
+
+/// htmx
+.bookmark-spinner {
+  display: none;
+}
+.htmx-request .bookmark-spinner {
+  display: inline;
+}
+.htmx-request.bookmark-spinner {
+  display: inline;
+}
+
+.like-spinner {
+  display: none;
+}
+.htmx-request .like-spinner {
+  display: inline;
+}
+.htmx-request.like-spinner {
+  display: inline;
+}
+
+/// Hide elements that require JS when scripting is disabled
+/// NOTE: This only seems to work when JS is actually disabled browser-wide, not via an extension like uBO
+///       See the callout on https://developer.mozilla.org/en-US/docs/Web/CSS/@media/scripting
+///       and the CSS spec at https://drafts.csswg.org/mediaqueries-5/#scripting for more on this
+///
+@media (scripting: none) {
+  .js-required {
+    display: none !important;
+  }
+}
+
+/// Novel preference setup
+[data-font=mincho][data-font=jp] {
+  font-family:
+    "Source Han Serif JP",
+    "Noto Serif JP",
+    $font-fallback-serif;
+}
+
+[data-font=mincho][data-font=zh-cn],
+[data-font=mincho][data-font=zh-hans] {
+  font-family:
+    "Songti SC",
+    "Source Han Serif SC",
+    "Noto Serif SC",
+    "Source Han Serif CN",
+    $font-fallback-serif;
+}
+
+// TODO: technically, zh-hk > zh-hant > zh
+// Noto Sans have
+// CJK HK
+// CJK JP
+// CJK KR
+// CJK SC
+// CJK TC
+
+[data-font=mincho][data-font=zh-tw],
+[data-font=mincho][data-font=zh-hk],
+[data-font=mincho][data-font=zh-hant] {
+  font-family:
+    "Songti TC",
+    "Source Han Serif TC",
+    "Noto Serif TC",
+    "Source Han Serif TW",
+    "Source Han Serif HK",
+    $font-fallback-serif;
+}
+
+[data-font=mincho] {
+  font-family: $font-fallback-serif;
+}
+
+[data-font=gothic] {
+  font-family: $font-fallback-sans;
+}
+
+[data-view="2"] {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  direction: rtl;
+}
+
+/// Loading indicator for hx-requests
+/// ref: https://stackoverflow.com/questions/63787241/css-how-to-create-an-infinitely-moving-repeating-linear-gradient/63787567#63787567
+#loading-indicator {
+  height: 4px;
+
+  /// background-size: 200px auto;
+  animation: rolling-something 1s linear infinite;
+  background-image: repeating-linear-gradient(-0.25turn, #118bee 0vw, transparent 40vw);
+  background-size: 80vw auto;
+
+  will-change: opacity;
+  transition: opacity 0.3s;
+  opacity: 0;
+
+  &.htmx-request {
+    opacity: 1;
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes rolling-something {
+  0% {
+    background-position-x: 0vw
+  }
+
+  100% {
+    background-position-x: 40vw
+  }
+}

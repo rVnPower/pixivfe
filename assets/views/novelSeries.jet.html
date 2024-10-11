@@ -1,69 +1,117 @@
 {{- extends "layout/default" }}
+{{- import "blocks/pagination" }}
 {{- block body() }}
-<div class="container novel" id="checkpoint">
-  <div class="novel-detail">
-    <div class="novel-cover">
-      <a href="/novel/series/{{ .NovelSeries.ID }}">
-        <img src="{{ .NovelSeries.Cover.Urls.Four80Mw }}" alt="{{ .NovelSeries.Title }}" />
-      </a>
-    </div>
-    <div class="novel-metadata">
-      <div class="novel-title">{{ .NovelSeries.Title }}</div>
-      <p class="novel-description">{{ raw: parsePixivRedirect(.NovelSeries.Caption) }}</p>
-      <small><span>{{ .NovelSeries.Total }} Episode(s)</span>&nbsp;&nbsp;
-        <span>Updated on {{parseTime: .NovelSeries.UpdateDate }}</span></span>&nbsp;&nbsp;
-        <span>{{ .NovelSeries.PublishedTotalCharacterCount }} character(s)</span>&nbsp;&nbsp;
-        <span>{{ floor: .NovelSeries.PublishedReadingTime / 60 }} mins</span>
-      </small>
-      <div class="illust-tags">
-        {{- if .NovelSeries.XRestrict != 0 }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">
-            {{ if .NovelSeries.XRestrict == 1 }} R-18 {{ else }} R-18G {{ end }}</span>
-        </span>
-        {{- end }}
-        {{- if .NovelSeries.AiType == 2 }}
-        <span class="illust-tag">
-          <span class="illust-tag-name" id="highlight">AI-generated</span>
-        </span>
-        {{- end }}
-        {{- if .NovelSeries.GenreID != "0" }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">{{ novelGenre: .NovelSeries.GenreID }}</span>
-        </span>
-        {{- end }}
-        {{- if .NovelSeries.IsOriginal }}
-        <span class="illust-tag">
-          <span class="illust-tag-name">Original</span>
-        </span>
-        {{- end }}
+<div class="row justify-content-center g-4">
+  <div class="col-12 col-lg-9">
+    <div class="custom-card">
+      <div class="custom-card-body bg-charcoal-surface1 p-4">
+        <div class="row g-4">
+          <div class="col-12 col-md-4">
+            <!-- Cover art -->
+            <a href="/novel/series/{{ .NovelSeries.ID }}">
+              <img src="{{ .NovelSeries.Cover.Urls.Four80Mw }}" alt="{{ .NovelSeries.Title }}" class="d-block img-fluid rounded mx-auto" />
+            </a>
+          </div>
+          <div class="col-12 col-md-8 d-flex flex-column">
+            <h3 class="text-body-secondary mb-2">
+                Series of {{ .NovelSeries.Total }} works
+            </h3>
+
+            <!-- Title -->
+            <h1 class="mb-2">{{ .NovelSeries.Title }}</h1>
+
+            <!-- Author -->
+            <div class="d-flex align-items-center mb-2">
+              <a href="/users/{{ .User.ID }}/novels" class="text-decoration-none">
+                <img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="rounded-circle me-2" style="width: 30px; height: 30px" />
+              </a>
+              <h4 class="mb-0">
+                <a href="/users/{{ .User.ID }}" class="text-body-secondary text-decoration-none">
+                  {{ .User.Name }}
+                </a>
+              </h4>
+            </div>
+
+            <!-- Word count and reading time -->
+            <p class="small text-body-secondary">
+              <span>{{ .NovelSeries.PublishedTotalCharacterCount }} character(s)</span> &middot; <span>{{ floor: .NovelSeries.PublishedReadingTime / 60 }} mins</span>
+            </p>
+
+            <!-- View Pixiv original button -->
+            <div class="d-flex">
+              <a href="https://pixiv.net/novel/series/{{ .NovelSeries.ID }}" class="custom-btn-secondary btn-sm mb-3">
+                <i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net
+              </a>
+            </div>
+
+            <!-- Description -->
+            <p>{{ raw: parsePixivRedirect(.NovelSeries.Caption) }}</p>
+
+            <!-- Tags -->
+            <div class="d-flex flex-wrap align-items-center mb-2">
+              {{- if .NovelSeries.AiType == 2 }}
+              <span class="badge bg-warning text-dark me-2 mb-2">AI-generated</span>
+              {{- end }}
+              {{- if .NovelSeries.XRestrict != 0 }}
+                {* NOTE: different logic than usual due to isEmphasize not existing *}
+                <span class="badge bg-danger me-2 mb-2">{{ if .NovelSeries.XRestrict == 1 }} R-18 {{ else }} R-18G {{ end }}</span>
+              {{- end }}
+              {{- if .NovelSeries.IsOriginal }}
+              <span class="badge bg-primary me-2 mb-2">Original</span>
+              {{- end }}
+              {{- if .NovelSeries.GenreID != "0" }}
+              <span class="badge bg-secondary me-2 mb-2">{{ novelGenre: .NovelSeries.GenreID }}</span>
+              {{- end }}
+              {{- range .NovelSeries.Tags }}
+                {{- if isEmphasize(.) }}
+                {* Intentionally empty to not render anything to avoid duplication *}
+                {{- else }}
+                <span class="badge fw-normal text-muted me-2 mb-2 p-0 text-wrap text-break text-start">
+                  <a href="/tags/{{ escapeString(.) }}" class="text-decoration-none text-wrap text-break">#{{ . }}</a>
+                </span>
+                {{- end }}
+              {{- end }}
+            </div>
+
+            <!-- Metadata -->
+            <div class="d-flex flex-wrap text-body-secondary small mb-3">
+              <div class="me-3 mb-2 mb-lg-0">
+                <i class="bi bi-book me-2"></i>{{ .NovelSeries.Total }} episode(s)
+              </div>
+              <div class="me-3 mb-2 mb-lg-0">
+                <i class="bi bi-calendar me-2"></i>Updated on {{parseTime: .NovelSeries.UpdateDate }}
+              </div>
+            </div>
+
+            <!-- Read first episode button -->
+            <div class="mt-auto">
+              <a href="/novel/{{ .NovelSeries.FirstNovelID }}" class="custom-btn-secondary">
+                <i class="bi bi-book me-2"></i>Read first episode
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      <a href="/novel/{{ .NovelSeries.FirstNovelID }}">Read first episode</a>
     </div>
   </div>
-  <div class="novel-attr">
-    <a href="/users/{{ .User.ID }}"><img src="{{ .User.Avatar }}" alt="{{ .User.Name }}" class="novel-avatar" />
-    </a>
-    <div class="attr-wrap">
-      <div class="novel-title">
-        <a href="/users/{{ .User.ID }}">{{ .User.Name }}</a>
+
+  <div class="col-12 mt-5">
+    <h2>{{ len(.NovelSeriesContents) }} works in this series</h2>
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+      {{- range .NovelSeriesContents }}
+      <div class="col mt-1">
+        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          {{- include "fragments/novelseriescontents-tn" . }}
+        </div>
+        <hr class="my-0">
       </div>
+      {{- end }}
     </div>
   </div>
-  <!-- ----------- -->
-  <div class="artwork-container-header">
-    <h2 id="checkpoint">Works</h2>
-  </div>
-  <div class="novel-container">
-    {{- range .NovelSeriesContents }}
-    {{- include "fragments/novelseriescontents-tn" . }}
-    {{- end }}
-  </div>
-  <div class="pagination">
-    {{- url := "/novel/series/" + .NovelSeries.ID + "?p="}}
-    <small>Page {{ .Page }}/{{ .PageLimit }}</small>
-    <br />
-    {{- raw: createPaginator(url, "#checkpoint", .Page, .PageLimit) }}
-  </div>
+
+  <!-- Pagination -->
+  {{- url := "/novel/series/" + .NovelSeries.ID + "?p="}}
+  {{- paginationData := createPaginator(url, "#checkpoint", .Page, .PageLimit, 1, 5) }}
+  {{- yield pagination(data=paginationData) }}
 </div>
 {{- end }}
