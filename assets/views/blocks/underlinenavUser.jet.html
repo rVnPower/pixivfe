@@ -1,0 +1,21 @@
+{*
+    Near duplicate of UnderlineNav, difference in accepting categoryCounts to control visibility
+*}
+
+{{- block UnderlineNavUser(baseURL, paths, names, categoryCounts, activeState="") }}
+<ul class="nav nav-underline">
+    {{- range i, k := paths }}
+        {{- if categoryCounts[i] > 0 }}
+        <li class="nav-item">
+            <a class="nav-link
+                {{ activeState == k ? "active border-custom-color fw-bold" : "fw-semibold" }}
+                border-4 px-3"
+                {{ activeState == k ? `aria-current="page"` : "" }}
+                href="{{ baseURL }}{{k}}">
+                {{ names[i] }}
+            </a>
+        </li>
+        {{- end }}
+    {{- end }}
+</ul>
+{{- end }}
