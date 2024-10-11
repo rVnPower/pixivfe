@@ -22,6 +22,7 @@ func main() {
 		translation_map[i18n.SuccintId(file, msg)] = msg
 	}
 	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", "  ")	
 	encoder.Encode(translation_map)
 }

@@ -30,6 +30,7 @@ func main() {
 	}
 
 	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetEscapeHTML(false)
 	encoder.SetIndent("", "  ")
 	encoder.Encode(result)
 }
@@ -40,6 +41,8 @@ var re_comment = regexp.MustCompile(`\{\*[\s\S]*?\*\}`)
 func stripComments(s string) string {
 	return re_comment.ReplaceAllString(s, "")
 }
+
+var entitiesReplacer = strings.NewReplacer("&amp;", "&", "&#39;", `'`, "&#34;", `"`)
 
 func processFile(filename string, result *jnode.Node) {
 	content, err := os.ReadFile(filename)
@@ -64,7 +67,7 @@ func processFile(filename string, result *jnode.Node) {
 		for _, node := range nodes {
 			html.Render(&builder, node)
 		}
-		s := strings.TrimSpace(builder.String())
+		s := entitiesReplacer.Replace(strings.TrimSpace(builder.String()))
 
 		if !shouldIgnore(s) {
 			object := jnode.NewObjectNode()
