@@ -43,16 +43,24 @@ scan() {
 }
 
 i18n_code() {
+    echo "Extracting i18n strings from code..."
     semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/code_strings.json
 }
 
 i18n_template() {
+    echo "Extracting i18n strings from templates..."
     go run ./i18n/crawler > i18n/template_strings.json
-    echo "Malformed strings are listed below:"
-    jq '.[] | select(.msg | contains("\n"))' < i18n/template_strings.json
+    malformed_strings=$(jq '.[] | select(.msg | contains("\n"))' < i18n/template_strings.json)
+    if [ -z "$malformed_strings" ]; then
+        echo "No malformed strings found."
+    else
+        echo "Malformed strings are listed below:"
+        echo "$malformed_strings"
+    fi
 }
 
 i18n() {
+    echo "Starting i18n extraction process..."
     i18n_code
     i18n_template
     mkdir -p i18n/locale/en
@@ -60,13 +68,16 @@ i18n() {
     go run ./i18n/converter < i18n/code_strings.json > i18n/locale/en/code.json
     go run ./i18n/converter < i18n/template_strings.json > i18n/locale/en/template.json
     chmod -w i18n/locale/en/code.json i18n/locale/en/template.json
+    echo "i18n extraction completed."
 }
 
 i18n_upload() {
+    echo "Uploading i18n strings to Crowdin..."
     crowdin upload
 }
 
 i18n_download() {
+    echo "Downloading i18n strings from Crowdin..."
     crowdin download
 }
 
@@ -86,6 +97,7 @@ install_pre_commit() {
     echo '#!/bin/sh' > .git/hooks/pre-commit
     echo './build.sh test' >> .git/hooks/pre-commit
     chmod +x .git/hooks/pre-commit
+    echo "Pre-commit hook installed successfully."
 }
 
 help() {
