@@ -14,7 +14,6 @@ require (
 	github.com/go-faker/faker/v4 v4.5.0
 	github.com/goccy/go-json v0.10.3
 	github.com/gorilla/mux v1.8.1
-	github.com/goware/urlx v0.3.2
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/sethvargo/go-envconfig v1.1.0
@@ -29,8 +28,6 @@ require (
 
 require (
 	github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53 // indirect
-	github.com/PuerkitoBio/purell v1.1.1 // indirect
-	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/tidwall/match v1.1.1 // indirect

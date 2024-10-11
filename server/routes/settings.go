@@ -196,7 +196,7 @@ func SettingsPage(w http.ResponseWriter, r *http.Request) error {
 		ProxyList:          config.BuiltinProxyList,
 		ProxyCheckEnabled:  config.GlobalConfig.ProxyCheckEnabled,    // Used to check whether proxy_checker is enabled on the instance
 		ProxyCheckInterval: config.GlobalConfig.ProxyCheckInterval,   // Used to display the ProxyCheckInterval configured on the instance
-		DefaultProxyServer: config.GlobalConfig.ProxyServer.String(), // Used to display the default image proxy server
+		DefaultProxyServer: config.GlobalConfig.ProxyServer, // Used to display the default image proxy server
 	})
 }
 

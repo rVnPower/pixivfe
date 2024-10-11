@@ -13,7 +13,7 @@ func AboutPage(w http.ResponseWriter, r *http.Request) error {
 		RepoURL:        config.GlobalConfig.RepoURL,
 		Revision:       config.GlobalConfig.Revision,
 		RevisionHash:   config.GlobalConfig.RevisionHash, // Used for the link to the source code repo
-		ImageProxy:     config.GlobalConfig.ProxyServer.String(),
+		ImageProxy:     config.GlobalConfig.ProxyServer,
 		AcceptLanguage: config.GlobalConfig.AcceptLanguage,
 	})
 }

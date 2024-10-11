@@ -8,8 +8,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/goware/urlx"
-
 	"codeberg.org/vnpower/pixivfe/v2/config"
 )
 
@@ -24,7 +22,9 @@ func GetImageProxy(r *http.Request) url.URL {
 	if value == "" {
 		// fall through to default case
 	} else {
-		proxyUrl, err := urlx.Parse(value)
+		// NOTE: do not use urlx for parsing here, a URI path like /proxy/i.pximg.net will fail to parse
+		// This will cause the default ProxyServer be silently used instead despite a UI change on the Settings page
+		proxyUrl, err := url.Parse(value)
 		if err != nil {
 			// fall through to default case
 		} else {
