@@ -24,9 +24,10 @@
     Tip: For absolute URI paths, start the baseURL with a forward slash.
 *}
 
-{{- block UnderlineNav(baseURL, paths, names, activeState="") }}
+{{- block UnderlineNav(baseURL, paths, names, categoryCounts, activeState="") }}
 <ul class="nav nav-underline">
     {{- range i, k := paths }}
+        {{- if categoryCounts[i] > 0 }}
         <li class="nav-item">
             <a class="nav-link
                 {{ activeState == k ? "active border-custom-color fw-bold" : "fw-semibold" }}
@@ -36,6 +37,7 @@
                 {{ names[i] }}
             </a>
         </li>
+        {{- end }}
     {{- end }}
 </ul>
 {{- end }}

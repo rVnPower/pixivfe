@@ -420,7 +420,7 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 					idsString += fmt.Sprintf("&ids[]=%d", ids[i])
 				}
 
-				recent, err := GetUserArtworks(r, illust.UserID, idsString)
+				recent, err := GetUserArtworkList(r, illust.UserID, idsString)
 				if err != nil {
 					cerr <- err
 					return
