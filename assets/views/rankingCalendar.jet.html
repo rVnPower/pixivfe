@@ -83,7 +83,6 @@
         </div>
 
         <!-- Navigation buttons -->
-        <!-- TODO: the checkpoint doesn't actually work as intended in most cases since there isn't enough 'page' when the images haven't loaded in yet -->
         {{- include "fragments/rankingCalendarNav" . }}
 
         <!-- The ranking calendar itself -->
@@ -99,21 +98,23 @@
         <div class="row row-cols-2 row-cols-md-5 row-cols-lg-7 g-3 mb-3">
           {{ range i, day := .Calendar }}
           <div class="col">
-            <div class="card h-100 border-0 rounded bg-charcoal-surface2">
-              {{ if day.DayNumber > 0 }} {{ if day.ImageURL }}
-              <a href="{{ day.ArtworkLink }}" class="text-decoration-none">
-                <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="card-img-top img-fluid object-fit-cover h-100 rounded" />
-                <div class="card-img-overlay d-flex align-items-start rounded p-2">
-                  <p class="card-text text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1 mb-0">{{ day.DayNumber }}</p>
-                </div>
-              </a>
-              {{ else }}
-              <div class="card-body d-flex align-items-center justify-content-center">
-                <p class="card-text text-center fw-bold mb-0">{{ day.DayNumber }}</p>
+            <div class="ratio ratio-1x1">
+              <div class="d-flex bg-charcoal-surface2 rounded overflow-hidden">
+                {{ if day.DayNumber > 0 }}
+                  {{ if day.ImageURL }}
+                    <a href="{{ day.ArtworkLink }}" class="text-decoration-none w-100 h-100 position-relative">
+                      <img src="{{ day.ImageURL }}" alt="Day {{ day.DayNumber }}" class="w-100 h-100 object-fit-cover" />
+                      <div class="position-absolute top-0 start-0 p-2">
+                        <span class="text-white fw-bold bg-dark bg-opacity-75 rounded-pill px-2 py-1">{{ day.DayNumber }}</span>
+                      </div>
+                    </a>
+                  {{ else }}
+                    <div class="d-flex align-items-center justify-content-center w-100 h-100">
+                      <p class="fw-bold mb-0">{{ day.DayNumber }}</p>
+                    </div>
+                  {{ end }}
+                {{ end }}
               </div>
-              {{ end }} {{ else }}
-              <div class="card h-100 border-0 bg-charcoal-surface2"></div>
-              {{ end }}
             </div>
           </div>
           {{ end }}
