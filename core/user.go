@@ -59,7 +59,7 @@ type User struct {
 	Comment           HTML            `json:"commentHtml"`
 	Webpage           string          `json:"webpage"`
 	SocialRaw         json.RawMessage `json:"social"`
-	Artworks          []ArtworkBrief  `json:"artworks"`
+	Artworks          []ArtworkBrief  `json:"artworks"` // this slice includes both illustrations and manga, but not novels
 	Illustrations     []ArtworkBrief
 	Manga             []ArtworkBrief
 	Novels            []NovelBrief   `json:"novels"`
