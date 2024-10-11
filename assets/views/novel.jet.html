@@ -112,14 +112,17 @@
                   </a>
                 </h3>
                 <h4 class="text-body-secondary text-center">
-                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
-                    <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
-                    {{- if len(.NovelSeriesContentTitles) == 1 }}
-                      work in this series
-                    {{- else }}
-                      works in this series
-                    {{- end }}
-                  </a>
+                  {* NOTE: formatting for the i18n crawler *}
+                  {{ seriesWorks := len(.NovelSeriesContentTitles) }}
+                  {{- if seriesWorks == 1 }}
+                    <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                      <i class="bi bi-stack me-2"></i>{{ seriesWorks }} work in this series
+                    </a>
+                  {{- else }}
+                    <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                      <i class="bi bi-stack me-2"></i>{{ seriesWorks }} works in this series
+                    </a>
+                  {{- end }}
                 </h4>
                 <hr class="my-3">
                 <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">
@@ -141,9 +144,10 @@
     </div>
   </div>
 
+  {* NOTE: temporarily disabled to prevent malformed strings from appearing in i18n
   <noscript>
-    <!-- col-12 because noscript forces d-inline which causes justify-content-center to break -->
-    <div class="col-12 col-lg-9">
+    {* NOTE: using col-12 because noscript forces d-inline which causes justify-content-center to break *}
+    <div class="col-12">
       <div class="custom-card">
         <div class="custom-card-body bg-charcoal-surface1 p-4">
           <h2><i class="bi bi-gear-fill me-2"></i>Options</h2>
@@ -198,6 +202,7 @@
       </div>
     </div>
   </noscript>
+  *}
 
   <!-- NOTE: col-12 to always display at full width, may tune down in the future -->
   <div class="col-12">
@@ -256,14 +261,17 @@
                   </a>
                 </h2>
                 <h3 class="text-body-secondary text-center">
-                  <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
-                    <i class="bi bi-stack me-2"></i>{{ len(.NovelSeriesContentTitles) }}
-                    {{- if len(.NovelSeriesContentTitles) == 1 }}
-                      work in this series
-                    {{- else }}
-                      works in this series
-                    {{- end }}
-                  </a>
+                  {* NOTE: formatting for the i18n crawler *}
+                  {{ seriesWorks := len(.NovelSeriesContentTitles) }}
+                  {{- if seriesWorks == 1 }}
+                    <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                      <i class="bi bi-stack me-2"></i>{{ seriesWorks }} work in this series
+                    </a>
+                  {{- else }}
+                    <a href="/novel/series/{{ .Novel.SeriesNavData.SeriesID }}" class="text-body-secondary text-decoration-none">
+                      <i class="bi bi-stack me-2"></i>{{ seriesWorks }} works in this series
+                    </a>
+                  {{- end }}
                 </h3>
                 <hr class="my-4">
                 <div class="row row-col-auto nav nav-underline justify-content-center pb-2 mx-1">

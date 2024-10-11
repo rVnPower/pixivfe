@@ -23,12 +23,10 @@
         <!-- Tag information -->
         <div class="col-md-8">
           <div class="custom-card-body p-4">
-            <!-- <div class="d-flex flex-wrap justify-content-between align-items-start"> -->
-              <div class="d-flex flex-column flex-md-row justify-content-start align-items-start align-items-md-center">
-                <h2 class="display-6 fw-bold me-2 mb-0">#{{ .Tag.Name }}</h2>
-                <span class="h3 text-muted mb-0">{{ .Tag.Metadata.Name }}</span>
-              </div>
-            <!-- </div> -->
+            <div class="d-flex flex-column flex-md-row justify-content-start align-items-start align-items-md-center">
+              <h2 class="display-6 fw-bold me-2 mb-0">#{{ .Tag.Name }}</h2>
+              <span class="h3 text-muted mb-0">{{ .Tag.Metadata.Name }}</span>
+            </div>
             <p class="lead"><span class="fw-bold">{{ .Data.Artworks.Total }}</span> <span class="fw-medium text-muted">works</span></p>
             <!-- mb-0 to remove the extra bottom margin Bootstrap adds to p class="lead" -->
             <p class="lead">{{ .Tag.Metadata.Detail }}</p>
@@ -45,6 +43,7 @@
     </div>
   </div>
 
+  {* NOTE: temporarily disabled to prevent malformed strings from appearing in i18n
   <noscript>
     <div class="col-12">
       <div class="custom-card bg-charcoal-surface1">
@@ -158,6 +157,7 @@
       </div>
     </div>
   </noscript>
+  *}
 
   <div class="col-12">
     <div class="d-flex flex-row align-items-center justify-content-between mb-4">

@@ -51,12 +51,15 @@
             </div>
             {{- end }}
             {{- if Content == "all" || Content == "illust" || Content == "manga" }}
+            {* NOTE: formatting for the i18n crawler *}
             <p class="small text-body-secondary mb-4">
-            {{- else }}
-            <p class="small text-body-secondary mb-0">
-            {{- end }}
               Choose the time frame for the rankings.
             </p>
+            {{- else }}
+            <p class="small text-body-secondary mb-0">
+              Choose the time frame for the rankings.
+            </p>
+            {{- end }}
           </div>
 
         <div class="row mb-4">
@@ -207,13 +210,16 @@
               {{- yield UnderlineNav(baseURL=url, paths=path, names=name, activeState=Mode)}}
             </div>
             {{- end }}
+            {* NOTE: formatting for the i18n crawler *}
             {{- if Content == "all" }}
             <p class="small text-body-secondary mb-4">
-            {{- else }}
-            <p class="small text-body-secondary mb-0">
-            {{- end }}
               Choose the time frame for the rankings.
             </p>
+            {{- else }}
+            <p class="small text-body-secondary mb-0">
+              Choose the time frame for the rankings.
+            </p>
+            {{- end }}
           </div>
         </div>
 
