@@ -423,7 +423,7 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 		// Only fetch the comments if 'full' is requested and comments are not disabled (illust.CommentDisabled != 1).
 		// This check needs to happen *after* fetching the basic artwork information, since that's when
 		// 'CommentDisabled' is populated. If we check it too early, it would default to 0 (enabled),
-		// leading to an invalid API call to fetch comments even when they are disabled, causing an HTTP 500 error
+		// leading to an invalid API call to fetch comments even when they are disabled, and causing an HTTP 500 error
 		// on our end when we receive HTTP 400 from the Pixiv API as a result.
 		if full && illust.CommentDisabled != 1 {
 			wg.Add(1)
