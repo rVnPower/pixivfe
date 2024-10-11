@@ -14,4 +14,5 @@ dev.sh
 docker/pixivfe_token.txt
 # Pipfile generated when using pipenv
 Pipfile
+# i18n debug artifacts
 i18n/*_strings.json

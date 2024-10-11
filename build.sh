@@ -44,13 +44,21 @@ scan() {
 
 i18n_code() {
     echo "Extracting i18n strings from code..."
+    mkdir -p i18n/locale/en
+    rm -f i18n/locale/en/code.json
     semgrep scan -q -f i18n/semgrep-i18n.yml --json | jq '.results | map({msg:.extra.metavars["$MSG"].abstract_content, file:.path, line:.start.line, offset:.start.offset})' > i18n/code_strings.json
+    go run ./i18n/converter < i18n/code_strings.json > i18n/locale/en/code.json
+    chmod -w i18n/locale/en/code.json
 }
 
 i18n_template() {
     echo "Extracting i18n strings from templates..."
+    mkdir -p i18n/locale/en
+    rm -f i18n/locale/en/template.json
     go run ./i18n/crawler > i18n/template_strings.json
-    malformed_strings=$(jq '.[] | select(.msg | contains("\n"))' < i18n/template_strings.json)
+    go run ./i18n/converter < i18n/template_strings.json > i18n/locale/en/template.json
+    chmod -w i18n/locale/en/template.json
+    malformed_strings=$(jq 'to_entries | .[] | select(.value | contains("\n"))' < i18n/locale/en/template.json)
     if [ -z "$malformed_strings" ]; then
         echo "No malformed strings found."
     else
@@ -63,11 +71,6 @@ i18n() {
     echo "Starting i18n extraction process..."
     i18n_code
     i18n_template
-    mkdir -p i18n/locale/en
-    rm -f i18n/locale/en/code.json i18n/locale/en/template.json
-    go run ./i18n/converter < i18n/code_strings.json > i18n/locale/en/code.json
-    go run ./i18n/converter < i18n/template_strings.json > i18n/locale/en/template.json
-    chmod -w i18n/locale/en/code.json i18n/locale/en/template.json
     echo "i18n extraction completed."
 }
 
