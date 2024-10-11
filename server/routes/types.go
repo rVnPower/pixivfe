@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"net/url"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
@@ -34,7 +33,7 @@ type Data_about struct {
 	RepoURL        string
 	Revision       string
 	RevisionHash   string
-	ImageProxy     url.URL
+	ImageProxy     string
 	AcceptLanguage string
 }
 type Data_artwork struct {
@@ -139,7 +138,7 @@ type Data_settings struct {
 	WorkingProxyList   []string
 	ProxyCheckEnabled  bool
 	ProxyCheckInterval time.Duration
-	DefaultProxyServer url.URL
+	DefaultProxyServer string
 }
 type Data_tag struct {
 	Title            string
