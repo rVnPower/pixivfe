@@ -63,7 +63,7 @@
         <!-- TODO: make the Options button appear in the same block as the form at md breakpoint and below -->
         <div class="d-flex flex-column flex-md-row align-items-start justify-content-start justify-content-md-between mb-4" aria-label="Ranking options">
           <div class="d-flex flex-column mb-3 mb-md-0">
-            <h2><i class="bi bi-calendar me-2"></i>Ranking Calendar for {{ .ThisMonth.MonthLiteral }} {{ .Year }}</h2>
+            <h2><i class="bi bi-calendar me-2"></i>{{ .ThisMonth.MonthLiteral }} {{ .Year }}</h2>
             <form action="/rankingCalendar" method="post">
               <input type="hidden" name="mode" value="{{ .Mode }}" />
               <label for="date" class="form-label fw-bold">Date (mm/dd/yyyy)</label>
