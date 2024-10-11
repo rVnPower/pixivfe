@@ -292,6 +292,50 @@ func initializeUserCounts(user *User) {
 	user.CategoryItemCount = 0
 }
 
+func fetchAndProcessArtworks(r *http.Request, id, ids string, category UserArtCategory) ([]ArtworkBrief, []NovelBrief, error) {
+	var artworks []ArtworkBrief
+	var novels []NovelBrief
+	var err error
+
+	if category == UserArt_Novel {
+		novels, err = GetUserNovels(r, id, ids)
+	} else {
+		artworks, err = GetUserArtworks(r, id, ids)
+	}
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Sort the works
+	if category == UserArt_Novel {
+		sort.Slice(novels[:], func(i, j int) bool {
+			return numberGreaterThan(novels[i].ID, novels[j].ID)
+		})
+	} else {
+		sort.Slice(artworks[:], func(i, j int) bool {
+			return numberGreaterThan(artworks[i].ID, artworks[j].ID)
+		})
+	}
+
+	return artworks, novels, nil
+}
+
+func handleSeriesData(series json.RawMessage, category UserArtCategory) ([]NovelSeries, []MangaSeries) {
+	var novelSeries []NovelSeries
+	var mangaSeries []MangaSeries
+
+	if series != nil {
+		if category == UserArt_Novel {
+			_ = json.Unmarshal(series, &novelSeries)
+		} else {
+			_ = json.Unmarshal(series, &mangaSeries)
+		}
+	}
+
+	return novelSeries, mangaSeries
+}
+
 func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page int, getTags bool) (User, error) {
 	var user User
 
@@ -340,43 +384,6 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 
 		user.Artworks = works
 		user.CategoryItemCount = bookmarksCount
-	} else if category == UserArt_Novel {
-		ids, count, _, _, _, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
-		if err != nil {
-			return user, err
-		}
-
-		if count > 0 {
-			// Check if the user has artworks available or not
-			works, err := GetUserNovels(r, id, ids)
-			if err != nil {
-				return user, err
-			}
-
-			// IDK but the order got shuffled even though Pixiv sorted the IDs in the response
-			sort.Slice(works[:], func(i, j int) bool {
-				left := works[i].ID
-				right := works[j].ID
-				return numberGreaterThan(left, right)
-			})
-			user.Novels = works
-
-			if getTags {
-				user.FrequentTags, err = GetFrequentTags(r, ids, category)
-				if err != nil {
-					return user, err
-				}
-			}
-		}
-
-		var novelSeries []NovelSeries
-		if series != nil {
-			if err = json.Unmarshal(series, &novelSeries); err == nil {
-				user.NovelSeries = novelSeries
-			}
-		}
-
-		user.CategoryItemCount = count
 	} else {
 		ids, count, _, _, _, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
 		if err != nil {
@@ -384,19 +391,16 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		}
 
 		if count > 0 {
-			// Check if the user has artworks available or not
-			works, err := GetUserArtworks(r, id, ids)
+			artworks, novels, err := fetchAndProcessArtworks(r, id, ids, category)
 			if err != nil {
 				return user, err
 			}
 
-			// IDK but the order got shuffled even though Pixiv sorted the IDs in the response
-			sort.Slice(works[:], func(i, j int) bool {
-				left := works[i].ID
-				right := works[j].ID
-				return numberGreaterThan(left, right)
-			})
-			user.Artworks = works
+			if category == UserArt_Novel {
+				user.Novels = novels
+			} else {
+				user.Artworks = artworks
+			}
 
 			if getTags {
 				user.FrequentTags, err = GetFrequentTags(r, ids, category)
@@ -406,13 +410,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 			}
 		}
 
-		var mangaSeries []MangaSeries
-		if series != nil {
-			if err = json.Unmarshal(series, &mangaSeries); err == nil {
-				user.MangaSeries = mangaSeries
-			}
-		}
-
+		user.NovelSeries, user.MangaSeries = handleSeriesData(series, category)
 		user.CategoryItemCount = count
 	}
 
