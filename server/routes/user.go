@@ -47,7 +47,7 @@ func fetchData(r *http.Request, getTags bool) (userPageData, error) {
 		worksPerPage = 30.0
 	}
 
-	worksCount = user.ArtworksCount
+	worksCount = user.CategoryItemCount
 	pageLimit := int(math.Ceil(float64(worksCount) / worksPerPage))
 
   return userPageData{

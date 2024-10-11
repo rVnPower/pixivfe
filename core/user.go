@@ -54,7 +54,7 @@ type User struct {
 	Artworks        []ArtworkBrief  `json:"artworks"`
 	Novels          []NovelBrief    `json:"novels"`
 	Background      map[string]any  `json:"background"`
-	ArtworksCount   int
+	CategoryItemCount   int
 	FrequentTags    []FrequentTag
 	Social          map[string]map[string]string
 	BackgroundImage string
@@ -312,7 +312,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		user.Artworks = works
 
 		// Public bookmarks count
-		user.ArtworksCount = count
+		user.CategoryItemCount = count
 		user.BookmarksCount = count
 	} else if category == UserArt_Novel {
 		ids, count, illustCount, mangaCount, novelCount, series, err := GetUserArtworksIDAndSeries(r, id, category, page)
@@ -351,7 +351,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		}
 
 		// Artworks count
-		user.ArtworksCount = count
+		user.CategoryItemCount = count
 		user.AllCount = illustCount + mangaCount + novelCount
 		user.IllustCount = illustCount
 		user.MangaCount = mangaCount
@@ -393,7 +393,7 @@ func GetUserArtwork(r *http.Request, id string, category UserArtCategory, page i
 		}
 
 		// Artworks count
-		user.ArtworksCount = count
+		user.CategoryItemCount = count
 		user.AllCount = illustCount + mangaCount + novelCount
 		user.IllustCount = illustCount
 		user.MangaCount = mangaCount
