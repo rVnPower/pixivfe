@@ -122,7 +122,7 @@ func GetFrequentTags(r *http.Request, ids string, category UserArtCategory) ([]F
 	return tags, nil
 }
 
-func GetUserArtworks(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
+func GetUserArtworkList(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
 	var works []ArtworkBrief
 
 	URL := GetUserFullArtworkURL(id, ids)
@@ -157,7 +157,7 @@ func GetUserArtworks(r *http.Request, id, ids string) ([]ArtworkBrief, error) {
 }
 
 func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
-	// VnPower: we can merge this function into GetUserArtworks, but I want to make things simple for now
+	// VnPower: we can merge this function into GetUserArtworks (now GetUserArtworkList), but I want to make things simple for now
 	var works []NovelBrief
 
 	URL := GetUserFullNovelURL(id, ids)
@@ -300,7 +300,7 @@ func fetchAndProcessArtworks(r *http.Request, id, ids string, category UserArtCa
 	if category == UserArt_Novel {
 		novels, err = GetUserNovels(r, id, ids)
 	} else {
-		artworks, err = GetUserArtworks(r, id, ids)
+		artworks, err = GetUserArtworkList(r, id, ids)
 	}
 
 	if err != nil {
