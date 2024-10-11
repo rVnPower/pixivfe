@@ -56,9 +56,14 @@ func setToken(w http.ResponseWriter, r *http.Request) (string, error) {
 }
 
 func setImageServer(w http.ResponseWriter, r *http.Request) (string, error) {
-	token := r.FormValue("image-proxy")
-	if token != "" {
-		session.SetCookie(w, session.Cookie_ImageProxy, token)
+	customProxy := r.FormValue("custom-image-proxy")
+	selectedProxy := r.FormValue("image-proxy")
+
+	if customProxy != "" {
+		session.SetCookie(w, session.Cookie_ImageProxy, customProxy)
+		return i18n.Sprintf("Custom image proxy server set successfully."), nil
+	} else if selectedProxy != "" {
+		session.SetCookie(w, session.Cookie_ImageProxy, selectedProxy)
 		return i18n.Sprintf("Image proxy server updated successfully."), nil
 	} else {
 		session.ClearCookie(w, session.Cookie_ImageProxy)
