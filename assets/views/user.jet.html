@@ -79,7 +79,7 @@
     <!-- User content -->
 
     <!-- Home category (all works) -->
-    {{- if .Category == "" }}
+    {{- if .Category == "" || .Category == "artworks" }}
       <div class="d-flex justify-content-between align-items-center mb-4">
         {* NOTE: using sentence case here to be more consistent with the rest of our UI, even though pixiv uses title case *}
         <h2 class="d-flex align-items-baseline mb-0">Illustrations and manga<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.All }}</span></h2>
