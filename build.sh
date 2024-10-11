@@ -30,6 +30,7 @@ fmt() {
 build() {
     echo "Building ${BINARY_NAME}..."
     go mod tidy
+    i18n
     CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=${REVISION}" -o "${BINARY_NAME}"
 }
 
@@ -111,8 +112,8 @@ help() {
     echo "  scan               - Scan Go code"
     echo "  test               - Run tests"
     echo "  i18n               - Extract i18n strings"
-    echo "  i18n_upload        - Upload strings to Crowdin"
-    echo "  i18n_download      - Download strings from Crowdin"
+    echo "  i18n-up            - Upload strings to Crowdin"
+    echo "  i18n-down          - Download strings from Crowdin"
     echo "  run                - Build and run the binary"
     echo "  clean              - Remove the binary"
     echo "  install-pre-commit - Install testing pre-commit hook"
@@ -139,7 +140,9 @@ execute_command() {
         i18n) i18n ;;
         i18n_code) i18n_code ;;
         i18n_template) i18n_template ;;
+        i18n-up) i18n_upload ;;
         i18n_upload) i18n_upload ;;
+        i18n-down) i18n_download ;;
         i18n_download) i18n_download ;;
         run) run ;;
         clean) clean ;;

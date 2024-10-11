@@ -60,7 +60,7 @@ func translationPairs_inner(locale string, file string) TrPairs {
 
 	staging := []translation_pair{}
 	for k, v := range to_map {
-		if strings.HasPrefix(k, file+":") {
+		if strings.HasPrefix(k, file+":") && from_map[k] != v {
 			staging = append(staging, translation_pair{from_map[k], v})
 		}
 	}
