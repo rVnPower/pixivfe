@@ -71,24 +71,70 @@
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between mx-auto mb-4">
       {{- baseURL := "/users/" + .User.ID + "/" }}
       {{- paths := slice("" + "#checkpoint", "illustrations" + "#checkpoint", "manga" + "#checkpoint", "novels" + "#checkpoint", "bookmarks" + "#checkpoint") }}
-      {{- names := slice("All", "Illustrations", "Manga", "Novels", "Bookmarks") }}
-      {{- categoryCounts := slice(.User.AllCount, .User.IllustCount, .User.MangaCount, .User.NovelCount, .User.BookmarksCount) }}
+      {{- names := slice("Home", "Illustrations", "Manga", "Novels", "Bookmarks") }}
+      {{- categoryCounts := slice(.User.CountInfo.All, .User.CountInfo.Illustrations, .User.CountInfo.Manga, .User.CountInfo.Novels, .User.CountInfo.Bookmarks) }}
       {{- yield UnderlineNavUser(baseURL=baseURL, paths=paths, names=names, categoryCounts=categoryCounts, activeState=.Category + "#checkpoint") }}
     </div>
 
     <!-- User content -->
-    {{- if .Category != "novels" }}
+
+    <!-- Home category (all works) -->
+    {{- if .Category == "" || .Category == "artworks" }}
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        {* NOTE: using sentence case here to be more consistent with the rest of our UI, even though pixiv uses title case *}
+        <h2 class="d-flex align-items-baseline mb-0">Illustrations and manga<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.All }}</span></h2>
+      </div>
+
+      {{ if .User.Artworks != 0 }}
+      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+        {{- include "fragments/small-tn" .User.Artworks }}
+      </div>
+      {{- end }}
+
+      {* TODO: the following doesn't do anything; .User.Novels isn't populated unless UserArtCategory is UserArt_Novel *}
+      {{ if .User.Novels != 0 }}
+      <div class="row row-cols-1 row-cols-lg-2 g-4">
+        {{- range .User.Novels }}
+        <div class="col mt-1">
+          <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+            {{- include "fragments/novel-tn" .User.Novels  }}
+          </div>
+          <hr class="my-0">
+        </div>
+        {{- end }}
+      </div>
+      {{- end }}
+    {{- end }}
+
+    <!-- Illustrations category -->
+    {{- if .Category == "illustrations" }}
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Illustrations and Manga</h2>
-      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Artworks) }}
+      <h2 class="d-flex align-items-baseline mb-0">Illustrations<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.Illustrations }}</span></h2>
+      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Illustrations) }}
       <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-      {{- include "fragments/small-tn" .User.Artworks }}
+      {{- include "fragments/small-tn" .User.Illustrations }}
     </div>
-    {{- else }}
+    {{- end }}
 
-    <h2>Novels</h2>
+    <!-- Manga category -->
+    {{- if .Category == "manga" }}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="d-flex align-items-baseline mb-0">Manga<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.Manga }}</span></h2>
+      {{- combinedUrl := "/artworks-multi/" + joinArtworkIds(.User.Manga) }}
+      <a href="{{combinedUrl}}" class="custom-btn-secondary">View all</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .User.Manga }}
+    </div>
+    {{- end }}
+
+    <!-- Novels category -->
+    {{- if .Category == "novels" }}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="d-flex align-items-baseline mb-0">Novels<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.Novels }}</span></h2>
+    </div>
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .User.Novels }}
       <div class="col mt-1">
@@ -100,6 +146,18 @@
       {{- end }}
     </div>
     {{- end }}
+
+    <!-- Bookmarks category -->
+    {{- if .Category == "bookmarks" }}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="d-flex align-items-baseline mb-0">Bookmarks<span class="fs-6 bg-charcoal-surface1 rounded px-2 py-1 ms-2">{{ .User.CountInfo.Bookmarks }}</span></h2>
+    </div>
+    {* NOTE: using .User.Artworks since there's no need to create a separate bookmarks slice; the category handles it *}
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+      {{- include "fragments/small-tn" .User.Artworks }}
+    </div>
+    {{- end }}
+
   </div>
 
   <!-- Pagination -->
