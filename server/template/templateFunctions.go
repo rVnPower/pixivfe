@@ -95,8 +95,11 @@ func ParseEmojis(s string) HTML {
 
 	// Replace shortcodes with corresponding image tags
 	parsedString := regex.ReplaceAllStringFunc(s, func(s string) string {
-		s = s[1 : len(s)-1] // Get the string inside parentheses
-		id := emojiList[s]
+		s = s[1 : len(s)-1]       // Get the string inside parentheses
+		id, found := emojiList[s] // Check if the string has a corresponding emoji ID
+		if !found {
+			return fmt.Sprintf("(%s)", s) // No replacement, return the original text
+		}
 
 		return fmt.Sprintf(`<img src="/proxy/s.pximg.net/common/images/emoji/%s.png" alt="(%s)" class="emoji" />`, id, s)
 	})
