@@ -62,9 +62,9 @@
       <div class="custom-card-body bg-charcoal-surface1 p-4">
 
         <!-- Header items -->
-        <!-- TODO: make the Options button appear in the same block as the form at sm breakpoint and below -->
-        <div class="d-flex flex-column flex-sm-row align-items-start justify-content-start justify-content-sm-between mb-4" aria-label="Ranking options">
-          <div class="d-flex flex-column mb-3 mb-sm-0">
+        <!-- TODO: make the Options button appear in the same block as the form at md breakpoint and below -->
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-start justify-content-md-between mb-4" aria-label="Ranking options">
+          <div class="d-flex flex-column mb-3 mb-md-0">
             <h2><i class="bi bi-calendar me-2"></i>Ranking Calendar for {{ .ThisMonth.MonthLiteral }} {{ .Year }}</h2>
             <form action="/rankingCalendar" method="post">
               <input type="hidden" name="mode" value="{{ .Mode }}" />
@@ -80,30 +80,13 @@
             </form>
           </div>
           <button class="js-required custom-btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#RankingOptionsModal">
-            <i class="bi bi-gear-fill me-0 me-md-2"></i>Options
+            <i class="bi bi-gear-fill me-2"></i>Options
           </button>
         </div>
 
         <!-- Navigation buttons -->
         <!-- TODO: the checkpoint doesn't actually work as intended in most cases since there isn't enough 'page' when the images haven't loaded in yet -->
-        <div class="d-flex flex-row align-items-center justify-content-between mb-3" aria-label="Month navigation">
-          {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-          {{- if .MonthBefore.Link != "false" }}
-          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
-            <span>
-              <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
-            </span>
-          </a>
-          {{- end }}
-          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
-            <span>Current month</span>
-          </a>
-          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
-            <span>
-              Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
-            </span>
-          </a>
-        </div>
+        {{- include "fragments/rankingCalendarNav" . }}
 
         <!-- The ranking calendar itself -->
         <div class="row text-center fw-bold mb-3">
@@ -139,24 +122,7 @@
         </div>
 
         <!-- Navigation buttons -->
-        <div class="d-flex flex-row align-items-center justify-content-between" aria-label="Month navigation">
-          {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
-          {{- if .MonthBefore.Link != "false" }}
-          <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
-            <span>
-              <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
-            </span>
-          </a>
-          {{- end }}
-          <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
-            <span>Current month</span>
-          </a>
-          <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
-            <span>
-              Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
-            </span>
-          </a>
-        </div>
+        {{- include "fragments/rankingCalendarNav" . }}
 
       </div>
     </div>

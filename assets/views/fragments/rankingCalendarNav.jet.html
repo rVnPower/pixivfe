@@ -1,0 +1,41 @@
+<div class="d-flex flex-row align-items-center justify-content-between mb-3" aria-label="Month navigation">
+  {{- url := "/rankingCalendar?mode=" + .Mode + "&date=" }}
+
+  <!-- Full buttons for md and above -->
+  <div class="d-none d-md-flex flex-row align-items-center justify-content-between w-100">
+    {{- if .MonthBefore.Link != "false" }}
+    <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
+      <span>
+        <i class="bi bi-arrow-left-circle-fill me-2"></i>Past month
+      </span>
+    </a>
+    {{- end }}
+    <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
+      <span>Current month</span>
+    </a>
+    <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+      <span>
+        Next month<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+      </span>
+    </a>
+  </div>
+
+  <!-- Shortened buttons for below md -->
+  <div class="d-flex d-md-none flex-row align-items-center justify-content-between w-100">
+    {{- if .MonthBefore.Link != "false" }}
+    <a href="{{ url }}{{ .MonthBefore.Link }}#checkpoint" class="custom-btn-secondary me-2">
+      <span>
+        <i class="bi bi-arrow-left-circle-fill me-2"></i>Past
+      </span>
+    </a>
+    {{- end }}
+    <a href="{{ url }}#checkpoint" class="custom-btn-secondary me-2">
+      <span>Current</span>
+    </a>
+    <a href="{{ url }}{{ .MonthAfter.Link }}#checkpoint" class="custom-btn-secondary{{ .MonthAfter.Link == "false" ? " disabled" : "" }}"{{ .MonthAfter.Link == "false" ? " aria-disabled=\"true\"" : "" }}>
+      <span>
+        Next<i class="bi bi-arrow-right-circle-fill ms-2"></i>
+      </span>
+    </a>
+  </div>
+</div>
