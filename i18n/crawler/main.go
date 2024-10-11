@@ -49,7 +49,7 @@ func processFile(filename string, result *jnode.Node) {
 
 	content2 := stripComments(string(content))
 
-	root, err := html.Parse(strings.NewReader(content2))
+	root, err := html.ParseWithOptions(strings.NewReader(content2), html.ParseOptionEnableScripting(false))
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +93,9 @@ func visit(node *html.Node, record func([]*html.Node)) {
 		case html.ElementNode:
 			tag := it.Data
 
-			if tag == "a" && containsOnlyText(it) {
+			if tag == "style" || tag == "script" {
+				continue
+			} else if tag == "a" && containsOnlyText(it) {
 				stash = append(stash, it)
 			} else {
 				clearTo(&stash, record)
