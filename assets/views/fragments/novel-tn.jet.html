@@ -12,13 +12,13 @@
   <div class="col-8 col-md-9">
     <!-- Novel title -->
     <!-- NOTE: using an h4 element here breaks the underline animation for some reason -->
-    <span class="fs-6 fw-bold text-truncate">
+    <span class="fs-6 fw-bold text-wrap">
       <a href="/novel/{{ .ID }}" class="text-body text-decoration-none">{{ .Title }}</a>
     </span>
 
     <!-- Series name -->
     {{- if .SeriesID }}
-    <p class="text-truncate mb-1">
+    <p class="text-wrap mb-1">
       <a href="/novel/series/{{ .SeriesID }}" class="small text-body-secondary text-decoration-none">{{ .SeriesTitle }}</a>
     </p>
     {{- end }}
