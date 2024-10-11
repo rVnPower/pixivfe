@@ -9,7 +9,7 @@ COPY . .
 # Build the application
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg \
-    ./build.sh build
+    ./build.sh build_docker
 
 # Stage for creating the non-privileged user
 FROM alpine:3.20 AS user-stage

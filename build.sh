@@ -34,6 +34,12 @@ build() {
     CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=${REVISION}" -o "${BINARY_NAME}"
 }
 
+build_docker() {
+    echo "Building ${BINARY_NAME}..."
+    go mod tidy
+    CGO_ENABLED=0 go build -v -ldflags="-extldflags=-static -X codeberg.org/vnpower/pixivfe/v2/config.REVISION=${REVISION}" -o "${BINARY_NAME}"
+}
+
 test() {
     echo "Running tests..."
     go test ./...
@@ -109,6 +115,7 @@ help() {
     echo "  all                - Run fmt, build, and test"
     echo "  fmt                - Format Go code"
     echo "  build              - Build the binary"
+    echo "  build_docker       - Build the binary (for Docker, skips i18n refresh)"
     echo "  scan               - Scan Go code"
     echo "  test               - Run tests"
     echo "  i18n               - Extract i18n strings"
@@ -135,6 +142,7 @@ execute_command() {
     case "$1" in
         fmt) fmt ;;
         build) build ;;
+        build_docker) build_docker ;;
         test) test ;;
         scan) scan ;;
         i18n) i18n ;;
