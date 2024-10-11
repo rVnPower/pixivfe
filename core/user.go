@@ -217,7 +217,7 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 
 	var body struct {
 		Illusts     json.RawMessage `json:"illusts"`
-		Mangas      json.RawMessage `json:"manga"`
+		Manga       json.RawMessage `json:"manga"`
 		MangaSeries json.RawMessage `json:"mangaSeries"`
 		Novels      json.RawMessage `json:"novels"`
 		NovelSeries json.RawMessage `json:"novelSeries"`
@@ -238,7 +238,7 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 	// }
 
 	var illusts map[int]string
-	var mangas map[int]string
+	var manga map[int]string
 	var novels map[int]string
 	var series json.RawMessage
 	count := 0
@@ -260,15 +260,15 @@ func GetUserArtworksIDAndSeries(r *http.Request, id string, category UserArtCate
 		illustCount = len(illusts)
 	}
 	if category == UserArt_Manga || category == UserArt_Any {
-		if err = json.Unmarshal(body.Mangas, &mangas); err != nil {
+		if err = json.Unmarshal(body.Manga, &manga); err != nil {
 			fmt.Println("Error unmarshalling manga:", err)
-			mangas = make(map[int]string)
+			manga = make(map[int]string)
 		}
-		for k := range mangas {
+		for k := range manga {
 			ids = append(ids, k)
 			count++
 		}
-		mangaCount = len(mangas)
+		mangaCount = len(manga)
 		series = body.MangaSeries
 	}
 	if category == UserArt_Novel {
