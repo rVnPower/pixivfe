@@ -14,7 +14,7 @@
 
           <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold mb-1" id="novels-tab" data-bs-toggle="tab" data-bs-target="#novels" type="button" role="tab" aria-controls="novels" aria-selected="false">Novels</button>
 
-          <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold mb-1" id="advanced-settings-tab" data-bs-toggle="tab" data-bs-target="#advanced-settings" type="button" role="tab" aria-controls="advanced-settings" aria-selected="false">Advanced settings</button>
+          <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold mb-1" id="advanced-settings-tab" data-bs-toggle="tab" data-bs-target="#advanced-settings" type="button" role="tab" aria-controls="advanced-settings" aria-selected="false">Cookies</button>
 
           <button class="btn btn-dark rounded-pill border-0 flex-fill fw-bold" id="reset-tab" data-bs-toggle="tab" data-bs-target="#reset" type="button" role="tab" aria-controls="reset" aria-selected="false">Reset</button>
         </nav>
@@ -273,10 +273,10 @@
               </ul>
             </div>
 
-            <!-- Advanced settings tab -->
+            <!-- Cookies tab -->
             <div class="tab-pane fade" id="advanced-settings" role="tabpanel" aria-labelledby="advanced-settings-tab">
               <ul class="list-group list-group-flush">
-                <h2 class="mb-4">Advanced settings</h2>
+                <h2 class="mb-4">Cookies</h2>
                 <p>This section allows you to directly manage PixivFE's cookie-based preferences. Intended for advanced users who understand the implications of changing these values.</p>
                 <div class="alert alert-warning" role="alert">
                   <p class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Exercise caution when modifying these settings. Incorrect values may adversely affect PixivFE's functionality or your browsing experience.</p>
@@ -339,7 +339,7 @@
                     <div class="mb-3">
                       <!-- NOTE: do not modify this <textarea> - weird whitespace will appear -->
                       <textarea class="form-control" name="raw" rows="10">
-                        {{- range CookieListOrdered -}}{{v := .v + "\n"}}{{ .k }}={{ v }}{{end -}}
+                        {{- range CookieListOrdered -}}{{ .k }}={{ .v + "\n" }}{{end -}}
                       </textarea>
                     </div>
                     <button type="submit" class="custom-btn-secondary">Set raw settings</button>
