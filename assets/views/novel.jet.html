@@ -144,9 +144,10 @@
     </div>
   </div>
 
-  {* NOTE: temporarily disabled to prevent malformed strings from appearing in i18n
+  {*
+  NOTE: temporarily disabled to prevent malformed strings from appearing in i18n
   <noscript>
-    {* NOTE: using col-12 because noscript forces d-inline which causes justify-content-center to break *}
+    <!-- NOTE: using col-12 because noscript forces d-inline which causes justify-content-center to break -->
     <div class="col-12">
       <div class="custom-card">
         <div class="custom-card-body bg-charcoal-surface1 p-4">
@@ -398,19 +399,21 @@
     </div>
   </div>
 
-  <div class="col-12 mt-5">
-    <h2>Related works</h2>
-    <div class="row row-cols-1 row-cols-lg-2 g-4">
-      {{- range .NovelRelated }}
-      <div class="col mt-1">
-        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
-          {{- include "fragments/novel-tn" . }}
+  {{- if len(.NovelRelated) > 0 }}
+    <div class="col-12 mt-5">
+      <h2>Related works</h2>
+      <div class="row row-cols-1 row-cols-lg-2 g-4">
+        {{- range .NovelRelated }}
+        <div class="col mt-1">
+          <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+            {{- include "fragments/novel-tn" . }}
+          </div>
+          <hr class="my-0">
         </div>
-        <hr class="my-0">
+        {{- end }}
       </div>
-      {{- end }}
     </div>
-  </div>
+  {{- end }}
 </div>
 
 <!-- End of main content -->
