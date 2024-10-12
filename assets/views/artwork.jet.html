@@ -27,9 +27,9 @@
         <div id="horizontal-scroll" class="row flex-nowrap flex-lg-wrap overflow-scroll overflow-lg-visible my-3 mx-0">
           {{- range .Illust.RecentWorks }}
           <div class="col-6 col-md-4 px-2">
-              <div class="card h-100 border-0">
+              <div class="card h-100 border-0 bg-transparent">
                 {{ include "fragments/thumbnail-dt" . }}
-                <div class="card-body bg-black py-2 px-0">
+                <div class="card-body py-2 px-0">
                   {{ include "fragments/thumbnail-tt" . }}
                 </div>
               </div>
