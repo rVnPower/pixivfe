@@ -296,7 +296,7 @@
       <!-- Recent works -->
       <div class="col-12 col-lg-6">
         <!-- Author information -->
-        <div class="custom-card bg-black mb-4 mb-lg-0">
+        <div class="custom-card bg-transparent mb-4 mb-lg-0">
           <div class="card-header border-0 rounded-5 bg-charcoal-surface1 py-3 px-4">
             <div class="d-flex align-items-center">
               <a href="/users/{{ .User.ID }}/novels">
@@ -311,7 +311,7 @@
             <div class="row flex-nowrap flex-lg-wrap mx-0">
               {{- range .Novel.UserNovels }}
               <div class="col-12 mt-1">
-                <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+                <div class="custom-novel-card bg-transparent p-3 py-4 thumbnail-hover-dark">
                 {{- include "fragments/novel-tn" . }}
                 </div>
                 <hr class="d-none d-lg-block my-0">
@@ -333,7 +333,7 @@
       <div class="row row-cols-1 row-cols-lg-2 g-4">
         {{- range .NovelRelated }}
         <div class="col mt-1">
-          <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          <div class="custom-novel-card bg-transparent p-3 py-4 thumbnail-hover-dark">
             {{- include "fragments/novel-tn" . }}
           </div>
           <hr class="my-0">

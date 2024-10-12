@@ -96,7 +96,7 @@
       <div class="row row-cols-1 row-cols-lg-2 g-4">
         {{- range .User.Novels }}
         <div class="col mt-1">
-          <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+          <div class="custom-novel-card bg-transparent p-3 py-4 thumbnail-hover-dark">
             {{- include "fragments/novel-tn" .User.Novels  }}
           </div>
           <hr class="my-0">
@@ -138,7 +138,7 @@
     <div class="row row-cols-1 row-cols-lg-2 g-4">
       {{- range .User.Novels }}
       <div class="col mt-1">
-        <div class="custom-novel-card bg-black p-3 py-4 thumbnail-hover-dark">
+        <div class="custom-novel-card bg-transparent p-3 py-4 thumbnail-hover-dark">
           {{- include "fragments/novel-tn" . }}
         </div>
         <hr class="my-0">
