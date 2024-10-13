@@ -34,7 +34,7 @@
               {{- if .User.IsFollowed == true && LoggedIn }}
               <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/unfollowUser/{{ .User.ID }}" hx-target="body" hx-indicator="#follow-spinner" hx-push-url="true">
                 <div class="d-flex">
-                  <div><i class="bi bi-person-plus-fill me-2"></i>Following</div>
+                  <div><i class="bi bi-person-fill me-2"></i>Following</div>
                   <div class="follow-spinner ms-2" id="follow-spinner">
                     <div class="spinner-border spinner-border-sm" role="status">
                       <span class="visually-hidden">Loading...</span>
@@ -43,15 +43,42 @@
                 </div>
               </button>
               {{- else }}
-              <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/followUser/{{ .User.ID }}" hx-target="body" hx-indicator="#follow-spinner" hx-push-url="true">
-              <div class="d-flex">
-                <div><i class="bi bi-person me-2"></i>Follow</div>
-                <div class="follow-spinner ms-2" id="follow-spinner">
-                  <div class="spinner-border spinner-border-sm" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </div>
-              </button>
+              <div class="btn-group">
+                <button type="button" class="custom-btn-secondary text-nowrap me-2">
+                  <div class="d-flex">
+                    <div><i class="bi bi-person-plus me-2"></i>Follow</div>
+                    <div class="follow-spinner ms-2" id="follow-spinner">
+                      <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                </button>
+                <button type="button" class="custom-btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#"
+                       hx-post="/self/followUser/{{ .User.ID }}"
+                       hx-target="body"
+                       hx-indicator="#follow-spinner"
+                       hx-push-url="true"
+                       hx-vals='{"private": false}'>
+                      Public
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                       hx-post="/self/followUser/{{ .User.ID }}"
+                       hx-target="body"
+                       hx-indicator="#follow-spinner"
+                       hx-push-url="true"
+                       hx-vals='{"private": true}'>
+                      Private
+                    </a>
+                  </li>
+                </ul>
+              </div>
               {{- end }}
             </div>
 
