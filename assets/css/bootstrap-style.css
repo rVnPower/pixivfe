@@ -14139,6 +14139,18 @@ h6, .h6 {
   display: inline;
 }
 
+.follow-spinner {
+  display: none;
+}
+
+.htmx-request .follow-spinner {
+  display: inline;
+}
+
+.htmx-request.follow-spinner {
+  display: inline;
+}
+
 @media (scripting: none) {
   .js-required {
     display: none !important;

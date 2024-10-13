@@ -12,7 +12,7 @@ import (
 var (
 	optionSaveResponse bool
 	MaxRecordedCount   = 0
-	logger             *zap.Logger
+	Logger             *zap.Logger
 )
 
 // Init initializes the audit package and sets up response saving if enabled.
@@ -70,7 +70,7 @@ func Init(saveResponse bool) error {
 
 	// Build and assign the logger
 	var err error
-	logger, err = zapConfig.Build()
+	Logger, err = zapConfig.Build()
 	if err != nil {
 		return i18n.Errorf("failed to initialize zap logger: %w", err)
 	}
@@ -82,7 +82,7 @@ func Init(saveResponse bool) error {
 	// Handle saving responses
 	MaxRecordedCount = 128
 	if err := os.MkdirAll(savePath, 0o700); err != nil {
-		logger.Error("Failed to create response save directory",
+		Logger.Error("Failed to create response save directory",
 			zap.Error(err),
 			zap.String("path", savePath),
 		)
@@ -90,4 +90,9 @@ func Init(saveResponse bool) error {
 	}
 
 	return nil
+}
+
+// GetLogger returns the initialized zap logger
+func GetLogger() *zap.Logger {
+    return Logger
 }

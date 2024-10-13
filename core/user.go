@@ -70,6 +70,8 @@ type User struct {
 	NovelSeries       []NovelSeries
 	MangaSeries       []MangaSeries
 
+	IsFollowed bool `json:"isFollowed"` // Denotes whether the logged in user currently following the given user
+
 	// The following fields are internal to PixivFE, used to display the number of works for a given category
 	CountInfo CountInfo
 }

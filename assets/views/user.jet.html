@@ -27,7 +27,41 @@
           </div>
           <!-- User name and social media links -->
           <div class="col-12 col-md-9">
-            <h1>{{ .User.Name }}</h1>
+
+
+
+            <!-- Follow and unfollow buttons -->
+            <div class="d-flex justify-content-start justify-content-xl-between align-items-center">
+              <h1>{{ .User.Name }}</h1>
+              {{- if .User.IsFollowed == true && LoggedIn }}
+              <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/unfollowUser/{{ .User.ID }}" hx-target="body" hx-indicator="#follow-spinner" hx-push-url="true">
+                <div class="d-flex">
+                  <div><i class="bi bi-person-plus-fill me-2"></i>Following</div>
+                  <div class="follow-spinner ms-2" id="follow-spinner">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+              {{- else }}
+              <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/followUser/{{ .User.ID }}" hx-target="body" hx-indicator="#follow-spinner" hx-push-url="true">
+              <div class="d-flex">
+                <div><i class="bi bi-person-plus me-2"></i>Follow</div>
+                <div class="follow-spinner ms-2" id="follow-spinner">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </button>
+              {{- end }}
+            </div>
+
+
+
+
+
+
             <p class="text-muted">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
             <div class="mb-3">
               {{- if .User.Webpage }}

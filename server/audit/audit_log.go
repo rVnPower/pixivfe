@@ -20,7 +20,7 @@ var RecordedRequestSpans = []Span{}
 func LogAndRecord(requestSpan Span) {
 	duration := float64(Duration(requestSpan)) / float64(time.Second)
 
-	logger.Info("Request",
+	Logger.Info("Request",
 		// Zap already prefixes the log with a timestamp
 		// zap.String("timestamp", span.GetStartTime().Format(time.RFC3339)),
 		zap.String("component", requestSpan.Component()),
@@ -44,7 +44,7 @@ func LogAndRecord(requestSpan Span) {
 // It also logs any internal server errors that occurred during the request.
 func LogServerRoundTrip(requestSpan ServerRequestSpan) {
 	if requestSpan.Error != nil {
-		logger.Error("Internal Server Error",
+		Logger.Error("Internal Server Error",
 			zap.Error(requestSpan.Error),
 			zap.String("requestId", requestSpan.RequestId),
 		)
@@ -62,7 +62,7 @@ func LogAPIRoundTrip(requestSpan APIRequestSpan) {
 			var err error
 			requestSpan.ResponseFilename, err = writeResponseBodyToFile(requestSpan.Body)
 			if err != nil {
-				logger.Error("Failed to save response to file",
+				Logger.Error("Failed to save response to file",
 					zap.Error(err),
 					zap.String("requestId", requestSpan.RequestId),
 				)
@@ -70,7 +70,7 @@ func LogAPIRoundTrip(requestSpan APIRequestSpan) {
 		}
 		// Log a warning for non-2xx status codes
 		if !(300 > requestSpan.Response.StatusCode && requestSpan.Response.StatusCode >= 200) {
-			logger.Warn("Non-2xx response from pixiv",
+			Logger.Warn("Non-2xx response from pixiv",
 				zap.Int("status", requestSpan.Response.StatusCode),
 				zap.String("requestId", requestSpan.RequestId),
 			)
