@@ -1,7 +1,7 @@
 package audit
 
 import (
-	"fmt"
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"net/http"
 	"time"
 )
@@ -10,7 +10,9 @@ type Span interface {
 	GetStartTime() time.Time
 	GetEndTime() time.Time
 	GetRequestId() string
-	LogLine() string
+	Component() string
+	Action() map[string]interface{}
+	Outcome() map[string]interface{}
 }
 
 func Duration(span Span) time.Duration {
@@ -38,8 +40,25 @@ func (span ServedRequestSpan) GetEndTime() time.Time {
 func (span ServedRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
-func (span ServedRequestSpan) LogLine() string {
-	return fmt.Sprintf("SERVER method=%s path=%s status=%d error=%v", span.Method, span.Path, span.Status, span.Error)
+func (span ServedRequestSpan) Component() string {
+	return "SERVER"
+}
+func (span ServedRequestSpan) Action() map[string]interface{} {
+	return map[string]interface{}{
+		"method": span.Method,
+		"path":   span.Path,
+	}
+}
+func (span ServedRequestSpan) Outcome() map[string]interface{} {
+	outcome := map[string]interface{}{
+		"status": span.Status,
+		"error":  "<none>",
+		"locale": i18n.GetLocale(),
+	}
+	if span.Error != nil {
+		outcome["error"] = span.Error.Error()
+	}
+	return outcome
 }
 
 type APIRequestSpan struct {
@@ -64,6 +83,28 @@ func (span APIRequestSpan) GetEndTime() time.Time {
 func (span APIRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
-func (span APIRequestSpan) LogLine() string {
-	return fmt.Sprintf("API method=%s url=%s error=%v responseFile=%s", span.Method, span.Url, span.Error, span.ResponseFilename)
+func (span APIRequestSpan) Component() string {
+	return "API"
+}
+func (span APIRequestSpan) Action() map[string]interface{} {
+	return map[string]interface{}{
+		"method":         span.Method,
+		"url":            span.Url,
+		"response_file":  span.ResponseFilename,
+	}
+}
+func (span APIRequestSpan) Outcome() map[string]interface{} {
+	outcome := map[string]interface{}{
+		"status": "success",
+		"error":  "<none>",
+		"locale": i18n.GetLocale(),
+	}
+	if span.Error != nil {
+		outcome["status"] = "error"
+		outcome["error"] = span.Error.Error()
+	}
+	if span.Response != nil {
+		outcome["status_code"] = span.Response.StatusCode
+	}
+	return outcome
 }

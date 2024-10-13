@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/soluble-ai/go-jnode"
@@ -19,6 +21,18 @@ func ResetDiagnosticsData(w http.ResponseWriter, r *http.Request) {
 	utils.RedirectToWhenceYouCame(w, r)
 }
 
+// formatSpanSummary creates a SpanSummary string from audit.Span
+func formatSpanSummary(span audit.Span) string {
+	duration := float64(audit.Duration(span)) / float64(time.Second)
+	return fmt.Sprintf("%s - %s - %v - %v - %.3fs",
+		span.GetStartTime().Format(time.RFC3339),
+		span.Component(),
+		span.Action(),
+		span.Outcome(),
+		duration,
+	)
+}
+
 func DiagnosticsData(w http.ResponseWriter, _ *http.Request) error {
 	data := jnode.NewArrayNode()
 	for _, span := range audit.RecordedSpans {
@@ -30,7 +44,7 @@ func DiagnosticsData(w http.ResponseWriter, _ *http.Request) error {
 		if err != nil {
 			return err
 		}
-		obj.Put("LogLine", span.LogLine())
+		obj.Put("SpanSummary", formatSpanSummary(span))
 		data.Append(obj)
 	}
 	w.Header().Set("content-type", "application/json")

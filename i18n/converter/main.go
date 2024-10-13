@@ -23,6 +23,6 @@ func main() {
 	}
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetEscapeHTML(false)
-	encoder.SetIndent("", "  ")	
+	encoder.SetIndent("", "  ")
 	encoder.Encode(translation_map)
 }

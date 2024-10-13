@@ -1,40 +1,32 @@
 package audit
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"path"
 	"time"
 
 	"github.com/oklog/ulid/v2"
+	"go.uber.org/zap"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
-// Logger is a custom logger with no timestamp prefix, as we control the timestamps in our log messages.
-var Logger = log.New(os.Stderr, "", 0)
-
 // RecordedSpans stores a slice of recorded Span objects for later analysis or debugging.
 var RecordedSpans = []Span{}
-
-// standardLog logs messages in a standardized format.
-func standardLog(logType string, message string, err error) {
-	timestamp := time.Now().Format("2006-01-02 15:04:05.000")
-	errStr := ""
-	if err != nil {
-		errStr = fmt.Sprintf(" error=%v", err)
-	}
-	Logger.Printf("%s %s %s locale=%s%s", timestamp, logType, message, i18n.GetLocale(), errStr)
-}
 
 // LogAndRecord logs the given span and optionally records it in the RecordedSpans slice.
 // It manages the RecordedSpans slice to maintain a maximum number of recorded spans.
 func LogAndRecord(span Span) {
 	duration := float64(Duration(span)) / float64(time.Second)
-	message := fmt.Sprintf("+%-5.3f %s", duration, span.LogLine())
-	standardLog("INFO", message, nil)
+
+	logger.Info("Span recorded",
+		zap.String("timestamp", span.GetStartTime().Format(time.RFC3339)),
+		zap.String("component", span.Component()),
+		zap.Any("action", span.Action()),
+		zap.Any("outcome", span.Outcome()),
+		zap.Float64("duration", duration),
+	)
 
 	// If MaxRecordedCount is set, manage the RecordedSpans slice
 	if MaxRecordedCount != 0 {
@@ -51,7 +43,10 @@ func LogAndRecord(span Span) {
 // It also logs any internal server errors that occurred during the request.
 func LogServerRoundTrip(perf ServedRequestSpan) {
 	if perf.Error != nil {
-		standardLog("ERROR", "Internal Server Error", perf.Error)
+		logger.Error("Internal Server Error",
+			zap.Error(perf.Error),
+			zap.String("requestId", perf.RequestId),
+		)
 	}
 
 	LogAndRecord(perf)
@@ -66,12 +61,18 @@ func LogAPIRoundTrip(perf APIRequestSpan) {
 			var err error
 			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
 			if err != nil {
-				standardLog("ERROR", "Failed to save response to file", err)
+				logger.Error("Failed to save response to file",
+					zap.Error(err),
+					zap.String("requestId", perf.RequestId),
+				)
 			}
 		}
 		// Log a warning for non-2xx status codes
 		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
-			standardLog("WARN", fmt.Sprintf("Non-2xx response from pixiv: %d", perf.Response.StatusCode), nil)
+			logger.Warn("Non-2xx response from pixiv",
+				zap.Int("status", perf.Response.StatusCode),
+				zap.String("requestId", perf.RequestId),
+			)
 		}
 	}
 
