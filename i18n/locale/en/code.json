@@ -26,6 +26,7 @@
   "core/requests.go:Odhyy2SoIGU": "failed to make request: %w",
   "core/requests.go:XGjPq4l3s2o": "userToken is required for POST requests",
   "core/requests.go:XdMN7Q7DY3k": "failed to proxy request: %w",
+  "core/requests.go:f78uqyomFJk": "Unsupported payload type",
   "core/requests.go:lLy9SHFUtQQ": "failed to copy response body: %w",
   "core/requests.go:y3v5nQwdU0s": "All tokens (%d) are timed out, resetting all tokens to their initial good state.\nConsider providing additional tokens in PIXIVFE_TOKEN or reviewing API request level backoff configuration.\nPlease refer the following documentation for additional information:\n- https://pixivfe-docs.pages.dev/hosting/obtaining-pixivfe-token/\n- https://pixivfe-docs.pages.dev/hosting/environment-variables/#exponential-backoff-configuration",
   "core/user.go:1itpJBE-3VI": "Invalid page number.",

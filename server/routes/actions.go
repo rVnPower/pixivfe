@@ -1,9 +1,10 @@
 package routes
 
 import (
+	"bytes"
 	"fmt"
+	"mime/multipart"
 	"net/http"
-	"net/url"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
@@ -41,12 +42,14 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/add"
 	payload := fmt.Sprintf(`{
-"illust_id": "%s",
-"restrict": 0,
-"comment": "",
-"tags": []
-}`, id)
-	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, true)
+        "illust_id": "%s",
+        "restrict": 0,
+        "comment": "",
+        "tags": []
+    }`, id)
+
+	contentType := "application/json; charset=utf-8"
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, contentType)
 	if err != nil {
 		logger.Error("API call failed", zap.Error(err))
 		return err
@@ -75,10 +78,11 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 		return i18n.Error("No ID provided.")
 	}
 
-	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
-	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	payload := fmt.Sprintf("bookmark_id=%s", id)
+
+	contentType := "application/x-www-form-urlencoded; charset=utf-8"
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, contentType)
 	if err != nil {
 		logger.Error("API call failed", zap.Error(err))
 		return err
@@ -109,7 +113,9 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, true)
+
+	contentType := "application/json; charset=utf-8"
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, contentType)
 	if err != nil {
 		logger.Error("API call failed", zap.Error(err))
 		return err
@@ -118,6 +124,19 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 	utils.RedirectToWhenceYouCame(w, r)
 	return nil
 }
+
+/*
+NOTE: we're using the mobile API for FollowUserRoute and UnfollowUserRoute since it's an actual AJAX API
+			instead of some weird php thing for the usual desktop routes (/bookmark_add.php and /rpc_group_setting.php)
+
+			the desktop routes return HTML for the pixiv SPA when they feel like it and don't return helpful responses
+			when you send a request that doesn't perfectly meet their specifications, making troubleshooting a nightmare
+
+			for comparison, the mobile API worked first try without any issues
+
+			interestingly enough, replicating the requests for the desktop routes via cURL worked fine but a Go implementation
+			just refused to work
+*/
 
 func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 	logger := getLogger()
@@ -151,18 +170,22 @@ func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 	}
 	logger.Debug("Follow privacy setting", zap.Bool("isPrivate", isPrivate))
 
-	URL := "https://www.pixiv.net/bookmark_add.php"
-	payload := url.Values{
-		"mode":     {"add"},
-		"type":     {"user"},
-		"user_id":  {id},
-		"tag":      {""},
-		"restrict": {restrict},
-		"format":   {"json"},
-	}.Encode()
+	URL := "https://www.pixiv.net/touch/ajax_api/ajax_api.php"
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	writer.WriteField("mode", "add_bookmark_user")
+	writer.WriteField("restrict", restrict)
+	writer.WriteField("user_id", id)
+	writer.Close()
 
 	logger.Debug("Making API call to follow user", zap.String("URL", URL))
-	resp, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	fields := map[string]string{
+		"mode":     "add_bookmark_user",
+		"restrict": restrict,
+		"user_id":  id,
+	}
+	resp, err := core.API_POST(r.Context(), URL, fields, token, csrf, "")
 	if err != nil {
 		logger.Error("API call failed", zap.Error(err))
 		return err
@@ -199,21 +222,26 @@ func UnfollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 	}
 	logger.Debug("Unfollowing user", zap.String("user_id", id))
 
-	URL := "https://www.pixiv.net/rpc_group_setting.php"
-	payload := url.Values{
-		"mode": {"del"},
-		"type": {"bookuser"},
-		"id":   {id},
-	}.Encode()
+	URL := "https://www.pixiv.net/touch/ajax_api/ajax_api.php"
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	writer.WriteField("mode", "delete_bookmark_user")
+	writer.WriteField("user_id", id)
+	writer.Close()
 
 	logger.Debug("Making API call to unfollow user", zap.String("URL", URL))
-	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	fields := map[string]string{
+		"mode":    "delete_bookmark_user",
+		"user_id": id,
+	}
+	resp, err := core.API_POST(r.Context(), URL, fields, token, csrf, "")
 	if err != nil {
 		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
 
-	logger.Debug("API call successful")
+	logger.Debug("API call successful", zap.Int("StatusCode", resp.StatusCode), zap.String("Body", resp.Body))
 
 	logger.Debug("Redirecting user")
 	utils.RedirectToWhenceYouCame(w, r)

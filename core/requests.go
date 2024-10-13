@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -180,17 +181,59 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 	return gjson.Get(resp.Body, "body").String(), nil
 }
 
-// API_POST performs a POST request to the Pixiv API with automatic retries
-func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) (*SimpleHTTPResponse, error) {
+// createMultipartFormData is a helper function to create multipart form data
+func createMultipartFormData(fields map[string]string) (*bytes.Buffer, string, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	for key, value := range fields {
+		err := writer.WriteField(key, value)
+		if err != nil {
+			return nil, "", err
+		}
+	}
+	err := writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return body, writer.FormDataContentType(), nil
+}
+
+// API_POST performs a POST request to the Pixiv API
+func API_POST(
+	ctx context.Context,
+	url string,
+	payload interface{},
+	userToken, csrf string,
+	contentType string,
+) (*SimpleHTTPResponse, error) {
 	if userToken == "" {
 		return nil, i18n.Error("userToken is required for POST requests")
 	}
 
 	resp, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
-		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
+		var req *retryablehttp.Request
+		var err error
+
+		switch v := payload.(type) {
+		case string:
+			req, err = retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(v)))
+		case map[string]string:
+			body, formContentType, err := createMultipartFormData(v)
+			if err != nil {
+				return nil, err
+			}
+			req, err = retryablehttp.NewRequest("POST", url, body)
+			if err == nil {
+				contentType = formContentType
+			}
+		default:
+			return nil, i18n.Error("Unsupported payload type")
+		}
+
 		if err != nil {
 			return nil, err
 		}
+
 		req = req.WithContext(ctx)
 		req.Header.Add("User-Agent", config.GetRandomUserAgent())
 		req.Header.Add("Accept", "application/json")
@@ -199,11 +242,8 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 			Name:  "PHPSESSID",
 			Value: token,
 		})
-		if isJSON {
-			req.Header.Add("Content-Type", "application/json; charset=utf-8")
-		} else {
-			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-		}
+		req.Header.Add("Content-Type", contentType)
+
 		return req, nil
 	}, userToken, true, url)
 	if err != nil {
