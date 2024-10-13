@@ -13,12 +13,15 @@
              class="img-fluid w-100 rounded-bottom rounded-5 object-fit-cover"
              style="max-height: 200px;" />
         <img src="{{.User.Avatar}}" alt="User avatar"
-             class="d-inline-block d-md-none border border-5 border-neutral-800 rounded-circle img-fluid object-fit-cover position-absolute z-1"
-             style="width: 150px; height: 150px; bottom: 0; left: 50%; transform: translate(-50%, 50%);">
+             class="d-inline-block d-md-none border border-5 border-neutral-800 bottom-0 start-50 rounded-circle img-fluid object-fit-cover position-absolute z-1"
+             style="width: 120px; height: 120px; transform: translate(-50%, 50%);">
       </div>
 
       {{- end }}
-      <div class="custom-card-body p-4 mt-5 mt-md-0">
+      <div class="custom-card-body p-4 position-relative">
+        <div class="d-inline-block d-md-none position-absolute top-0 end-0 mt-4 me-4">
+          {{- include "fragments/followButtons" . }}
+        </div>
         <div class="row g-4 mt-3 mt-md-0">
           <!-- User avatar and external link to pixiv.net -->
           <!-- TODO: make these elements appear to the left alongside the user name and social media links -->
@@ -34,49 +37,12 @@
 
           <div class="col-12 col-md-9 mt-0">
             <!-- User name and follow and unfollow buttons -->
-            <div class="d-flex flex-column flex-md-row justify-content-start flex-wrap justify-content-xl-between align-items-center mb-3 mb-md-2">
+            <div class="d-flex flex-column flex-md-row justify-content-start flex-wrap justify-content-xl-between align-items-center mt-5 mt-md-0 mb-3 mb-md-2">
               <h1 class="flex-grow-1 mb-2 mb-md-0">{{ .User.Name }}</h1>
-              <p class="d-inline-block d-md-none text-body-secondary text-center text-md-start">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
-              {{- if .User.IsFollowed == true && LoggedIn }}
-              <button type="button" class="custom-btn-secondary text-nowrap me-2" hx-post="/self/unfollowUser/{{ .User.ID }}" hx-target="body" hx-indicator="#follow-spinner" hx-push-url="true">
-                <div class="d-flex">
-                  <div><i class="bi bi-person-fill me-2"></i>Following</div>
-                  <div class="follow-spinner ms-2" id="follow-spinner">
-                    <div class="spinner-border spinner-border-sm" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </div>
-                </div>
-              </button>
-              {{- else }}
-              <!-- NOTE: bootstrap doesnt have custom hover states so the dropdown stays as a separate button -->
-              <div class="btn-group">
-                <button type="button" class="custom-btn-secondary text-nowrap me-2">
-                  <div class="d-flex">
-                    <div><i class="bi bi-person-plus me-2"></i>Follow</div>
-                    <div class="follow-spinner ms-2" id="follow-spinner">
-                      <div class="spinner-border spinner-border-sm" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    </div>
-                </button>
-                <button type="button" class="custom-btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow-md">
-                  <li>
-                    <a class="dropdown-item" href="#"
-                       hx-post="/self/followUser/{{ .User.ID }}"
-                       hx-target="body"
-                       hx-indicator="#follow-spinner"
-                       hx-push-url="true"
-                       hx-vals='{"private": true}'>
-                      Follow privately
-                    </a>
-                  </li>
-                </ul>
+              <p class="d-inline-block d-md-none text-body-secondary text-center text-md-start mb-0">{{ .User.Following }} Following | {{ .User.MyPixiv }} MyPixiv</p>
+              <div class="d-none d-md-inline-block">
+                {{- include "fragments/followButtons" . }}
               </div>
-              {{- end }}
             </div>
 
             <!-- Social media links -->
@@ -102,7 +68,7 @@
             <!-- User bio and frequently used tags -->
             <p class="mb-4">{{ raw: parsePixivRedirect(.User.Comment) }}</p>
             <a href="https://pixiv.net/u/{{ .User.ID }}" class="d-inline-block d-md-none custom-btn-secondary btn-sm bg-charcoal-surface2 mb-3">
-              <i class="bi bi-box-arrow-up-right me-2"></i>pixiv.net
+              <i class="bi bi-box-arrow-up-right me-2"></i>View on pixiv.net
             </a>
             <div class="custom-card bg-charcoal-surface2 p-4">
               <h3><i class="bi bi-tags-fill"></i> Frequently used tags</h3>
