@@ -39,7 +39,7 @@ func (span ServedRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
 func (span ServedRequestSpan) LogLine() string {
-	return fmt.Sprintf("%v %v %v %v", span.Method, span.Path, span.Status, span.Error)
+	return fmt.Sprintf("SERVER method=%s path=%s status=%d error=%v", span.Method, span.Path, span.Status, span.Error)
 }
 
 type APIRequestSpan struct {
@@ -65,5 +65,5 @@ func (span APIRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
 func (span APIRequestSpan) LogLine() string {
-	return fmt.Sprintf("-> %v %v %v %v", span.Method, span.Url, span.Error, span.ResponseFilename)
+	return fmt.Sprintf("API method=%s url=%s error=%v responseFile=%s", span.Method, span.Url, span.Error, span.ResponseFilename)
 }

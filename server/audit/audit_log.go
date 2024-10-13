@@ -1,8 +1,7 @@
-// Package audit provides functionality for logging and recording various types of spans
-// in the application, including server requests and API calls.
 package audit
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -20,11 +19,22 @@ var Logger = log.New(os.Stderr, "", 0)
 // RecordedSpans stores a slice of recorded Span objects for later analysis or debugging.
 var RecordedSpans = []Span{}
 
+// standardLog logs messages in a standardized format.
+func standardLog(logType string, message string, err error) {
+	timestamp := time.Now().Format("2006-01-02 15:04:05.000")
+	errStr := ""
+	if err != nil {
+		errStr = fmt.Sprintf(" error=%v", err)
+	}
+	Logger.Printf("%s %s %s locale=%s%s", timestamp, logType, message, i18n.GetLocale(), errStr)
+}
+
 // LogAndRecord logs the given span and optionally records it in the RecordedSpans slice.
 // It manages the RecordedSpans slice to maintain a maximum number of recorded spans.
 func LogAndRecord(span Span) {
-	// Log the span with a formatted timestamp, duration, and log line
-	Logger.Printf("%v +%-5.3f %s locale=%s", span.GetStartTime().Format("2006-01-02 15:04:05.000"), float64(Duration(span))/float64(time.Second), span.LogLine(), i18n.GetLocale())
+	duration := float64(Duration(span)) / float64(time.Second)
+	message := fmt.Sprintf("+%-5.3f %s", duration, span.LogLine())
+	standardLog("INFO", message, nil)
 
 	// If MaxRecordedCount is set, manage the RecordedSpans slice
 	if MaxRecordedCount != 0 {
@@ -41,7 +51,7 @@ func LogAndRecord(span Span) {
 // It also logs any internal server errors that occurred during the request.
 func LogServerRoundTrip(perf ServedRequestSpan) {
 	if perf.Error != nil {
-		log.Printf("Internal Server Error: %s", perf.Error)
+		standardLog("ERROR", "Internal Server Error", perf.Error)
 	}
 
 	LogAndRecord(perf)
@@ -56,12 +66,12 @@ func LogAPIRoundTrip(perf APIRequestSpan) {
 			var err error
 			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
 			if err != nil {
-				log.Print("When saving response to file: ", err)
+				standardLog("ERROR", "Failed to save response to file", err)
 			}
 		}
 		// Log a warning for non-2xx status codes
 		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
-			log.Print("(WARN) non-2xx response from pixiv:")
+			standardLog("WARN", fmt.Sprintf("Non-2xx response from pixiv: %d", perf.Response.StatusCode), nil)
 		}
 	}
 
@@ -73,13 +83,15 @@ func LogAPIRoundTrip(perf APIRequestSpan) {
 func writeResponseBodyToFile(body string) (string, error) {
 	// Generate a unique ID using ULID
 	id := ulid.Make().String()
+
 	// Create a filename using the last 6 characters of the ID
 	filename := path.Join(config.GlobalConfig.ResponseSaveLocation, id[len(id)-6:])
+
 	// Write the body to the file with read/write permissions for the owner only
 	err := os.WriteFile(filename, []byte(body), 0o600)
 	if err != nil {
 		return "", i18n.Errorf("failed to write response body to file %s: %w", filename, err)
 	}
-	log.Printf("Successfully wrote response body to file: %s", filename)
+
 	return filename, nil
 }

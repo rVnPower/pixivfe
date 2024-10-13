@@ -1,7 +1,6 @@
 package audit
 
 import (
-	"log"
 	"os"
 
 	"codeberg.org/vnpower/pixivfe/v2/config"
@@ -25,7 +24,7 @@ func Init(saveResponse bool) error {
 	savePath := config.GlobalConfig.ResponseSaveLocation
 
 	if err := os.MkdirAll(savePath, 0o700); err != nil {
-		log.Printf("Error creating response save directory: %v", err)
+		standardLog("ERROR", "Failed to create response save directory", err)
 		return i18n.Errorf("failed to create response save directory: %w", err)
 	}
 

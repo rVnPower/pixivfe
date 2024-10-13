@@ -32,10 +32,17 @@ func init() {
 	retryClient.RetryWaitMin = config.GlobalConfig.APIBaseTimeout
 	retryClient.RetryWaitMax = config.GlobalConfig.APIMaxBackoffTime
 	retryClient.HTTPClient = utils.HttpClient
+	retryClient.Logger = nil // Disables the default logger in go-retryablehttp
 }
 
 // retryRequest performs a request with automatic retries and token management
-func retryRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), userToken string, isPost bool) (*SimpleHTTPResponse, error) {
+func retryRequest(
+	ctx context.Context,
+	reqFunc func(context.Context, string) (*retryablehttp.Request, error),
+	userToken string,
+	isPost bool,
+	url string, // used for logging in audit.LogAPIRoundTrip only
+) (*SimpleHTTPResponse, error) {
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
@@ -88,14 +95,15 @@ Please refer the following documentation for additional information:
 		}
 
 		audit.LogAPIRoundTrip(audit.APIRequestSpan{
+			StartTime: start,
+			EndTime:   end,
 			RequestId: request_context.GetFromContext(ctx).RequestId,
 			Response:  resp,
 			Error:     err,
 			Method:    req.Method,
+			Url:       url,
 			Token:     tokenValue,
 			Body:      string(body),
-			StartTime: start,
-			EndTime:   end,
 		})
 
 		if resp.StatusCode == http.StatusOK {
@@ -140,7 +148,7 @@ func API_GET(ctx context.Context, url string, userToken string) (*SimpleHTTPResp
 			Value: token,
 		})
 		return req, nil
-	}, userToken, false)
+	}, userToken, false, url)
 }
 
 // API_GET_UnwrapJson performs a GET request and unwraps the JSON response
@@ -192,7 +200,7 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 		}
 		return req, nil
-	}, userToken, true)
+	}, userToken, true, url)
 
 	return err
 }
