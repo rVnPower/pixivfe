@@ -38,6 +38,7 @@
   "server/middleware/router.go:Z9UG-DYmQCk": "Route not found",
   "server/routes/actions.go:2RxigvKdaDk": "Method not allowed",
   "server/routes/actions.go:PG4HiUvZvVA": "No ID provided.",
+  "server/routes/actions.go:ZamBnL56VXw": "No user ID provided.",
   "server/routes/artwork.go:X4U1Et_mKik": "Invalid ID: %s",
   "server/routes/artworkMulti.go:X4U1Et_mKik": "Invalid ID: %s",
   "server/routes/mangaseries.go:H6vNDk8s4ig": "Invalid Series ID: %s",

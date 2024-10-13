@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
@@ -92,6 +93,79 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
 	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
+		return err
+	}
+
+	utils.RedirectToWhenceYouCame(w, r)
+	return nil
+}
+
+func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != http.MethodPost {
+		return i18n.Error("Method not allowed")
+	}
+
+	token := session.GetUserToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
+
+	if token == "" || csrf == "" {
+		return PromptUserToLoginPage(w, r)
+	}
+
+	id := GetPathVar(r, "id")
+	if id == "" {
+		return i18n.Error("No user ID provided.")
+	}
+
+	isPrivate := r.FormValue("private") == "true"
+	restrict := "0"
+	if isPrivate {
+		restrict = "1"
+	}
+
+	URL := "https://www.pixiv.net/bookmark_add.php"
+	payload := url.Values{
+		"mode":     {"add"},
+		"type":     {"user"},
+		"user_id":  {id},
+		"tag":      {""},
+		"restrict": {restrict},
+		"format":   {"json"},
+	}.Encode()
+
+	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
+		return err
+	}
+
+	utils.RedirectToWhenceYouCame(w, r)
+	return nil
+}
+
+func UnfollowUserRoute(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != http.MethodPost {
+		return i18n.Error("Method not allowed")
+	}
+
+	token := session.GetUserToken(r)
+	csrf := session.GetCookie(r, session.Cookie_CSRF)
+
+	if token == "" || csrf == "" {
+		return PromptUserToLoginPage(w, r)
+	}
+
+	id := GetPathVar(r, "id")
+	if id == "" {
+		return i18n.Error("No user ID provided.")
+	}
+
+	URL := "https://www.pixiv.net/rpc_group_setting.php"
+	payload := url.Values{
+		"mode": {"del"},
+		"type": {"bookuser"},
+		"id":   {id},
+	}.Encode()
+
+	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
 		return err
 	}
 
