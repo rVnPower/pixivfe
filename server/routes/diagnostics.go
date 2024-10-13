@@ -17,7 +17,7 @@ func Diagnostics(w http.ResponseWriter, r *http.Request) error {
 }
 
 func ResetDiagnosticsData(w http.ResponseWriter, r *http.Request) {
-	audit.RecordedSpans = audit.RecordedSpans[:0]
+	audit.RecordedRequestSpans = audit.RecordedRequestSpans[:0]
 	utils.RedirectToWhenceYouCame(w, r)
 }
 
@@ -35,7 +35,7 @@ func formatSpanSummary(span audit.Span) string {
 
 func DiagnosticsData(w http.ResponseWriter, _ *http.Request) error {
 	data := jnode.NewArrayNode()
-	for _, span := range audit.RecordedSpans {
+	for _, span := range audit.RecordedRequestSpans {
 		bytes, err := json.Marshal(span)
 		if err != nil {
 			return err
