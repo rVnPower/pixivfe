@@ -26,7 +26,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	audit.Init(config.GlobalConfig.InDevelopment)
+	if err := audit.Init(config.GlobalConfig.InDevelopment); err != nil {
+		log.Fatalf("Failed to initialize audit logger: %v", err)
+	}
+	log.Println("Audit logger initialized")
 	i18n.Init()
 	template.Init(config.GlobalConfig.InDevelopment, "assets/views")
 

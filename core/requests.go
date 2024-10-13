@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -35,6 +37,45 @@ func init() {
 	retryClient.Logger = nil // Disables the default logger in go-retryablehttp
 }
 
+// Helper function to handle common request logic
+func makeRequest(ctx context.Context, reqFunc func(context.Context, string) (*retryablehttp.Request, error), token *token_manager.Token, url string) (*SimpleHTTPResponse, error) {
+	req, err := reqFunc(ctx, token.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	start := time.Now()
+	resp, err := retryClient.Do(req)
+	end := time.Now()
+
+	if err != nil {
+		return nil, i18n.Errorf("failed to make request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	audit.LogAPIRoundTrip(audit.APIRequestSpan{
+		StartTime: start,
+		EndTime:   end,
+		RequestId: request_context.GetFromContext(ctx).RequestId,
+		Response:  resp,
+		Error:     err,
+		Method:    req.Method,
+		Url:       url,
+		Token:     token.Value,
+		Body:      string(body),
+	})
+
+	return &SimpleHTTPResponse{
+		StatusCode: resp.StatusCode,
+		Body:       string(body),
+	}, nil
+}
+
 // retryRequest performs a request with automatic retries and token management
 func retryRequest(
 	ctx context.Context,
@@ -46,15 +87,22 @@ func retryRequest(
 	var lastErr error
 	tokenManager := config.GlobalConfig.TokenManager
 
+	if isPost {
+		// For POST requests, perform the request once without retrying
+		token := &token_manager.Token{Value: userToken}
+		return makeRequest(ctx, reqFunc, token, url)
+	}
+
+	// For GET requests, use the retry logic
 	for i := 0; i < config.GlobalConfig.APIMaxRetries; i++ {
 		var token *token_manager.Token
 		if userToken != "" {
 			token = &token_manager.Token{Value: userToken}
-		} else if !isPost {
+		} else {
 			token = tokenManager.GetToken()
 		}
 
-		if token == nil && !isPost {
+		if token == nil {
 			tokenManager.ResetAllTokens()
 			return nil, i18n.Errorf(
 				`All tokens (%d) are timed out, resetting all tokens to their initial good state.
@@ -65,62 +113,20 @@ Please refer the following documentation for additional information:
 				len(config.GlobalConfig.Token))
 		}
 
-		tokenValue := ""
-		if token != nil {
-			tokenValue = token.Value
-		}
-
-		req, err := reqFunc(ctx, tokenValue)
+		resp, err := makeRequest(ctx, reqFunc, token, url)
 		if err != nil {
-			return nil, err
-		}
-
-		start := time.Now()
-		resp, err := retryClient.Do(req)
-		end := time.Now()
-		// Unwrap the body here so that we could log stuff correctly
-		if err != nil {
-			return nil, i18n.Errorf("failed to make request: %w", err)
-		}
-		// Validate response isn't nil
-		if resp == nil {
-			lastErr = i18n.Errorf("Received nil response after request: %w", err)
+			lastErr = err
+			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 			continue
 		}
-		defer resp.Body.Close()
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil || resp.Body == nil {
-			return nil, err
-		}
-
-		audit.LogAPIRoundTrip(audit.APIRequestSpan{
-			StartTime: start,
-			EndTime:   end,
-			RequestId: request_context.GetFromContext(ctx).RequestId,
-			Response:  resp,
-			Error:     err,
-			Method:    req.Method,
-			Url:       url,
-			Token:     tokenValue,
-			Body:      string(body),
-		})
 
 		if resp.StatusCode == http.StatusOK {
-			if userToken == "" && !isPost {
-				tokenManager.MarkTokenStatus(token, token_manager.Good)
-			}
-			return &SimpleHTTPResponse{
-				StatusCode: resp.StatusCode,
-				Body:       string(body),
-			}, nil
+			tokenManager.MarkTokenStatus(token, token_manager.Good)
+			return resp, nil
 		}
 
 		lastErr = i18n.Errorf("HTTP status code: %d", resp.StatusCode)
-
-		if userToken == "" && !isPost {
-			tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
-		}
+		tokenManager.MarkTokenStatus(token, token_manager.TimedOut)
 
 		select {
 		case <-ctx.Done():
@@ -130,7 +136,7 @@ Please refer the following documentation for additional information:
 		}
 	}
 
-	return nil, i18n.Errorf("Max retries reached. Last error: %v", lastErr)
+	return nil, i18n.Errorf("Max retries reached for GET request. Last error: %v", lastErr)
 }
 
 // API_GET performs a GET request to the Pixiv API with automatic retries
@@ -175,17 +181,59 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 	return gjson.Get(resp.Body, "body").String(), nil
 }
 
-// API_POST performs a POST request to the Pixiv API with automatic retries
-func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) error {
+// createMultipartFormData is a helper function to create multipart form data
+func createMultipartFormData(fields map[string]string) (*bytes.Buffer, string, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	for key, value := range fields {
+		err := writer.WriteField(key, value)
+		if err != nil {
+			return nil, "", err
+		}
+	}
+	err := writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return body, writer.FormDataContentType(), nil
+}
+
+// API_POST performs a POST request to the Pixiv API
+func API_POST(
+	ctx context.Context,
+	url string,
+	payload interface{},
+	userToken, csrf string,
+	contentType string,
+) (*SimpleHTTPResponse, error) {
 	if userToken == "" {
-		return i18n.Error("userToken is required for POST requests")
+		return nil, i18n.Error("userToken is required for POST requests")
 	}
 
-	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
-		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
+	resp, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
+		var req *retryablehttp.Request
+		var err error
+
+		switch v := payload.(type) {
+		case string:
+			req, err = retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(v)))
+		case map[string]string:
+			body, formContentType, err := createMultipartFormData(v)
+			if err != nil {
+				return nil, err
+			}
+			req, err = retryablehttp.NewRequest("POST", url, body)
+			if err == nil {
+				contentType = formContentType
+			}
+		default:
+			return nil, i18n.Error("Unsupported payload type")
+		}
+
 		if err != nil {
 			return nil, err
 		}
+
 		req = req.WithContext(ctx)
 		req.Header.Add("User-Agent", config.GetRandomUserAgent())
 		req.Header.Add("Accept", "application/json")
@@ -194,15 +242,19 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 			Name:  "PHPSESSID",
 			Value: token,
 		})
-		if isJSON {
-			req.Header.Add("Content-Type", "application/json; charset=utf-8")
-		} else {
-			req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-		}
+		req.Header.Add("Content-Type", contentType)
+
 		return req, nil
 	}, userToken, true, url)
+	if err != nil {
+		return nil, err
+	}
 
-	return err
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API request failed with status code: %d, body: %s", resp.StatusCode, resp.Body)
+	}
+
+	return resp, nil
 }
 
 // ProxyRequest forwards an HTTP request to the target server and copies the response back
