@@ -68,6 +68,11 @@ type ServerConfig struct {
 	// Development options
 	InDevelopment        bool   `env:"PIXIVFE_DEV"`
 	ResponseSaveLocation string `env:"PIXIVFE_RESPONSE_SAVE_LOCATION,overwrite"`
+
+	// Logging configuration
+	LogLevel   string   `env:"PIXIVFE_LOG_LEVEL,overwrite"`
+	LogOutputs []string `env:"PIXIVFE_LOG_OUTPUTS,overwrite"`
+	LogFormat  string   `env:"PIXIVFE_LOG_FORMAT,overwrite"`
 }
 
 // parseRevision extracts RevisionDate, RevisionHash, and IsDirty status from the Revision string
@@ -143,6 +148,10 @@ func (s *ServerConfig) LoadConfig() error {
 	s.APIMaxBackoffTime = 8000 * time.Millisecond
 
 	s.ResponseSaveLocation = "/tmp/pixivfe/responses"
+
+	s.LogLevel = "info"
+	s.LogOutputs = []string{"stdout"}
+	s.LogFormat = "console"
 
 	// load config from from env vars
 	if err := envconfig.Process(context.Background(), s); err != nil {

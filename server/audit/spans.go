@@ -88,9 +88,9 @@ func (span APIRequestSpan) Component() string {
 }
 func (span APIRequestSpan) Action() map[string]interface{} {
 	return map[string]interface{}{
-		"method":         span.Method,
-		"url":            span.Url,
-		"response_file":  span.ResponseFilename,
+		"method":        span.Method,
+		"url":           span.Url,
+		"response_file": span.ResponseFilename,
 	}
 }
 func (span APIRequestSpan) Outcome() map[string]interface{} {
