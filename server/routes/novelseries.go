@@ -3,9 +3,8 @@ package routes
 import (
 	"fmt"
 	"math"
-	"strconv"
-
 	"net/http"
+	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"

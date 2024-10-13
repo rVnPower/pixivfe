@@ -46,6 +46,7 @@ func loadLocale(fs_i18n fs.FS, locale string) (map[string]string, error) {
 	maps.Copy(m0, m1)
 	return m0, nil
 }
+
 func loadLocale_helper(fs_i18n fs.FS, locale string, filename string) (map[string]string, error) {
 	file, err := fs_i18n.Open(path.Join(locale, filename))
 	if err != nil {

@@ -3,9 +3,8 @@
 package session
 
 import (
-	"time"
-
 	"net/http"
+	"time"
 )
 
 type CookieName string

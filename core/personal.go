@@ -1,10 +1,11 @@
 package core
 
 import (
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 func GetNewestFromFollowing(r *http.Request, mode, page string) ([]ArtworkBrief, error) {

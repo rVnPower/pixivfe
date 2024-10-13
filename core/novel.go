@@ -2,11 +2,10 @@ package core
 
 import (
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
-
-	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
@@ -126,11 +125,13 @@ type NovelBrief struct {
 }
 
 // Novel embedded illusts
-var re_r = regexp.MustCompile(`\[pixivimage:\d+(-\d+)?\]`)
-var re_d = regexp.MustCompile(`\d+(-\d+)?`)
-var re_t = regexp.MustCompile(`\"original\":\"(.+?)\"`)
-var re_u = regexp.MustCompile(`\[uploadedimage:(\d+)\]`)
-var re_id = regexp.MustCompile(`\d+`)
+var (
+	re_r  = regexp.MustCompile(`\[pixivimage:\d+(-\d+)?\]`)
+	re_d  = regexp.MustCompile(`\d+(-\d+)?`)
+	re_t  = regexp.MustCompile(`\"original\":\"(.+?)\"`)
+	re_u  = regexp.MustCompile(`\[uploadedimage:(\d+)\]`)
+	re_id = regexp.MustCompile(`\d+`)
+)
 
 func GetNovelByID(r *http.Request, id string) (Novel, error) {
 	var novel Novel

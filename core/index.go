@@ -59,7 +59,6 @@ func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks
 	var landing LandingArtworks
 
 	resp, err := API_GET_UnwrapJson(r.Context(), URL, "")
-
 	if err != nil {
 		return &landing, err
 	}
@@ -80,7 +79,6 @@ func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks
 	stuff.ForEach(func(key, value gjson.Result) bool {
 		var artwork ArtworkBrief
 		err = json.Unmarshal([]byte(value.String()), &artwork)
-
 		if err != nil {
 			return false
 		}
@@ -94,7 +92,6 @@ func GetLanding(r *http.Request, mode string, isLoggedIn bool) (*LandingArtworks
 
 	pagesStr := gjson.Get(resp, "page").String()
 	err = json.Unmarshal([]byte(pagesStr), &pages)
-
 	if err != nil {
 		return &landing, err
 	}

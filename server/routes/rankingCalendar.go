@@ -2,10 +2,9 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
-
-	"net/http"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"

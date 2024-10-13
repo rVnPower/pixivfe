@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"codeberg.org/vnpower/pixivfe/v2/core"
 	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/core"
 )
 
 func NewestPage(w http.ResponseWriter, r *http.Request) error {

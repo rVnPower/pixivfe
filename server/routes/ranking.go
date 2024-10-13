@@ -1,10 +1,10 @@
 package routes
 
 import (
+	"net/http"
 	"strconv"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
-	"net/http"
 )
 
 func RankingPage(w http.ResponseWriter, r *http.Request) error {
