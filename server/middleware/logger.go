@@ -62,7 +62,7 @@ func LogRequest(h http.Handler) http.Handler {
 			end_time := time.Now()
 
 			// Log the request details using the audit package
-			audit.LogServerRoundTrip(audit.ServedRequestSpan{
+			audit.LogServerRoundTrip(audit.ServerRequestSpan{
 				StartTime:  start_time,
 				EndTime:    end_time,
 				RequestId:  request_context.Get(r).RequestId,

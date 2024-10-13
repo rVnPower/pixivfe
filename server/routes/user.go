@@ -50,12 +50,12 @@ func fetchData(r *http.Request, getTags bool) (userPageData, error) {
 	worksCount = user.CategoryItemCount
 	pageLimit := int(math.Ceil(float64(worksCount) / worksPerPage))
 
-  return userPageData{
-      user:           user,
-      category:       category,
-      pageLimit:      pageLimit,
-      page:           page,
-  }, nil
+	return userPageData{
+		user:      user,
+		category:  category,
+		pageLimit: pageLimit,
+		page:      page,
+	}, nil
 }
 
 func UserPage(w http.ResponseWriter, r *http.Request) error {
@@ -65,13 +65,13 @@ func UserPage(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return RenderHTML(w, r, Data_user{
-    Title:          data.user.Name,
-    User:           data.user,
-    Category:       data.category,
-    PageLimit:      data.pageLimit,
-    Page:           data.page,
-    MetaImage:      data.user.BackgroundImage,
-})
+		Title:     data.user.Name,
+		User:      data.user,
+		Category:  data.category,
+		PageLimit: data.pageLimit,
+		Page:      data.page,
+		MetaImage: data.user.BackgroundImage,
+	})
 }
 
 func UserAtomFeed(w http.ResponseWriter, r *http.Request) error {
