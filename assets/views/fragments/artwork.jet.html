@@ -6,12 +6,21 @@
     {{- range index := .Images }}
         <!-- Bootstrap + Jet wizardry to dynamically scale artwork -->
         {{- if .Width != 0 && .Height != 0 }}
-        <!-- Display artwork at full width (col-12) if it is in landscape orientation -->
-            {{- if .Width > .Height }}
+        <!-- Display artwork at full width (col-12) if it is a manga or in landscape orientation -->
+            {* Check whether these images are part of a manga, if so, display at full width and at original resolution *}
+            {{- if .IllustType == 1 }}
             <div class="row justify-content-center mb-4">
                 <div class="col-12 p-0">
-                    <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
-                      <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                    <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="h-100 w-100">
+                      <img src="{{ .Original }}" alt="Page {{ index + 1 }}" class="img-fluid rounded h-100 w-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                    </a>
+                </div>
+            </div>
+            {{- else if .Width > .Height }}
+            <div class="row justify-content-center mb-4">
+                <div class="col-12 p-0">
+                    <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="h-100 w-100">
+                      <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded h-100 w-100" data-width="{{.Width}}" data-height="{{.Height}}" />
                     </a>
                 </div>
             </div>
@@ -19,15 +28,15 @@
             {{- else }}
             <div class="row justify-content-center mb-4">
                 <div class="col-sm-12 col-md-8 p-0">
-                  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
-                    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" data-width="{{.Width}}" data-height="{{.Height}}" />
+                  <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="h-100 w-100">
+                    <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded h-100 w-100" data-width="{{.Width}}" data-height="{{.Height}}" />
                   </a>
                 </div>
             </div>
             {{- end }}
         {{- else }}
-            <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="d-block text-center">
-              <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded mw-100" />
+            <a href="{{ .Original }}" target="_blank" id="{{ index + 1 }}" class="h-100 w-100">
+              <img src="{{ .Large }}" alt="Page {{ index + 1 }}" class="img-fluid rounded h-100 w-100" />
             </a>
         {{- end }}
     {{- end }}

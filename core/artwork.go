@@ -76,12 +76,13 @@ type ImageResponse struct {
 }
 
 type Image struct {
-	Width    int
-	Height   int
-	Small    string
-	Medium   string
-	Large    string
-	Original string
+	Width      int
+	Height     int
+	Small      string
+	Medium     string
+	Large      string
+	Original   string
+	IllustType int
 }
 
 type Tag struct {
@@ -163,6 +164,7 @@ type Illust struct {
 	CommentsList []Comment
 	IsUgoira     bool
 	BookmarkID   string
+	IllustType   int `json:"illustType"`
 }
 
 func GetUserBasicInformation(r *http.Request, id string) (UserBrief, error) {
@@ -184,7 +186,7 @@ func GetUserBasicInformation(r *http.Request, id string) (UserBrief, error) {
 	return user, nil
 }
 
-func GetArtworkImages(r *http.Request, id string) ([]Image, error) {
+func GetArtworkImages(r *http.Request, id string, illustType int) ([]Image, error) {
 	var resp []ImageResponse
 	var images []Image
 
@@ -215,6 +217,12 @@ func GetArtworkImages(r *http.Request, id string) ([]Image, error) {
 		image.Medium = imageRaw.Urls["small"]
 		image.Large = imageRaw.Urls["regular"]
 		image.Original = imageRaw.Urls["original"]
+
+		// Required for logic to display manga differently
+		image.IllustType = illustType
+
+		// Debug statement
+		// log.Printf("Artwork ID: %s, IllustType set to %d", id, image.IllustType)
 
 		images = append(images, image)
 	}
@@ -289,35 +297,6 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 	wg := sync.WaitGroup{}
 	cerr := make(chan error, 7)
 
-	// Get illust images
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-
-		images, err := GetArtworkImages(r, id)
-		if err != nil {
-			cerr <- err
-			return
-		}
-		illust2.Images = images
-	}()
-
-	if full {
-		// Get related artworks
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
-			var err error
-			related, err := GetRelatedArtworks(r, id)
-			if err != nil {
-				cerr <- err
-				return
-			}
-			illust2.RelatedWorks = related
-		}()
-	}
-
 	// Get basic illust information
 	wg.Add(1)
 	go func() {
@@ -353,6 +332,36 @@ func GetArtworkByID(r *http.Request, id string, full bool) (*Illust, error) {
 			}
 			illust.User = userInfo
 		}()
+
+		// Get illust images
+		// Done after basic information is retrieved in order to properly populate IllustType
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			images, err := GetArtworkImages(r, id, illust.IllustType)
+			if err != nil {
+				cerr <- err
+				return
+			}
+			illust2.Images = images
+		}()
+
+		if full {
+			// Get related artworks
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+
+				var err error
+				related, err := GetRelatedArtworks(r, id)
+				if err != nil {
+					cerr <- err
+					return
+				}
+				illust2.RelatedWorks = related
+			}()
+		}
 
 		// translate tags
 		wg.Add(1)

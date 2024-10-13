@@ -32,6 +32,7 @@ func ArtworkPage(w http.ResponseWriter, r *http.Request) error {
 
 	return RenderHTML(w, r, Data_artwork{
 		Illust:          *illust,
+		IllustType:      illust.IllustType,
 		Title:           illust.Title,
 		MetaDescription: metaDescription,
 		MetaImage:       illust.Images[0].Original,

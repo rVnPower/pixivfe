@@ -38,6 +38,7 @@ type Data_about struct {
 }
 type Data_artwork struct {
 	Illust          core.Illust
+	IllustType      int
 	Title           string
 	MetaDescription string
 	MetaImage       string
