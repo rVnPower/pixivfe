@@ -44,7 +44,7 @@ func DiagnosticsData(w http.ResponseWriter, _ *http.Request) error {
 		if err != nil {
 			return err
 		}
-		obj.Put("SpanSummary", formatSpanSummary(span))
+		obj.Put("LogLine", formatSpanSummary(span))
 		data.Append(obj)
 	}
 	w.Header().Set("content-type", "application/json")
