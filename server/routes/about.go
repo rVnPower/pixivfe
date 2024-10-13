@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"codeberg.org/vnpower/pixivfe/v2/config"
 	"net/http"
+
+	"codeberg.org/vnpower/pixivfe/v2/config"
 )
 
 func AboutPage(w http.ResponseWriter, r *http.Request) error {

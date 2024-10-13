@@ -1,9 +1,10 @@
 package audit
 
 import (
-	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"net/http"
 	"time"
+
+	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
 type Span interface {
@@ -34,21 +35,26 @@ type ServerRequestSpan struct {
 func (span ServerRequestSpan) GetStartTime() time.Time {
 	return span.StartTime
 }
+
 func (span ServerRequestSpan) GetEndTime() time.Time {
 	return span.EndTime
 }
+
 func (span ServerRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
+
 func (span ServerRequestSpan) Component() string {
 	return "server"
 }
+
 func (span ServerRequestSpan) Action() map[string]interface{} {
 	return map[string]interface{}{
 		"method": span.Method,
 		"path":   span.Path,
 	}
 }
+
 func (span ServerRequestSpan) Outcome() map[string]interface{} {
 	outcome := map[string]interface{}{
 		"status": span.Status,
@@ -77,15 +83,19 @@ type APIRequestSpan struct {
 func (span APIRequestSpan) GetStartTime() time.Time {
 	return span.StartTime
 }
+
 func (span APIRequestSpan) GetEndTime() time.Time {
 	return span.EndTime
 }
+
 func (span APIRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
+
 func (span APIRequestSpan) Component() string {
 	return "API"
 }
+
 func (span APIRequestSpan) Action() map[string]interface{} {
 	return map[string]interface{}{
 		"method":        span.Method,
@@ -93,6 +103,7 @@ func (span APIRequestSpan) Action() map[string]interface{} {
 		"response_file": span.ResponseFilename,
 	}
 }
+
 func (span APIRequestSpan) Outcome() map[string]interface{} {
 	outcome := map[string]interface{}{
 		"status": "success",

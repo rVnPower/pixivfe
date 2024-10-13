@@ -17,12 +17,14 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
 )
 
-const USER_AGENT = "PixivAndroidApp/5.0.234 (Android 11; Pixel 5)"
-const REDIRECT_URI = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback"
-const LOGIN_URL = "https://app-api.pixiv.net/web/v1/login"
-const AUTH_TOKEN_URL = "https://oauth.secure.pixiv.net/auth/token"
-const CLIENT_ID = "MOBrBDS8blbauoSck0ZfDbtuzpyT"
-const CLIENT_SECRET = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj"
+const (
+	USER_AGENT     = "PixivAndroidApp/5.0.234 (Android 11; Pixel 5)"
+	REDIRECT_URI   = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback"
+	LOGIN_URL      = "https://app-api.pixiv.net/web/v1/login"
+	AUTH_TOKEN_URL = "https://oauth.secure.pixiv.net/auth/token"
+	CLIENT_ID      = "MOBrBDS8blbauoSck0ZfDbtuzpyT"
+	CLIENT_SECRET  = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj"
+)
 
 type AppAPICredentials struct {
 	AccessToken  string `json:"access_token"`
@@ -75,7 +77,7 @@ func oauth_pkce() (string, string) {
 
 func AppAPIRefresh(r *http.Request, refresh_token string) AppAPICredentials {
 	var credentials AppAPICredentials
-	var body = []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&grant_type=refresh_token&include_policy=true&refresh_token=%s`, CLIENT_ID, CLIENT_SECRET, refresh_token))
+	body := []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&grant_type=refresh_token&include_policy=true&refresh_token=%s`, CLIENT_ID, CLIENT_SECRET, refresh_token))
 	req, err := http.NewRequestWithContext(r.Context(), "POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
 	if err != nil {
 		panic(err)
@@ -110,7 +112,7 @@ func AppAPILogin(r *http.Request) AppAPICredentials {
 	// Change this.
 	fmt.Scanln(&s)
 
-	var body = []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&code=%s&code_verifier=%s&grant_type=authorization_code&include_policy=true&redirect_uri=%s`, CLIENT_ID, CLIENT_SECRET, s, code_verifier, REDIRECT_URI))
+	body := []byte(fmt.Sprintf(`client_id=%s&client_secret=%s&code=%s&code_verifier=%s&grant_type=authorization_code&include_policy=true&redirect_uri=%s`, CLIENT_ID, CLIENT_SECRET, s, code_verifier, REDIRECT_URI))
 	req, err := http.NewRequestWithContext(r.Context(), "POST", AUTH_TOKEN_URL, bytes.NewBuffer(body))
 	if err != nil {
 		panic(err)

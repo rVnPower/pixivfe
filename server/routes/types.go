@@ -2,11 +2,11 @@ package routes
 
 import (
 	"net/http"
+	"time"
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/request_context"
 	"codeberg.org/vnpower/pixivfe/v2/server/template"
-	"time"
 )
 
 func RenderHTML[T any](w http.ResponseWriter, r *http.Request, data T) error {
@@ -48,7 +48,6 @@ type Data_artworkMulti struct {
 	Artworks []core.Illust
 	Title    string
 }
-type Data_diagnostics struct{}
 type Data_discovery struct {
 	Artworks []core.ArtworkBrief
 	Title    string
@@ -153,7 +152,6 @@ type Data_tag struct {
 	ActiveRatio      string
 	ActiveSearchMode string
 }
-type Data_unauthorized struct{}
 type Data_user struct {
 	Title     string
 	User      core.User
@@ -179,3 +177,7 @@ type Data_mangaSeries struct {
 	Page               int
 	PageLimit          int
 }
+type (
+	Data_diagnostics  struct{}
+	Data_unauthorized struct{}
+)

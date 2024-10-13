@@ -1,9 +1,10 @@
 package core
 
 import (
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"github.com/goccy/go-json"
-	"net/http"
 )
 
 func GetNewestArtworks(r *http.Request, worktype string, r18 string) ([]ArtworkBrief, error) {

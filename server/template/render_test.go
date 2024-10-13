@@ -83,7 +83,6 @@ func testWith[T any](t *testing.T, data T) {
 	}
 
 	err := template.Render(io.Discard, variables, data)
-
 	if err != nil {
 		template_name, _ := strings.CutPrefix(reflect.TypeFor[T]().Name(), "Data_")
 		t.Errorf("while rendering template %s: %v", template_name, err)

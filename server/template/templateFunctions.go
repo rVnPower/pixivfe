@@ -317,11 +317,13 @@ func SwitchButtonAttributes(baseURL, selection, currentSelection string) string 
 	return fmt.Sprintf(`href=%s%s class=switch-button selected=%s`, baseURL, selection, cur)
 }
 
-var furiganaPattern = regexp.MustCompile(`\[\[rb:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
-var chapterPattern = regexp.MustCompile(`\[chapter:\s*(.+?)\s*\]`)
-var jumpUriPattern = regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
-var jumpPagePattern = regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
-var newPagePattern = regexp.MustCompile(`\s*\[newpage\]\s*`)
+var (
+	furiganaPattern = regexp.MustCompile(`\[\[rb:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+	chapterPattern  = regexp.MustCompile(`\[chapter:\s*(.+?)\s*\]`)
+	jumpUriPattern  = regexp.MustCompile(`\[\[jumpuri:\s*(.+?)\s*>\s*(.+?)\s*\]\]`)
+	jumpPagePattern = regexp.MustCompile(`\[jump:\s*(\d+?)\s*\]`)
+	newPagePattern  = regexp.MustCompile(`\s*\[newpage\]\s*`)
+)
 
 // GetTemplateFunctions returns a map of custom template functions for use in HTML templates
 func GetTemplateFunctions() map[string]any {
@@ -347,9 +349,7 @@ func GetTemplateFunctions() map[string]any {
 
 		"isEmphasize": func(s string) bool {
 			switch s {
-			case
-				"R-18",
-				"R-18G":
+			case "R-18", "R-18G":
 				return true
 			}
 			return false

@@ -35,8 +35,10 @@ func main() {
 	encoder.Encode(result)
 }
 
-var re_command_fullmatch = regexp.MustCompile(`\A([\s\n# =]*\{\{[^\{\}]*\}\})*[\s\n]*\z`)
-var re_comment = regexp.MustCompile(`\{\*[\s\S]*?\*\}`)
+var (
+	re_command_fullmatch = regexp.MustCompile(`\A([\s\n# =]*\{\{[^\{\}]*\}\})*[\s\n]*\z`)
+	re_comment           = regexp.MustCompile(`\{\*[\s\S]*?\*\}`)
+)
 
 func stripComments(s string) string {
 	return re_comment.ReplaceAllString(s, "")

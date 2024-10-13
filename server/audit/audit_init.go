@@ -9,9 +9,11 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var optionSaveResponse bool
-var MaxRecordedCount = 0
-var logger *zap.Logger
+var (
+	optionSaveResponse bool
+	MaxRecordedCount   = 0
+	logger             *zap.Logger
+)
 
 // Init initializes the audit package and sets up response saving if enabled.
 // saveResponse is passed as a boolean from main.go.

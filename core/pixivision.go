@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"html"
 	"io"
 	"net/http"
@@ -10,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
@@ -216,8 +217,8 @@ func PixivisionGetTag(r *http.Request, id string, page string, lang ...string) (
 	doc.Find("._article-card").Each(func(i int, s *goquery.Selection) {
 		var article PixivisionArticle
 
-		//article.ID = s.Find(".arc__title a").AttrOr("data-gtm-label", "")
-		//article.Title = s.Find(".arc__title a").Text()
+		// article.ID = s.Find(".arc__title a").AttrOr("data-gtm-label", "")
+		// article.Title = s.Find(".arc__title a").Text()
 
 		article.ID = s.Find(`a[data-gtm-action="ClickTitle"]`).AttrOr("data-gtm-label", "")
 		article.Title = s.Find(`a[data-gtm-action="ClickTitle"]`).Text()
@@ -330,8 +331,8 @@ func PixivisionGetCategory(r *http.Request, id string, page string, lang ...stri
 	doc.Find("._article-card").Each(func(i int, s *goquery.Selection) {
 		var article PixivisionArticle
 
-		//article.ID = s.Find(".arc__title a").AttrOr("data-gtm-label", "")
-		//article.Title = s.Find(".arc__title a").Text()
+		// article.ID = s.Find(".arc__title a").AttrOr("data-gtm-label", "")
+		// article.Title = s.Find(".arc__title a").Text()
 
 		article.ID = s.Find(`a[data-gtm-action="ClickTitle"]`).AttrOr("data-gtm-label", "")
 		article.Title = s.Find(`a[data-gtm-action="ClickTitle"]`).Text()

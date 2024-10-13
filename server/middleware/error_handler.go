@@ -51,7 +51,6 @@ func HandleError(h http.Handler) http.Handler {
 
 		// Check if an error was caught during the request processing
 		err := request_context.Get(r).CaughtError
-
 		if err != nil {
 			// If an error was caught, render the error page
 			routes.ErrorPage(w, r, err, http.StatusInternalServerError)

@@ -1,10 +1,10 @@
 package routes
 
 import (
+	"net/http"
+
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
-
-	"net/http"
 )
 
 func PixivisionHomePage(w http.ResponseWriter, r *http.Request) error {

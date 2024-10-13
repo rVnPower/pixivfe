@@ -3,9 +3,8 @@ package core
 import (
 	"fmt"
 	"math"
-	"sort"
-
 	"net/http"
+	"sort"
 
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
@@ -153,7 +152,6 @@ func GetUserArtworkList(r *http.Request, id, ids string) ([]ArtworkBrief, error)
 	for _, v := range body.Illusts {
 		var illust ArtworkBrief
 		err = json.Unmarshal(v, &illust)
-
 		if err != nil {
 			return nil, err
 		}
@@ -194,7 +192,6 @@ func GetUserNovels(r *http.Request, id, ids string) ([]NovelBrief, error) {
 	for _, v := range body.Novels {
 		var novel NovelBrief
 		err = json.Unmarshal(v, &novel)
-
 		if err != nil {
 			return nil, err
 		}
