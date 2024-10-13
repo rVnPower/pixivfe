@@ -41,7 +41,7 @@ func (span ServedRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
 func (span ServedRequestSpan) Component() string {
-	return "SERVER"
+	return "server"
 }
 func (span ServedRequestSpan) Action() map[string]interface{} {
 	return map[string]interface{}{
