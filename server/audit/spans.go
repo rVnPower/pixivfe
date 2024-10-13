@@ -19,7 +19,7 @@ func Duration(span Span) time.Duration {
 	return span.GetEndTime().Sub(span.GetStartTime())
 }
 
-type ServedRequestSpan struct {
+type ServerRequestSpan struct {
 	StartTime  time.Time
 	EndTime    time.Time
 	RequestId  string
@@ -31,25 +31,25 @@ type ServedRequestSpan struct {
 	Error      error
 }
 
-func (span ServedRequestSpan) GetStartTime() time.Time {
+func (span ServerRequestSpan) GetStartTime() time.Time {
 	return span.StartTime
 }
-func (span ServedRequestSpan) GetEndTime() time.Time {
+func (span ServerRequestSpan) GetEndTime() time.Time {
 	return span.EndTime
 }
-func (span ServedRequestSpan) GetRequestId() string {
+func (span ServerRequestSpan) GetRequestId() string {
 	return span.RequestId
 }
-func (span ServedRequestSpan) Component() string {
+func (span ServerRequestSpan) Component() string {
 	return "server"
 }
-func (span ServedRequestSpan) Action() map[string]interface{} {
+func (span ServerRequestSpan) Action() map[string]interface{} {
 	return map[string]interface{}{
 		"method": span.Method,
 		"path":   span.Path,
 	}
 }
-func (span ServedRequestSpan) Outcome() map[string]interface{} {
+func (span ServerRequestSpan) Outcome() map[string]interface{} {
 	outcome := map[string]interface{}{
 		"status": span.Status,
 		"error":  "<none>",

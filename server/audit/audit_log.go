@@ -12,37 +12,37 @@ import (
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
 )
 
-// RecordedSpans stores a slice of recorded Span objects for later analysis or debugging.
-var RecordedSpans = []Span{}
+// RecordedRequestSpans stores a slice of requestSpan objects.
+var RecordedRequestSpans = []Span{}
 
-// LogAndRecord logs the given span and optionally records it in the RecordedSpans slice.
-// It manages the RecordedSpans slice to maintain a maximum number of recorded spans.
-func LogAndRecord(span Span) {
-	duration := float64(Duration(span)) / float64(time.Second)
+// LogAndRecord logs the given requestSpan and optionally records it in the RecordedRequestSpans slice.
+// It manages the RecordedRequestSpans slice to maintain a maximum number of recorded spans.
+func LogAndRecord(requestSpan Span) {
+	duration := float64(Duration(requestSpan)) / float64(time.Second)
 
-	logger.Info("Span recorded",
+	logger.Info("Request",
 		// Zap already prefixes the log with a timestamp
 		// zap.String("timestamp", span.GetStartTime().Format(time.RFC3339)),
-		zap.String("component", span.Component()),
-		zap.Any("action", span.Action()),
-		zap.Any("outcome", span.Outcome()),
+		zap.String("component", requestSpan.Component()),
+		zap.Any("action", requestSpan.Action()),
+		zap.Any("outcome", requestSpan.Outcome()),
 		zap.Float64("duration", duration),
 	)
 
-	// If MaxRecordedCount is set, manage the RecordedSpans slice
+	// If MaxRecordedCount is set, manage the RecordedRequestSpans slice
 	if MaxRecordedCount != 0 {
 		// Remove the oldest span if we're at capacity
-		if len(RecordedSpans)+1 == MaxRecordedCount {
-			RecordedSpans = RecordedSpans[1:]
+		if len(RecordedRequestSpans)+1 == MaxRecordedCount {
+			RecordedRequestSpans = RecordedRequestSpans[1:]
 		}
 		// Append the new span
-		RecordedSpans = append(RecordedSpans, span)
+		RecordedRequestSpans = append(RecordedRequestSpans, requestSpan)
 	}
 }
 
-// LogServerRoundTrip logs and records a server request span.
+// LogServerRoundTrip logs and records a ServerRequestSpan.
 // It also logs any internal server errors that occurred during the request.
-func LogServerRoundTrip(requestSpan ServedRequestSpan) {
+func LogServerRoundTrip(requestSpan ServerRequestSpan) {
 	if requestSpan.Error != nil {
 		logger.Error("Internal Server Error",
 			zap.Error(requestSpan.Error),
@@ -53,7 +53,7 @@ func LogServerRoundTrip(requestSpan ServedRequestSpan) {
 	LogAndRecord(requestSpan)
 }
 
-// LogAPIRoundTrip logs and records an API request span.
+// LogAPIRoundTrip logs and records an APIRequestSpan.
 // It handles saving the response body to a file if enabled and logs warnings for non-2xx status codes.
 func LogAPIRoundTrip(requestSpan APIRequestSpan) {
 	if requestSpan.Response != nil {
