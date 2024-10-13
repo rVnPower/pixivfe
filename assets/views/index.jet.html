@@ -38,7 +38,7 @@
         {{- range .Data.Pixivision }}
         {* TODO: make the entire pixivision card clickable while preserving the text underline effect *}
         {* NOTE: intentionally choosing indivisible col widths to create a visible affordance *}
-        <div class="col-11 col-md-9 col-lg-5">
+        <div class="col-11 col-md-9 col-lg-5 position-relative">
           <div class="custom-card bg-charcoal-surface1 thumbnail-hover-dark">
             <a href="/pixivision/a/{{.ID}}">
               <div class="thumbnail-wrapper rounded-top-5 overflow-hidden">

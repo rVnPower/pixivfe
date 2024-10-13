@@ -7,10 +7,11 @@ function OpenPreviewer(url) {
     top: 0;
     left: 0;
     background: rgba(0,0,0,.8);
-		display: flex;
-		flex-direction: column;
-		padding: 0 3rem;
-		overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    padding: 0 3rem;
+    overflow: scroll;
+    z-index: 999;
   `;
 
   const imageLink = url.replace(/c\/\d+x\d+.*?\//, "").replace(/square1200/, "master1200");
@@ -38,23 +39,24 @@ function AddOverlay() {
   let className, html;
 
   if (type === "cover") {
-    className = "overlay-cover";
+    className = "overlay-cover position-absolute w-100 h-100 z-5 top-0 start-0";
     html = "";
   } else if (type === "button") {
-    className = "overlay-button";
+    className = "overlay-button position-absolute p-1 z-5 bottom-0 end-0 rounded bg-neutral-950";
     html = "↗";
   } else {
     return;
   }
 
-  document.querySelectorAll('.artwork-small .artwork-image img').forEach(illust => {
+  document.querySelectorAll('.ratio-1x1 .thumbnail-wrapper img').forEach(illust => {
     const url = illust.getAttribute("src");
     const button = document.createElement('div');
 
     button.setAttribute("class", className);
     button.innerHTML = html;
 
-    illust.parentElement.parentElement.appendChild(button);
+    // TODO: Need a better way to do this
+    illust.parentElement.parentElement.parentElement.parentElement.appendChild(button);
 
     button.onclick = (e) => {
       OpenPreviewer(url);
