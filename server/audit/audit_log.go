@@ -41,42 +41,42 @@ func LogAndRecord(span Span) {
 
 // LogServerRoundTrip logs and records a server request span.
 // It also logs any internal server errors that occurred during the request.
-func LogServerRoundTrip(perf ServedRequestSpan) {
-	if perf.Error != nil {
+func LogServerRoundTrip(requestSpan ServedRequestSpan) {
+	if requestSpan.Error != nil {
 		logger.Error("Internal Server Error",
-			zap.Error(perf.Error),
-			zap.String("requestId", perf.RequestId),
+			zap.Error(requestSpan.Error),
+			zap.String("requestId", requestSpan.RequestId),
 		)
 	}
 
-	LogAndRecord(perf)
+	LogAndRecord(requestSpan)
 }
 
 // LogAPIRoundTrip logs and records an API request span.
 // It handles saving the response body to a file if enabled and logs warnings for non-2xx status codes.
-func LogAPIRoundTrip(perf APIRequestSpan) {
-	if perf.Response != nil {
+func LogAPIRoundTrip(requestSpan APIRequestSpan) {
+	if requestSpan.Response != nil {
 		// Save response body to file if enabled and body is not empty
-		if perf.Body != "" && optionSaveResponse {
+		if requestSpan.Body != "" && optionSaveResponse {
 			var err error
-			perf.ResponseFilename, err = writeResponseBodyToFile(perf.Body)
+			requestSpan.ResponseFilename, err = writeResponseBodyToFile(requestSpan.Body)
 			if err != nil {
 				logger.Error("Failed to save response to file",
 					zap.Error(err),
-					zap.String("requestId", perf.RequestId),
+					zap.String("requestId", requestSpan.RequestId),
 				)
 			}
 		}
 		// Log a warning for non-2xx status codes
-		if !(300 > perf.Response.StatusCode && perf.Response.StatusCode >= 200) {
+		if !(300 > requestSpan.Response.StatusCode && requestSpan.Response.StatusCode >= 200) {
 			logger.Warn("Non-2xx response from pixiv",
-				zap.Int("status", perf.Response.StatusCode),
-				zap.String("requestId", perf.RequestId),
+				zap.Int("status", requestSpan.Response.StatusCode),
+				zap.String("requestId", requestSpan.RequestId),
 			)
 		}
 	}
 
-	LogAndRecord(perf)
+	LogAndRecord(requestSpan)
 }
 
 // writeResponseBodyToFile saves the given response body to a file in the ResponseSaveLocation directory.
