@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -180,12 +181,12 @@ func API_GET_UnwrapJson(ctx context.Context, url string, userToken string) (stri
 }
 
 // API_POST performs a POST request to the Pixiv API with automatic retries
-func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) error {
+func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON bool) (*SimpleHTTPResponse, error) {
 	if userToken == "" {
-		return i18n.Error("userToken is required for POST requests")
+		return nil, i18n.Error("userToken is required for POST requests")
 	}
 
-	_, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
+	resp, err := retryRequest(ctx, func(ctx context.Context, token string) (*retryablehttp.Request, error) {
 		req, err := retryablehttp.NewRequest("POST", url, bytes.NewBuffer([]byte(payload)))
 		if err != nil {
 			return nil, err
@@ -205,8 +206,15 @@ func API_POST(ctx context.Context, url, payload, userToken, csrf string, isJSON 
 		}
 		return req, nil
 	}, userToken, true, url)
+	if err != nil {
+		return nil, err
+	}
 
-	return err
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API request failed with status code: %d, body: %s", resp.StatusCode, resp.Body)
+	}
+
+	return resp, nil
 }
 
 // ProxyRequest forwards an HTTP request to the target server and copies the response back

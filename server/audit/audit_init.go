@@ -94,5 +94,5 @@ func Init(saveResponse bool) error {
 
 // GetLogger returns the initialized zap logger
 func GetLogger() *zap.Logger {
-    return Logger
+	return Logger
 }

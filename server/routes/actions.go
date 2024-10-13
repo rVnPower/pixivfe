@@ -7,15 +7,22 @@ import (
 
 	"codeberg.org/vnpower/pixivfe/v2/core"
 	"codeberg.org/vnpower/pixivfe/v2/i18n"
+	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"codeberg.org/vnpower/pixivfe/v2/server/session"
 	"codeberg.org/vnpower/pixivfe/v2/server/utils"
-	"codeberg.org/vnpower/pixivfe/v2/server/audit"
 	"go.uber.org/zap"
 )
+
+// getLogger initializes the audit logger lazily
+func getLogger() *zap.Logger {
+	return audit.GetLogger()
+}
 
 // NOTE: is the csrf protection by the upstream Pixiv API itself good enough, or do we need to implement our own?
 
 func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	logger := getLogger()
+
 	if r.Method != http.MethodPost {
 		return i18n.Error("Method not allowed")
 	}
@@ -39,7 +46,9 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 "comment": "",
 "tags": []
 }`, id)
-	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, true)
+	if err != nil {
+		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
 
@@ -48,6 +57,8 @@ func AddBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
+	logger := getLogger()
+
 	if r.Method != http.MethodPost {
 		return i18n.Error("Method not allowed")
 	}
@@ -67,7 +78,9 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 	// You can't unlike
 	URL := "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
 	payload := fmt.Sprintf(`bookmark_id=%s`, id)
-	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	if err != nil {
+		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
 
@@ -76,6 +89,8 @@ func DeleteBookmarkRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LikeRoute(w http.ResponseWriter, r *http.Request) error {
+	logger := getLogger()
+
 	if r.Method != http.MethodPost {
 		return i18n.Error("Method not allowed")
 	}
@@ -94,7 +109,9 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 
 	URL := "https://www.pixiv.net/ajax/illusts/like"
 	payload := fmt.Sprintf(`{"illust_id": "%s"}`, id)
-	if err := core.API_POST(r.Context(), URL, payload, token, csrf, true); err != nil {
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, true)
+	if err != nil {
+		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
 
@@ -103,7 +120,7 @@ func LikeRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
-	logger := audit.GetLogger()
+	logger := getLogger()
 
 	logger.Debug("FollowUserRoute called")
 
@@ -145,11 +162,12 @@ func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 	}.Encode()
 
 	logger.Debug("Making API call to follow user", zap.String("URL", URL))
-	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
-		logger.Debug("API call failed", zap.Error(err))
+	resp, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	if err != nil {
+		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
-	logger.Debug("API call successful")
+	logger.Debug("API call successful", zap.Int("StatusCode", resp.StatusCode), zap.String("Body", resp.Body))
 
 	logger.Debug("Redirecting user")
 	utils.RedirectToWhenceYouCame(w, r)
@@ -157,7 +175,7 @@ func FollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 }
 
 func UnfollowUserRoute(w http.ResponseWriter, r *http.Request) error {
-	logger := audit.GetLogger()
+	logger := getLogger()
 
 	logger.Debug("UnfollowUserRoute called")
 
@@ -189,10 +207,12 @@ func UnfollowUserRoute(w http.ResponseWriter, r *http.Request) error {
 	}.Encode()
 
 	logger.Debug("Making API call to unfollow user", zap.String("URL", URL))
-	if err := core.API_POST(r.Context(), URL, payload, token, csrf, false); err != nil {
-		logger.Debug("API call failed", zap.Error(err))
+	_, err := core.API_POST(r.Context(), URL, payload, token, csrf, false)
+	if err != nil {
+		logger.Error("API call failed", zap.Error(err))
 		return err
 	}
+
 	logger.Debug("API call successful")
 
 	logger.Debug("Redirecting user")
