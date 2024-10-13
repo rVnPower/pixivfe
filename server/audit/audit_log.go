@@ -21,7 +21,8 @@ func LogAndRecord(span Span) {
 	duration := float64(Duration(span)) / float64(time.Second)
 
 	logger.Info("Span recorded",
-		zap.String("timestamp", span.GetStartTime().Format(time.RFC3339)),
+		// Zap already prefixes the log with a timestamp
+		// zap.String("timestamp", span.GetStartTime().Format(time.RFC3339)),
 		zap.String("component", span.Component()),
 		zap.Any("action", span.Action()),
 		zap.Any("outcome", span.Outcome()),
